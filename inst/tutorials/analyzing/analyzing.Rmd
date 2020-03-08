@@ -1,0 +1,306 @@
+---
+title: "Dr. Hu's R Workshop"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gapminder)
+library(car)
+library(descr)
+library(arm)
+library(gtsummary)
+library(performance)
+library(tidyverse)
+```
+
+# Lecture III: Data Analysis
+
+## Preface
+
+### R Workshop Series
+
+* R basics
+* Munging Data
+* **Analyzing Data**
+* Presenting Data
+* Reproduction
+
+## Toy Data
+
+Demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare).
+
+```{r toy, exercise = TRUE}
+library(gapminder)
+gapminder
+```
+
+## Let the data tell
+
+HAVE THE DATA!
+
+HOW JUICY THEY ARE !!
+
+HOW...to let it tell...
+ 
+
+## Let's rub the lamp
+
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/rubLamp.gif")
+```
+
+### Ways to "rub" the data with R
+
+1. *Descriptive statistics;*
+1. *Binary analyses;*
+1. *Multivariate analyses;*
+1. Advanced stuff (multilevel, spatial, network, big-data based text analysis, SEM...)
+
+
+## Descriptive statistics
+
+Means, median, IQR, etc.
+
+```{r descriptive, exercise = TRUE, exercise.eval = TRUE}
+summary(gapminder)
+```
+
+```{r descriptive-solution}
+summary(gapminder$year)
+
+library(broom)
+tb_continent <- summary(gapminder$year) %>% tidy
+
+summary(gapminder$continent)
+
+library(descr)
+freq(gapminder$continent)
+```
+
+## Summary table
+
+```{r descriptive_table, echo = FALSE, warning=FALSE, message=FALSE}
+library(gtsummary)
+
+gapminder %>% 
+  select(continent, lifeExp, pop, gdpPercap) %>% 
+  tbl_summary(statistic = list(all_continuous() ~ "{mean} ({min}, {max})"))
+  
+```
+
+## Binary analysis
+
+How does one variable relate to another?
+
+1. Are the averages close?
+1. Are the two variables independent to each other?
+1. Does variance matter?
+
+## Difference in mean
+
+Q: Does the average life expectancy changes before and after the Cold War? 
+
+$H_{0}: \bar{LifeExpctancy}_{prio 1991} = \bar{LifeExpctancy}_{post 1991},\ \alpha = .05$
+
+```{r ttest, exercise = TRUE}
+# T-test
+```
+
+```{r ttest-solution}
+gapminder$coldWar <- gapminder$year <= 1992
+gapminder %>% group_by(coldWar) %>% summarise(mean(lifeExp))
+
+t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$year > 1991])
+
+t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$year > 1991], alternative = "greater", conf.level = .99)
+```
+
+## Correlation
+
+Q: Does a country's average life expectancy associate with its GDP per capital? (How about with populations?)
+
+$H_{0}: \rho_{(LifeExpectancy, GDP)} = 0,\ \alpha = .05$
+
+```{r corr, exercise = TRUE}
+cor.test(gapminder$lifeExp, gapminder$gdpPercap)
+```
+
+## Correlation among multiple variables
+
+```{r corrplot}
+select(gapminder, lifeExp, gdpPercap, pop) %>% 
+  cor %>% 
+  corrplot::corrplot.mixed()
+```
+
+## ANOVA
+
+Q: Does the average life expectancy vary across continents? (And over year?)
+
+$H_{0}: \mu_{Africa} = \mu_{Americas} = ... = \mu_{Oceania},\ \alpha = .05$
+
+```{r anova, exercise = TRUE}
+aov(lifeExp ~ continent, data = gapminder) %>% 
+  summary()
+```
+
+```{r anova-solution}
+aov(lifeExp ~ continent + as.factor(year), data = gapminder) %>% 
+  summary()
+```
+
+## Multivariate analysis
+
+### OLS
+
+Q: How does a country's average life expectancy change across continents and over time?
+
+```{r ols, exercise = TRUE}
+gapminder %>% count(lifeExp, continent, year)
+```
+
+```{r ols-solution}
+lm(lifeExp ~ continent + year, data = gapminder) %>%
+  summary()
+```
+
+### Variable transforms
+
+Controlling for time dependency?
+
+$t + t^2$
+
+```{r time, exercise = TRUE}
+lm(lifeExp ~ gdpPercap + year, data = gapminder) %>%
+  summary()
+```
+
+
+```{r time-solution}
+lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
+  summary()
+```
+
+### Standardization
+
+```{r standardized}
+library(arm)
+
+lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
+  standardize() %>% 
+  summary()
+```
+
+
+### Conditional effect
+
+Does the contribution of GDP per captia to a country's life expectancy vary with different sizes of population?
+
+```{r interact, exercise = TRUE}
+lm(lifeExp ~ gdpPercap + year, data = gapminder) %>%
+  summary()
+```
+
+
+```{r interact-solution}
+lm(lifeExp ~ gdpPercap * pop + year, data = gapminder) %>%
+  summary()
+```
+
+Hint: You must include both base terms in the model.
+
+### Post-estimate diagnoses
+
+* Residual
+
+```{r residual, exercise = TRUE}
+fit <- lm(lifeExp ~ gdpPercap + year, data = gapminder)
+res <- resid(fit)
+```
+
+```{r residual-solution}
+plot(fit, which  = 1)
+```
+
+* Outlier
+
+```{r outlier, exercise = TRUE}
+library(car)
+outlierTest(fit)
+# car::qqPlot(fit)
+```
+
+* Heteroscedasticity
+
+```{r heter, exercise = TRUE}
+ncvTest(fit) 
+```
+
+* Multicollinearity
+
+```{r multi, exercise = TRUE}
+vif(fit)
+```
+
+* Autocorrelation
+
+```{r durbin, exercise = TRUE}
+durbinWatsonTest(fit)
+```
+
+## Cool shortcut
+
+```{r performance, exercise = TRUE}
+library(performance)
+
+model_performance(fit)
+check_normality(fit)
+check_outliers(fit)
+```
+
+
+```{r performance-solution}
+model_performance(fit)
+check_normality(fit)
+check_outliers(fit)
+```
+
+## Limited dependent variables
+
+* Logit: Does GDP per capita determine if a country's average life expentacy is above the global average after controlling for the population size?
+
+```{r logit, exercise = TRUE}
+gapminder$asia <- as.numeric(gapminder$continent == "Asia")
+```
+
+```{r logit-solution}
+glm(asia ~ gdpPercap + pop + lifeExp, data = gapminder, family = "binomial") %>%
+  summary()
+```
+
+* Interpretation: marginal effect
+
+```{r margin, exercise = TRUE}
+fit <- glm(asia ~ gdpPercap + pop + lifeExp, data = gapminder, family = "binomial")
+ggeffects::ggpredict(fit)
+```
+
+
+##
+
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/thatsit.gif")
+```
+
+## Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)

@@ -1,0 +1,603 @@
+---
+title: "Dr. Hu's R Workshop"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gt)
+library(gtsummary)
+library(modelsummary)
+library(flextable)
+library(dotwhisker)
+library(interplot)
+library(magick)
+library(likert)
+library(tidyverse)
+
+m1 <- lm(mpg ~ cyl + hp + wt, data = mtcars)
+m2 <- lm(mpg ~ cyl + hp + wt + hp, data = mtcars)
+m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
+
+m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
+```
+
+# Lecture IV: Presenting Data
+
+## Preface
+
+### R Workshop Series
+
+* R basics
+* Munging Data
+* Analyzing Data
+* **Presenting Data**
+* Reproduction
+
+## Toy Data and Model
+
+Toy data: `mtcars` data, extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
+
+```{r structure, exercise = TRUE}
+glimpse(mtcars)
+```
+
+## Tabulating
+Over twenty packages for [table presentation](http://conjugateprior.org/2013/03/r-to-latex-packages-coverage/) in R.
+
+My favorite:
+
+* `flextable`: Made by David Gohel, good for any descriptive tables.
+* `gtsummary`: Made by Daniel Sjoberg, good for biostatistician outputs.
+* `modelsummary`: Made by Vincent Arel-Bundock, good for social scientific outputs.
+
+*Downside*: 
+
+* May not work for a limited number of cases.
+    + `DT`-based packages do not work with `bookdown::pdf_document` very well...so far.
+
+*Some backups*:
+
+* `stargazer`: good for summary table and regular regression results
+* `texreg`: when some results can't be presented by `stargazer`, try `texreg` (e.g., MLM results.)
+* `xtable`: the most extensively compatible package, but need more settings to get a pretty output, most of which `stargazer` and `texreg` can automatically do for you.
+
+## Summary Tables
+
+### Output table
+
+```{r table_output, exercise = TRUE, warning = FALSE}
+library(flextable)
+
+tb_freq <-descr::freq(mtcars$cyl, plot = FALSE) %>% 
+  tidy
+
+```
+
+```{r table_output-solution}
+tb_freq <- flextable(tb_freq) %>% 
+  bg(bg = "#C90000", part = "header") %>% 
+  color(color = "white", part = "header") %>% 
+  color(~ Percent < 40, ~ Percent, color = "red") %>% 
+  autofit
+
+tb_freq
+
+# print(tb_freq, preview = "docx")
+# print(tb_freq, preview = "pptx")
+```
+
+### Descriptive table
+
+```{r descriptive, exercise = TRUE}
+summary(mtcars)
+
+library(gtsummary)
+```
+
+```{r descriptive-solution}
+mtcars %>% 
+  tbl_summary(statistic = list(all_continuous() ~ "{mean} ({min}, {max})"))
+```
+
+### Regression table
+
+This is the basic model we'll play with
+
+```{r model, exercise = TRUE}
+m1 <- lm(mpg ~ wt + cyl + disp + gear, data = mtcars)
+summary(m1)
+
+library(modelsummary)
+```
+
+```{r model-solution}
+msummary(m1, 
+         stars = TRUE,
+         title = "一个漂亮的回归结果表格",
+         subtitle = "A Pretty Regression Table",
+         notes = "来源：Dr Hu's R workshop。",
+         coef_map = c("cyl" = "Number of cylinders",
+                      "disp" = "Displacement (cu.in.)",
+                      "gear" = "Number of forward gears",
+                      "wt" = "Weight (1000 lbs)")) %>% 
+  tab_footnote(
+    footnote = "A footnote just to show I can add a footnote.",
+    locations = cells_column_labels(columns = vars(`Model 1`))
+  )
+
+# msummary(models, filename = 'table.tex')
+# msummary(models, filename = 'table.rtf')
+# msummary(models, filename = 'table.html')
+# msummary(models, filename = 'table.jpeg')
+# msummary(models, filename = 'table.png')
+```
+
+## Data Visualization
+
+A picture worth a thousand words
+
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/picThanWords.jpg")
+```
+
+## How Fancy You Can Do
+
+### Networks
+
+<div class="centered">
+<img src="images/hiveplot.png" height="450"/>
+</div>
+
+### Maps
+
+<div class="center">
+<img src="images/ggmap.png" height="600"/>
+</div>
+
+### Interactive plots
+
+<div class="center">
+<img src="images/interactive3D.gif" height="550"/>
+</div>
+
+
+## R Visualization
+
+* Basic plots: `plot()`.
+* Lattice plots: e.g., `ggplot()`.
+* Interactive plots: `shiny()`. (save for later)
+
+## Basic Plot
+
+Pro:
+
+* Embedded in R
+* Good tool for <span style="color:purple">data exploration</span>. 
+* <span style="color:purple">Spatial</span> analysis and <span style="color:purple">3-D</span> plots.
+
+Con:
+
+* Not very pretty
+* Not very flexible
+
+### Example
+
+```{r basePlot, exercise = TRUE}
+hist(mtcars$mpg)
+```
+
+```{r basePlot-solution}
+plot(mtcars$wt, mtcars$mpg, 
+     main="Scatterplot Example", 
+     xlab="Car Weight ", 
+     ylab="Miles Per Gallon ")
+```
+
+
+### Saving the output
+
+* Compatible format:`.jpg`, `.png`, `.wmf`, `.pdf`, `.bmp`, and `postscript`.
+* Process: 
+      1. call the graphic device
+      2. plot
+      3. close the device
+
+```{r saving, eval = F}
+png("<working directory>/histgraph.png")
+hist(mtcars$mpg)
+dev.off()
+```
+
+## `ggplot`
+
+Built by Hadley Wickham based on Leland Wilkinson's *Grammar of Graphics*.
+
+* To use `ggplot` function, you need another `tidyverse` package: `ggplot2`.
+
+### Why not just the build-in plots?
+
+```{r data4plot, echo=FALSE}
+# bit of setup
+library(ggplot2)
+library(dplyr)
+
+load(url("http://varianceexplained.org/files/ggplot2_example.rda"))
+top_data <- cleaned_data %>%
+    semi_join(top_intercept, by = "systematic_name")
+```
+
+
+```{r plot_tradition}
+par(mar = c(1.5, 1.5, 1.5, 1.5))
+
+colors <- 1:6
+names(colors) <- unique(top_data$nutrient)
+
+# legend approach from http://stackoverflow.com/a/10391001/712603
+m <- matrix(c(1:20, 21, 21, 21, 21), nrow = 6, ncol = 4, byrow = TRUE)
+layout(mat = m, heights = c(.18, .18, .18, .18, .18, .1))
+
+top_data$combined <- paste(top_data$name, top_data$systematic_name)
+for (gene in unique(top_data$combined)) {
+    sub_data <- filter(top_data, combined == gene)
+    plot(expression ~ rate, sub_data, col = colors[sub_data$nutrient], main = gene)
+    for (n in unique(sub_data$nutrient)) {
+        m <- lm(expression ~ rate, filter(sub_data, nutrient == n))
+        if (!is.na(m$coefficients[2])) {
+            abline(m, col = colors[n])
+        }
+    }
+}
+
+# create a new plot for legend
+plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
+legend("top", names(colors), col = colors, horiz = TRUE, lwd = 4)
+```
+
+```{r plot_ggplot, out.width="100%", fig.height=8}
+ggplot(top_data, aes(rate, expression, color = nutrient)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE) +
+    facet_wrap(~name + systematic_name, scales = "free_y")
+```
+
+## Terminology
+
+Hadley: 
+
+* `aes`: Aesthetic, colour, shape, size
+    + Properties that can be perceived on the graphic.
+    + Each aesthetic can be mapped to a variable, or set to a constant value
+* `geom_`: Geometric, points, lines, bars
+    + Over forty types
+
+##
+
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/ggplot_geom.png")
+```
+
+### Example
+
+```{r gghist, exercise = TRUE}
+ggplot(data = mtcars, aes(x=mpg)) + 
+    geom_histogram(aes(y=..density..), binwidth=2, colour="black") 
+```
+
+```{r gghist-solution}
+## A little decoration
+
+ggplot(mtcars, aes(x=mpg)) + 
+    geom_histogram(aes(y=..density..), binwidth=2, colour="black", fill="purple") +
+    geom_density(alpha=.2, fill="blue")  + # Overlay with transparent density plot
+    theme_bw() + ggtitle("histogram with a Normal Curve") + 
+    xlab("Miles Per Gallon") + ylab("Density")
+```
+
+* `data`: The data that you want to visualize
+* `aes`: Aesthetic mappings
+* `geoms`: Geometric objects 
+* `theme`: background
+* `ggtitle`: plot caption
+* `xlab`, `ylab`: axes labels
+* Other parts you may see in some developed template
+    + `stats`: Statistics transformations
+    + `scales`: relate the data to the aesthetic
+    + `coord`: a coordinate system that describes how data coordinates are
+mapped to the plane of the graphic.
+    + `facet`: a faceting specification describes how to break up the data into sets.
+
+### Oh, histogram is too boring~
+
+```{r magic, message=FALSE, exercise = TRUE}
+library(magick)
+fig <- image_graph(width = 800, height = 600, res = 96)
+
+qplot(factor(cyl), data = mtcars, fill = factor(gear))
+
+frink <- image_read("https://jeroen.github.io/images/frink.png")
+
+fig %>%
+  image_rotate(10) %>%
+  image_implode(.6) %>%
+  image_composite(frink, offset = "+140+70") %>%
+  image_annotate("Visualizaaaaation~", size = 40, location = "+300+100", color = "navy")
+```
+
+
+```{r magic-solution}
+image_read("https://jeroen.github.io/images/banana.gif") %>%
+  image_apply( function(banana){
+    image_composite(fig, banana, offset = "+200+200")
+  }) %>%
+  image_resize("50%") %>%
+  image_animate()
+```
+
+### Saving the output
+
+* `ggsave(<plot project>, "<name + type>")`:
+    + When the `<plot project>` is omitted, R will save the last presented plot. 
+    + There are additional arguments which users can use to adjust the size, path, scale, etc.
+    
+```{r eval = FALSE}
+saveThis <- ggplot(data = df_desc, aes(x = as.factor(value))) + geom_bar() + 
+  facet_wrap(~ var, scales = "free", ncol = 3) + xlab("")
+
+ggsave(saveThis, "A Good Figure.png")
+#ggsave("A Good Figure.png") # also do the job
+```
+
+### Descriptive Statistics
+
+```{r facet, exercise = TRUE}
+library(dplyr)
+library(tidyr)
+
+df_desc <- select(mtcars, am, carb, cyl, gear,vs) %>% # select the variables
+  gather(var, value) # reshape the wide data to long data
+
+ggplot(data = df_desc, aes(x = as.factor(value))) + geom_bar() + 
+  facet_wrap(~ var, scales = "free", ncol = 3) + xlab("")
+```
+
+### Go Beyond Histogram
+
+Let's make up a likert-scale index.
+
+```{r likert, exercise = TRUE}
+input <- ("
+  Pooh    Piglet  Tigger
+  3       2       4
+  5       4       4
+  4       2       4
+  4       2       4
+  4       1       5
+  4       2       3
+  4       3       5
+  4       2       4
+  5       2       4
+  5       3       3
+")
+
+df_likert <- read.table(textConnection(input), header = TRUE)
+
+df_likert$Pooh = factor(df_likert$Pooh,
+                   levels = c("1", "2", "3", "4", "5"),
+                   ordered = TRUE)
+
+df_likert$Piglet = factor(df_likert$Piglet,
+                     levels = c("1", "2", "3", "4", "5"),
+                     ordered = TRUE)
+
+df_likert$Tigger = factor(df_likert$Tigger,
+                     levels = c("1", "2", "3", "4", "5"),
+                     ordered = TRUE)
+
+str(df_likert)
+
+library(likert)
+```
+
+```{r likert-solution}
+likert(df_likert) %>%
+  plot(type = "bar")
+
+likert(df_likert) %>%
+  plot(
+    type = "heat",
+    low.color = "white",
+    high.color = "blue",
+    text.color = "black",
+    text.size = 4,
+    wrap = 50
+  )
+
+likert(df_likert) %>%
+  plot(type = "density",
+       facet = TRUE,
+       bw = 0.5)
+```
+
+### Comparing Experimental Results?
+
+```{r violin, exercise = TRUE}
+ggplot(mtcars, aes(factor(cyl), mpg)) +
+  geom_boxplot()
+```
+
+```{r violin-solution}
+ggplot(mtcars, aes(factor(cyl), mpg)) +
+  geom_violin() + 
+  geom_jitter(height = 0, width = 0.1)
+```
+
+## Regression Results
+
+### Coefficient visualization
+
+`dotwhisker` ![](http://cranlogs.r-pkg.org/badges/grand-total/dotwhisker)
+
+Remember our regression table?
+
+```{r dotwhisker, exercise = TRUE}
+msummary(m1, stars = TRUE)
+```
+
+```{r dotwhisker-solution}
+dwplot(m1)
+```
+
+### Multiple models
+
+```{r dwMulti, exercise = TRUE}
+m2 <- lm(mpg ~ cyl + hp + wt + hp, data = mtcars)
+m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
+
+msummary(list(m1, m2, m3), stars = TRUE)
+```
+
+```{r dwMulti-solution}
+dwplot(list(m1, m2, m3))
+
+## Don't like combined results?
+
+dwplot(list(m1, m2, m3)) +
+    facet_grid(~model, scales="free_y")
+```
+
+### Decorated figure
+
+```{r publishable}
+dwplot(list(m1, m2, m3)) %>% 
+    relabel_predictors(c(wt = "Weight",                       
+                         cyl = "Cylinders", 
+                         disp = "Displacement", 
+                         hp = "Horsepower", 
+                         gear = "Gears", 
+                         am = "Manual")) +
+     theme_bw() + xlab("Coefficient Estimate") + ylab("") +
+     geom_vline(xintercept = 0, colour = "grey60", linetype = 2) +
+     ggtitle("Predicting Gas Mileage") +
+     theme(plot.title = element_text(face="bold"),
+           legend.justification=c(0, 0), legend.position=c(0, 0),
+           legend.background = element_rect(colour="grey80"),
+           legend.title = element_blank()) 
+```
+
+See more details in the [vignette](https://cran.r-project.org/web/packages/dotwhisker/vignettes/dotwhisker-vignette.html).
+
+### `small_multiple`
+
+Comparing variables in their own scales.
+
+```{r smallMultiple, exercise = TRUE}
+small_multiple(list(m1, m2, m3)) +
+  ylab("Coefficient Estimate") +
+  geom_hline(yintercept = 0, colour = "grey60", linetype = 2) +
+  ggtitle("Predicting Gas Mileage") +
+  theme(plot.title = element_text(face = "bold"), legend.position = "none",
+    axis.text.x  = element_text(angle = 60, hjust = 1)) 
+```
+
+
+### Moderation effects
+
+`interplot` ![](http://cranlogs.r-pkg.org/badges/grand-total/interplot)
+
+Visualizing the changes in the coefficient of one variable in a two-way interaction term conditional on the value of the other included variable.
+
+* You can't correctly explain interactions with table!
+    + Model: $$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + \varepsilon.$$
+    + Effect: $$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
+    + Standard error: $$\hat{\sigma}_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$
+
+* How can you tell if the change is significant?
+    + Most precise way: calculate the difference between two mean with SEs.
+    + Most convenient way: visualizing it
+
+### Plotting moderation
+
+```{r interact, exercise = TRUE}
+m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
+summary(m_cyl)
+```
+
+```{r interact-solution}
+library(interplot)
+
+interplot(m = m_cyl, var1 = "cyl", var2 = "wt")
+interplot(m = m_cyl, var1 = "wt", var2 = "cyl")
+```
+
+### Significant?
+
+```{r interHist}
+interplot(m = m_cyl, var1 = "cyl", var2 = "wt", hist = TRUE) +
+    geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+### Category comparison
+
+```{r interFactor}
+mtcars$gear <- factor(mtcars$gear)
+m_gear <- lm(mpg ~ gear * wt, data = mtcars)
+
+interplot(m = m_gear, var1 = "wt", var2 = "gear")
+```
+
+## Geographic Visualization
+
+```{r map, message=FALSE, cache=TRUE}
+library("ggmap")
+china <- c(left = 72, bottom = 0, right = 135, top = 52)
+
+get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
+  ggmap() 
+```
+
+More information about mapping China, see Jie Zhang's [post](http://www.easycharts.club/post/17). 
+
+
+## Network Visualization
+
+```{r network, message=FALSE}
+library(network)
+library(sna)
+n <- network(rgraph(10, tprob = 0.2), directed = FALSE)
+
+n %v% "family" <- sample(letters[1:3], 10, replace = TRUE)
+n %v% "importance" <- sample(1:3, 10, replace = TRUE)
+
+e <- network.edgecount(n)
+set.edge.attribute(n, "type", sample(letters[24:26], e, replace = TRUE))
+set.edge.attribute(n, "day", sample(1:3, e, replace = TRUE))
+
+library(ggnetwork)
+
+ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_edges(aes(linetype = type), color = "grey50") +
+  geom_nodes(aes(color = family, size = importance)) +
+  theme_blank()
+```
+
+## Take-Home Points
+
+1. R is power on visualization.
+1. Pretty &prop; complexity.
+1. The fancier...em...unnecessarily the better.
+
+## Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
