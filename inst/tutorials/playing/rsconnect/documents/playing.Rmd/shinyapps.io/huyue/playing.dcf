@@ -1,0 +1,12 @@
+name: playing
+title: playing
+username:
+account: huyue
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2050581
+bundleId: 2964500
+url: https://huyue.shinyapps.io/playing/
+when: 1585923756.97745
+asMultiple: FALSE
+asStatic: FALSE

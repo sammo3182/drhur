@@ -1,5 +1,5 @@
 ---
-title: "Dr. Hu & His Friends' R Workshop"
+title: "Dr. Hu's R Workshop"
 output: 
   learnr::tutorial:
     progressive: true
@@ -287,7 +287,79 @@ table(x)
 
 Note: Most of the property function can be used for all types of data in R
 
-## Toy Data
+## Excel-Like Data
+
+"spreadsheet"
+
+In Excel:
+
+```{r out.width = "60%", echo = FALSE}
+knitr::include_graphics("images/excel-r1.png")
+```
+
+In R(studio):
+
+```{r}
+knitr::include_graphics("images/excel-r2.png")
+```
+
+## Data Input
+
+### Build-in data
+
+```{r mtcars, exercise}
+data(mtcars)
+#data(gapminder::gapminder)
+```
+
+### R Data
+
+* `.RDS` (single object)
+* `.RData` (multiple objects)
+* `.txt` (tab table)
+* `.csv`
+
+```{r input, eval = FALSE}
+df_rds <- readRDS("<FileName>.rds")
+df_txt <- read.table("<FileName>.txt")
+df_csv <- read.csv("<FileName>.csv")
+```
+
+```{r eval=FALSE}
+# SPSS, Stata, SAS
+library(haven)
+df_spss <- read_spss("<FileName>.sav")
+df_stata <- read_dta("<FileName>.dta") 
+df_sas <- read_sas("<FileName>.sas7bdat")  
+
+# Excel sheets
+library(readxl)
+df_excel <- read_excel("<FileName>.xls")
+df_excel2 <- read_excel("<FileName>.xlsx") 
+
+# JavaScript Object Notation 
+library(rjson)
+df_json <- fromJSON(file = "<FileName>.json" )
+
+# XML/Html
+df_xml <- xmlTreeParse("<url>")
+df_html <- readHTMLTable(url, which=3)
+
+# Feather
+feather::read_feather("<FileName>.feather")
+```
+
+
+### If the data hasn't existed
+
+```{r newData, exercise = TRUE}
+df_new <- data.frame(x = 1:3, y = c("x", "y", "z"))
+df_new
+```
+
+## Combining Data
+
+### Toy Data
 
 Demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare).
 
@@ -296,29 +368,26 @@ library(gapminder)
 gapminder
 ```
 
-
-## Combining Data
-
-### Appending
+### Merging Rows
 
 ```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/rowbind.png")
+knitr::include_graphics("images/rowBind.png")
 ```
 
 Q: Assuming we have two separate data for Asia and Europe (how?), how could we combine them into one? 
 
 ```{r ex_append, exercise = TRUE, exercise.eval = TRUE}
-gapminder
+gapminder_asia <- gapminder[gapminder$continent == "Asia", ]
+gapminder_europe <- gapminder[gapminder$continent == "Europe", ]
 ```
 
 ```{r ex_append-solution}
-gapminder_asia <- filter(gapminder, continent == "Asia")
-gapminder_europe <- filter(gapminder, continent == "Europe")
+library(dplyr)
 
 gapminder_eurasia <- bind_rows(gapminder_asia, gapminder_europe)
 ```
 
-### Rough Merging
+### Merging columns
 
 Q: I have several rows and just want to merge them together
 
@@ -327,15 +396,15 @@ knitr::include_graphics("images/columnBind.png")
 ```
 
 ```{r ex_columnBind, exercise = TRUE}
-gapminder_country <- select(gapminder, country)
-gapminder_year <- select(gapminder, year)
+gapminder_country <- gapminder$country
+gapminder_year <- gapminder$year
 ```
 
 ```{r ex_columnBind-solution}
 bind_cols(gapminder_country, gapminder_year)
 ```
 
-### Conditional Merging
+### Index-based merging
 
 Q: How can I use two datasets jointly?
 
@@ -344,7 +413,7 @@ knitr::include_graphics("images/join.png")
 ```
 
 ```{r ex_join, exercise = TRUE}
-gapminder_country <- select(gapminder, country, pop)
+gapminder_country <- select(gapminder, country, year)
 gapminder_year <- select(gapminder, year, pop)
 ```
 
@@ -352,13 +421,39 @@ gapminder_year <- select(gapminder, year, pop)
 gapminder_countryYear<- left_join(gapminder_country, gapminder_year)
 ```
 
+## Long-Wide Transformation
+
+* To long: Transfer columns to values of a variable
+* To wide: Convert values of a rows to columns
+
+```{r pivot}
+library(tidyr)
+
+relig_income # wide
+fish_encounters # long
+```
+
+### To longer
+
+```{r pivotLonger, exercise = TRUE}
+relig_income %>%
+ pivot_longer(-religion, names_to = "income", values_to = "count")
+```
+
+### To wider
+
+```{r pivotWider, exercise = TRUE}
+fish_encounters %>%
+  pivot_wider(names_from = station, values_from = seen)
+```
+
+
 ## Take-Home Points
 
-1. Be clear about the logic <span style="color:red">before</span>  the moves;
-1. Use the `dplyr` functions wisely and in combo;
-1. You will encounter issues you don't know how to solve;
-    + Please do some research before asking the experts!
-1. Explore more `dplyr` functions.
+1. Keep in mind that R is an **OOP**.
+1. Think data as matrices.
+1. Choose the vector type wisely and don't hesitate to change them.
+1. Columns are variables, and rows are observations ("tidy data").
 
 ## Thank you!
 
