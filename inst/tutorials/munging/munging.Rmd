@@ -1,5 +1,5 @@
 ---
-title: "Dr. Hu's R Workshop"
+title: "Dr. Hu & His Friends' R Workshop"
 output: 
   learnr::tutorial:
     progressive: true
@@ -16,13 +16,11 @@ library(gapminder)
 
 # Lecture II: Data Munging
 
-## Preface
+## Tasks
 
-* R basics
-* **Data manipulation**
-* Statistical/econometric analysis
-* Data visualization
-* Reproduction
+1. Vector, matrix, & data frame
+1. Filter, select, & summary
+
 
 ## Toy Data
 
@@ -32,6 +30,8 @@ Demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted
 library(gapminder)
 gapminder
 ```
+
+## A Little Review
 
 ## What You Can Do
 
