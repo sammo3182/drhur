@@ -11,18 +11,21 @@ runtime: shiny_prerendered
 library(learnr)
 library(tidyverse)
 library(gapminder)
-library(forcats)
 ```
 
 
 # Lecture I: Playing Around
 
-## Tasks
+## Skills
 
-1. Object, function, and math
 1. Data creation
 1. Data input & output
 1. Data merging & transforming
+
+## Abilities You'll Achieve
+
+1. Create the data in the most effective and efficient way!
+1. Input whatever type of data into R
 
 ## Before Anything
 
@@ -445,6 +448,29 @@ relig_income %>%
 ```{r pivotWider, exercise = TRUE}
 fish_encounters %>%
   pivot_wider(names_from = station, values_from = seen)
+```
+
+## Data Output
+
+### Save as R data
+
+```{r saving, eval = FALSE}
+saveRDS(gapminder_country, file = "gapminder_country.rds")
+save(gapminder_country, gapminder_year, file = "gapminder.rdata")
+```
+
+### Save as csv
+
+```{r savingCSV, eval = FALSE}
+write.csv(gapminder_country, file = "gapminder_country.csv")
+```
+
+Hint: Don't open csv file with Excel if you have data in Chinese.
+
+### Save as Python readable data
+
+```{r savingPythong, eval = FALSE}
+feather::write_feather(gapminder, path = "gapminder.feather")
 ```
 
 

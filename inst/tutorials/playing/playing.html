@@ -118,13 +118,19 @@ $(document).ready(function () {
 
 <div id="section-lecture-i-playing-around" class="section level1">
 <h1>Lecture I: Playing Around</h1>
-<div id="section-tasks" class="section level2">
-<h2>Tasks</h2>
+<div id="section-skills" class="section level2">
+<h2>Skills</h2>
 <ol style="list-style-type: decimal">
-<li>Object, function, and math</li>
 <li>Data creation</li>
 <li>Data input &amp; output</li>
 <li>Data merging &amp; transforming</li>
+</ol>
+</div>
+<div id="section-abilities-youll-achieve" class="section level2">
+<h2>Abilities You’ll Achieve</h2>
+<ol style="list-style-type: decimal">
+<li>Create the data in the most effective and efficient way!</li>
+<li>Input whatever type of data into R</li>
 </ol>
 </div>
 <div id="section-before-anything" class="section level2">
@@ -293,15 +299,15 @@ levels(x2)</code></pre>
 <h3>Time</h3>
 <p><code>as.POSIXct</code> vs. <code>as.POSIXlt</code></p>
 <pre class="r"><code>Sys.time()</code></pre>
-<pre><code>## [1] &quot;2020-04-03 22:19:58 CST&quot;</code></pre>
+<pre><code>## [1] &quot;2020-04-04 15:26:43 CST&quot;</code></pre>
 <pre class="r"><code># The full pack
 time1 &lt;- Sys.time()
 time2 &lt;- as.POSIXlt(Sys.time())
 time2$wday # week of the day</code></pre>
-<pre><code>## [1] 5</code></pre>
+<pre><code>## [1] 6</code></pre>
 <pre class="r"><code>## If I only care about the date?</code></pre>
 <pre class="r"><code>Sys.Date()</code></pre>
-<pre><code>## [1] &quot;2020-04-03&quot;</code></pre>
+<pre><code>## [1] &quot;2020-04-04&quot;</code></pre>
 <pre class="r"><code>date1 &lt;- as.Date(&quot;2019-01-02&quot;)</code></pre>
 </div>
 </div>
@@ -526,6 +532,23 @@ relig_income # wide</code></pre>
 </div>
 </div>
 </div>
+<div id="section-data-output" class="section level2">
+<h2>Data Output</h2>
+<div id="section-save-as-r-data" class="section level3">
+<h3>Save as R data</h3>
+<pre class="r"><code>saveRDS(gapminder_country, file = &quot;gapminder_country.rds&quot;)
+save(gapminder_country, gapminder_year, file = &quot;gapminder.rdata&quot;)</code></pre>
+</div>
+<div id="section-save-as-csv" class="section level3">
+<h3>Save as csv</h3>
+<pre class="r"><code>write.csv(gapminder_country, file = &quot;gapminder_country.csv&quot;)</code></pre>
+<p>Hint: Don’t open csv file with Excel if you have data in Chinese.</p>
+</div>
+<div id="section-save-as-python-readable-data" class="section level3">
+<h3>Save as Python readable data</h3>
+<pre class="r"><code>feather::write_feather(gapminder, path = &quot;gapminder.feather&quot;)</code></pre>
+</div>
+</div>
 <div id="section-take-home-points" class="section level2">
 <h2>Take-Home Points</h2>
 <ol style="list-style-type: decimal">
@@ -544,7 +567,6 @@ relig_income # wide</code></pre>
 library(learnr)
 library(tidyverse)
 library(gapminder)
-library(forcats)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">

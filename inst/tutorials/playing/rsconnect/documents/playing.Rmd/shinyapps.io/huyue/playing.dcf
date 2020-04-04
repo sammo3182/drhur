@@ -5,8 +5,9 @@ account: huyue
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2050581
-bundleId: 2964500
+bundleId: 2967566
 url: https://huyue.shinyapps.io/playing/
-when: 1585923756.97745
+when: 1585983845.99079
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: images
