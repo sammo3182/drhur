@@ -11,19 +11,21 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
-if (!require(pacman)) install.packages("pacman")
-library(pacman)
+library(learnr)
+library(ggthemes)
+library(scales)
+library(modelsummary)
+library(dotwhisker)
+library(interplot)
+library(likert)
+library(tidyverse)
 
-p_load(
-  learnr, gt,
-  dotwhisker, interplot, 
-  likert, 
-  tidyverse
-)
 
 # Functions preload
 set.seed(114)
+```
 
+```{r dataPreload, include=FALSE}
 # Data of incubation
 
 incubation_data = data.frame(
@@ -114,7 +116,8 @@ m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 ```
 
-# Lecture IV: Data Visualization Basic
+
+# Lecture IV: Basic Data Visualization 
 
 ## A Picture Worths a Thousand Words
 
@@ -145,6 +148,10 @@ knitr::include_graphics("images/picThanWords.jpg")
 ## Skill
 
 ```{r goal-plots, results="hide", out.width="100%", echo=FALSE}
+if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(scales)) install.packages("scales")
+if (!require(ggthemes)) install.packages("ggthemes")
+
 library(ggplot2)
 library(ggthemes)
 library(scales)
@@ -256,6 +263,14 @@ cfr_china
 ###
 
 ```{r cfr-plot, echo = FALSE}
+if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(scales)) install.packages("scales")
+if (!require(ggthemes)) install.packages("ggthemes")
+
+library(ggplot2)
+library(scales)
+library(ggthemes)
+
 ggplot(cfr_china, aes(x=age, y=cfr, group=1)) +
   geom_line() +
   geom_hline(yintercept = 0.01 * 2.3, linetype="dashed", alpha=0.5) +
@@ -276,6 +291,10 @@ ggplot(cfr_china, aes(x=age, y=cfr, group=1)) +
 ### Step by Step
 
 ```{r steps, exercise = TRUE}
+if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(scales)) install.packages("scales")
+if (!require(ggthemes)) install.packages("ggthemes")
+
 library(ggplot2)
 library(scales)
 library(ggthemes)
@@ -453,7 +472,9 @@ ggplot(incubation_data,
 ```{r likert, exercise = TRUE}
 df_likert
 
+if (!require(likert)) install.packages("likert")
 library(likert)
+
 likert(df_likert) %>%
   plot(type = "bar")
 ```
@@ -486,7 +507,9 @@ m1 <- lm(mpg ~ cyl + hp + wt, data = mtcars)
 ```
 
 ```{r dotwhisker-solution}
+if (!require(dotwhisker)) install.packages("dotwhisker")
 library(dotwhisker)
+
 dwplot(m1)
 ```
 
@@ -567,6 +590,7 @@ summary(m_cyl)
 ```
 
 ```{r interact-solution}
+if (!require(interplot)) install.packages("interplot")
 library(interplot)
 
 interplot(m = m_cyl, var1 = "cyl", var2 = "wt")
@@ -592,7 +616,9 @@ interplot(m = m_gear, var1 = "wt", var2 = "gear")
 ## Geographic Visualization
 
 ```{r map, message=FALSE, cache=TRUE}
-library("ggmap")
+if (!require(ggmap)) install.packages("ggmap")
+library(ggmap)
+
 china <- c(left = 72, bottom = 0, right = 135, top = 52)
 
 get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
@@ -604,7 +630,10 @@ More information about mapping China, see Jie Zhang's [post](http://www.easychar
 
 ## Network Visualization
 
-```{r network, message=FALSE}
+```{r network}
+if (!require(network)) install.packages("network")
+if (!require(sna)) install.packages("sna")
+
 library(network)
 library(sna)
 n <- network(rgraph(10, tprob = 0.2), directed = FALSE)
@@ -616,6 +645,7 @@ e <- network.edgecount(n)
 set.edge.attribute(n, "type", sample(letters[24:26], e, replace = TRUE))
 set.edge.attribute(n, "day", sample(1:3, e, replace = TRUE))
 
+if (!require(ggnetwork)) install.packages("ggnetwork")
 library(ggnetwork)
 
 ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
@@ -631,16 +661,17 @@ ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
 ```{r modeltable, exercise = TRUE}
 summary(m1); summary(m2); summary(m3)
 
+if (!require(modelsummary)) install.packages("modelsummary")
 library(modelsummary)
 ```
 
 ```{r modeltable-solution}
 msummary(list(m1, m2, m3),
          stars = TRUE,
-         title =  gt::md('This is *the* title'), 
+         title =  gt::md('This is *the* title'),
          subtitle = 'And a subtitle',
-         notes = list('A first note', gt::md('A **bold** note'))) %>% 
-  tab_style(style = cell_fill(color = "lightcyan"), 
+         notes = list('A first note', gt::md('A **bold** note'))) %>%
+  tab_style(style = cell_fill(color = "lightcyan"),
 			  locations = cells_body(columns = vars(`Model 2`), rows = 3:4)
 			  )
 ```

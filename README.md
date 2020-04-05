@@ -2,7 +2,7 @@
 drhur
 =========
 
-`drhur` is a supplementary package for the "Learning R with Dr. Hu" workshops. 
+`drhur` is a supplementary package for the "Dr. Hu's R Workshop" workshops. 
 
 To install the latest version: `remotes::install_github("sammo3182/drhur")`.
 
