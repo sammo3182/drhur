@@ -15,8 +15,9 @@ The function calls a \code{\link[learnr]{run_tutorial}} function to open a \code
 \details{
 The list of workshop available so far:
 \itemize{
-\item Data munging (\code{munging}): Describe data, select columns, rows, and cells and so on.
-\item Data analyzing (\code{analyzing}): Analyze data with descriptive and multivariate tools.
-\item Data presenting (\code{presenting}): Present analytic results in tables and plots.
+\item Playing around with R (\code{munging}): Intro to basic data structure in R; inputting, outputting, and creating data.
+\item Data munging (\code{munging}): Generalizing (such as sorting and summarizing) and extracting (selecting or adjusting certain columns or rows) data frames.
+\item Data analyzing (\code{analyzing}): Analyze data with descriptive and multivariate tools and diagnoses.
+\item Data presenting (\code{visualizing}): Present descriptive and analytic results with `ggplot2`
 }
 }
