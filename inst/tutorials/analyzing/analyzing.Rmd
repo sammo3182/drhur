@@ -47,9 +47,9 @@ library(gapminder)
 glimpse(gapminder)
 ```
 
-## Let the data tell
+## Let the Data Tell
 
-Ah, rara data!
+Ah, rare data!
 
 How JUICY they are!!
 
@@ -100,7 +100,7 @@ dfSummary(gapminder)
 
 ###
 
-```{r descriptivePretty}
+```{r descriptivePretty, eval = FALSE, include = FALSE}
 print(dfSummary(gapminder, 
                 graph.magnif = 0.3,
                 trim.strings = TRUE,
@@ -108,6 +108,10 @@ print(dfSummary(gapminder,
                 valid.col = FALSE,
                 na.col = FALSE),
       method = 'render')
+```
+
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/dfSummary.png")
 ```
 
 ## Analytic Statistics
