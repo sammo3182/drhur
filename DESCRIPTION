@@ -13,13 +13,23 @@ Depends:
   R(>= 3.6.0)
 Imports:
   gapminder,
-  descr,
+  scales,
+  modelsummary,
+  dotwhisker,
+  interplot,
+  likert,
+  ggthemes,
+  ggeffects
   summarytools,
   knitr,
   tidyverse,
   learnr,
   car,
   arm,
-  gtsummary,
+  nnet,
+  ordinal,
+  ggeffect,
+  moments,
+  tibble,
   performance
 RoxygenNote: 7.1.0

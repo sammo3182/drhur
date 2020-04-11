@@ -23,9 +23,7 @@ library(tidyverse)
 
 # Functions preload
 set.seed(114)
-```
 
-```{r dataPreload, include=FALSE}
 # Data of incubation
 
 incubation_data = data.frame(
@@ -192,6 +190,11 @@ ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = 
         plot.caption = element_text(face = "italic", size=6),
         strip.text = element_text(size = 12))
 ```
+
+## Abilities You'll Achieve
+
+1. Draw basic and `ggplot` charts.
+1. Read complex `ggplot` codes.
 
 
 ## R's Visualization System
@@ -625,7 +628,7 @@ get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>%
   ggmap() 
 ```
 
-More information about mapping China, see Jie Zhang's [post](http://www.easycharts.club/post/17). 
+More information about mapping China, see Jie Zhang's [post](http://www.easycharts.club/article/11). 
 
 
 ## Network Visualization
