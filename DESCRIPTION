@@ -19,7 +19,7 @@ Imports:
   interplot,
   likert,
   ggthemes,
-  ggeffects
+  ggeffects,
   summarytools,
   knitr,
   tidyverse,
@@ -28,7 +28,6 @@ Imports:
   arm,
   nnet,
   ordinal,
-  ggeffect,
   moments,
   tibble,
   performance

@@ -172,7 +172,7 @@ select(gapminder, year, lifeExp, gdpPercap, pop) %>%
   corrplot::corrplot.mixed()
 ```
 
-## ANOVA
+### ANOVA
 
 Q: Does the average life expectancy vary across continents? (And over year?)
 
