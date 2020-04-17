@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(learnr)
 library(ggthemes)
 library(scales)
+library(gt)
 library(modelsummary)
 library(dotwhisker)
 library(interplot)
@@ -664,8 +665,10 @@ ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
 ```{r modeltable, exercise = TRUE}
 summary(m1); summary(m2); summary(m3)
 
+if (!require(gt)) install.packages("gt")
 if (!require(modelsummary)) install.packages("modelsummary")
 library(modelsummary)
+library(gt)
 ```
 
 ```{r modeltable-solution}

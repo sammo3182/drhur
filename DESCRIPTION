@@ -14,6 +14,7 @@ Depends:
 Imports:
   gapminder,
   scales,
+  gt,
   modelsummary,
   dotwhisker,
   interplot,
