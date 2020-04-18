@@ -466,7 +466,7 @@ ggplot(incubation_data,
 
 ## Specific Charts
 
-* Likers
+* Likert responses
 * Coefficients
 * Interactions
 * Map
