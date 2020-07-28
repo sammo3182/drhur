@@ -5,7 +5,7 @@
 #'
 #' @details The list of workshop available so far:
 #' \itemize{
-#' \item Playing around with R (\code{munging}): Intro to basic data structure in R; inputting, outputting, and creating data.
+#' \item Playing around with R (\code{playing}): Intro to basic data structure in R; inputting, outputting, and creating data.
 #' \item Data munging (\code{munging}): Generalizing (such as sorting and summarizing) and extracting (selecting or adjusting certain columns or rows) data frames.
 #' \item Data analyzing (\code{analyzing}): Analyze data with descriptive and multivariate tools and diagnoses.
 #' \item Data presenting (\code{visualizing}): Present descriptive and analytic results with `ggplot2`

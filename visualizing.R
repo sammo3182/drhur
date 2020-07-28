@@ -1,14 +1,4 @@
----
-title: "Dr. Hu's R Workshop"
-output: 
-  learnr::tutorial:
-    progressive: true
-    allow_skip: true
-runtime: shiny_prerendered
----
-
-
-```{r setup, include=FALSE}
+## ----setup, include=FALSE-----------------
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 library(learnr)
@@ -113,40 +103,13 @@ m2 <- lm(mpg ~ cyl + hp + wt + hp, data = mtcars)
 m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
-```
 
 
-# Lecture IV: Basic Data Visualization 
-
-## A Picture Worths a Thousand Words
-
-```{r out.width = "100%", echo = FALSE}
+## ----out.width = "100%", echo = FALSE-----
 knitr::include_graphics("images/picThanWords.jpg")
-```
 
-## When You Are a Professional R Visualizer...
 
-### Networks
-
-<div class="centered">
-<img src="images/hiveplot.png" height="450"/>
-</div>
-
-### Maps
-
-<div class="center">
-<img src="images/ggmap.png" height="600"/>
-</div>
-
-### Interactive plots
-
-<div class="center">
-<img src="images/interactive3D.gif" height="550"/>
-</div>
-
-## Skill
-
-```{r goal-plots, results="hide", out.width="100%", echo=FALSE}
+## ----goal-plots, results="hide", out.width="100%", echo=FALSE----
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(scales)) install.packages("scales")
 if (!require(ggthemes)) install.packages("ggthemes")
@@ -190,83 +153,27 @@ ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = 
   theme(axis.text = element_blank(),
         plot.caption = element_text(face = "italic", size=6),
         strip.text = element_text(size = 12))
-```
-
-## Abilities You'll Achieve
-
-1. Draw basic and `ggplot` charts.
-1. Read complex `ggplot` codes.
 
 
-## R's Visualization System
-
-* Basic plots: `plot()`.
-* Lattice plots: e.g., `ggplot()`.
-* Interactive plots: `shiny()` (Not for today)
-
-## Basic Plot
-
-Pro:
-
-* Embedded in R
-* Good tool for <span style="color:purple">data exploration</span>. 
-* <span style="color:purple">Spatial</span> analysis and <span style="color:purple">3-D</span> plots.
-
-Con:
-
-* Not very delicate
-* Not very flexible
-
-### Example
-
-```{r basePlot, exercise = TRUE}
+## ----basePlot, exercise = TRUE------------
 hist(mtcars$mpg)
-```
-
-### Saving the output
-
-* Compatible format:`.jpg`, `.png`, `.wmf`, `.pdf`, `.bmp`, and `postscript`.
-* Process: 
-    1. call the graphic device
-    2. plot
-    3. close the device
-
-```{r saving, eval = F}
-png("<working directory>/histgraph.png")
-hist(mtcars$mpg)
-dev.off()
-```
-
-## `ggplot`
-
-Built based on Leland Wilkinson's *Grammar of Graphics*.
-
-* To use `ggplot` function, you need another `tidyverse` package: `ggplot2`.
 
 
-## Two Stuffs You Need to Know Ahead
+## ----saving, eval = F---------------------
+## png("<working directory>/histgraph.png")
+## hist(mtcars$mpg)
+## dev.off()
 
-* `aes`: Aesthetic---color, shape, size
-    + Properties that can be perceived in the graph.
-    + Each aesthetic can be mapped to a variable, or set to a constant value
-* `geom_`: Geometric---points, lines, bars
-    + Over forty types
 
-```{r out.width = "100%", echo = FALSE}
+## ----out.width = "100%", echo = FALSE-----
 knitr::include_graphics("images/ggplot_geom.png")
-```
 
-## Case Fatality Rate
 
-###
-
-```{r cfr-df, echo = FALSE}
+## ----cfr-df, echo = FALSE-----------------
 cfr_china
-```
 
-###
 
-```{r cfr-plot, echo = FALSE}
+## ----cfr-plot, echo = FALSE---------------
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(scales)) install.packages("scales")
 if (!require(ggthemes)) install.packages("ggthemes")
@@ -290,11 +197,9 @@ ggplot(cfr_china, aes(x=age, y=cfr, group=1)) +
   theme_minimal(base_size = 14, base_family = "Palatino") +
   theme(plot.caption = element_text(face = "italic", size=6),
         legend.position = "none")
-```
 
-### Step by Step
 
-```{r steps, exercise = TRUE}
+## ----steps, exercise = TRUE---------------
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(scales)) install.packages("scales")
 if (!require(ggthemes)) install.packages("ggthemes")
@@ -305,9 +210,9 @@ library(ggthemes)
 
 ggplot(data = cfr_china,
        aes(x = age, y = cfr, group = 1))
-```
 
-```{r steps-solution}
+
+## ----steps-solution-----------------------
 ggplot(data = cfr_china,
        aes(x = age, y = cfr, group = 1)) + 
   geom_bar(aes(width = cases / 10000, fill = age),
@@ -341,46 +246,19 @@ ggplot(data = cfr_china,
   theme_minimal(base_size = 14, base_family = "Palatino") +
   theme(plot.caption = element_text(face = "italic", size = 6),
         legend.position = "none")
-```
-
-###
-
-* `data`: The data that you want to visualize
-* `aes`: Aesthetic mappings
-* `geoms`: Geometric objects 
-* `labs`: 
-    + `title, subtitle`: Titles
-    + `x, y`: Axis labels
-    + `caption`: Notes
-+ `stats`: Statistics transformations
-+ `scales`: relate the data to the aesthetic
-    + `coord`: a coordinate system that describes how data coordinates are
-mapped to the plane of the graphic.
-    + `facet`: a faceting specification describes how to break up the data into sets.
-* `theme`: background
 
 
-### Saving the output
+## ----save, eval = FALSE-------------------
+## ggsave("cfr.png")
 
-* `ggsave(<plot project>, "<name + type>")`:
-    + When the `<plot project>` is omitted, R will save the last presented plot. 
-    + There are additional arguments which users can use to adjust the size, path, scale, etc.
-    
-```{r save, eval = FALSE}
-ggsave("cfr.png")
-```
 
-## COVID-19 Incubation Time
-
-###
-
-```{r incubation-df, echo = FALSE}
+## ----incubation-df, echo = FALSE----------
 incubation_data %>% 
   mutate(sname = c("0%", "2.5%", "50%", "Average", "97.5%", "100%"),
          stext = str_sub(stext, start = 2))
-```
 
-```{r incubation-plot, echo = FALSE}
+
+## ----incubation-plot, echo = FALSE--------
 ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = sname)) +
   geom_rect(aes(ymax=14, ymin=0, xmax=2, xmin=1), fill ="#ece8bd") +
   geom_rect() + 
@@ -399,11 +277,9 @@ ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = 
   theme(axis.text = element_blank(),
         plot.caption = element_text(face = "italic", size=6),
         strip.text = element_text(size = 12))
-```
 
-### Steps
 
-```{r incubation, exercise = TRUE}
+## ----incubation, exercise = TRUE----------
 ggplot(incubation_data,
        aes(
          ymax = svalue,
@@ -412,10 +288,9 @@ ggplot(incubation_data,
          xmin = 1,
          fill = sname
        )) 
-```
 
 
-```{r incubation-solution}
+## ----incubation-solution------------------
 ggplot(incubation_data,
        aes(
          ymax = svalue,
@@ -460,20 +335,9 @@ ggplot(incubation_data,
     plot.caption = element_text(face = "italic", size = 6),
     strip.text = element_text(size = 12)
   )
-```
 
 
-
-## Specific Charts
-
-* Likert responses
-* Coefficients
-* Interactions
-* Map
-
-### Likert-Scale Index
-
-```{r likert, exercise = TRUE}
+## ----likert, exercise = TRUE--------------
 df_likert
 
 if (!require(likert)) install.packages("likert")
@@ -481,9 +345,9 @@ library(likert)
 
 likert(df_likert) %>%
   plot(type = "bar")
-```
 
-```{r likert-solution}
+
+## ----likert-solution----------------------
 likert(df_likert) %>%
   plot(
     type = "heat",
@@ -498,36 +362,27 @@ likert(df_likert) %>%
   plot(type = "density",
        facet = TRUE,
        bw = 0.5)
-```
 
-## Regression Results
 
-### Coefficient visualization
-
-`dotwhisker` ![](http://cranlogs.r-pkg.org/badges/grand-total/dotwhisker)
-
-```{r dotwhisker, exercise = TRUE}
+## ----dotwhisker, exercise = TRUE----------
 m1 <- lm(mpg ~ cyl + hp + wt, data = mtcars)
-```
 
-```{r dotwhisker-solution}
+
+## ----dotwhisker-solution------------------
 if (!require(dotwhisker)) install.packages("dotwhisker")
 library(dotwhisker)
 
 dwplot(m1)
-```
 
 
-### Multiple models
-
-```{r dwMulti, exercise = TRUE}
+## ----dwMulti, exercise = TRUE-------------
 m2 <- lm(mpg ~ cyl + hp + wt + hp, data = mtcars)
 m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 
 dwplot(list(m1, m2, m3))
-```
 
-```{r dwMulti-solution}
+
+## ----dwMulti-solution---------------------
 dwplot(list(m1, m2, m3)) %>%
   relabel_predictors(
     c(
@@ -551,12 +406,9 @@ dwplot(list(m1, m2, m3)) %>%
     legend.background = element_rect(colour = "grey80"),
     legend.title = element_blank()
   ) 
-```
 
 
-### Comparing in their own scales.
-
-```{r smallMultiple, exercise = TRUE}
+## ----smallMultiple, exercise = TRUE-------
 small_multiple(list(m1, m2, m3)) +
   ylab("Coefficient Estimate") +
   geom_hline(yintercept = 0,
@@ -568,58 +420,34 @@ small_multiple(list(m1, m2, m3)) +
     legend.position = "none",
     axis.text.x  = element_text(angle = 60, hjust = 1)
   ) 
-```
 
 
-## Moderation effects
-
-`interplot` ![](http://cranlogs.r-pkg.org/badges/grand-total/interplot)
-
-Visualizing the changes in the coefficient of one variable in a two-way interaction term conditional on the value of the other included variable.
-
-* You can't correctly explain interactions with table!
-    + Model: $$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + \varepsilon.$$
-    + Effect: $$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
-    + Standard error: $$\hat{\sigma}_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$
-
-* How can you tell if the change is significant?
-    + Most precise way: calculate the difference between two mean with SEs.
-    + Most convenient way: visualizing it
-
-### Plotting moderation
-
-```{r interact, exercise = TRUE}
+## ----interact, exercise = TRUE------------
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 summary(m_cyl)
-```
 
-```{r interact-solution}
+
+## ----interact-solution--------------------
 if (!require(interplot)) install.packages("interplot")
 library(interplot)
 
 interplot(m = m_cyl, var1 = "cyl", var2 = "wt")
 interplot(m = m_cyl, var1 = "wt", var2 = "cyl")
-```
 
-### Significant?
 
-```{r interHist}
+## ----interHist----------------------------
 interplot(m = m_cyl, var1 = "cyl", var2 = "wt", hist = TRUE) +
     geom_hline(yintercept = 0, linetype = "dashed")
-```
 
-### Category comparison
 
-```{r interFactor}
+## ----interFactor--------------------------
 mtcars$gear <- factor(mtcars$gear)
 m_gear <- lm(mpg ~ gear * wt, data = mtcars)
 
 interplot(m = m_gear, var1 = "wt", var2 = "gear")
-```
 
-## Geographic Visualization
 
-```{r map, message=FALSE, cache=TRUE}
+## ----map, message=FALSE, cache=TRUE-------
 if (!require(ggmap)) install.packages("ggmap")
 library(ggmap)
 
@@ -627,14 +455,9 @@ china <- c(left = 72, bottom = 0, right = 135, top = 52)
 
 get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
   ggmap() 
-```
-
-More information about mapping China, see Jie Zhang's [post](http://www.easycharts.club/article/11). 
 
 
-## Network Visualization
-
-```{r network}
+## ----network------------------------------
 if (!require(network)) install.packages("network")
 if (!require(sna)) install.packages("sna")
 
@@ -656,22 +479,18 @@ ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
   geom_edges(aes(linetype = type), color = "grey50") +
   geom_nodes(aes(color = family, size = importance)) +
   theme_blank()
-```
 
-## Bonus: Tables
 
-###
-
-```{r modeltable, exercise = TRUE}
+## ----modeltable, exercise = TRUE----------
 summary(m1); summary(m2); summary(m3)
 
 if (!require(gt)) install.packages("gt")
 if (!require(modelsummary)) install.packages("modelsummary")
 library(modelsummary)
 library(gt)
-```
 
-```{r modeltable-solution}
+
+## ----modeltable-solution------------------
 msummary(list(m1, m2, m3),
          stars = TRUE,
          title =  gt::md('This is *the* title'),
@@ -680,29 +499,12 @@ msummary(list(m1, m2, m3),
   tab_style(style = cell_fill(color = "lightcyan"),
 			  locations = cells_body(columns = vars(`Model 2`), rows = 3:4)
 			  )
-```
-
-### Output Format
-
-```{r modelOut, eval = FALSE}
-msummary(models, filename = 'table.tex')
-msummary(models, filename = 'table.rtf')
-msummary(models, filename = 'table.html')
-msummary(models, filename = 'table.jpeg')
-msummary(models, filename = 'table.png')
-```
 
 
-## Take-Home Points
+## ----modelOut, eval = FALSE---------------
+## msummary(models, filename = 'table.tex')
+## msummary(models, filename = 'table.rtf')
+## msummary(models, filename = 'table.html')
+## msummary(models, filename = 'table.jpeg')
+## msummary(models, filename = 'table.png')
 
-1. R is power on visualization.
-1. Pretty &prop; complexity.
-1. The fancier is unnecessarily the better.
-
-## Thank you!
-
-<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
-
-<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
-
-<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
