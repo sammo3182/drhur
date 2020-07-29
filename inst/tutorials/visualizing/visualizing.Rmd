@@ -246,7 +246,7 @@ Built based on Leland Wilkinson's *Grammar of Graphics*.
 
 ## Two Stuffs You Need to Know Ahead
 
-* `aes`: Aesthetic---color, shape, size
+* `mapping`: Aesthetic (`aes`, `alpha`)---color, shape, size
     + Properties that can be perceived in the graph.
     + Each aesthetic can be mapped to a variable, or set to a constant value
 * `geom_`: Geometric---points, lines, bars
@@ -256,11 +256,55 @@ Built based on Leland Wilkinson's *Grammar of Graphics*.
 knitr::include_graphics("images/ggplot_geom.png")
 ```
 
-## Case Fatality Rate
+## Basic Format
+
+```{r basic, eval = FALSE}
+ggplot(___) + 
+  geom_point(
+    mapping = aes(x = ___, y = ___, 
+                  color = ___, 
+                  size  = ___),
+    alpha  = ___
+  )
+```
+
+## Example: Aesthetic Attributes
+
+```{r point, exercise = TRUE}
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp))
+```
+
+```{r point-solution}
+# Color adjustment
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp,
+                 color = continent))
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp,
+                 color = pop))
+
+# Size adjustment
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp,
+                 size = pop)) + 
+  scale_size_area(max_size = 10)
+
+# Transparency adjustment
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop), 
+             alpha = 0.5)
+```
+
+
+## Example: Geomatric Layers 
 
 ###
 
 ```{r cfr-df, echo = FALSE}
+# Case Fatality Rate
+
 cfr_china
 ```
 
