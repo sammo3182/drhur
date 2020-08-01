@@ -10,6 +10,7 @@ library(dotwhisker)
 library(interplot)
 library(likert)
 library(tidyverse)
+library(gapminder)
 
 
 # Functions preload
@@ -113,10 +114,19 @@ knitr::include_graphics("images/picThanWords.jpg")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(scales)) install.packages("scales")
 if (!require(ggthemes)) install.packages("ggthemes")
+if (!require(gapminder)) install.packages("gapminder")
 
-library(ggplot2)
-library(ggthemes)
-library(scales)
+library(ggplot2) # major function
+library(ggthemes) # outlook
+library(scales) # scale of the axes
+library(gapminder) # data
+
+gapminder_2007 <- filter(gapminder, year == 2007)
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop, 
+                 color = continent), 
+             alpha = 0.5)
 
 ggplot(cfr_china, aes(x=age, y=cfr, group=1)) +
   geom_line() +
@@ -169,7 +179,68 @@ hist(mtcars$mpg)
 knitr::include_graphics("images/ggplot_geom.png")
 
 
+## ----basic, eval = FALSE------------------
+## ggplot(___) +
+##   geom_point(
+##     mapping = aes(x = ___, y = ___,
+##                   color = ___,
+##                   size  = ___),
+##     alpha  = ___
+##   )
+
+
+## ----pointGoal,echo=FALSE-----------------
+library(gapminder)
+
+gapminder_2007 <- filter(gapminder, year == 2007)
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop, 
+                 color = continent), 
+             alpha = 0.5)
+
+
+## ----point, exercise = TRUE---------------
+library(gapminder)
+
+gapminder_2007 <- filter(gapminder, year == 2007)
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp))
+
+
+## ----point-solution-----------------------
+# Color adjustment
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp,
+                 color = continent))
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp,
+                 color = pop))
+
+# Size adjustment
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp,
+                 size = pop)) + 
+  scale_size_area(max_size = 10)
+
+# Transparency adjustment
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop), 
+             alpha = 0.5)
+
+# Combo
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop, 
+                 color = continent), 
+             alpha = 0.5)
+
+
 ## ----cfr-df, echo = FALSE-----------------
+# Case Fatality Rate
+
 cfr_china
 
 
@@ -447,16 +518,6 @@ m_gear <- lm(mpg ~ gear * wt, data = mtcars)
 interplot(m = m_gear, var1 = "wt", var2 = "gear")
 
 
-## ----map, message=FALSE, cache=TRUE-------
-if (!require(ggmap)) install.packages("ggmap")
-library(ggmap)
-
-china <- c(left = 72, bottom = 0, right = 135, top = 52)
-
-get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
-  ggmap() 
-
-
 ## ----network------------------------------
 if (!require(network)) install.packages("network")
 if (!require(sna)) install.packages("sna")
@@ -479,6 +540,16 @@ ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
   geom_edges(aes(linetype = type), color = "grey50") +
   geom_nodes(aes(color = family, size = importance)) +
   theme_blank()
+
+
+## ----map, message=FALSE, cache=TRUE-------
+if (!require(ggmap)) install.packages("ggmap")
+library(ggmap)
+
+china <- c(left = 72, bottom = 0, right = 135, top = 52)
+
+get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
+  ggmap() 
 
 
 ## ----modeltable, exercise = TRUE----------

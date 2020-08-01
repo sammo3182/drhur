@@ -104,6 +104,7 @@ $(document).ready(function () {
 <!-- end tabsets -->
 
 
+<link rel="stylesheet" href="css\styles.css" type="text/css" />
 
 </head>
 
@@ -116,14 +117,12 @@ $(document).ready(function () {
 
 <div class="topics">
 
-<div id="section-lecture-iv-basic-data-visualization" class="section level1">
-<h1>Lecture IV: Basic Data Visualization</h1>
 <div id="section-a-picture-worths-a-thousand-words" class="section level2">
 <h2>A Picture Worths a Thousand Words</h2>
 <p><img src="images/picThanWords.jpg" width="100%" /></p>
 </div>
-<div id="section-when-you-are-a-professional-r-visualizer" class="section level2">
-<h2>When You Are a Professional R Visualizer…</h2>
+<div id="section-when-you-become-a-professional-visualizer" class="section level2">
+<h2>When You Become a Professional Visualizer…</h2>
 <div id="section-networks" class="section level3">
 <h3>Networks</h3>
 <div class="centered">
@@ -145,7 +144,27 @@ $(document).ready(function () {
 </div>
 <div id="section-skill" class="section level2">
 <h2>Skill</h2>
-<p><img src="visualizing_files/figure-html/goal-plots-1.png" width="100%" /><img src="visualizing_files/figure-html/goal-plots-2.png" width="100%" /></p>
+<ol style="list-style-type: decimal">
+<li>Statistics
+<ul>
+<li>Descriptive</li>
+<li>Post-analysis</li>
+</ul></li>
+<li>Network
+<ul>
+<li>Diagram (<a href="https://rich-iannone.github.io/DiagrammeR/docs.html"><code>DiagrammeR</code></a>, <a href="http://sachaepskamp.com/semPlot/examples"><code>semPlot</code></a>)</li>
+</ul></li>
+<li>Map</li>
+</ol>
+</div>
+<div id="section-learning-with-three-examples" class="section level2">
+<h2>Learning with Three Examples</h2>
+<ol style="list-style-type: decimal">
+<li>Gapminder 2007 (Point plot)</li>
+<li>COVID-19 Case Fatality Rate (Bar plot)</li>
+<li>COVID-19 Incubation Time (Fan plot)</li>
+</ol>
+<p><img src="visualizing_files/figure-html/goal-plots-1.png" width="100%" /><img src="visualizing_files/figure-html/goal-plots-2.png" width="100%" /><img src="visualizing_files/figure-html/goal-plots-3.png" width="100%" /></p>
 </div>
 <div id="section-abilities-youll-achieve" class="section level2">
 <h2>Abilities You’ll Achieve</h2>
@@ -220,8 +239,8 @@ dev.off()</code></pre>
 </ul>
 <p><img src="images/ggplot_geom.png" width="100%" /></p>
 </div>
-<div id="section-basic-format" class="section level2">
-<h2>Basic Format</h2>
+<div id="section-primary-template" class="section level2">
+<h2>Primary Template</h2>
 <pre class="r"><code>ggplot(___) + 
   geom_point(
     mapping = aes(x = ___, y = ___, 
@@ -232,8 +251,18 @@ dev.off()</code></pre>
 </div>
 <div id="section-example-aesthetic-attributes" class="section level2">
 <h2>Example: Aesthetic Attributes</h2>
+<div id="section-section" class="section level3">
+<h3></h3>
+<p><img src="visualizing_files/figure-html/pointGoal-1.png" width="624" /></p>
+</div>
+<div id="section-step-by-step" class="section level3">
+<h3>Step by Step</h3>
 <div class="tutorial-exercise" data-label="point" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>ggplot(gapminder_2007) + 
+<pre class="text"><code>library(gapminder)
+
+gapminder_2007 &lt;- filter(gapminder, year == 2007)
+
+ggplot(gapminder_2007) + 
   geom_point(aes(x = gdpPercap, y = lifeExp))</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
@@ -256,12 +285,20 @@ ggplot(gapminder_2007) +
 # Transparency adjustment
 ggplot(gapminder_2007) + 
   geom_point(aes(x = gdpPercap, y = lifeExp, size = pop), 
+             alpha = 0.5)
+
+# Combo
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop, 
+                 color = continent), 
              alpha = 0.5)</code></pre>
+</div>
 </div>
 </div>
 <div id="section-example-geomatric-layers" class="section level2">
 <h2>Example: Geomatric Layers</h2>
-<div id="section-section" class="section level3">
+<div id="section-section-1" class="section level3">
 <h3></h3>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -269,11 +306,11 @@ ggplot(gapminder_2007) +
   </script>
 </div>
 </div>
-<div id="section-section-1" class="section level3">
+<div id="section-section-2" class="section level3">
 <h3></h3>
 <p><img src="visualizing_files/figure-html/cfr-plot-1.png" width="624" /></p>
 </div>
-<div id="section-step-by-step" class="section level3">
+<div id="section-step-by-step-1" class="section level3">
 <h3>Step by Step</h3>
 <div class="tutorial-exercise" data-label="steps" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>if (!require(ggplot2)) install.packages(&quot;ggplot2&quot;)
@@ -324,7 +361,7 @@ ggplot(data = cfr_china,
         legend.position = &quot;none&quot;)</code></pre>
 </div>
 </div>
-<div id="section-section-2" class="section level3">
+<div id="section-section-3" class="section level3">
 <h3></h3>
 <ul>
 <li><code>data</code>: The data that you want to visualize</li>
@@ -359,7 +396,7 @@ ggplot(data = cfr_china,
 </div>
 <div id="section-covid-19-incubation-time" class="section level2">
 <h2>COVID-19 Incubation Time</h2>
-<div id="section-section-3" class="section level3">
+<div id="section-section-4" class="section level3">
 <h3></h3>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -429,8 +466,8 @@ ggplot(data = cfr_china,
 </div>
 </div>
 </div>
-<div id="section-specific-charts" class="section level2">
-<h2>Specific Charts</h2>
+<div id="section-post-analysis-visualization" class="section level2">
+<h2>Post-Analysis Visualization</h2>
 <ul>
 <li>Likert responses</li>
 <li>Coefficients</li>
@@ -537,7 +574,7 @@ dwplot(list(m1, m2, m3))</code></pre>
 </div>
 </div>
 <div id="section-moderation-effects" class="section level2">
-<h2>Moderation effects</h2>
+<h2>Moderation Effects</h2>
 <p><code>interplot</code> <img src="http://cranlogs.r-pkg.org/badges/grand-total/interplot" /></p>
 <p>Visualizing the changes in the coefficient of one variable in a two-way interaction term conditional on the value of the other included variable.</p>
 <ul>
@@ -583,18 +620,6 @@ interplot(m = m_gear, var1 = &quot;wt&quot;, var2 = &quot;gear&quot;)</code></pr
 <p><img src="visualizing_files/figure-html/interFactor-1.png" width="624" /></p>
 </div>
 </div>
-<div id="section-geographic-visualization" class="section level2">
-<h2>Geographic Visualization</h2>
-<pre class="r"><code>if (!require(ggmap)) install.packages(&quot;ggmap&quot;)
-library(ggmap)
-
-china &lt;- c(left = 72, bottom = 0, right = 135, top = 52)
-
-get_stamenmap(china, zoom = 5, maptype = &quot;toner-lite&quot;) %&gt;% 
-  ggmap() </code></pre>
-<p><img src="visualizing_files/figure-html/map-1.png" width="624" /></p>
-<p>More information about mapping China, see Jie Zhang’s <a href="http://www.easycharts.club/article/11">post</a>.</p>
-</div>
 <div id="section-network-visualization" class="section level2">
 <h2>Network Visualization</h2>
 <pre class="r"><code>if (!require(network)) install.packages(&quot;network&quot;)
@@ -620,9 +645,21 @@ ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
   theme_blank()</code></pre>
 <p><img src="visualizing_files/figure-html/network-1.png" width="624" /></p>
 </div>
+<div id="section-geographic-visualization" class="section level2">
+<h2>Geographic Visualization</h2>
+<pre class="r"><code>if (!require(ggmap)) install.packages(&quot;ggmap&quot;)
+library(ggmap)
+
+china &lt;- c(left = 72, bottom = 0, right = 135, top = 52)
+
+get_stamenmap(china, zoom = 5, maptype = &quot;toner-lite&quot;) %&gt;% 
+  ggmap() </code></pre>
+<p><img src="visualizing_files/figure-html/map-1.png" width="624" /></p>
+<p>More information about mapping China, see Jie Zhang’s <a href="http://www.easycharts.club/article/11">post</a>.</p>
+</div>
 <div id="section-bonus-tables" class="section level2">
 <h2>Bonus: Tables</h2>
-<div id="section-section-4" class="section level3">
+<div id="section-section-5" class="section level3">
 <h3></h3>
 <div class="tutorial-exercise" data-label="modeltable" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>summary(m1); summary(m2); summary(m3)
@@ -678,6 +715,7 @@ library(dotwhisker)
 library(interplot)
 library(likert)
 library(tidyverse)
+library(gapminder)
 
 
 # Functions preload
@@ -859,10 +897,9 @@ output$`tutorial-exercise-modeltable-output` <- renderUI({
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111]}},"value":[{"type":"character","attributes":{},"value":["abind","arm","assertthat","backports","base","blob","boot","broom","cellranger","cli","coda","colorspace","compiler","crayon","datasets","DBI","dbplyr","digest","dotwhisker","dplyr","ellipsis","evaluate","fansi","farver","fastmap","forcats","fs","generics","ggnetwork","ggplot2","ggstance","ggthemes","glue","graphics","grDevices","grid","gridExtra","gt","gtable","haven","hms","htmltools","htmlwidgets","httpuv","httr","interactionTest","interplot","jsonlite","knitr","labeling","later","lattice","learnr","lifecycle","likert","lme4","lubridate","magrittr","markdown","MASS","Matrix","methods","mime","minqa","mnormt","modelr","modelsummary","munsell","network","nlme","nloptr","parallel","pillar","pkgconfig","plyr","promises","psych","purrr","R6","Rcpp","readr","readxl","reprex","reshape2","rlang","rmarkdown","rprojroot","rvest","scales","shiny","sna","splines","statmod","statnet.common","stats","stringi","stringr","tables","tibble","tidyr","tidyselect","tidyverse","tmvnsim","tools","utils","vctrs","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4-5","1.11-1","0.2.1","1.1.8","4.1.0","1.2.1","1.3-25","0.7.0.9001","1.1.0","2.0.2","0.19-3","1.4-1","4.1.0","1.3.4","4.1.0","1.1.0","1.4.4","0.6.25","0.5.1","1.0.0","0.3.1","0.14","0.4.1","2.0.3","1.0.1","0.5.0","1.4.2","0.0.2","0.5.8","3.3.2","0.3.4","4.2.0","1.4.1","4.1.0","4.1.0","4.1.0","2.3","0.2.1","0.3.0","2.3.1","0.5.3","0.5.0","1.5.1","1.5.4","1.4.2","1.2","0.2.2","1.7.0","1.29","0.3","1.1.0.1","0.20-41","0.10.1","0.2.0","1.3.5","1.1-23","1.7.9","1.5","1.1","7.3-51.6","1.2-18","4.1.0","0.9","1.2.4","2.0.1","0.1.8","0.5.0","0.5.0","1.16.0","3.1-148","1.2.2.2","4.1.0","1.4.6","2.0.3","1.8.6","1.1.1","2.0.7","0.3.4","2.4.1","1.0.5","1.3.1","1.3.1","0.3.0","1.4.4","0.4.7","2.3","1.3-2","0.3.6","1.1.1","1.5.0","2.5","4.1.0","1.4.34","4.3.0","4.1.0","1.4.6","1.4.0","0.9.3","3.0.3","1.1.0","1.1.0","1.3.0","1.0-2","4.1.0","4.1.0","0.3.2","2.2.0","0.16","1.3.2","1.8-4","2.2.1"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129]}},"value":[{"type":"character","attributes":{},"value":["abind","acepack","arm","assertthat","backports","base","base64enc","blob","boot","broom","cellranger","checkmate","cli","cluster","coda","colorspace","compiler","crayon","data.table","datasets","DBI","dbplyr","digest","dotwhisker","dplyr","ellipsis","evaluate","fansi","farver","fastmap","forcats","foreign","Formula","fs","gapminder","generics","ggnetwork","ggplot2","ggstance","ggthemes","glue","graphics","grDevices","grid","gridExtra","gt","gtable","haven","Hmisc","hms","htmlTable","htmltools","htmlwidgets","httpuv","httr","interactionTest","interplot","jpeg","jsonlite","knitr","labeling","later","lattice","latticeExtra","learnr","lifecycle","likert","lme4","lubridate","magrittr","markdown","MASS","Matrix","methods","mime","minqa","mnormt","modelr","modelsummary","munsell","network","nlme","nloptr","nnet","parallel","pillar","pkgconfig","plyr","png","promises","psych","purrr","R6","RColorBrewer","Rcpp","readr","readxl","reprex","reshape2","rlang","rmarkdown","rpart","rprojroot","rstudioapi","rvest","scales","shiny","sna","splines","statmod","statnet.common","stats","stringi","stringr","survival","tables","tibble","tidyr","tidyselect","tidyverse","tmvnsim","tools","utils","vctrs","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4-5","1.4.1","1.11-2","0.2.1","1.1.8","4.1.0","0.1-3","1.2.1","1.3-25","0.7.0.9001","1.1.0","2.0.0","2.0.2","2.1.0","0.19-3","1.4-1","4.1.0","1.3.4","1.13.0","4.1.0","1.1.0","1.4.4","0.6.25","0.5.1","1.0.1","0.3.1","0.14","0.4.1","2.0.3","1.0.1","0.5.0","0.8-80","1.2-3","1.5.0","0.3.0","0.0.2","0.5.8","3.3.2","0.3.4","4.2.0","1.4.1","4.1.0","4.1.0","4.1.0","2.3","0.2.1","0.3.0","2.3.1","4.4-0","0.5.3","2.0.1","0.5.0","1.5.1","1.5.4","1.4.2","1.2","0.2.2","0.1-8.1","1.7.0","1.29","0.3","1.1.0.1","0.20-41","0.6-29","0.10.1","0.2.0","1.3.5","1.1-23","1.7.9","1.5","1.1","7.3-51.6","1.2-18","4.1.0","0.9","1.2.4","2.0.1","0.1.8","0.5.0","0.5.0","1.16.0","3.1-148","1.2.2.2","7.3-14","4.1.0","1.4.6","2.0.3","1.8.6","0.1-7","1.1.1","2.0.7","0.3.4","2.4.1","1.1-2","1.0.5","1.3.1","1.3.1","0.3.0","1.4.4","0.4.7","2.3","4.1-15","1.3-2","0.11","0.3.6","1.1.1","1.5.0","2.5","4.1.0","1.4.34","4.3.0","4.1.0","1.4.6","1.4.0","3.2-3","0.9.3","3.0.3","1.1.1","1.1.0","1.3.0","1.0-2","4.1.0","4.1.0","0.3.2","2.2.0","0.16","1.3.2","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
-</div>
 </div>
 
 </div> <!-- topics -->

@@ -4,9 +4,9 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    css: css/styles.css
 runtime: shiny_prerendered
 ---
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
@@ -20,6 +20,7 @@ library(dotwhisker)
 library(interplot)
 library(likert)
 library(tidyverse)
+library(gapminder)
 
 
 # Functions preload
@@ -115,16 +116,13 @@ m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 ```
 
-
-# Lecture IV: Basic Data Visualization 
-
 ## A Picture Worths a Thousand Words
 
 ```{r out.width = "100%", echo = FALSE}
 knitr::include_graphics("images/picThanWords.jpg")
 ```
 
-## When You Are a Professional R Visualizer...
+## When You Become a Professional Visualizer...
 
 ### Networks
 
@@ -146,14 +144,38 @@ knitr::include_graphics("images/picThanWords.jpg")
 
 ## Skill
 
+1. Statistics
+    + Descriptive
+    + Post-analysis
+1. Network
+    + Diagram ([`DiagrammeR`](https://rich-iannone.github.io/DiagrammeR/docs.html), [`semPlot`](http://sachaepskamp.com/semPlot/examples))
+1. Map
+
+
+
+## Learning with Three Examples
+
+1. Gapminder 2007 (Point plot)
+1. COVID-19 Case Fatality Rate (Bar plot)
+1. COVID-19 Incubation Time (Fan plot)
+
 ```{r goal-plots, results="hide", out.width="100%", echo=FALSE}
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(scales)) install.packages("scales")
 if (!require(ggthemes)) install.packages("ggthemes")
+if (!require(gapminder)) install.packages("gapminder")
 
-library(ggplot2)
-library(ggthemes)
-library(scales)
+library(ggplot2) # major function
+library(ggthemes) # outlook
+library(scales) # scale of the axes
+library(gapminder) # data
+
+gapminder_2007 <- filter(gapminder, year == 2007)
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop, 
+                 color = continent), 
+             alpha = 0.5)
 
 ggplot(cfr_china, aes(x=age, y=cfr, group=1)) +
   geom_line() +
@@ -256,7 +278,7 @@ Built based on Leland Wilkinson's *Grammar of Graphics*.
 knitr::include_graphics("images/ggplot_geom.png")
 ```
 
-## Basic Format
+## Primary Template
 
 ```{r basic, eval = FALSE}
 ggplot(___) + 
@@ -270,7 +292,27 @@ ggplot(___) +
 
 ## Example: Aesthetic Attributes
 
+###
+
+```{r pointGoal,echo=FALSE}
+library(gapminder)
+
+gapminder_2007 <- filter(gapminder, year == 2007)
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop, 
+                 color = continent), 
+             alpha = 0.5)
+```
+
+
+### Step by Step
+
 ```{r point, exercise = TRUE}
+library(gapminder)
+
+gapminder_2007 <- filter(gapminder, year == 2007)
+
 ggplot(gapminder_2007) + 
   geom_point(aes(x = gdpPercap, y = lifeExp))
 ```
@@ -294,6 +336,13 @@ ggplot(gapminder_2007) +
 # Transparency adjustment
 ggplot(gapminder_2007) + 
   geom_point(aes(x = gdpPercap, y = lifeExp, size = pop), 
+             alpha = 0.5)
+
+# Combo
+
+ggplot(gapminder_2007) + 
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop, 
+                 color = continent), 
              alpha = 0.5)
 ```
 
@@ -508,7 +557,7 @@ ggplot(incubation_data,
 
 
 
-## Specific Charts
+## Post-Analysis Visualization
 
 * Likert responses
 * Coefficients
@@ -615,7 +664,7 @@ small_multiple(list(m1, m2, m3)) +
 ```
 
 
-## Moderation effects
+## Moderation Effects
 
 `interplot` ![](http://cranlogs.r-pkg.org/badges/grand-total/interplot)
 
@@ -661,20 +710,6 @@ m_gear <- lm(mpg ~ gear * wt, data = mtcars)
 interplot(m = m_gear, var1 = "wt", var2 = "gear")
 ```
 
-## Geographic Visualization
-
-```{r map, message=FALSE, cache=TRUE}
-if (!require(ggmap)) install.packages("ggmap")
-library(ggmap)
-
-china <- c(left = 72, bottom = 0, right = 135, top = 52)
-
-get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
-  ggmap() 
-```
-
-More information about mapping China, see Jie Zhang's [post](http://www.easycharts.club/article/11). 
-
 
 ## Network Visualization
 
@@ -701,6 +736,20 @@ ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
   geom_nodes(aes(color = family, size = importance)) +
   theme_blank()
 ```
+
+## Geographic Visualization
+
+```{r map, message=FALSE, cache=TRUE}
+if (!require(ggmap)) install.packages("ggmap")
+library(ggmap)
+
+china <- c(left = 72, bottom = 0, right = 135, top = 52)
+
+get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
+  ggmap() 
+```
+
+More information about mapping China, see Jie Zhang's [post](http://www.easycharts.club/article/11). 
 
 ## Bonus: Tables
 
