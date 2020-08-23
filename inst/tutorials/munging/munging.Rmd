@@ -24,7 +24,7 @@ library(gapminder)
 ## Abilities You'll Achieve
 
 1. Be the "family doctor" to your dataset
-1. Reserve the valuable part easily! and quickly!
+1. Store the valuable data easily! And quickly!
 
 ## Your "Patient" Today
 

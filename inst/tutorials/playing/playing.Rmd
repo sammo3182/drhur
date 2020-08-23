@@ -10,22 +10,22 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(tidyverse)
+library(lubridate)
 library(gapminder)
 ```
-
 
 # Lecture I: Playing Around
 
 ## Skills
 
-1. Data creation
-1. Data input & output
-1. Data merging & transforming
+1.  Data creation
+2.  Data input & output
+3.  Data merging & transforming
 
 ## Abilities You'll Achieve
 
-1. Create the data in the most effective and efficient way!
-1. Input whatever type of data into R
+1.  Create the data in the most effective and efficient way!
+2.  Input whatever type of data into R
 
 ## Before Anything
 
@@ -37,10 +37,10 @@ Object is created by a "name" + `<-...`
 
 Naming rules
 
-1. Don't start with numbers (WRONG: `1stday`)
-1. No special signs except for `.` and `-` (WRONG: `M&M`)
-1. Case sensitivity (`X != x`)
-1. Don't overwrite the build-in functions unless necessary (DON'T: `list <- c(1:5)`)
+1.  Don't start with numbers (WRONG: `1stday`)
+2.  No special signs except for `.` and `-` (WRONG: `M&M`)
+3.  Case sensitivity (`X != x`)
+4.  Don't overwrite the build-in functions unless necessary (DON'T: `list <- c(1:5)`)
 
 ```{r obejctEg, exercise = TRUE}
 # Creating a legit object
@@ -50,8 +50,8 @@ Naming rules
 
 ### Fun History
 
-+ `=` is not "equals" in R! 
-+ `=` is (almost) equivalent to `<-` in R (`<<-` also exists)
+-   `=` is not "equals" in R!
+-   `=` is (almost) equivalent to `<-` in R (`<<-` also exists)
 
 ```{r out.width = "60%", echo = FALSE}
 knitr::include_graphics("images/APLkeyBoard.png")
@@ -134,10 +134,9 @@ A
 A[2, 3]
 ```
 
-
 ### Vector
 
-A one-dimension matrix.  
+A one-dimension matrix.
 
 ```{r vector, exercise = TRUE}
 A[2,]
@@ -155,8 +154,7 @@ c(1.5, -2.34, NA) #Double
 # What does c(1.5:3) come out?
 ```
 
-Note:
-1. `NA`: not available
+Note: 1. `NA`: not available
 
 ### Character
 
@@ -267,13 +265,11 @@ semester/months(1)
 
 ## Properties of vectors
 
-1. What type is a given vector?
-1. How many elements does it have?
-1. Does it have missing data?
-1. Is it a character vector?
-1. How many unique categories of data does it have? How many elements are in each? 
-......
-
+1.  What type is a given vector?
+2.  How many elements does it have?
+3.  Does it have missing data?
+4.  Is it a character vector?
+5.  How many unique categories of data does it have? How many elements are in each? ......
 
 ```{r property, exercise = TRUE}
 x <- rep(1:5, times = 300)
@@ -317,10 +313,10 @@ data(mtcars)
 
 ### R Data
 
-* `.RDS` (single object)
-* `.RData` (multiple objects)
-* `.txt` (tab table)
-* `.csv`
+-   `.RDS` (single object)
+-   `.RData` (multiple objects)
+-   `.txt` (tab table)
+-   `.csv`
 
 ```{r input, eval = FALSE}
 df_rds <- readRDS("<FileName>.rds")
@@ -352,7 +348,6 @@ df_html <- readHTMLTable(url, which=3)
 feather::read_feather("<FileName>.feather")
 ```
 
-
 ### If the data hasn't existed
 
 ```{r newData, exercise = TRUE}
@@ -377,7 +372,7 @@ gapminder
 knitr::include_graphics("images/rowBind.png")
 ```
 
-Q: Assuming we have two separate data for Asia and Europe (how?), how could we combine them into one? 
+Q: Assuming we have two separate data for Asia and Europe (how?), how could we combine them into one?
 
 ```{r ex_append, exercise = TRUE, exercise.eval = TRUE}
 gapminder_asia <- gapminder[gapminder$continent == "Asia", ]
@@ -426,8 +421,8 @@ gapminder_countryYear<- left_join(gapminder_country, gapminder_year)
 
 ## Long-Wide Transformation
 
-* To long: Transfer columns to values of a variable
-* To wide: Convert values of a rows to columns
+-   To long: Transfer columns to values of a variable
+-   To wide: Convert values of a rows to columns
 
 ```{r pivot}
 library(tidyr)
@@ -459,6 +454,12 @@ saveRDS(gapminder_country, file = "gapminder_country.rds")
 save(gapminder_country, gapminder_year, file = "gapminder.rdata")
 ```
 
+### Save as Python readable data
+
+```{r savingPythong, eval = FALSE}
+feather::write_feather(gapminder, path = "gapminder.feather")
+```
+
 ### Save as csv
 
 ```{r savingCSV, eval = FALSE}
@@ -467,24 +468,42 @@ write.csv(gapminder_country, file = "gapminder_country.csv")
 
 Hint: Don't open csv file with Excel if you have data in Chinese.
 
-### Save as Python readable data
+Of course you could save the data in the format of STATA, SPSS, Excel, but...
 
-```{r savingPythong, eval = FALSE}
-feather::write_feather(gapminder, path = "gapminder.feather")
-```
+### Saving Data Decently
 
+STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
+
+#### 
+
+| **Method**       | **Average Time** | **Minimum** | **Maximum** |
+|:-----------------|:----------------:|:-----------:|:-----------:|
+| base::readRDS    |       19.65      |    18.64    |    21.01    |
+| fst::read\_fst   |       1.39       |     0.56    |     3.41    |
+| haven::read\_sav |      104.78      |    101.00   |    111.85   |
+| qs::qread        |       3.33       |     3.00    |     4.24    |
+
+: Average Times (with Minimums and Maximums) in Seconds of Four Methods for Reading GSS Data in R
+
+| **Method**      | **Average Time** | **Minimum** | **Maximum** | **File Size** |
+|:----------------|:----------------:|:-----------:|:-----------:|:-------------:|
+| base::saveRDS   |       98.36      |    93.09    |    103.24   |    30.9 MB    |
+| fst::write\_fst |       2.70       |     1.86    |     4.05    |    122.1 MB   |
+| qs::qsave       |       5.03       |     4.35    |     6.62    |    44.6 MB    |
+
+: Average Write Times (and File Size) for GSS Data in R
 
 ## Take-Home Points
 
-1. Keep in mind that R is an **OOP**.
-1. Think data as matrices.
-1. Choose the vector type wisely and don't hesitate to change them.
-1. Columns are variables, and rows are observations ("tidy data").
+1.  Keep in mind that R is an **OOP**.
+2.  Think data as matrices.
+3.  Choose the vector type wisely and don't hesitate to change them.
+4.  Columns are variables, and rows are observations ("tidy data").
 
 ## Thank you!
 
-<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+<i class="fa fa-envelope fa-lg"></i>  <yuehu@tsinghua.edu.cn>
 
-<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+<i class="fa fa-globe fa-lg"></i>  <https://sammo3182.github.io/>
 
-<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
+<i class="fab fa-github fa-lg"></i>  [sammo3182](https://github.com/sammo3182)
