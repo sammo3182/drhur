@@ -55,10 +55,10 @@ txt <- data.frame(
       paste('**Data analyzing:** Analyze data with descriptive and multivariate tools and diagnoses.'),
       paste("**Data presenting:** Present descriptive and analytic results with 'ggplot2'")),
   Usage = 
-    c('`drhur(playing)`',
-      paste('`drhur(munging)`'),
-      paste('`drhur(analyzing)`'),
-      paste('`drhur(visualizing)`'))
+    c("`drhur('playing')`",
+      paste("`drhur('munging')`"),
+      paste("`drhur('analyzing')`"),
+      paste("`drhur('visualizing')`"))
   )
 
 kable(txt, format = "html", escape = FALSE, align = c('l', 'l')) %>%
