@@ -1,22 +1,46 @@
 ---
-title: "drhur-vignette"
-author: "Yufei Sun"
-date: "9/15/2020"
+title: "drhur: Learn R with Dr. Hu Easily and Happily"
+author: "Yue Hu and Yufei Sun"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{drhur-vignette}
+  %\VignetteIndexEntry{drhur: Learn R with Dr. Hu Easily and Happily}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE
+)
+
 library(kableExtra)
 ```
 
-# Overview
-**drhur** is a function that calls a run_tutorial function to open a `learnr` project. The project list is continually updated along with the R workshop with Dr. Hu.
+## Overview
 
-# Core Functions
-**drhur** mainly includes the following parts：
+Learning a programming language such as R is tough.
+`drhur` is a pedagogical software make the R learners' life a little bit easier and more happily. 
+The package includes (and is going to include more) tutorials of basic and advanced data science skills with R, such as data cleaning, analyzing, and visualization. 
+The goal of the package is to provide an interactive platform for learners to enter the R world easily and efficiently. 
+
+The package is built upon the `learnr` function which will open a shiny app for learners to interact with the instructions and tasks. 
+The best way to learn these skills together with the "Learning R with Dr. Hu" online/offline workshops.
+One can get more information about the workshops through my website or contact me directly.
+
+## Usage
+
+One can easily load the package and call the tutorials through the function `drhur()`.
+For instance, one can initiate the visualization tutorial with the following commands:
+
+```{r eval = FALSE}
+if (!require(drhur)) install.packages("drhur")
+library(drhur)
+
+drhur("visualization")
+```
+
+
+The current available tutorials include：
 
 ```{r, results='asis', echo=FALSE}
 txt <- data.frame(
@@ -44,7 +68,31 @@ kable(txt, format = "html", escape = FALSE, align = c('l', 'l')) %>%
   column_spec(3, width = "28em")
 ```
 
-# Conclusion
-It is a work in progress and feedback is always welcome. Please open an issue on [GitHub](https://github.com/sammo3182/drhur) if you find a bug or wish to submit a feature request.
+## Conclusion
 
-Check out the [GitHub project’s page](GitHub project’s page); from there you can see the latest updates and also submit feature requests.
+`drhur` aims to help R learners to get in touch with the most common applied skills of the programming language. We encourage users to consult the help files for more details. 
+
+The development of the package is ongoing. Please contact us with any questions, bug reports, and comments. Free to open an issue on [GitHub](https://github.com/sammo3182/drhur/issues) if you have any question or a feature request.
+
+## Affiliation
+
+Yue Hu
+
+Department of Political Science,
+
+Tsinghua Univeristy
+
+Email: <yuehu@tsinghua.edu.cn>
+
+Website: <https://sammo3182@tsinghua.edu.cn>
+
+<br></br>
+
+Yuefei Sun
+
+Department of Political Science,
+
+Tsinghua University
+
+Email: <sunyf20@mails.tsinghua.edu.cn>
+

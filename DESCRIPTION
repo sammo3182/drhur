@@ -2,15 +2,20 @@ Package: drhur
 Type: Package
 Title: Learning R with Dr. Hu
 Version: 0.1.0
-Author: person("Yue", "Hu", role = c("aut"), email = "yuehu@tsinghua.edu.cn")
-Maintainer: Yue Hu <yuehu@tsinghua.edu.cn>
-Description: A package for the R workshops with Dr. Yue Hu.
+Authors@R: c(
+person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
+person("Yufei", "Sun", role = c("crb"), email = "sunyf20@mails.tsinghua.edu.cn")
+)
+Maintainer: Yufei Sun <sunyf20@mails.tsinghua.edu.cn>
+Description: Tutarials of R learning easily and happily.
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 Encoding: UTF-8
+BugReports: https://github.com/sammo3182/drhur/issues
 LazyData: true
 Depends:
-  R(>= 3.6.0)
+  R(>= 3.6.0),
+  learnr(>= 0.10.1)
 Imports:
   gapminder,
   scales,
@@ -24,7 +29,6 @@ Imports:
   summarytools,
   knitr,
   tidyverse,
-  learnr,
   car,
   arm,
   nnet,
