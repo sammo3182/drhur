@@ -14,7 +14,7 @@ library(lubridate)
 library(gapminder)
 ```
 
-# Lecture I: Playing Around
+# Lecture: Playing Around w. R
 
 ## Skills
 
