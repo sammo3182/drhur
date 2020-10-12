@@ -1,5 +1,5 @@
 ---
-title: "Dr. Hu's R Workshop"
+title: "Learning R with Dr. Hu"
 output: 
   learnr::tutorial:
     progressive: true
@@ -14,26 +14,19 @@ library(lubridate)
 library(gapminder)
 ```
 
-# Lecture: Playing Around w. R
+# Lecture: Data Input/Output
 
 ## Skills
 
-1.  Data creation
-2.  Data input & output
-3.  Data merging & transforming
+1.  Input & output data
+1.  Store data
+1.  Combine data
 
-## Abilities You'll Achieve
+## Data Input
 
-1.  Create the data in the most effective and efficient way!
-2.  Input whatever type of data into R
+### Assignment operator
 
-## Before Anything
-
-R is an OOP (objective-oriented programming), remember?
-
-### Create an object
-
-Object is created by a "name" + `<-...`
+"name" + `<-...`
 
 Naming rules
 
@@ -48,16 +41,17 @@ Naming rules
 # Try to build an illegal object
 ```
 
-### Fun History
+### Another assignment operator
 
--   `=` is not "equals" in R!
--   `=` is (almost) equivalent to `<-` in R (`<<-` also exists)
+=
+
+why `<-` not `=`
 
 ```{r out.width = "60%", echo = FALSE}
 knitr::include_graphics("images/APLkeyBoard.png")
 ```
 
-### Why typing twice?
+### You can, but...
 
 Short key: `Alt + -`
 
@@ -75,7 +69,56 @@ median(x <-  1:10); x
 # median(x = 1:10); x
 ```
 
-## Function
+## Assigning Data to an Object
+
+### Build-in data (existing object)
+
+```{r mtcars, exercise}
+data(mtcars)
+#data(gapminder::gapminder)
+```
+
+### Data R recognizes
+
+- `.RDS` (single object)
+- `.RData` (multiple objects)
+- `.txt` (tab table)
+- `.csv`
+
+```{r input, eval = FALSE}
+df_rds <- readRDS("<FileName>.rds")
+df_txt <- read.table("<FileName>.txt")
+df_csv <- read.csv("<FileName>.csv")
+```
+
+### Data reading through functions
+
+```{r eval=FALSE}
+# SPSS, Stata, SAS
+library(haven)
+df_spss <- read_spss("<FileName>.sav")
+df_stata <- read_dta("<FileName>.dta") 
+df_sas <- read_sas("<FileName>.sas7bdat")  
+
+# Excel sheets
+library(readxl)
+df_excel <- read_excel("<FileName>.xls")
+df_excel2 <- read_excel("<FileName>.xlsx") 
+
+# JavaScript Object Notation 
+library(rjson)
+df_json <- fromJSON(file = "<FileName>.json" )
+
+# XML/Html
+df_xml <- xmlTreeParse("<url>")
+df_html <- readHTMLTable(url, which=3)
+
+# Feather
+feather::read_feather("<FileName>.feather")
+```
+
+
+## A Word of Function
 
 ```{r out.width = "60%", echo = FALSE}
 knitr::include_graphics("images/handShadow.gif")
@@ -89,61 +132,17 @@ handShadow <- light(finger = 3)
 handShadow
 ```
 
-NB: Object can contains everything, no matter data, functions, outcomes, or plots.
 
-## Math
+## Storing Data
 
-```{r math, exercise = TRUE}
-x <- y <- 42
+1. A vector
+1. A matrix
+1. A data.frame
+1. A list
+1. An array
 
-# basic math
-x + (1 - 2) * 3 / 4
 
-# advanced math
-x^2;sqrt(x);log(x);exp(x)
-
-# matrix algebra
-z <- matrix(1:4, ncol = 2)
-z + z - z
-z %*% z  # inner multiplication
-z %o% z  # outter multiplication
-
-# logical evaluation
-x == y; x != y
-x & y; x | y
-x > y; x <= y
-```
-
-See more about linear algebra in R [here](https://towardsdatascience.com/intro-to-r-linear-algebra-2a4de2506c93).
-
-## Let's Create Some Data
-
-Hey, matrix and its friends!
-
-### Matrix
-
-```{r out.width = "60%", echo = FALSE}
-knitr::include_graphics("images/matrix.gif")
-```
-
-Creating matrix in R
-
-```{r matrixR}
-A <- matrix(-8:7, ncol = 4)
-A
-A[2, 3]
-```
-
-### Vector
-
-A one-dimension matrix.
-
-```{r vector, exercise = TRUE}
-A[2,]
-A[,3]
-```
-
-Let's know some common types of it
+## Vector
 
 ### Numeric
 
@@ -202,7 +201,7 @@ Learn more about `levels`, `labels`, and more sophisticated manipulations in the
 
 ### Time
 
-`as.POSIXct` vs. `as.POSIXlt`
+`as.POSIXct` (numeric input), `as.POSIXlt` (character input)
 
 ```{r time, exercise}
 Sys.time()
@@ -263,28 +262,21 @@ semester/days(1)
 semester/months(1)
 ```
 
-## Properties of vectors
 
-1.  What type is a given vector?
-2.  How many elements does it have?
-3.  Does it have missing data?
-4.  Is it a character vector?
-5.  How many unique categories of data does it have? How many elements are in each? ......
+## Matrix = Multiple Vectors
 
-```{r property, exercise = TRUE}
-x <- rep(1:5, times = 300)
+```{r out.width = "60%", echo = FALSE}
+knitr::include_graphics("images/matrix.gif")
 ```
 
-```{r property-solution}
-class(x)
-length(x)
-is.na(x)
-is.character(x)
-unique(x)
-table(x)
+Creating matrix in R
+
+```{r matrixR}
+A <- matrix(-8:7, ncol = 4)
+A
+A[2, 3]
 ```
 
-Note: Most of the property function can be used for all types of data in R
 
 ## Excel-Like Data
 
@@ -292,67 +284,25 @@ Note: Most of the property function can be used for all types of data in R
 
 In Excel:
 
-```{r out.width = "60%", echo = FALSE}
+```{r excel, out.width = "60%", echo = FALSE}
 knitr::include_graphics("images/excel-r1.png")
 ```
 
-In R(studio):
+In R: 
 
-```{r}
+```{r dataframe}
+df_toy <- data.frame(female = c(0,1,1,0),
+           age = c(29, 39, 38, 12),
+           name = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America"))
+
+df_toy
+```
+
+
+In Rstudio:
+
+```{r rstudio}
 knitr::include_graphics("images/excel-r2.png")
-```
-
-## Data Input
-
-### Build-in data
-
-```{r mtcars, exercise}
-data(mtcars)
-#data(gapminder::gapminder)
-```
-
-### R Data
-
--   `.RDS` (single object)
--   `.RData` (multiple objects)
--   `.txt` (tab table)
--   `.csv`
-
-```{r input, eval = FALSE}
-df_rds <- readRDS("<FileName>.rds")
-df_txt <- read.table("<FileName>.txt")
-df_csv <- read.csv("<FileName>.csv")
-```
-
-```{r eval=FALSE}
-# SPSS, Stata, SAS
-library(haven)
-df_spss <- read_spss("<FileName>.sav")
-df_stata <- read_dta("<FileName>.dta") 
-df_sas <- read_sas("<FileName>.sas7bdat")  
-
-# Excel sheets
-library(readxl)
-df_excel <- read_excel("<FileName>.xls")
-df_excel2 <- read_excel("<FileName>.xlsx") 
-
-# JavaScript Object Notation 
-library(rjson)
-df_json <- fromJSON(file = "<FileName>.json" )
-
-# XML/Html
-df_xml <- xmlTreeParse("<url>")
-df_html <- readHTMLTable(url, which=3)
-
-# Feather
-feather::read_feather("<FileName>.feather")
-```
-
-### If the data hasn't existed
-
-```{r newData, exercise = TRUE}
-df_new <- data.frame(x = 1:3, y = c("x", "y", "z"))
-df_new
 ```
 
 ## Combining Data
@@ -492,6 +442,31 @@ STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
 | qs::qsave       |       5.03       |     4.35    |     6.62    |    44.6 MB    |
 
 : Average Write Times (and File Size) for GSS Data in R
+
+## Bonus: Math
+
+```{r math, exercise = TRUE}
+x <- y <- 42
+
+# basic math
+x + (1 - 2) * 3 / 4
+
+# advanced math
+x^2;sqrt(x);log(x);exp(x)
+
+# matrix algebra
+z <- matrix(1:4, ncol = 2)
+z + z - z
+z %*% z  # inner multiplication
+z %o% z  # outter multiplication
+
+# logical evaluation
+x == y; x != y
+x & y; x | y
+x > y; x <= y
+```
+
+See more about linear algebra in R [here](https://towardsdatascience.com/intro-to-r-linear-algebra-2a4de2506c93).
 
 ## Take-Home Points
 

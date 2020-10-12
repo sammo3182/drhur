@@ -3,9 +3,9 @@ Type: Package
 Title: Learning R with Dr. Hu
 Version: 0.1.0
 Authors@R: c(
-person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
-person("Yufei", "Sun", role = c("crb"), email = "sunyf20@mails.tsinghua.edu.cn")
-)
+    person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
+    person("Yufei", "Sun", role = c("crb"), email = "sunyf20@mails.tsinghua.edu.cn")
+    )
 Maintainer: Yufei Sun <sunyf20@mails.tsinghua.edu.cn>
 Description: Tutarials of R learning easily and happily.
 License: MIT + file LICENSE
@@ -36,6 +36,6 @@ Imports:
   moments,
   tibble,
   performance
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests: 
     rmarkdown
