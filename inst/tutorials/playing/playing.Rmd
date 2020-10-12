@@ -112,9 +112,6 @@ df_json <- fromJSON(file = "<FileName>.json" )
 # XML/Html
 df_xml <- xmlTreeParse("<url>")
 df_html <- readHTMLTable(url, which=3)
-
-# Feather
-feather::read_feather("<FileName>.feather")
 ```
 
 
@@ -278,7 +275,7 @@ A[2, 3]
 ```
 
 
-## Excel-Like Data
+## Data.frame: Excel-Like Data
 
 "spreadsheet"
 
@@ -298,11 +295,30 @@ df_toy <- data.frame(female = c(0,1,1,0),
 df_toy
 ```
 
-
 In Rstudio:
 
 ```{r rstudio}
 knitr::include_graphics("images/excel-r2.png")
+```
+
+## List and Array: Chains of Datas
+
+```{r list}
+ls_monks <- list(name = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"), 
+                   power = c(100, 20, 90, 40),
+                   buddha = c(TRUE, TRUE, FALSE, FALSE))
+
+ls_monks
+```
+
+```{r array}
+# Create two vectors of different lengths.
+vector1 <- c(5,9,3)
+vector2 <- c(10,11,12,13,14,15)
+
+# Take these vectors as input to the array.
+result <- array(c(vector1,vector2),dim = c(3,3,2))
+result
 ```
 
 ## Combining Data
@@ -325,8 +341,8 @@ knitr::include_graphics("images/rowBind.png")
 Q: Assuming we have two separate data for Asia and Europe (how?), how could we combine them into one?
 
 ```{r ex_append, exercise = TRUE, exercise.eval = TRUE}
-gapminder_asia <- gapminder[gapminder$continent == "Asia", ]
-gapminder_europe <- gapminder[gapminder$continent == "Europe", ]
+gapminder_asia <- gapminder[gapminder$continent == "Asia", 1:2]
+gapminder_europe <- gapminder[gapminder$continent == "Europe", 1:2]
 ```
 
 ```{r ex_append-solution}
@@ -369,31 +385,6 @@ gapminder_year <- select(gapminder, year, pop)
 gapminder_countryYear<- left_join(gapminder_country, gapminder_year)
 ```
 
-## Long-Wide Transformation
-
--   To long: Transfer columns to values of a variable
--   To wide: Convert values of a rows to columns
-
-```{r pivot}
-library(tidyr)
-
-relig_income # wide
-fish_encounters # long
-```
-
-### To longer
-
-```{r pivotLonger, exercise = TRUE}
-relig_income %>%
- pivot_longer(-religion, names_to = "income", values_to = "count")
-```
-
-### To wider
-
-```{r pivotWider, exercise = TRUE}
-fish_encounters %>%
-  pivot_wider(names_from = station, values_from = seen)
-```
 
 ## Data Output
 
@@ -404,11 +395,6 @@ saveRDS(gapminder_country, file = "gapminder_country.rds")
 save(gapminder_country, gapminder_year, file = "gapminder.rdata")
 ```
 
-### Save as Python readable data
-
-```{r savingPythong, eval = FALSE}
-feather::write_feather(gapminder, path = "gapminder.feather")
-```
 
 ### Save as csv
 
@@ -470,15 +456,22 @@ See more about linear algebra in R [here](https://towardsdatascience.com/intro-t
 
 ## Take-Home Points
 
-1.  Keep in mind that R is an **OOP**.
-2.  Think data as matrices.
-3.  Choose the vector type wisely and don't hesitate to change them.
-4.  Columns are variables, and rows are observations ("tidy data").
+1. Input
+    + `readTYPE`
+    + `read_type`
+    + `read.type`
+1. Store
+    + Vector
+    + Matrix/data.frame
+    + List, array
+1. Output
+    + `save`
+    + `saveTYPE`
 
 ## Thank you!
 
-<i class="fa fa-envelope fa-lg"></i>  <yuehu@tsinghua.edu.cn>
+<i class="fa fa-envelope fa-lg"></i> <yuehu@tsinghua.edu.cn>
 
-<i class="fa fa-globe fa-lg"></i>  <https://sammo3182.github.io/>
+<i class="fa fa-globe fa-lg"></i> <https://sammo3182.github.io/>
 
-<i class="fab fa-github fa-lg"></i>  [sammo3182](https://github.com/sammo3182)
+<i class="fab fa-github fa-lg"></i> [sammo3182](https://github.com/sammo3182)
