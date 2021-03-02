@@ -1,3 +1,5 @@
+pkgdown <img src="https://user-images.githubusercontent.com/58319029/109610431-b5fc7080-7b67-11eb-9bfb-988bd1759c50.png" width = "116.9" height = "135" align="right" />
+
 ------------------------------------------------------------------------
 drhur
 =========
