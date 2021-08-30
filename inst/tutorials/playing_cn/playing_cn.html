@@ -129,7 +129,7 @@ $(document).ready(function () {
 </div>
 <div id="section-函数是什么" class="section level3">
 <h3>函数是什么？</h3>
-<p><img src="images/handShadow.gif" width="60%" /></p>
+<p><img src="D:/Dropbox/Seafile/WW/01_Instruction/Research/R%20packages/drhur/inst/tutorials/playing/images/handShadow.gif" width="60%" /></p>
 <pre class="r"><code>light &lt;- function(finger){
   {{shadow &lt;- finger + 5}}
 }
@@ -173,7 +173,7 @@ aValidObject # 展示对象内容</code></pre>
 <h3>另一种赋值符 <code>=</code></h3>
 <p>用法和<code>&lt;-</code>等效。 但更多写过更倾向使用 <code>&lt;-</code> 而不是 <code>=</code>。</p>
 <p>Why?</p>
-<p><img src="images/APLkeyBoard.png" width="60%" /></p>
+<p><img src="../playing/images/APLkeyBoard.png" width="60%" /></p>
 <ul>
 <li>指向直观</li>
 </ul>
@@ -327,11 +327,11 @@ vec_fac2</code></pre>
 </ul>
 <p><code>as.POSIXct</code> (numeric input), <code>as.POSIXlt</code> (character input) 其中POSIXct是整数存储、POSIXlt是列表存储</p>
 <pre class="r"><code>Sys.time() # 获取当前时间</code></pre>
-<pre><code>## [1] &quot;2021-08-30 14:36:53 CST&quot;</code></pre>
+<pre><code>## [1] &quot;2021-08-30 15:36:55 CST&quot;</code></pre>
 <pre class="r"><code>today()   # 获取当日的 年月日</code></pre>
 <pre><code>## [1] &quot;2021-08-30&quot;</code></pre>
 <pre class="r"><code>now()  # 获取当日的 年月日 时分秒  时区</code></pre>
-<pre><code>## [1] &quot;2021-08-30 14:36:53 CST&quot;</code></pre>
+<pre><code>## [1] &quot;2021-08-30 15:36:55 CST&quot;</code></pre>
 <pre class="r"><code># CST为操作时电脑ip所在的时区
 
 # The full pack
@@ -358,7 +358,7 @@ class(date1)  # 查看数据类型</code></pre>
 <div id="section-矩阵" class="section level3">
 <h3>矩阵</h3>
 <p>矩阵（matrix）是具有维度属性的向量，矩阵都是二维的，和向量类似，矩阵中也仅能包含一种数据类型</p>
-<p><img src="images/matrix.gif" width="60%" /></p>
+<p><img src="../playing/images/matrix.gif" width="60%" /></p>
 <p>创建矩阵主要有三种方法：</p>
 <ul>
 <li>手动创建: <code>matrix</code></li>
@@ -445,7 +445,7 @@ ls_monks</code></pre>
 </ul>
 <p>数据框（Data Frame）是一种特殊的列表/矩阵，其中所用元素长度都相等，列表中的每个元素都可以看作一列，每个元素的长度可以看作行数。</p>
 <p>在Excel中:</p>
-<p><img src="images/excel-r1.png" width="60%" /></p>
+<p><img src="../playing/images/excel-r1.png" width="60%" /></p>
 <p>在R中，使用<code>data.frame()</code>创建数据框</p>
 <pre class="r"><code>df_toy &lt;- data.frame(female = c(0,1,1,0),
            age = c(29, 39, 38, 12),
@@ -458,8 +458,8 @@ df_toy</code></pre>
   </script>
 </div>
 <p>在Rstudio中:</p>
-<pre class="r"><code>knitr::include_graphics(&quot;images/excel-r2.png&quot;)</code></pre>
-<p><img src="images/excel-r2.png" width="565" /></p>
+<pre class="r"><code>knitr::include_graphics(&quot;../playing/images/excel-r2.png&quot;)</code></pre>
+<p><img src="../playing/images/excel-r2.png" width="565" /></p>
 </div>
 </div>
 <div id="section-合并数据" class="section level2">
@@ -475,7 +475,7 @@ gapminder</code></pre>
 </div>
 <div id="section-行合并" class="section level3">
 <h3>行合并</h3>
-<p><img src="images/rowBind.png" width="95%" /></p>
+<p><img src="../playing/images/rowBind.png" width="95%" /></p>
 <p>假设我们有亚洲和欧洲人口数据，如何把它们合并在一起呢？</p>
 <div class="tutorial-exercise" data-label="ex_append" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>gapminder_asia &lt;- gapminder[gapminder$continent == &quot;Asia&quot;, 1:2]
@@ -491,7 +491,7 @@ gapminder_eurasia &lt;- bind_rows(gapminder_asia, gapminder_europe) #按行连�
 <div id="section-列合并" class="section level3">
 <h3>列合并</h3>
 <p>如果我们有一系列的变量，都是来自同一组国家的，如何把他们整合在一起？</p>
-<p><img src="images/columnBind.png" width="95%" /></p>
+<p><img src="../playing/images/columnBind.png" width="95%" /></p>
 <div class="tutorial-exercise" data-label="ex_columnBind" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>gapminder_country &lt;- gapminder$country
 gapminder_year &lt;- gapminder$year</code></pre>
@@ -504,7 +504,7 @@ gapminder_year &lt;- gapminder$year</code></pre>
 <div id="section-索引合并" class="section level3">
 <h3>索引合并</h3>
 <p><code>dplyr::*_joint</code>函数</p>
-<p><img src="images/join.png" width="95%" /></p>
+<p><img src="../playing/images/join.png" width="95%" /></p>
 <ol style="list-style-type: decimal">
 <li>左连接（left_jion): 保留x中的所有观测,如果x中的key变量,在y中有多个同样的key,那么所有的结合可能都会罗列出来。</li>
 </ol>

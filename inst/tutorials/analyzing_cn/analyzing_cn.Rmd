@@ -1,0 +1,374 @@
+---
+title: "Dr. Hu's R Workshop"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gapminder)
+library(car)
+library(arm)
+library(summarytools)
+library(performance)
+library(nnet)
+library(tibble)
+library(tidyverse)
+```
+
+# 课程 III: 数据分析
+
+## 技能
+
+1. 描述统计学:
+    + 统计分布的矩
+    + 跨变量电子数据表
+1. 分析统计学:
+    + 二元分析 (t 检验, 相关性分析, 方差分析)
+    + 多变量分析 (普通最小二乘法（OLS）, 最大似然估计（MLE)）
+
+## 你将会获得的能力
+
+1. 获取描述性表格中的任何信息。
+1. 运行常见模型并学习向更复杂的模型迈进。
+
+
+## 示例数据
+
+由 [Hans Rosling 的 TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare) 普及的人口数据.
+
+```{r toy, exercise = TRUE}
+library(tibble)
+library(gapminder)
+glimpse(gapminder)
+```
+
+## 让数据来说话
+
+啊, 稀有数据!
+
+它们是多么的鲜美多汁!!
+
+如何...才能让它们说话?
+
+
+## 描述统计学
+
+### 矩 (moments)
+
+1. 平均值
+
+2. 方差：当数据分布比较分散（即数据在平均数附近波动较大）时，各个数据与平均数的差的平方和较大，方差就较大；当数据分布比较集中时，各个数据与平均数的差的平方和较小。因此方差越大，数据的波动越大；方差越小，数据的波动就越小。
+
+3. 偏度（skewness），是统计数据分布偏斜方向和程度的度量。偏度定义中包括右偏分布（也叫正偏分布，其偏度>0），正态分布（偏度=0），左偏分布（也叫负偏分布，其偏度<0）
+
+4. 峰度（kurtosis）：表征概率密度分布曲线在平均值处峰值高低的特征数。直观看来，峰度反映了峰部的尖度，计算方法为随机变量的四阶中心矩与方差平方的比值。
+
+```{r moments, exercise = TRUE, exercise.eval = TRUE}
+library(tidyverse)
+library(moments)
+gapminder %>%
+  summarise(mean_life = mean(lifeExp),
+            median_life = median(lifeExp),
+            iqr_life = IQR(lifeExp),
+            #  IQR = quantile(x, 3/4) - quantile(x, 1/4)
+            skew_life = skewness(lifeExp),
+            kurtosis_life = kurtosis(lifeExp))
+```
+
+
+```{r moments-solution}
+library(broom) #broom是tidyverse系列包之一，可以使建模结果变量更加整洁。
+sum_OneVar <- summary(gapminder$lifeExp) %>% tidy
+```
+
+### 总结表格
+
+```{r descriptive, exercise = TRUE}
+library(summarytools)
+freq(gapminder)
+```
+
+```{r descriptive-solution}
+dfSummary(gapminder)
+```
+
+### 图形
+
+```{r descriptivePretty, eval = FALSE, include = FALSE}
+print(dfSummary(gapminder,
+                graph.magnif = 0.3,
+                trim.strings = TRUE,
+                plain.ascii = FALSE,
+                valid.col = FALSE,
+                na.col = FALSE),
+      method = 'render')
+```
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/analyzing/images/dfSummary.png' width = '100%'>
+
+## 分析统计学
+
+### 二元分析
+
+一个变量如何和另一个变量相关？
+
+1. 它们的平均值相近吗?
+1. 两个变量独立于彼此吗?
+1. 方差重要吗？
+
+### 交叉表
+
+```{r crossTable}
+library(summarytools)
+gapminder$coldWar <- gapminder$year <= 1992
+gapminder$asia <- gapminder$continent == "Asia"
+ctable(gapminder$asia, gapminder$coldWar)
+```
+
+
+### 平均值中的差异
+
+问: 冷战前后的人均寿命是否有变化？
+
+$H_{0}: \bar{LifeExpctancy}_{prio 1991} = \bar{LifeExpctancy}_{post 1991},\ \alpha = .05$
+
+```{r ttest, exercise = TRUE}
+gapminder$coldWar <- gapminder$year <= 1992
+gapminder %>%
+  group_by(coldWar) %>% #根据coldWar分组
+  summarise(mean(lifeExp)) #分组汇总，group_by通常与summarise函数一起使用
+```
+
+```{r ttest-solution}
+t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$year > 1991])
+t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$year > 1991], alternative = "greater", conf.level = .99) #t 检验
+```
+
+### 相关性
+
+问: 一个国家的人均寿命是否和人均国民生产总值相关(人口呢）？
+
+$H_{0}: \rho_{(LifeExpectancy, GDP)} = 0,\ \alpha = .05$
+
+```{r corr, exercise = TRUE}
+cor.test(gapminder$lifeExp, gapminder$gdpPercap) #相关性检验
+```
+
+### 两个以上变量
+
+```{r corrplot}
+select(gapminder, year, lifeExp, gdpPercap, pop) %>% #select函数用于选择固定列
+  cor %>% # 相关性分析
+  corrplot::corrplot.mixed() # 相关性图
+```
+
+### 方差分析(ANOVA)
+
+问: 不同大洲的人均寿命不同吗(不同年份呢)？
+
+$H_{0}: \mu_{Africa} = \mu_{Americas} = ... = \mu_{Oceania},\ \alpha = .05$
+
+```{r anova, exercise = TRUE}
+aov(lifeExp ~ continent, data = gapminder) %>%
+  summary() #方差分析
+```
+
+协方差分析(ANCOVA)?
+
+```{r anova-solution}
+aov(lifeExp ~ continent + as.factor(year), data = gapminder) %>%
+  summary()
+```
+
+
+### 普通最小二乘法(OLS)
+
+问: 一个国家的人均寿命如何在不同大洲和年份之间变动?
+
+```{r ols, exercise = TRUE}
+gapminder %>% count(lifeExp, continent, year)
+```
+
+```{r ols-solution}
+lm(lifeExp ~ continent + year, data = gapminder) %>%  
+  summary()  #OLS用于线性回归分析，`～`左侧为因变量，右侧为解释变量、控制变量
+```
+
+### 变量变换
+
+控制时效性?
+
+$t + t^2$
+
+```{r time, exercise = TRUE}
+lm(lifeExp ~ gdpPercap + year, data = gapminder) %>%
+  summary()
+```
+
+
+```{r time-solution}
+lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
+  summary()
+```
+
+其他变换
+
+`sqrt(var)`, `log(var)`
+
+### 标准化
+
+```{r standardized}
+library(arm)
+lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
+  standardize() %>%
+  summary()
+```
+
+
+### 条件效应
+
+一个国家的人均国民生产总值对人均寿命的影响是否随着人口数量的变化而变化?
+
+```{r interact, exercise = TRUE}
+lm(lifeExp ~ gdpPercap + year, data = gapminder) %>%
+  summary()
+```
+
+
+```{r interact-solution}
+lm(lifeExp ~ gdpPercap * pop + year, data = gapminder) %>% 
+  summary()
+```
+
+提示: 你的模型中必须同时包含这两个基本概念.
+
+### 分析后的诊断
+
++ 残差
++ 异常值
++ 异方差性
++ 多重共线性
++ 自相关性
+
+......
+
+### 残差
+
+```{r residual, exercise = TRUE}
+fit <- lm(lifeExp ~ gdpPercap + year, data = gapminder)
+res <- resid(fit) # 残差分析
+```
+
+```{r residual-solution}
+plot(fit, which  = 1) # plot函数用于画出残差分析图
+```
+
+### 异常值
+
+```{r outlier, exercise = TRUE}
+library(car)
+outlierTest(fit)
+# car::qqPlot(fit)
+```
+
+### 异方差性
+
+```{r heter, exercise = TRUE}
+ncvTest(fit)
+```
+
+### 多重共线性
+
+```{r multi, exercise = TRUE}
+vif(fit)
+```
+
+### 自相关性
+
+```{r durbin, exercise = TRUE}
+durbinWatsonTest(fit)
+```
+
+### 很酷的快捷方式
+
+```{r performance, exercise = TRUE}
+library(performance)
+model_performance(fit)
+check_normality(fit)
+check_outliers(fit)
+```
+
+
+### 广义逻辑回归
+
+* Logit: 在控制人口的前提下，一国的人均GDP是否决定了该国的人均预期寿命高于全球平均水平？
+
+```{r logit, exercise = TRUE}
+glimpse(mtcars) #查看数据概要
+glm(vs ~ gear + wt + mpg, data = mtcars, family = "binomial") %>% #tips：vs是定类（0/1）变量
+  summary()
+```
+
+### 阐释
+
+```{r margin, exercise = TRUE}
+glm(vs ~ gear + wt + mpg, data = mtcars, family = "binomial") %>%
+  ggeffects::ggpredict()
+```
+
+### 有序回归
+
+```{r ologit, exercise = TRUE}
+polr(as.factor(gear) ~ wt + mpg, data = mtcars) %>% # tips:gear为定序变量
+  summary()
+```
+
+```{r ologit-solution}
+library(ordinal)
+clm(as.factor(gear) ~ wt + mpg, data = mtcars) %>%
+  summary()
+```
+
+
+### 多项分布
+
+```{r mlogit, exercise = TRUE}
+library(nnet)
+multinom(as.factor(cyl) ~ wt + mpg, data = mtcars) %>%
+  summary()
+```
+
+
+### 泊松分布
+
+```{r poisson, exercise = TRUE}
+df_poisson <- data.frame(counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12),
+                         outcome = gl(3, 1, 9),
+# Generate factors by specifying the pattern of their levels.
+                         treatment = gl(3, 3))
+glm(counts ~ outcome + treatment,
+               family = poisson(),
+               data = df_poisson) %>%
+  summary()
+```
+
+
+## 总结
+
+1. 描述:
+    + `ctable`
+    + `cor`
+    + `aov`
+2. 分析: `lm/glm/clm/multinom(Y ~ Xs, data)`
+
+## 谢谢！
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)

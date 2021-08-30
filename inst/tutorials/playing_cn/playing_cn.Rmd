@@ -37,7 +37,7 @@ R是对象指向型编程（Object-oriented programming）语言。
 ### 函数是什么？
 
 ```{r out.width = "60%", echo = FALSE}
-knitr::include_graphics("images/handShadow.gif")
+knitr::include_graphics("D:/Dropbox/Seafile/WW/01_Instruction/Research/R packages/drhur/inst/tutorials/playing/images/handShadow.gif")
 ```
 
 ```{r funIllustration, eval = FALSE}
@@ -90,7 +90,7 @@ aValidObject # 展示对象内容
 Why?
 
 ```{r out.width = "60%", echo = FALSE}
-knitr::include_graphics("images/APLkeyBoard.png")
+knitr::include_graphics("../playing/images/APLkeyBoard.png")
 ```
 
 + 指向直观
@@ -282,7 +282,7 @@ class(date1)  # 查看数据类型
 矩阵（matrix）是具有维度属性的向量，矩阵都是二维的，和向量类似，矩阵中也仅能包含一种数据类型
 
 ```{r out.width = "60%", echo = FALSE}
-knitr::include_graphics("images/matrix.gif")
+knitr::include_graphics("../playing/images/matrix.gif")
 ```
 
 创建矩阵主要有三种方法：
@@ -343,7 +343,7 @@ ls_monks
 在Excel中:
 
 ```{r excel, out.width = "60%", echo = FALSE}
-knitr::include_graphics("images/excel-r1.png")
+knitr::include_graphics("../playing/images/excel-r1.png")
 ```
 
 在R中，使用`data.frame()`创建数据框
@@ -359,7 +359,7 @@ df_toy
 在Rstudio中:
 
 ```{r rstudio}
-knitr::include_graphics("images/excel-r2.png")
+knitr::include_graphics("../playing/images/excel-r2.png")
 ```
 
 
@@ -378,7 +378,7 @@ gapminder
 ### 行合并
 
 ```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/rowBind.png")
+knitr::include_graphics("../playing/images/rowBind.png")
 ```
 
 假设我们有亚洲和欧洲人口数据，如何把它们合并在一起呢？
@@ -399,7 +399,7 @@ gapminder_eurasia <- bind_rows(gapminder_asia, gapminder_europe) #按行连接�
 如果我们有一系列的变量，都是来自同一组国家的，如何把他们整合在一起？
 
 ```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/columnBind.png")
+knitr::include_graphics("../playing/images/columnBind.png")
 ```
 
 ```{r ex_columnBind, exercise = TRUE}
@@ -416,7 +416,7 @@ bind_cols(gapminder_country, gapminder_year) #按列结合时需要行名相同
 `dplyr::*_joint`函数
 
 ```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/join.png")
+knitr::include_graphics("../playing/images/join.png")
 ```
 
 1. 左连接（left_jion): 保留x中的所有观测,如果x中的key变量,在y中有多个同样的key,那么所有的结合可能都会罗列出来。

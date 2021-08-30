@@ -1,0 +1,321 @@
+---
+title: "Dr. Hu's R Workshop"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(gapminder)
+```
+
+# 课程 II: 数据整理
+
+## 技能
+
+1. 归纳: 整理, 计数, 总结
+1. 提取: 过敏, 选择, 转化
+
+## 你将会获得的能力
+
+1. 成为你的数据集的“家庭医生”
+1. 轻松快速地储存有价值的数据！
+
+## 你今天的“患者”
+
+由 [Hans Rosling 的 TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare) 普及的人口数据。
+
+```{r toy, exercise = TRUE}
+library(gapminder)
+gapminder
+```
+
+## 归纳
+
+### 了解数据
+```{r glimpse, exercise = TRUE}
+head(gapminder, n = 6) # 查看数据框中的前6行
+
+## 系统的视角
+str(gapminder)  #查看数据框当中有哪些变量以及变量的类型：
+```
+
+### 专业的理解
+
+嗨，我是一名专家~ 我想从系统的视角了解数据, 例如找到
+
+* 观察数据大小
+* 变量的名字及数量
+* 或者整个数据帧的结构
+
+```{r systemView, exercise = TRUE}
+gapminder
+```
+
+```{r systemView-solution}
+nrow(gapminder) # 获取数据的行数
+ncol(gapminder) # 获取数据的列数
+names(gapminder) # 获取变量名/列名
+str(gapminder) # 获取变量名、变量名类型、行数、列数
+```
+
+
+### 了解变量
+
+问: 给我讲讲数据集中的人口变量, 比如说, 我们有多少个国家的人口数据, 平均值是多少, 哪个国家的人口最多／最少, 还有其他内容! 对了,  `pop` 被保存成了什么形式呢？
+
+```{r variable, exercise = TRUE}
+head(gapminder$year, n = 10) #查看年份前10行
+```
+
+```{r variable-solution}
+mean(gapminder$year, na.rm = TRUE) #求取年份的平均值，na.rm = TRUE表示忽略NA
+median(gapminder$year) #求取年份的中间值
+min(gapminder$year) #求取年份的最小值
+max(gapminder$year) #求取年份的最大值
+length(gapminder$year) #求取年份的长度（此处为行数）
+summary(gapminder$year) #获取年份的上述所有信息
+class(gapminder$gdpPercap) #查看年份结构：vector、matrix、array、dataframe、list
+typeof(gapminder$gdpPercap) #查看年份元素类型
+```
+
+## 更进一步
+
+欢迎来到 Tidyverse
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/tidyverseHive.png' width = '100%'>
+
+数据操作的常用工具箱
+
++ 一个Hadley包
++ 实际上是一个不断增长的 [数据包](https://www.tidyverse.org/packages/)！
+
+安装:
+
+```{r loadTidy, exercise = TRUE}
+## install.packages("tidyverse")
+library("tidyverse")
+```
+
+今天我们主要关注 `dplyr`。
+
+##  `dplyr`的五个杀手锏
+
+他们只做一件事，却做得很好。
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/simple.png' width = '95%'>
+
+### 可组合性: 使一切不同
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/composable.png' width = '95%'>
+
+使代码的可读性更强。
+
+ `%>%`的快捷键:
+
+* Ctrl + Shift + M (Win)
+* Cmd + Shift + M (Mac)
+
+## 数据概览
+
+### 拓展提升
+
+你还记得 `str()`, 对吧?
+
+```{r overview, exercise = TRUE}
+str(gapminder)
+glimpse(gapminder)
+```
+
+### 按顺序查看
+
+问: 哪个国家的人口最多？哪个国家的人口最少？
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/arrange.png' width = '95%'>
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/desc.png' width = '95%'>
+
+```{r ex_arrange, exercise = TRUE}
+gapminder
+```
+
+```{r ex_arrange-solution}
+gapminder %>%
+  arrange(pop) # arrange函数用于排序，此处为按照人口规模从小到大进行排序
+
+arrange(gapminder, desc(pop)) #此处为按照人口规模进行降序排列
+```
+
+### "给我一些数字"!
+
+问: 每个大洲我们分别有多少个观测值? 每个大洲的观测值数量一样吗? 每个国家呢？
+
+```{r ex_count, exercise = TRUE}
+gapminder %>%
+  count(continent)
+
+# gapminder %>%
+#   add_count(continent)
+```
+
+```{r ex_count-solution}
+gapminder %>%
+  count(continent, country)
+```
+
+ `count()` 告诉了我们什么?
+
+### 变量的统计数据
+
+问: 人均国民生产总值和预期寿命的中位数分别是什么?
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/summarise.png' width = '95%'>
+
+
+```{r ex_summary, exercise = TRUE}
+gapminder %>%
+  summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
+```
+
+### 组内总结
+
+问: *每个大洲的*人均国民生产总值和预期寿命的中位数分别是什么？
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/group_by.png' width = '95%'>
+
+
+```{r ex_summaryG, exercise = TRUE}
+gapminder %>%
+  group_by(continent) %>%
+  summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
+```
+
+
+## 提取
+
+### 行
+
+Q: *2007*年哪个国家的人口数量最多?
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/filter.png' width = '95%'>
+
+
+```{r ex_filter, exercise = TRUE, exercise.eval = TRUE}
+gapminder %>%
+  arrange(desc(pop))
+```
+
+```{r ex_filter-solution}
+gapminder %>%
+  filter(year == 2007) %>% #filter函数筛选出年份为2007年
+  arrange(desc(pop)) #再根据人口规模进行降序排列
+```
+
+2007年及以前的十年哪个国家的人口数量最多? (提示: 把 `%in%` 当成一个条件)
+
+### 列
+
+问: 如果我想要
+
+1. 仅国家，年份和人口
+2. 除了大洲的一切
+3. 以"co"开头的变量
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/select.png' width = '95%'>
+
+```{r ex_select, exercise = TRUE}
+gapminder %>%
+  select(country, year, pop) #选择国家、年份、人口规模
+```
+
+```{r ex_select-solution}
+gapminder %>%
+  select(-continent) #去掉大洲
+
+gapminder %>%
+  select(starts_with("co")) #匹配以“co”开头的名称
+```
+
+### 连击大招
+
+问: 2007年人口最多的国家的预期寿命是多少---请同时提供国家名称, 人口数量, 以及预期寿命?
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/comboAttack.gif' width = '95%'>
+
+```{r ex_combo, exercise = TRUE}
+gapminder
+```
+
+```{r ex_combo-solution}
+gapminder %>%
+  filter(year == 2007) %>%
+  arrange(desc(pop)) %>%
+  select(country, pop, lifeExp)
+```
+
+### 修改调整
+
+问: 每个国家的国民生产总值是多少?
+
+<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/mutate.png' width = '95%'>
+
+```{r ex_mutate, exercise = TRUE}
+gapminder %>%
+  mutate(gdp = pop * gdpPercap) %>% #可根据已有变量添加新的变量，将新添加的列到已有列的末尾
+    select(country, pop, gdpPercap, gdp)
+```
+
+### 批量修改
+
+问: 我们如何仅保留数值型变量中的整数？
+
+```{r ex_batch, exercise = TRUE}
+gapminder %>%
+  mutate_if(is.double, round, digits = 0) #mutate_if对数据进行判断，如果是T，则对其进行四舍五入操作
+```
+
+### 重要笔记
+
+当使用 `gapminder %>% ...`指令的时候, 你<span style="color:red">没有</span>增加或改变`gapminder`的任何东西.
+如果你想把变化保存下来, 把结果发给一个对象。
+
+```{r eval = FALSE}
+gapminderNew <- gapminder %>% ...
+```
+
+## 课后思考
+
+1. 行动<span style="color:red">之前</span> 弄清楚逻辑;
+1. 巧妙地使用 `dplyr` 的功能并融会贯通;
+    + 归纳: `arrange`, `count`, `summarise`
+    + 提取: `filter`, `select`, `mutate`
+1. 不要忘了 `group_by` 和 `mutate_if`
+
+## 额外奖励: 合并变量
+
+```{r df_coalesce, echo = FALSE}
+df_toy <- data.frame(x = sample(c(1:2, NA, NA, NA)),
+                     y = c(1, 2, NA, NA, 5),
+                     z = c(NA, NA, 3, 4, 5))
+```
+
+问: 我如何填补缺失的 `x`, 然后把 `y` 和 `z` 合并成一个变量?
+
+```{r coalesce, exercise = TRUE}
+df_toy %>%
+  mutate(x = coalesce(x, 0L),
+         yz = coalesce(y, z))
+```
+
+
+## 谢谢！
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
