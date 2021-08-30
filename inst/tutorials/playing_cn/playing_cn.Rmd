@@ -14,7 +14,7 @@ library(lubridate) #时间数据处理
 library(gapminder) 
 ```
 
-# 课程: 数据输入／输出
+# 课程I: 数据输入／输出
 
 哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
 
@@ -100,7 +100,7 @@ a <- 12
 25 -> b
 ```
 
-+ 不会和“等于”混淆（本章最后一节会详述）
++ 不可以和“等于”混淆（本章最后一节会详述）
 + 可以通过快捷键一次性输入
     + PC: `Alt + -`
     + Mac: `option + -`
@@ -121,7 +121,7 @@ median(x = 1:10); x
 ```{r objectEg, exercise = TRUE}
 # 一个合规对象
 
-# 试着创建一个不合规的对
+# 试着创建一个不合规的对象
 
 ```
 
@@ -271,6 +271,8 @@ date1 <- as.Date("2019-01-02")
 class(date1)  # 查看数据类型
 ```
 
+> 萌萌：我不会告诉你`lubridate`是专门用于处理时间的包。
+
 + 时间处理包`lubridate`
     1. 实时获取日期型数据和日期时间型数据
     2. 自定义生成公式化的日期数据
@@ -288,7 +290,6 @@ knitr::include_graphics("images/matrix.gif")
 创建矩阵主要有三种方法：
 
 + 手动创建: `matrix`
-
 ```{r matrixR}
 A <- matrix(1:20, ncol = 4) #创建一个数字1-20，5行4列的矩阵（col为列，row为行）
 A

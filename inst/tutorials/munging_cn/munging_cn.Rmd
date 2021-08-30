@@ -16,17 +16,10 @@ library(gapminder)
 
 # 课程 II: 数据整理
 
-## 技能
+哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
+恭喜你成功完成第一关——数据输入与输出，接下来就让我们开启`R expert`的第二站之旅吧。本次闯关需要具备数据归纳和提取的技能哟，请认真学习！
 
-1. 归纳: 整理, 计数, 总结
-1. 提取: 过敏, 选择, 转化
-
-## 你将会获得的能力
-
-1. 成为你的数据集的“家庭医生”
-1. 轻松快速地储存有价值的数据！
-
-## 你今天的“患者”
+## 今天的大boss
 
 由 [Hans Rosling 的 TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare) 普及的人口数据。
 
@@ -35,17 +28,16 @@ library(gapminder)
 gapminder
 ```
 
-## 归纳
+## 数据归纳
 
-### 了解数据
+### 初探数据
 ```{r glimpse, exercise = TRUE}
 head(gapminder, n = 6) # 查看数据框中的前6行
 
-## 系统的视角
 str(gapminder)  #查看数据框当中有哪些变量以及变量的类型：
 ```
 
-### 专业的理解
+### 系统探索
 
 嗨，我是一名专家~ 我想从系统的视角了解数据, 例如找到
 
@@ -84,36 +76,43 @@ class(gapminder$gdpPercap) #查看年份结构：vector、matrix、array、dataf
 typeof(gapminder$gdpPercap) #查看年份元素类型
 ```
 
-## 更进一步
+## `Tidyverse`包
 
-欢迎来到 Tidyverse
+> 萌萌：欢迎来到 `Tidyverse`世界，让我们通过下面这张图一起揭开`Tidyverse`的庐山真面目吧！
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/tidyverseHive.png' width = '100%'>
+```{r out.width = "60%", echo = FALSE}
+knitr::include_graphics("images/tidyverseHive.png")
+```
 
-数据操作的常用工具箱
+> 萌萌：哈！看完上面这张图，是不是对`Tidyverse`包有了新的了解？恭喜你，我们的闯关之旅又近了一步！
 
 + 一个Hadley包
 + 实际上是一个不断增长的 [数据包](https://www.tidyverse.org/packages/)！
 
-安装:
++ 安装:
 
 ```{r loadTidy, exercise = TRUE}
 ## install.packages("tidyverse")
 library("tidyverse")
 ```
 
-今天我们主要关注 `dplyr`。
+> 萌萌：接下来就让我们一起了解今天故事的主角——`dplyr`。
 
-##  `dplyr`的五个杀手锏
+##  `dplyr`包
 
 他们只做一件事，却做得很好。
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/simple.png' width = '95%'>
+```{r out.width = "60%", echo = FALSE}
+knitr::include_graphics("images/simple.png")
+```
 
-### 可组合性: 使一切不同
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/composable.png' width = '95%'>
+### 可组合性：
 
-使代码的可读性更强。
+```{r out.width = "60%", echo = FALSE}
+knitr::include_graphics("images/composable.png")
+```
+
+> 萌萌：想写出更加简洁和酷炫的代码吗？那就使用`dplyr`包吧！偷偷告诉你关于`%>%`的快捷键方式哟，这是属于我俩之间的秘密，可别告诉别人，嘘🤫！
 
  `%>%`的快捷键:
 
@@ -124,20 +123,24 @@ library("tidyverse")
 
 ### 拓展提升
 
-你还记得 `str()`, 对吧?
+> 萌萌：还记得上一关卡获取的 `str()`技能吗？让我们一起回忆一下吧
 
 ```{r overview, exercise = TRUE}
 str(gapminder)
 glimpse(gapminder)
 ```
 
-### 按顺序查看
+### 按序查看
 
-问: 哪个国家的人口最多？哪个国家的人口最少？
+> 萌萌：你能告诉我哪个国家的人口最多&哪个国家的人口最少吗？
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/arrange.png' width = '95%'>
+```{r out.width = "60%", echo = FALSE}
+knitr::include_graphics("images/arrange.png")
+```
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/desc.png' width = '95%'>
+```{r out.width = "90%", echo = FALSE}
+knitr::include_graphics("images/desc.png")
+```
 
 ```{r ex_arrange, exercise = TRUE}
 gapminder
@@ -150,9 +153,8 @@ gapminder %>%
 arrange(gapminder, desc(pop)) #此处为按照人口规模进行降序排列
 ```
 
-### "给我一些数字"!
 
-问: 每个大洲我们分别有多少个观测值? 每个大洲的观测值数量一样吗? 每个国家呢？
+> 萌萌：呀！你真棒！那你还能告诉我每个大洲分别有多少个观测值?&每个大洲的观测值数量一样吗&每个国家呢？
 
 ```{r ex_count, exercise = TRUE}
 gapminder %>%
@@ -167,13 +169,15 @@ gapminder %>%
   count(continent, country)
 ```
 
- `count()` 告诉了我们什么?
+> 萌萌：试着使用`count()`，看看能获取什么，嘻嘻😁 
 
-### 变量的统计数据
+### 总结数据
 
-问: 人均国民生产总值和预期寿命的中位数分别是什么?
+> 萌萌：我想知道人均国民生产总值和预期寿命的中位数分别是什么，你能试着告诉我吗?
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/summarise.png' width = '95%'>
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/summarise.png")
+```
 
 
 ```{r ex_summary, exercise = TRUE}
@@ -183,10 +187,11 @@ gapminder %>%
 
 ### 组内总结
 
-问: *每个大洲的*人均国民生产总值和预期寿命的中位数分别是什么？
+> 萌萌：不懂就问，请问*每个大洲的*人均国民生产总值和预期寿命的中位数分别是什么？
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/group_by.png' width = '95%'>
-
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/group_by.png")
+```
 
 ```{r ex_summaryG, exercise = TRUE}
 gapminder %>%
@@ -194,15 +199,17 @@ gapminder %>%
   summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
 ```
 
+>萌萌：恭喜你将本次闯关之旅的进度条推进至1/2🎉🎉，加油，终点有丰厚的奖励哟🏁！
 
-## 提取
+## 数据提取
 
-### 行
+### filter函数
 
-Q: *2007*年哪个国家的人口数量最多?
+>萌萌：试着看看*2007*年哪个国家的人口数量最多吗?
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/filter.png' width = '95%'>
-
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/filter.png")
+```
 
 ```{r ex_filter, exercise = TRUE, exercise.eval = TRUE}
 gapminder %>%
@@ -215,17 +222,19 @@ gapminder %>%
   arrange(desc(pop)) #再根据人口规模进行降序排列
 ```
 
-2007年及以前的十年哪个国家的人口数量最多? (提示: 把 `%in%` 当成一个条件)
+>萌萌：如果你已经知道了2007年人口最多的国家，那么2007年以前的十年哪个国家的人口数量最多呢? (提示: 把 `%in%` 当成一个条件😁)
 
-### 列
+### select函数
 
-问: 如果我想要
+>萌萌：接下来的挑战将会更难哟！你能告诉我：
 
 1. 仅国家，年份和人口
 2. 除了大洲的一切
 3. 以"co"开头的变量
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/select.png' width = '95%'>
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/select.png")
+```
 
 ```{r ex_select, exercise = TRUE}
 gapminder %>%
@@ -240,11 +249,13 @@ gapminder %>%
   select(starts_with("co")) #匹配以“co”开头的名称
 ```
 
-### 连击大招
+### filter与select之双重暴击
 
-问: 2007年人口最多的国家的预期寿命是多少---请同时提供国家名称, 人口数量, 以及预期寿命?
+>萌萌：2007年人口最多的国家的预期寿命是多少---请同时提供国家名称, 人口数量, 以及预期寿命?
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/comboAttack.gif' width = '95%'>
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/comboAttack.gif")
+```
 
 ```{r ex_combo, exercise = TRUE}
 gapminder
@@ -257,11 +268,13 @@ gapminder %>%
   select(country, pop, lifeExp)
 ```
 
-### 修改调整
+### mutate函数
 
-问: 每个国家的国民生产总值是多少?
+>萌萌:每个国家的国民生产总值是多少?
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/munging/images/mutate.png' width = '95%'>
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/mutate.png")
+```
 
 ```{r ex_mutate, exercise = TRUE}
 gapminder %>%
@@ -269,16 +282,14 @@ gapminder %>%
     select(country, pop, gdpPercap, gdp)
 ```
 
-### 批量修改
-
-问: 我们如何仅保留数值型变量中的整数？
+>萌萌:我想保留数值型变量中的整数，该怎么做了？
 
 ```{r ex_batch, exercise = TRUE}
 gapminder %>%
   mutate_if(is.double, round, digits = 0) #mutate_if对数据进行判断，如果是T，则对其进行四舍五入操作
 ```
 
-### 重要笔记
+### 敲黑板！
 
 当使用 `gapminder %>% ...`指令的时候, 你<span style="color:red">没有</span>增加或改变`gapminder`的任何东西.
 如果你想把变化保存下来, 把结果发给一个对象。
@@ -295,7 +306,7 @@ gapminderNew <- gapminder %>% ...
     + 提取: `filter`, `select`, `mutate`
 1. 不要忘了 `group_by` 和 `mutate_if`
 
-## 额外奖励: 合并变量
+## 额外奖励
 
 ```{r df_coalesce, echo = FALSE}
 df_toy <- data.frame(x = sample(c(1:2, NA, NA, NA)),
@@ -303,7 +314,7 @@ df_toy <- data.frame(x = sample(c(1:2, NA, NA, NA)),
                      z = c(NA, NA, 3, 4, 5))
 ```
 
-问: 我如何填补缺失的 `x`, 然后把 `y` 和 `z` 合并成一个变量?
+>萌萌: 我怎么样才能填补缺失的 `x`, 然后把 `y` 和 `z` 合并成一个变量呢?
 
 ```{r coalesce, exercise = TRUE}
 df_toy %>%
