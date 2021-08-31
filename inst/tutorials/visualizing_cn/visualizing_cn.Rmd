@@ -4,7 +4,7 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
-    css: css/styles.css
+    css: "style_ui.css"
 runtime: shiny_prerendered
 ---
 
@@ -14,7 +14,6 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(learnr)
 library(ggthemes) 
 library(scales)
-library(gt)
 library(modelsummary)
 library(dotwhisker)
 library(interplot)
@@ -116,46 +115,157 @@ m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 ```
 
-## 一张值得说道的图片
+# 课程: 数据可视化
 
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/visualizing/images/picThanWords.jpg' width = '100%'>
 
-## 当你成了一个视觉化专家...
+## 导语
 
-### 网络
+哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
+
+现在你进入的是通往`R expert`之路的“数据可视化”教学环节。
+我将和胡老师一起带大家领略R语言最强悍的功能之一，数据图标功能。
+在本节中，胡老师将为大家展示R画图的“万能模板”——一个你学会后散点图、柱状图、扇形图……几乎所有图都适用的画图方法。
+
+Ready? Go!
+
+## 一图顶千言
+
+```{r out.width = "80%", echo = FALSE}
+knitr::include_graphics("images/picThanWords.jpg")
+```
+
+## R常见可视化举例
+
+### 关系图
 
 <div class="centered">
-<img src="https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/visualizing/images/hiveplot.png" height="450"/>
+<img src="images/hiveplot.png" height="450"/>
 </div>
 
 ### 地图
 
 <div class="center">
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/visualizing/images/ggmap.png' height="600"/>
+<img src="images/ggmap.png" height="600"/>
 </div>
 
-### 交互式的图表
+### 动图
 
 <div class="center">
-<img src="https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/visualizing/images/interactive3D.gif" height="550"/>
+<img src="images/interactive3D.gif" height="550"/>
 </div>
 
-## 技能
+## 知识点
 
-1. 统计
-    + 描述性
-    + 之后的分析
-1. 网络
++ 什么是数据可视化？
+
+数据可视化指将数字记录间**关系**以二维或三维图具象化的技术。
+
+###
+
++ *The Grammar of Graphics* 
+
+Leland Wilkinson创造的针对几乎所有类型定量可视化系统的基础总结，试图探究数据可视化的底层结构。在R中最流行的可视化包`ggplot2`，就是对这一理论系统的全面呈现。
+
+### 
+
++ 可视化类型
+
+1. <span style="color:goldenrod">统计可视化</span>
+    + 描述性~
+    + 分析~
+1. 网络可视化
     + 图表 ([`DiagrammeR`](https://rich-iannone.github.io/DiagrammeR/docs.html), [`semPlot`](http://sachaepskamp.com/semPlot/examples))
+    + 节点-连线
 1. 地图
 
+## R可视化引擎
+
+* 基本图表: `plot()`
+* 栅栏图: e.g., `ggplot()`
+* 交互式图表: `shiny()` (今天先不讨论)
+
+###
+
+### 基本图表
+
+```{r basePlot}
+hist(mtcars$mpg)
+```
+
+**优点**
+
+* R中自带
+* <span style="color:goldenrod">探索数据</span>的优良工具。
++ <span style="color:goldenrod">空间</span>分析和 <span style="color:goldenrod">3-D</span>图。
+
+**缺点**
+
+* 不精致
+* 灵活性差
+
+**保存输出**
+
+* 兼容模式:`.jpg`, `.png`, `.wmf`, `.pdf`, `.bmp`, and `postscript`.
+* 过程:
+    1. 启用装置
+    2. 画图
+    3. 关闭装置
+
+```{r saving, eval = FALSE}
+png("<working directory>/histgraph.png")
+hist(mtcars$mpg)
+dev.off()
+```
+
+### `ggplot`
+
+在Leland Wilkinson的 *Grammar of Graphics*基础上创建。
+
+* 为了使用 `ggplot` 函数, 你需要安装`ggplot2`.
 
 
-## 从三个例子中学习
+```{r install, eval=FALSE}
+install.packages("ggplot2")
+
+# Or the development version from GitHub:
+devtools::install_github("tidyverse/ggplot2")
+```
+
+## `ggplot`核心概念
+
+* `mapping`: 美观映射 (`aes`, `alpha`)---颜色, 形状, 大小
+    + 从一幅图中可以感知到的性质。
+    + 每一种美观性可以被映射到一个变量，或是被设置成一个常量。
+* `geom_`: 几何图案---点, 线, 条
+    + 四十余种
+
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/ggplot_geom.png")
+```
+
+## 万能模板
+
+```{r basic, eval = FALSE}
+ggplot(___) +
+  geom_point(
+    mapping = aes(x = ___, y = ___,
+                  color = ___,
+                  size  = ___),
+    alpha  = ___
+  )
+```
+
+> 萌萌：其实ggplot作图和我们常见的修图很像，先把基本图做出来，然后一层一层叠加滤镜效果。
+
+## 描述可视化
+
+一生二，二生三，三生万张图。
+
+此次课程我们将用以下三个例子演示如何在R中进行统计分析。
 
 1. Gapminder 2007 (点状图)
 2. 新冠病毒致死率 (柱状图)
-3. 新冠病毒潜伏期(扇形图)
+3. 新冠病毒潜伏期 (扇形图)
 
 ```{r goal-plots, results="hide", out.width="100%", echo=FALSE}
 if (!require(ggplot2)) install.packages("ggplot2")
@@ -212,83 +322,8 @@ ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = 
         strip.text = element_text(size = 12))
 ```
 
-## 你将会获得的能力
 
-1. 画基本的 `ggplot` 表格
-1. 阅读复杂的`ggplot` 代码
-
-
-## R 的可视化系统
-
-* 基本图表: `plot()`
-* 栅栏图: e.g., `ggplot()`
-* 交互式图表: `shiny()` (今天先不讨论)
-
-## 基本图表
-
-优点:
-
-* R中自带
-* <span style="color:purple">探索数据</span>的优良工具。
-* <span style="color:purple">空间</span> 分析和 <span style="color:purple">3-D</span>图。
-
-缺点:
-
-* 不是很精致
-* 灵活性不强
-
-### 示例
-
-```{r basePlot, exercise = TRUE}
-hist(mtcars$mpg)
-```
-
-### 保存输出
-
-* 兼容模式:`.jpg`, `.png`, `.wmf`, `.pdf`, `.bmp`, and `postscript`.
-* 过程:
-    1. 启用装置
-    2. 画图
-    3. 关闭装置
-
-```{r saving, eval = F}
-png("<working directory>/histgraph.png")
-hist(mtcars$mpg)
-dev.off()
-```
-
-## `ggplot`
-
-在Leland Wilkinson的 *Grammar of Graphics*的基础上创建。
-
-* 为了使用 `ggplot` 函数, 你需要另外一个`tidyverse`包: `ggplot2`.
-
-
-## 你需要提前知道的两件事
-
-* `mapping`: 美观映射 (`aes`, `alpha`)---颜色, 形状, 大小
-    + 从一幅图中可以感知到的性质。
-    + 每一种美观性可以被映射到一个变量，或是被设置成一个常量。
-* `geom_`: 几何图案---点, 线, 条
-    + 四十余种
-
-<img src='https://raw.githubusercontent.com/sammo3182/drhur/master/inst/tutorials/visualizing/images/ggplot_geom.png' width = '100%'>
-
-## 主要模版
-
-```{r basic, eval = FALSE}
-ggplot(___) +
-  geom_point(
-    mapping = aes(x = ___, y = ___,
-                  color = ___,
-                  size  = ___),
-    alpha  = ___
-  )
-```
-
-## 案例: 图形属性
-
-###
+## 案例1: 图形属性
 
 ```{r pointGoal,echo=FALSE}
 library(gapminder)
@@ -302,7 +337,7 @@ ggplot(gapminder_2007) +
 ```
 
 
-### 一步一步来
+### 搭建拆解
 
 ```{r point, exercise = TRUE}
 library(gapminder)
@@ -343,17 +378,13 @@ ggplot(gapminder_2007) +
 ```
 
 
-## 案例: 几何图层
-
-###
+## 案例2: 几何图层
 
 ```{r cfr-df, echo = FALSE}
 # Case Fatality Rate
 
 cfr_china
 ```
-
-###
 
 ```{r cfr-plot, echo = FALSE}
 if (!require(ggplot2)) install.packages("ggplot2")
@@ -381,7 +412,7 @@ ggplot(cfr_china, aes(x=age, y=cfr, group=1)) +
         legend.position = "none")
 ```
 
-### 一步一步来
+### 搭建拆解
 
 ```{r steps, exercise = TRUE}
 if (!require(ggplot2)) install.packages("ggplot2")
@@ -432,7 +463,7 @@ ggplot(data = cfr_china,
         legend.position = "none")
 ```
 
-###
+### 初步总结
 
 * `data`: 你想要可视化的数据
 * `aes`: 美学映射
@@ -458,9 +489,7 @@ ggplot(data = cfr_china,
 ggsave("cfr.png")
 ```
 
-## 新冠病毒潜伏期
-
-###
+## 案例3: 新冠病毒潜伏期
 
 ```{r incubation-df, echo = FALSE}
 incubation_data %>%
@@ -489,7 +518,7 @@ ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = 
         strip.text = element_text(size = 12))
 ```
 
-### 步骤
+### 搭建拆解
 
 ```{r incubation, exercise = TRUE}
 ggplot(incubation_data,
@@ -501,7 +530,6 @@ ggplot(incubation_data,
          fill = sname
        ))
 ```
-
 
 ```{r incubation-solution}
 ggplot(incubation_data,
@@ -552,18 +580,23 @@ ggplot(incubation_data,
 
 
 
-## 可视化之后的分析
+## 分析可视化
 
-* Likert反馈
-* 系数
-* 交互性
+* Likert量表
+* 回归系数
+* 交互效应
 * 地图
 
-### Likert-Scale指数
+###
 
-```{r likert, exercise = TRUE}
+```{r data-likert, echo=FALSE}
 df_likert
+```
 
+
+## 案例1：Likert-Scale指数
+
+```{r likert, exercise = TRUE, exercise.eval = TRUE}
 if (!require(likert)) install.packages("likert")
 library(likert)
 
@@ -588,27 +621,53 @@ likert(df_likert) %>%
        bw = 0.5)
 ```
 
-## 回归结果
+## 案例2：回归结果
 
 ### 系数可视化
 
-`dotwhisker` ![](http://cranlogs.r-pkg.org/badges/grand-total/dotwhisker)
+```{r m1}
+m1 <- lm(mpg ~ cyl + gear + wt, data = mtcars) #进行OLS回归
 
-```{r dotwhisker, exercise = TRUE}
-m1 <- lm(mpg ~ cyl + hp + wt, data = mtcars) #进行OLS回归
+summary(m1)
 ```
 
-```{r dotwhisker-solution}
+### 插播：制表之真Publishable
+
+```{r modeltable}
+library(modelsummary)
+library(gt)
+
+modelsummary(m1,
+         stars = TRUE,
+         title =  gt::md('This is *the* title'),
+         subtitle = 'And a subtitle',
+         output = "gt") %>% 
+  tab_style(style = cell_fill(color = 'lightblue'),
+              locations = cells_body(rows = 7:8))
+```
+
+输出格式
+
+```{r modelOut, eval = FALSE}
+modelsummary(models, filename = 'table.tex')
+modelsummary(models, filename = 'table.rtf')
+modelsummary(models, filename = 'table.html')
+modelsummary(models, filename = 'table.jpeg')
+modelsummary(models, filename = 'table.png')
+```
+
+### Dot-whisker plot
+
+```{r dotwhisker}
 if (!require(dotwhisker)) install.packages("dotwhisker")
 library(dotwhisker)
 
-dwplot(m1) #画出胡须图
+dwplot(m1)
 ```
-
 
 ### 多重模型
 
-```{r dwMulti, exercise = TRUE}
+```{r dwMulti, exercise = TRUE, exercise.eval = TRUE}
 m2 <- lm(mpg ~ cyl + hp + wt + hp, data = mtcars)
 m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 
@@ -642,42 +701,43 @@ dwplot(list(m1, m2, m3)) %>%
 ```
 
 
-### 按它们自己的比例进行比较
+### Small_multiple
 
-```{r smallMultiple, exercise = TRUE}
-small_multiple(list(m1, m2, m3)) +
-  ylab("Coefficient Estimate") +
-  geom_hline(yintercept = 0,
-             colour = "grey60",
-             linetype = 2) +
-  ggtitle("Predicting Gas Mileage") +
-  theme(
-    plot.title = element_text(face = "bold"),
-    legend.position = "none",
-    axis.text.x  = element_text(angle = 60, hjust = 1)
-  )
+```{r smallMultiple}
+#small_multiple(list(m1, m2, m3)) +
+  #ylab("Coefficient Estimate") +
+ # geom_hline(yintercept = 0,
+             #colour = "grey60",
+             #linetype = 2) +
+  #ggtitle("Predicting Gas Mileage") +
+ # theme(
+   # plot.title = element_text(face = "bold"),
+   # legend.position = "none",
+   # axis.text.x  = element_text(angle = 60, hjust = 1)
+ # )
 ```
 
 
-## 调节效应
+## 案例3：交互效应
 
 `interplot` ![](http://cranlogs.r-pkg.org/badges/grand-total/interplot)
 
 用双向交互的方式可视化中一个变量的系数变化取决于另一个被包含的变量的值。
 
-* 你无法正确地解释和表格的互动!
+###
+
+* （老营销style😏）惊天揭秘！单看显著性无法正确解释交互效应！
     + 模型: $$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + \varepsilon.$$
     + 影响: $$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
     + 标准差: $$\hat{\sigma}_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$
 
-
-* 你如何知道变化是否显著?
+* 如何才能正确理解？
     + 最精确的方式: 计算平均数和标准差之间的差值。
     + 最方便的方式：把它可视化
 
-### 绘制调节效应
+### 绘制交互效应
 
-```{r interact, exercise = TRUE}
+```{r interact, exercise = TRUE, exercise.eval = TRUE}
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 summary(m_cyl)
 ```
@@ -690,7 +750,7 @@ interplot(m = m_cyl, var1 = "cyl", var2 = "wt")
 interplot(m = m_cyl, var1 = "wt", var2 = "cyl")
 ```
 
-### 显著性?
+### 实质显著性
 
 ```{r interHist}
 interplot(m = m_cyl, var1 = "cyl", var2 = "wt", hist = TRUE) +
@@ -746,48 +806,15 @@ get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>%
 ```
 
 
-## 额外奖励: 表格
-
-###
-
-```{r modeltable, exercise = TRUE}
-summary(m1); summary(m2); summary(m3)
-
-if (!require(gt)) install.packages("gt")
-if (!require(modelsummary)) install.packages("modelsummary")
-library(modelsummary)
-library(gt)
-```
-
-```{r modeltable-solution}
-msummary(list(m1, m2, m3),
-         stars = TRUE,
-         title =  gt::md('This is *the* title'),
-         subtitle = 'And a subtitle',
-         notes = list('A first note', gt::md('A **bold** note'))) %>%
-  tab_style(style = cell_fill(color = "lightcyan"),
-			  locations = cells_body(columns = vars(`Model 2`), rows = 3:4)
-			  )
-```
-
-### 输出格式
-
-```{r modelOut, eval = FALSE}
-msummary(models, filename = 'table.tex')
-msummary(models, filename = 'table.rtf')
-msummary(models, filename = 'table.html')
-msummary(models, filename = 'table.jpeg')
-msummary(models, filename = 'table.png')
-```
-
-
-## 课后思考
+## 总结
 
 1. R 在可视化方面很强大。
 1. 好看 &prop; 复杂性。
 1. 更酷炫不意味着更好。
 
-## 谢谢!
+###
+
+### 感谢聆听！
 
 <i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
 

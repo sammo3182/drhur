@@ -23,7 +23,7 @@ library(tidyverse)
 
 哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
 
-恭喜你已经掌握了处理数据的基本功能，但想要练就绝世武功还需要获取一些武功秘籍，现在就让我们一起通往`R expert`之路的第三站，获得*葵花宝典*吧！
+相信经过前两天的修炼，你已经掌握了处理数据的基本功能，但想要练就绝世武功需经历九九八十一难，方可成为*斗战神佛*🌻，现在就让我们一起通往`R expert`之旅的第三站，提升战斗值吧！
 
 ## 知识点
 
@@ -36,7 +36,7 @@ library(tidyverse)
     + 二元分析 (t 检验, 相关性分析, 方差分析)
     + 多变量分析 (普通最小二乘法（OLS）, 最大似然估计（MLE)）
 
-## 示例数据
+## 课程导入
 
 由 [Hans Rosling 的 TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare) 普及的人口数据.
 
@@ -49,7 +49,7 @@ glimpse(gapminder)
 >萌萌：啊, 稀有数据！它们是多么的鲜美多汁！！但如何...才能让它们说话？接下来就让我们一起获得让数据说话的*葵花宝典*🌻！
 
 
-## 描述统计学
+## 描述性统计
 
 ### 矩阵
 
@@ -61,7 +61,7 @@ glimpse(gapminder)
 
 + 峰度（kurtosis）：表征概率密度分布曲线在平均值处峰值高低的特征数。直观看来，峰度反映了峰部的尖度，计算方法为随机变量的四阶中心矩与方差平方的比值。
 
->萌萌：咦～～ 无形装逼，最为致命。这些概念看起来神秘莫测，咱也不懂，咱也不敢问🤫
+>萌萌：咦～～ 无形装逼，最为致命。这些概念看起来神秘莫测的，咱也不懂，咱也不敢问🤫
 
 ```{r moments, exercise = TRUE, exercise.eval = TRUE}
 library(tidyverse)
@@ -75,6 +75,7 @@ gapminder %>%
             kurtosis_life = kurtosis(lifeExp))
 ```
 
+>萌萌：还记得我俩之间关于 `%>% `的小秘密吗🤫 
 
 ```{r moments-solution}
 library(broom) #broom是tidyverse系列包之一，可以使建模结果变量更加整洁。
@@ -109,11 +110,11 @@ print(dfSummary(gapminder,
 knitr::include_graphics("images/dfSummary.png")
 ```
 
-## 回归统计
+## 线性回归统计
 
 ### 二元分析
 
-一个变量如何和另一个变量相关？
+>萌萌：呀！刚刚闯关就遇到了银角大王——回归统计。银角大王出了一道难题：一个变量和另一个变量相关吗？
 
 1. 它们的平均值相近吗?
 1. 两个变量独立于彼此吗?
@@ -127,11 +128,12 @@ gapminder$coldWar <- gapminder$year <= 1992
 gapminder$asia <- gapminder$continent == "Asia"
 ctable(gapminder$asia, gapminder$coldWar)
 ```
+>萌萌：悄悄告诉你filter与select函数也可以完成任务✅
 
 
-### 平均值中的差异
+### 平均差异
 
-问: 冷战前后的人均寿命是否有变化？
+银角大王：接招吧！请问冷战前后的人均寿命是否变化吗？
 
 $H_{0}: \bar{LifeExpctancy}_{prio 1991} = \bar{LifeExpctancy}_{post 1991},\ \alpha = .05$
 
@@ -139,8 +141,9 @@ $H_{0}: \bar{LifeExpctancy}_{prio 1991} = \bar{LifeExpctancy}_{post 1991},\ \alp
 gapminder$coldWar <- gapminder$year <= 1992
 gapminder %>%
   group_by(coldWar) %>% #根据coldWar分组
-  summarise(mean(lifeExp)) #分组汇总，group_by通常与summarise函数一起使用
+  summarise(mean(lifeExp)) 
 ```
+>萌萌：实际应用中，group_by与summarise函数搭配使用风味更佳哟！
 
 ```{r ttest-solution}
 t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$year > 1991])
@@ -149,7 +152,7 @@ t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$ye
 
 ### 相关性
 
-问: 一个国家的人均寿命是否和人均国民生产总值相关(人口呢）？
+银角大王: 一个国家的人均寿命是否和人均国民生产总值相关(人口呢）？
 
 $H_{0}: \rho_{(LifeExpectancy, GDP)} = 0,\ \alpha = .05$
 
@@ -157,17 +160,18 @@ $H_{0}: \rho_{(LifeExpectancy, GDP)} = 0,\ \alpha = .05$
 cor.test(gapminder$lifeExp, gapminder$gdpPercap) #相关性检验
 ```
 
-### 两个以上变量
+### 多变量相关性分析
 
 ```{r corrplot}
-select(gapminder, year, lifeExp, gdpPercap, pop) %>% #select函数用于选择固定列
+select(gapminder, year, lifeExp, gdpPercap, pop) %>% 
   cor %>% # 相关性分析
   corrplot::corrplot.mixed() # 相关性图
 ```
+>萌萌：这里又用到了select函数哟！
 
 ### 方差分析(ANOVA)
 
-问: 不同大洲的人均寿命不同吗(不同年份呢)？
+银角大王: 不同大洲的人均寿命不同吗(不同年份呢)？
 
 $H_{0}: \mu_{Africa} = \mu_{Americas} = ... = \mu_{Oceania},\ \alpha = .05$
 
@@ -176,7 +180,7 @@ aov(lifeExp ~ continent, data = gapminder) %>%
   summary() #方差分析
 ```
 
-协方差分析(ANCOVA)?
+### 协方差分析(ANCOVA)
 
 ```{r anova-solution}
 aov(lifeExp ~ continent + as.factor(year), data = gapminder) %>%
@@ -184,9 +188,9 @@ aov(lifeExp ~ continent + as.factor(year), data = gapminder) %>%
 ```
 
 
-### 普通最小二乘法(OLS)
+### 最小二乘法分析(OLS)
 
-问: 一个国家的人均寿命如何在不同大洲和年份之间变动?
+银角大王: 一个国家的人均寿命如何在不同大洲和年份之间变动?
 
 ```{r ols, exercise = TRUE}
 gapminder %>% count(lifeExp, continent, year)
@@ -194,12 +198,15 @@ gapminder %>% count(lifeExp, continent, year)
 
 ```{r ols-solution}
 lm(lifeExp ~ continent + year, data = gapminder) %>%  
-  summary()  #OLS用于线性回归分析，`～`左侧为因变量，右侧为解释变量、控制变量
+  summary() 
 ```
+
+>萌萌： 敲黑板啦！OLS为线性回归分析，通常用于连续性因变量，`～`左侧为因变量，右侧为自变量、控制变量。那分类变量又应该使用什么回归呢？
+
 
 ### 变量变换
 
-控制时效性?
++ 控制时间
 
 $t + t^2$
 
@@ -214,7 +221,7 @@ lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
   summary()
 ```
 
-其他变换
++ 其他变换
 
 `sqrt(var)`, `log(var)`
 
@@ -230,7 +237,7 @@ lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
 
 ### 条件效应
 
-一个国家的人均国民生产总值对人均寿命的影响是否随着人口数量的变化而变化?
+银角大王：一个国家的人均国民生产总值对人均寿命的影响是否随着人口数量的变化而变化?
 
 ```{r interact, exercise = TRUE}
 lm(lifeExp ~ gdpPercap + year, data = gapminder) %>%
@@ -243,68 +250,11 @@ lm(lifeExp ~ gdpPercap * pop + year, data = gapminder) %>%
   summary()
 ```
 
-提示: 你的模型中必须同时包含这两个基本概念.
+>萌萌：记在小本本上的——在进行条件效应检验时，模型中必须同时包含所需的两个基本概念哟！呀！刚送走银角大王，它哥——金角又来了，给我冲！
 
-### 分析后的诊断
+## 广义逻辑回归
 
-+ 残差
-+ 异常值
-+ 异方差性
-+ 多重共线性
-+ 自相关性
-
-......
-
-### 残差
-
-```{r residual, exercise = TRUE}
-fit <- lm(lifeExp ~ gdpPercap + year, data = gapminder)
-res <- resid(fit) # 残差分析
-```
-
-```{r residual-solution}
-plot(fit, which  = 1) # plot函数用于画出残差分析图
-```
-
-### 异常值
-
-```{r outlier, exercise = TRUE}
-library(car)
-outlierTest(fit)
-# car::qqPlot(fit)
-```
-
-### 异方差性
-
-```{r heter, exercise = TRUE}
-ncvTest(fit)
-```
-
-### 多重共线性
-
-```{r multi, exercise = TRUE}
-vif(fit)
-```
-
-### 自相关性
-
-```{r durbin, exercise = TRUE}
-durbinWatsonTest(fit)
-```
-
-### 很酷的快捷方式
-
-```{r performance, exercise = TRUE}
-library(performance)
-model_performance(fit)
-check_normality(fit)
-check_outliers(fit)
-```
-
-
-### 广义逻辑回归
-
-* Logit: 在控制人口的前提下，一国的人均GDP是否决定了该国的人均预期寿命高于全球平均水平？
+金角大王: 在控制人口的前提下，一国的人均GDP是否决定了该国的人均预期寿命高于全球平均水平？
 
 ```{r logit, exercise = TRUE}
 glimpse(mtcars) #查看数据概要
@@ -355,6 +305,65 @@ glm(counts ~ outcome + treatment,
   summary()
 ```
 
+
+## 回归结果分析
+
++ 残差
++ 异常值
++ 异方差性
++ 多重共线性
++ 自相关性
+
+......
+
+### 残差
+
+```{r residual, exercise = TRUE}
+fit <- lm(lifeExp ~ gdpPercap + year, data = gapminder)
+res <- resid(fit) # 残差分析
+```
+
+```{r residual-solution}
+plot(fit, which  = 1) # plot函数用于画出残差分析图
+```
+
+### 异常值
+
+```{r outlier, exercise = TRUE}
+library(car)
+outlierTest(fit)
+# car::qqPlot(fit)
+```
+
+### 异方差性
+
+```{r heter, exercise = TRUE}
+ncvTest(fit)
+```
+
+### 多重共线性
+
+```{r multi, exercise = TRUE}
+vif(fit)
+```
+
+### 自相关性
+
+```{r durbin, exercise = TRUE}
+durbinWatsonTest(fit)
+```
+
+
+### 很酷的快捷方式
+
+```{r performance, exercise = TRUE}
+library(performance)
+model_performance(fit)
+check_normality(fit)
+check_outliers(fit)
+```
+
+>萌萌：快捷方式在手，装逼我有，嘻嘻🤫
 
 ## 总结
 
