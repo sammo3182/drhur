@@ -321,7 +321,7 @@ ggplot(gapminder_2007) +
 <h2>案例2: 几何图层</h2>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["age"],"name":[1],"type":["ord"],"align":["right"]},{"label":["deaths"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["cases"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cfr"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"=9","2":"0","3":"416","4":"0.0000"},{"1":"10-19","2":"1","3":"549","4":"0.0018"},{"1":"20-29","2":"7","3":"3619","4":"0.0019"},{"1":"30-39","2":"18","3":"7600","4":"0.0023"},{"1":"40-49","2":"38","3":"8571","4":"0.0044"},{"1":"50-59","2":"130","3":"10008","4":"0.0130"},{"1":"60-69","2":"309","3":"8583","4":"0.0360"},{"1":"70-79","2":"312","3":"3918","4":"0.0800"},{"1":"=80","2":"208","3":"1408","4":"0.1480"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["age"],"name":[1],"type":["ord"],"align":["right"]},{"label":["deaths"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["cases"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cfr"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"≤9","2":"0","3":"416","4":"0.0000"},{"1":"10-19","2":"1","3":"549","4":"0.0018"},{"1":"20-29","2":"7","3":"3619","4":"0.0019"},{"1":"30-39","2":"18","3":"7600","4":"0.0023"},{"1":"40-49","2":"38","3":"8571","4":"0.0044"},{"1":"50-59","2":"130","3":"10008","4":"0.0130"},{"1":"60-69","2":"309","3":"8583","4":"0.0360"},{"1":"70-79","2":"312","3":"3918","4":"0.0800"},{"1":"≥80","2":"208","3":"1408","4":"0.1480"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><img src="visualizing_cn_files/figure-html/cfr-plot-1.png" width="624" /></p>
@@ -1003,18 +1003,17 @@ dwplot(list(m1, m2, m3)) #多个回归结果可视化</code></pre>
 </div>
 <div id="section-small_multiple" class="section level3">
 <h3>Small_multiple</h3>
-<pre class="r"><code>small_multiple(list(m1, m2, m3)) +
-  ylab(&quot;Coefficient Estimate&quot;) +
-  geom_hline(yintercept = 0,
-             colour = &quot;grey60&quot;,
-             linetype = 2) +
-  ggtitle(&quot;Predicting Gas Mileage&quot;) +
-  theme(
-    plot.title = element_text(face = &quot;bold&quot;),
-    legend.position = &quot;none&quot;,
-    axis.text.x  = element_text(angle = 60, hjust = 1)
-  )</code></pre>
-<p><img src="visualizing_cn_files/figure-html/smallMultiple-1.png" width="624" /></p>
+<pre class="r"><code>#small_multiple(list(m1, m2, m3)) +
+ # ylab(&quot;Coefficient Estimate&quot;) +
+  #geom_hline(yintercept = 0,
+   #          colour = &quot;grey60&quot;,
+    #         linetype = 2) +
+  #ggtitle(&quot;Predicting Gas Mileage&quot;) +
+  #theme(
+   # plot.title = element_text(face = &quot;bold&quot;),
+    #legend.position = &quot;none&quot;,
+    #axis.text.x  = element_text(angle = 60, hjust = 1)
+  #)</code></pre>
 </div>
 </div>
 <div id="section-案例3交互效应" class="section level2">
@@ -1152,10 +1151,10 @@ library(tidyverse)
 library(gapminder)
 
 
-# <U+51FD><U+6570><U+9884><U+52A0><U+8F7D>
+# 函数预加载
 set.seed(114)
 
-# <U+6F5C><U+4F0F><U+671F><U+7684><U+6570><U+636E>
+# 潜伏期的数据
 
 incubation_data = data.frame(
   sname = factor(
@@ -1188,10 +1187,10 @@ incubation_data = data.frame(
   )
 )
 
-## cfr<U+7684><U+6570><U+636E>
+## cfr的数据
 
 age_groups <-
-  c("=9",
+  c("≤9",
     "10-19",
     "20-29",
     "30-39",
@@ -1199,7 +1198,7 @@ age_groups <-
     "50-59",
     "60-69",
     "70-79",
-    "=80")
+    "≥80")
 cfr_china <-
   data.frame(
     age = factor(age_groups, levels = age_groups, ordered = TRUE),
@@ -1208,7 +1207,7 @@ cfr_china <-
     cfr = 0.01 * c(0, 0.18, 0.19, 0.23, 0.44, 1.3, 3.6, 8., 14.8)
   )
 
-## liker<U+7684><U+6570><U+636E>
+## liker的数据
 
 input <- ("
   Mask    Bleach  WashHand
@@ -1303,7 +1302,7 @@ output$`tutorial-exercise-interact-output` <- renderUI({
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146]}},"value":[{"type":"character","attributes":{},"value":["abind","arm","assertthat","backports","base","base64enc","bayestestR","boot","broom","bslib","cellranger","checkmate","cli","cluster","coda","codetools","colorspace","commonmark","compiler","crayon","data.table","datasets","datawizard","DBI","dbplyr","digest","dotwhisker","dplyr","effectsize","ellipsis","emmeans","estimability","evaluate","fansi","farver","fastmap","forcats","foreign","Formula","fs","gapminder","generics","ggnetwork","ggplot2","ggstance","ggthemes","glue","graphics","grDevices","grid","gridExtra","gt","gtable","haven","highr","Hmisc","hms","htmlTable","htmltools","htmlwidgets","httpuv","httr","insight","interactionTest","interplot","jpeg","jquerylib","jsonlite","knitr","labeling","later","lattice","latticeExtra","learnr","lifecycle","likert","lme4","lubridate","magrittr","markdown","MASS","Matrix","methods","mime","minqa","mnormt","modelr","modelsummary","multcomp","munsell","mvtnorm","network","nlme","nloptr","nnet","parallel","parameters","pillar","pkgconfig","plyr","png","promises","psych","purrr","R6","RColorBrewer","Rcpp","readr","readxl","reprex","reshape2","rlang","rmarkdown","rpart","rprojroot","rstudioapi","rvest","sandwich","sass","scales","shiny","sna","splines","statnet.common","stats","stringi","stringr","survival","tables","TH.data","tibble","tidyr","tidyselect","tidyverse","tmvnsim","tools","tzdb","utf8","utils","vctrs","withr","xfun","xml2","xtable","yaml","zoo"]},{"type":"character","attributes":{},"value":["1.4-5","1.11-2","0.2.1","1.2.1","4.2.0","0.1-3","0.10.5","1.3-28","0.7.9","0.2.5.1","1.1.0","2.0.0","3.0.1","2.1.2","0.19-4","0.2-18","2.0-2","1.7","4.2.0","1.4.1","1.14.0","4.2.0","0.2.0","1.1.1","2.1.1","0.6.27","0.7.4","1.0.7","0.4.5","0.3.2","1.6.3","1.3","0.14","0.5.0","2.1.0","1.1.0","0.5.1","0.8-81","1.2-4","1.5.0","0.3.0","0.1.0","0.5.10","3.3.5.9000","0.3.5","4.2.4","1.4.2","4.2.0","4.2.0","4.2.0","2.3","0.3.1","0.3.0","2.4.3","0.9","4.5-0","1.1.0","2.2.1","0.5.2","1.5.3","1.6.2","1.4.2","0.14.3","1.2","0.2.9999","0.1-9","0.1.4","1.7.2","1.33","0.4.2","1.3.0","0.20-44","0.6-29","0.10.1","1.0.0","1.3.5","1.1-27.1","1.7.10","2.0.1","1.1","7.3-54","1.3-4","4.2.0","0.11","1.2.4","2.0.2","0.1.8","0.9.1","1.4-17","0.5.0","1.1-2","1.17.1","3.1-152","1.2.2.2","7.3-16","4.2.0","0.14.0","1.6.2","2.0.3","1.8.6","0.1-7","1.2.0.1","2.1.6","0.3.4","2.5.1","1.1-2","1.0.7","2.0.1","1.3.1","2.0.1","1.4.4","0.4.11","2.10","4.1-15","2.0.2","0.13","1.0.1","3.0-1","0.4.0","1.1.1","1.6.0","2.6","4.2.0","4.5.0","4.2.0","1.7.4","1.4.0.9000","3.2-13","0.9.6","1.0-10","3.1.4","1.1.3","1.1.1","1.3.1","1.0-2","4.2.0","0.1.2","1.2.2","4.2.0","0.3.8","2.4.2","0.25","1.3.2","1.8-4","2.2.1","1.8-9"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137]}},"value":[{"type":"character","attributes":{},"value":["abind","arm","assertthat","backports","base","base64enc","bayestestR","boot","broom","bslib","cellranger","checkmate","cli","cluster","coda","colorspace","commonmark","compiler","crayon","data.table","datasets","datawizard","DBI","dbplyr","digest","dotwhisker","dplyr","ellipsis","evaluate","fansi","farver","fastmap","forcats","foreign","Formula","fs","gapminder","generics","ggnetwork","ggplot2","ggstance","ggthemes","glue","graphics","grDevices","grid","gridExtra","gt","gtable","haven","highr","Hmisc","hms","htmlTable","htmltools","htmlwidgets","httpuv","httr","insight","interactionTest","interplot","jpeg","jquerylib","jsonlite","knitr","labeling","later","lattice","latticeExtra","learnr","lifecycle","likert","lme4","lubridate","magrittr","markdown","MASS","Matrix","methods","mime","minqa","mnormt","modelr","modelsummary","munsell","network","nlme","nloptr","nnet","parallel","parameters","pillar","pkgconfig","plyr","png","promises","psych","purrr","R6","RColorBrewer","Rcpp","readr","readxl","reprex","reshape2","rlang","rmarkdown","rpart","rprojroot","rstudioapi","rvest","sass","scales","shiny","sna","splines","statnet.common","stats","stringi","stringr","survival","tables","tibble","tidyr","tidyselect","tidyverse","tmvnsim","tools","tzdb","utf8","utils","vctrs","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4-5","1.11-2","0.2.1","1.2.1","4.1.1","0.1-3","0.10.5","1.3-28","0.7.9","0.2.5.1","1.1.0","2.0.0","3.0.1","2.1.2","0.19-4","2.0-2","1.7","4.1.1","1.4.1","1.14.0","4.1.1","0.1.0","1.1.1","2.1.1","0.6.27","0.7.0","1.0.7","0.3.2","0.14","0.5.0","2.1.0","1.1.0","0.5.1","0.8-81","1.2-4","1.5.0","0.3.0","0.1.0","0.5.10","3.3.5","0.3.5","4.2.4","1.4.2","4.1.1","4.1.1","4.1.1","2.3","0.3.1","0.3.0","2.4.3","0.9","4.5-0","1.1.0","2.2.1","0.5.1.1","1.5.3","1.6.2","1.4.2","0.14.3","1.2","0.2.3","0.1-9","0.1.4","1.7.2","1.33","0.4.2","1.3.0","0.20-44","0.6-29","0.10.1","1.0.0","1.3.5","1.1-27.1","1.7.10","2.0.1","1.1","7.3-54","1.3-4","4.1.1","0.11","1.2.4","2.0.2","0.1.8","0.9.1","0.5.0","1.17.1","3.1-152","1.2.2.2","7.3-16","4.1.1","0.14.0","1.6.2","2.0.3","1.8.6","0.1-7","1.2.0.1","2.1.6","0.3.4","2.5.0","1.1-2","1.0.7","2.0.1","1.3.1","2.0.1","1.4.4","0.4.11","2.10","4.1-15","2.0.2","0.13","1.0.1","0.4.0","1.1.1","1.6.0","2.6","4.1.1","4.5.0","4.1.1","1.7.3","1.4.0","3.2-11","0.9.6","3.1.3","1.1.3","1.1.1","1.3.1","1.0-2","4.1.1","0.1.2","1.2.2","4.1.1","0.3.8","2.4.2","0.25","1.3.2","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>
