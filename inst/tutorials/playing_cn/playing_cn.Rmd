@@ -4,6 +4,7 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    css: "style_ui.css"
 runtime: shiny_prerendered
 ---
 
@@ -14,9 +15,11 @@ library(lubridate) #时间数据处理
 library(gapminder) 
 ```
 
-# 课程I: 数据输入／输出
+# 数据输入／输出
 
-哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
+## 导语
+
+大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
 
 现在你进入的是通往`R expert`之路的第一站，我将和胡老师一起引领你走入R的世界，领略其中风采。
 
@@ -24,7 +27,7 @@ library(gapminder)
 我们常见的C++, Java和Python也是如此。
 了解一种语言的“说话方式”的特点有助于我们更好的通过它与计算机进行“**沟通**”。
 
-## 概念
+## 知识点
 
 ### 对象是什么？
 
@@ -36,7 +39,7 @@ R是对象指向型编程（Object-oriented programming）语言。
 
 ### 函数是什么？
 
-```{r out.width = "60%", echo = FALSE}
+```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/handShadow.gif")
 ```
 
@@ -54,7 +57,7 @@ handShadow
 当你买到手机的时候，功能都是有限的。
 通过app，你可以让手机的功能极大丰富起来。
 
-## 知识点
+###
 
 本章节我们将要学习的知识点有以下几个方面：
 
@@ -89,7 +92,7 @@ aValidObject # 展示对象内容
 
 Why?
 
-```{r out.width = "60%", echo = FALSE}
+```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/APLkeyBoard.png")
 ```
 
@@ -215,12 +218,16 @@ vec_num1; vec_num2; vec_num3
 注意: 1. `NA`表示的是: not available
       2. 单个向量中的数据必须拥有相同的类型（数值型、字符型或逻辑型）
 
+###
+
 + 字符向量（character vector）
 
 ```{r character, exercise = TRUE}
 vec_chr <- c("R is hard.", "But I can nail it.")
 vec_chr
 ```
+
+###
 
 + 逻辑向量（logic vector）
 
@@ -229,6 +236,9 @@ vec_tf <- c(TRUE, TRUE, FALSE)
 vec_tf
 # c(TRUE, TRUE, FALSE) == c(1, 1, 0)
 ```
+
+
+###
 
 + 类别向量（factor vector）
 
@@ -245,7 +255,9 @@ vec_fac2 <- factor(c(1, 2, 2, 3), levels = c(3, 2, 1), labels = c("Apple", "Pear
 vec_fac2
 ```
 
-> 萌萌：你可以通过`?factor`和[`forcats手册`](https://forcats.tidyverse.org/)了解更多关于类别变量的知识。
+> 萌萌：你可以通过`?factor`和[`forcats`手册](https://forcats.tidyverse.org/)了解更多关于类别变量的知识。
+
+###
 
 + 时间向量（POSIXct/POSXlt vector）
 
@@ -271,7 +283,7 @@ date1 <- as.Date("2019-01-02")
 class(date1)  # 查看数据类型
 ```
 
-> 萌萌：我不会告诉你`lubridate`是专门用于处理时间的包。
+###
 
 + 时间处理包`lubridate`
     1. 实时获取日期型数据和日期时间型数据
@@ -283,9 +295,11 @@ class(date1)  # 查看数据类型
 
 矩阵（matrix）是具有维度属性的向量，矩阵都是二维的，和向量类似，矩阵中也仅能包含一种数据类型
 
-```{r out.width = "60%", echo = FALSE}
+```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/matrix.gif")
 ```
+
+###
 
 创建矩阵主要有三种方法：
 
@@ -296,12 +310,16 @@ A
 A[2, 3]
 ```
 
+###
+
 + 矢量+维度: `dim()`
 ```{r}
 M <- c(1:20)
 dim(M) <- c(4,5) #4行5列       
 M
 ```
+
+###
 
 + 绑定行/列: `cbind()`和`rbind()`
 ```{r}
@@ -337,13 +355,13 @@ ls_monks <- list(name = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sh
 ls_monks
 ```
 
-+ 数据框
+### 数据框
 
 数据框（Data Frame）是一种特殊的列表/矩阵，其中所用元素长度都相等，列表中的每个元素都可以看作一列，每个元素的长度可以看作行数。
 
 在Excel中:
 
-```{r excel, out.width = "60%", echo = FALSE}
+```{r excel, out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/excel-r1.png")
 ```
 
@@ -366,12 +384,11 @@ knitr::include_graphics("images/excel-r2.png")
 
 ## 合并数据
 
-### 数据示例
-
+### 
 我们采用瑞典学者Hans Rosling在[TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare)中使用的人口数据作为案例来进行下面的讲述。
 让我们首先来看看数据
 
-```{r toy, exercise = TRUE}
+```{r toy}
 library(gapminder)
 gapminder
 ```
@@ -492,7 +509,7 @@ STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
 : 在R中写入GSS数据（及文件大小）所用的平均时间
 
 
-## 在R里做数学
+## 数学计算
 
 ```{r math, exercise = TRUE}
 x <- y <- 42
@@ -531,9 +548,7 @@ x > y; x <= y
     + `save`
     + `saveTYPE`
 
-###
-
-Dr.Hu和萌萌：今天就到这里啦!下次再见！
+### 感谢聆听，下次再见！
 
 <i class="fa fa-envelope fa-lg"></i> <yuehu@tsinghua.edu.cn>
 

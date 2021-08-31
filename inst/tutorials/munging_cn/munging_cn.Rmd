@@ -4,6 +4,7 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    css: "style_ui.css"
 runtime: shiny_prerendered
 ---
 
@@ -14,36 +15,51 @@ library(tidyverse)
 library(gapminder)
 ```
 
-# 课程 II: 数据整理
+# 数据整理
 
-哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
-恭喜你成功完成第一关——数据输入与输出，接下来就让我们开启`R expert`的第二站之旅吧。本次闯关需要具备数据归纳和提取的技能哟，请认真学习！
+## 导言
 
-## 今天的大boss
+大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
+现在我们将开启成为`R expert`旅程的第二站，数据整理。
+在本节中胡老师将带领大家了解最高效的数据清理和调整技术，请认真学习哟！
+
+## 知识点
+
+数据整理：
+
++ 探索
++ 归纳
++ 提取
++ 调整
+
+### 案例数据
 
 由 [Hans Rosling 的 TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare) 普及的人口数据。
 
-```{r toy, exercise = TRUE}
+```{r toy, exercise = TRUE, exercise.eval = TRUE}
 library(gapminder)
 gapminder
 ```
 
-## 数据归纳
+## 数据探索
 
-### 初探数据
-```{r glimpse, exercise = TRUE}
+数据探索旨在对陌生数据的数据构成、结构、形式、内容的初步了解，是数据分析的第一步，也是关键一步。
+我们将数据探索分成三部，用三个动词来表示：瞧，提，钻。
+
+### 瞧：了解数据样貌
+
+
+```{r glimpse, exercise = TRUE, exercise.eval = TRUE}
 head(gapminder, n = 6) # 查看数据框中的前6行
 
-str(gapminder)  #查看数据框当中有哪些变量以及变量的类型：
+tail(gapminder, n = 3) # 后三行
 ```
 
-### 系统探索
+### 提：总结数据结构
 
-嗨，我是一名专家~ 我想从系统的视角了解数据, 例如找到
-
-* 观察数据大小
+* 观察数据大小（多少行，多少列）
 * 变量的名字及数量
-* 或者整个数据帧的结构
+* 数据结构总览
 
 ```{r systemView, exercise = TRUE}
 gapminder
@@ -57,9 +73,12 @@ str(gapminder) # 获取变量名、变量名类型、行数、列数
 ```
 
 
-### 了解变量
+### 钻：了解变量
 
-问: 给我讲讲数据集中的人口变量, 比如说, 我们有多少个国家的人口数据, 平均值是多少, 哪个国家的人口最多／最少, 还有其他内容! 对了,  `pop` 被保存成了什么形式呢？
+比如人口变量, 我们可能想知道国家人口的一般水平是多少，哪个国家的人口最多／最少, 还有其他内容。 
+他们都被存成了什么类？
+
+> 萌萌：还记得类不？类是指对对象属性结构的规定。
 
 ```{r variable, exercise = TRUE}
 head(gapminder$year, n = 10) #查看年份前10行
@@ -76,18 +95,24 @@ class(gapminder$gdpPercap) #查看年份结构：vector、matrix、array、dataf
 typeof(gapminder$gdpPercap) #查看年份元素类型
 ```
 
-## `Tidyverse`包
+## 数据归纳
 
-> 萌萌：欢迎来到 `Tidyverse`世界，让我们通过下面这张图一起揭开`Tidyverse`的庐山真面目吧！
+数据归纳是对数据特征的挖掘和整理。
+我们将使用`tidyverse`系列函数来实现高效数据归纳。
 
-```{r out.width = "60%", echo = FALSE}
+### 什么是`tidyverse`
+
++ 是一个R包
++ 其实是一群[R包](https://www.tidyverse.org/packages/)！
++ 像漫威和DC漫画宇宙一样，所有`tidyverse`组成成员都在同一个数据结构内工作，可以相互对话，共同使用。
+
+### `tidyverse`组成
+
+```{r out.width = "100%", echo = FALSE}
 knitr::include_graphics("images/tidyverseHive.png")
 ```
 
-> 萌萌：哈！看完上面这张图，是不是对`Tidyverse`包有了新的了解？恭喜你，我们的闯关之旅又近了一步！
-
-+ 一个Hadley包
-+ 实际上是一个不断增长的 [数据包](https://www.tidyverse.org/packages/)！
+###
 
 + 安装:
 
@@ -96,43 +121,32 @@ knitr::include_graphics("images/tidyverseHive.png")
 library("tidyverse")
 ```
 
-> 萌萌：接下来就让我们一起了解今天故事的主角——`dplyr`。
+> 萌萌：`tidyverse`中数据包各有独特功用，我们之后将频繁和它们打交道。
 
-##  `dplyr`包
+### `dplyr`包
 
-他们只做一件事，却做得很好。
+`tidyverse`中专门负责数据清理的组件，贯彻一个函数做一件事的风格。
 
-```{r out.width = "60%", echo = FALSE}
++ 专门性
+
+```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/simple.png")
 ```
 
-### 可组合性：
+> 萌萌：`dplyr`是对数据整理的伟大发明，我觉得它最厉害的地方是让计算机在数据整理的时候能“说人话”😘
 
-```{r out.width = "60%", echo = FALSE}
++ 组合性
+
+```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/composable.png")
 ```
 
-> 萌萌：想写出更加简洁和酷炫的代码吗？那就使用`dplyr`包吧！偷偷告诉你关于`%>%`的快捷键方式哟，这是属于我俩之间的秘密，可别告诉别人，嘘🤫！
-
- `%>%`的快捷键:
+`%>%`的快捷键:
 
 * Ctrl + Shift + M (Win)
 * Cmd + Shift + M (Mac)
 
-## 数据概览
-
-### 拓展提升
-
-> 萌萌：还记得上一关卡获取的 `str()`技能吗？让我们一起回忆一下吧
-
-```{r overview, exercise = TRUE}
-str(gapminder)
-glimpse(gapminder)
-```
-
-### 按序查看
-
-> 萌萌：你能告诉我哪个国家的人口最多&哪个国家的人口最少吗？
+### `arrange`
 
 ```{r out.width = "60%", echo = FALSE}
 knitr::include_graphics("images/arrange.png")
@@ -141,6 +155,10 @@ knitr::include_graphics("images/arrange.png")
 ```{r out.width = "90%", echo = FALSE}
 knitr::include_graphics("images/desc.png")
 ```
+
+###
+
+将数据根据人口由少到多（或者有多到少）排列？
 
 ```{r ex_arrange, exercise = TRUE}
 gapminder
@@ -153,15 +171,16 @@ gapminder %>%
 arrange(gapminder, desc(pop)) #此处为按照人口规模进行降序排列
 ```
 
+### `count`
 
-> 萌萌：呀！你真棒！那你还能告诉我每个大洲分别有多少个观测值?&每个大洲的观测值数量一样吗&每个国家呢？
+数据中对于每个大洲各有多少个观测值？每个国家各有多少个（请按大洲排列）？
 
 ```{r ex_count, exercise = TRUE}
 gapminder %>%
   count(continent)
 
 # gapminder %>%
-#   add_count(continent)
+#   add_count(continent) # adding the count number to the dataset.
 ```
 
 ```{r ex_count-solution}
@@ -169,29 +188,31 @@ gapminder %>%
   count(continent, country)
 ```
 
-> 萌萌：试着使用`count()`，看看能获取什么，嘻嘻😁 
 
-### 总结数据
-
-> 萌萌：我想知道人均国民生产总值和预期寿命的中位数分别是什么，你能试着告诉我吗?
+### `summary`
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/summarise.png")
 ```
 
+###
+
+人均国民生产总值和预期寿命的中位数分别是什么?
 
 ```{r ex_summary, exercise = TRUE}
 gapminder %>%
   summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
 ```
 
-### 组内总结
-
-> 萌萌：不懂就问，请问*每个大洲的*人均国民生产总值和预期寿命的中位数分别是什么？
+### `group_by`
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/group_by.png")
 ```
+
+###
+
+*每个大洲的*人均国民生产总值和预期寿命的中位数分别是多少？
 
 ```{r ex_summaryG, exercise = TRUE}
 gapminder %>%
@@ -199,17 +220,19 @@ gapminder %>%
   summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
 ```
 
->萌萌：恭喜你将本次闯关之旅的进度条推进至1/2🎉🎉，加油，终点有丰厚的奖励哟🏁！
-
 ## 数据提取
 
-### filter函数
+`dplyr`中也能帮助我们实现数据提取，主要通过`filter`和`select`实现。
 
->萌萌：试着看看*2007*年哪个国家的人口数量最多吗?
+### `filter`
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/filter.png")
 ```
+
+###
+
+如何知道*2007*年哪个国家的人口数量最多？
 
 ```{r ex_filter, exercise = TRUE, exercise.eval = TRUE}
 gapminder %>%
@@ -222,19 +245,17 @@ gapminder %>%
   arrange(desc(pop)) #再根据人口规模进行降序排列
 ```
 
->萌萌：如果你已经知道了2007年人口最多的国家，那么2007年以前的十年哪个国家的人口数量最多呢? (提示: 把 `%in%` 当成一个条件😁)
-
-### select函数
-
->萌萌：接下来的挑战将会更难哟！你能告诉我：
-
-1. 仅国家，年份和人口
-2. 除了大洲的一切
-3. 以"co"开头的变量
+### `select`
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/select.png")
 ```
+
+1. 提取国家，年份和人口
+2. 除了大洲的一切
+3. 以"co"开头的变量
+
+###
 
 ```{r ex_select, exercise = TRUE}
 gapminder %>%
@@ -249,13 +270,19 @@ gapminder %>%
   select(starts_with("co")) #匹配以“co”开头的名称
 ```
 
-### filter与select之双重暴击
+> 萌萌：有些同学很容易将`filter`和`select`搞混，给大家一个小口诀“select挑列，filter选行”。
 
->萌萌：2007年人口最多的国家的预期寿命是多少---请同时提供国家名称, 人口数量, 以及预期寿命?
+### 挑战时间？
 
-```{r out.width = "95%", echo = FALSE}
+想要从跨年数据中提取2007年的国家极其人口数量和预期寿命，应该怎么做？
+
+> 萌萌：小提示——being Bruce Lee!
+
+```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/comboAttack.gif")
 ```
+
+###
 
 ```{r ex_combo, exercise = TRUE}
 gapminder
@@ -268,13 +295,23 @@ gapminder %>%
   select(country, pop, lifeExp)
 ```
 
-### mutate函数
+## 数据调整
 
->萌萌:每个国家的国民生产总值是多少?
+在数据分析中，我们常常要将数据进行调整和再加工，`mutate`可以帮你做到这一点。
+英文中“mutate”表示“变异”，也就是说这个函数可以实现的并不是无中生有，而是改头换面。
+
+
+> 萌萌：“正经”的知识：前几年大火的“金刚狼”、“X战警”、“黑凤凰” 都在描绘一群身体变异的超级英雄故事。这群英雄有个统一的“类”叫“变种人”，英文就是“mutants”，是`mutate`函数非常形象的诠释。
+
+### `mutate`
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/mutate.png")
 ```
+
+###
+
+知道了人口和人均生产总值，如何知道国民生产总值?
 
 ```{r ex_mutate, exercise = TRUE}
 gapminder %>%
@@ -282,39 +319,55 @@ gapminder %>%
     select(country, pop, gdpPercap, gdp)
 ```
 
->萌萌:我想保留数值型变量中的整数，该怎么做了？
+### 条件性改变
+
+如何对变量进行批量修改？`dplyr`和它的朋友`tidyselect`提供了`across`和`where`函数。
+让我们看看如何通过这些函数实现将数据中所有的非整数变量都四舍五入取整？
 
 ```{r ex_batch, exercise = TRUE}
 gapminder %>%
-  mutate_if(is.double, round, digits = 0) #mutate_if对数据进行判断，如果是T，则对其进行四舍五入操作
+  mutate(across(where(is.double), round, digits = 0))
 ```
 
-### 敲黑板！
+> 萌萌：`across`和`where`在很多`dplyr`函数中都能使用，比如`arrange`、`filter`、`summarise`等。而有的`dplyr`函数还有自己独有的条件筛选命令，比如和`select`配套的就有`starts_with`、`ends_with`、`contains`、`matches`等等。好学如你，请去尽情挖掘吧！
 
-当使用 `gapminder %>% ...`指令的时候, 你<span style="color:red">没有</span>增加或改变`gapminder`的任何东西.
-如果你想把变化保存下来, 把结果发给一个对象。
+### 根本原则
+
+基于`tidyverse`的数据整理，有一个重要的核心前提：“不改变原始数据”——这也是所有数据分析者都应遵守的原则。
+你会发现无论你使用以上命令对原数据做了什么, 你实际都<span style="color:red">没有</span>增加或改变`gapminder`的任何东西。
+
+如果你想把变化保存下来, 你要把结果赋值给一个新的对象，而保持你原来数据的完整性。
 
 ```{r eval = FALSE}
 gapminderNew <- gapminder %>% ...
 ```
 
-## 课后思考
+## 总结
 
-1. 行动<span style="color:red">之前</span> 弄清楚逻辑;
-1. 巧妙地使用 `dplyr` 的功能并融会贯通;
+1. 行动<span style="color:red">之前</span> 想清楚;
+1. 巧妙且综合地使用 `dplyr` 函数;
+    + 探索: `glimpse`
     + 归纳: `arrange`, `count`, `summarise`
-    + 提取: `filter`, `select`, `mutate`
-1. 不要忘了 `group_by` 和 `mutate_if`
+    + 提取: `filter`, `select`
+    + 调整: `mutate`
+1. 条件性操作
+    + `group_by`
+    + `across` & `where`
+    + `starts_with`, etc.
 
-## 额外奖励
+## Bonus
 
 ```{r df_coalesce, echo = FALSE}
 df_toy <- data.frame(x = sample(c(1:2, NA, NA, NA)),
                      y = c(1, 2, NA, NA, 5),
                      z = c(NA, NA, 3, 4, 5))
+
+df_toy
 ```
 
->萌萌: 我怎么样才能填补缺失的 `x`, 然后把 `y` 和 `z` 合并成一个变量呢?
+###
+
+怎么样才能填补缺失的 `x`, 然后把 `y` 和 `z` 合并成一个变量呢?
 
 ```{r coalesce, exercise = TRUE}
 df_toy %>%
@@ -323,7 +376,7 @@ df_toy %>%
 ```
 
 
-## 谢谢！
+### 感谢聆听，下次再见！
 
 <i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
 

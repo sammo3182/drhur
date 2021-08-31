@@ -115,7 +115,7 @@ m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 ```
 
-# 课程: 数据可视化
+# 数据可视化
 
 
 ## 导语
@@ -812,9 +812,7 @@ get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>%
 1. 好看 &prop; 复杂性。
 1. 更酷炫不意味着更好。
 
-###
-
-### 感谢聆听！
+### 感谢聆听，下次再见！
 
 <i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
 
