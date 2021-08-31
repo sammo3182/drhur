@@ -255,7 +255,7 @@ ggplot(___) +
   )
 ```
 
-> 萌萌：其实ggplot作图和我们常见的修图很像，先把基本图做出来，然后一层一层叠加滤镜效果。
+> 萌萌：其实ggplot作图和我们常见的PS修图很像，先把基本图做出来，然后一层一层叠加滤镜效果。
 
 ## 描述可视化
 
@@ -376,7 +376,7 @@ ggplot(gapminder_2007) +
                  color = continent),
              alpha = 0.5)
 ```
-
+>萌萌：可以看出，一张统计图形是由从数据到几何对象（geometric object，记为geom，如点，线，条形等），图形属性（aesthetic attributes，记为aes，如颜色，形状，大小）的一个映射。这些组件之间通过“+”, 以图层(layer)的方式来粘合构图。
 
 ## 案例2: 几何图层
 
@@ -411,6 +411,9 @@ ggplot(cfr_china, aes(x=age, y=cfr, group=1)) +
   theme(plot.caption = element_text(face = "italic", size=6),
         legend.position = "none")
 ```
+
+>萌萌：`ggplot2`提供了`ggtitle()`, `xlab()`和`ylab()`来显示出图标题，x轴，y轴。除此之外，我们可以通过`theme()`函数
+根据需要来改变字体，字体大小，坐标轴，背景等各种元素。如,`theme_grey()`为默认主题，`theme_bw()`为白色背景的主题。
 
 ### 搭建拆解
 
@@ -462,6 +465,9 @@ ggplot(data = cfr_china,
   theme(plot.caption = element_text(face = "italic", size = 6),
         legend.position = "none")
 ```
+
+>萌萌：每一种图形属性都有一个默认的标度,`scale_`便是将数据空间（标度的定义域）映射到图形属性空间（标度的值域）的常用函数。如，离散性数据的颜色图形属性默认标度名为`scale_colour_hue()`，形状图形属性标度为`scale_shape_shape()`。
+
 
 ### 初步总结
 
@@ -517,6 +523,8 @@ ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = 
         plot.caption = element_text(face = "italic", size=6),
         strip.text = element_text(size = 12))
 ```
+
+>萌萌：`facet_wrap`和`facet_grid`是`ggplot2`常用到的分面函数，在数据对比以及分类显示上有着极为重要的作用。
 
 ### 搭建拆解
 
@@ -646,7 +654,7 @@ modelsummary(m1,
               locations = cells_body(rows = 7:8))
 ```
 
-输出格式
+>萌萌：`modelssummary`可以自定义回归结果表中显示的信息。如，重命名、重新排序 选择要显示的拟合优度； 显示各种“稳健”标准误差或置信区间； 添加标题、脚注或源注释； 插入星号或自定义字符以指示统计显着性水平。
 
 ```{r modelOut, eval = FALSE}
 modelsummary(models, filename = 'table.tex')
@@ -664,6 +672,8 @@ library(dotwhisker)
 
 dwplot(m1)
 ```
+
+>萌萌：`dotwhisker`能够快速绘制回归结果图。
 
 ### 多重模型
 
@@ -703,7 +713,7 @@ dwplot(list(m1, m2, m3)) %>%
 
 ### Small_multiple
 
-```{r smallMultiple}
+```{r smallMultiple,eval=FALSE}
 small_multiple(list(m1, m2, m3)) +
   ylab("Coefficient Estimate") +
   geom_hline(yintercept = 0,
@@ -805,12 +815,14 @@ get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>%
   ggmap()
 ```
 
+>萌萌：`ggmap`和`ggplot2`一样可以实现图形的分层语法，其基本思路是使用下载的地图图像，同时使用ggplot2将其作为背景层，然后在地图上绘制数据，统计信息或模型等图层。
 
 ## 总结
 
-1. R 在可视化方面很强大。
 1. 好看 &prop; 复杂性。
 1. 更酷炫不意味着更好。
+
+###
 
 ### 感谢聆听，下次再见！
 
