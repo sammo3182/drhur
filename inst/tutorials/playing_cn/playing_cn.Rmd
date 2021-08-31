@@ -11,7 +11,6 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(tidyverse)
-library(lubridate) #时间数据处理
 library(gapminder) 
 ```
 
@@ -282,14 +281,6 @@ Sys.Date()
 date1 <- as.Date("2019-01-02")
 class(date1)  # 查看数据类型
 ```
-
-###
-
-+ 时间处理包`lubridate`
-    1. 实时获取日期型数据和日期时间型数据
-    2. 自定义生成公式化的日期数据
-    3. 实现日期型数据和日期时间型数据的转化
-    4. 列出提取Date类中的年月日时分秒等元素
 
 ### 矩阵
 
