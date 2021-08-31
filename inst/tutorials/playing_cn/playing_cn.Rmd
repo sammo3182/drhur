@@ -20,7 +20,7 @@ library(gapminder)
 
 大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
 
-现在你进入的是通往`R expert`之路的第一站，我将和胡老师一起引领你走入R的世界，领略其中风采。
+现在你进入的是通往`R expert`之路的第一站，胡老师和我将引领你走入R的世界，领略其中风采。
 
 希望这节课能让你初步了解R语言的**说话风格**！对，就是“说话风格”——R作为一种编程语言，本质上就是一种与计算机对话的方式。
 我们常见的C++, Java和Python也是如此。
@@ -375,7 +375,8 @@ knitr::include_graphics("images/excel-r2.png")
 
 ## 合并数据
 
-### 
+### 教学数据
+
 我们采用瑞典学者Hans Rosling在[TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare)中使用的人口数据作为案例来进行下面的讲述。
 让我们首先来看看数据
 

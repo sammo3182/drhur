@@ -32,11 +32,13 @@ library(gapminder)
 + 提取
 + 调整
 
-### 案例数据
 
-由 [Hans Rosling 的 TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare) 普及的人口数据。
+### 教学数据
 
-```{r toy, exercise = TRUE, exercise.eval = TRUE}
+我们采用瑞典学者Hans Rosling在[TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare)中使用的人口数据作为案例来进行下面的讲述。
+让我们首先来看看数据
+
+```{r toy}
 library(gapminder)
 gapminder
 ```

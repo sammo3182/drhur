@@ -123,7 +123,7 @@ m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
 
 现在你进入的是通往`R expert`之路的“数据可视化”教学环节。
-我将和胡老师一起带大家领略R语言最强悍的功能之一，数据图标功能。
+胡老师和我将带大家领略R语言最强悍的功能之一，数据图标功能。
 在本节中，胡老师将为大家展示R画图的“万能模板”——一个你学会后散点图、柱状图、扇形图……几乎所有图都适用的画图方法。
 
 Ready? Go!
@@ -376,7 +376,8 @@ ggplot(gapminder_2007) +
                  color = continent),
              alpha = 0.5)
 ```
->萌萌：可以看出，一张统计图形是由从数据到几何对象（geometric object，记为geom，如点，线，条形等），图形属性（aesthetic attributes，记为aes，如颜色，形状，大小）的一个映射。这些组件之间通过“+”, 以图层(layer)的方式来粘合构图。
+
+> 萌萌：可以看出，一张统计图形是由从数据到几何对象（geometric object，记为geom，如点，线，条形等），图形属性（aesthetic attributes，记为aes，如颜色，形状，大小）的一个映射。这些组件之间通过“+”, 以图层(layer)的方式来粘合构图。
 
 ## 案例2: 几何图层
 
@@ -466,7 +467,7 @@ ggplot(data = cfr_china,
         legend.position = "none")
 ```
 
->萌萌：每一种图形属性都有一个默认的标度,`scale_`便是将数据空间（标度的定义域）映射到图形属性空间（标度的值域）的常用函数。如，离散性数据的颜色图形属性默认标度名为`scale_colour_hue()`，形状图形属性标度为`scale_shape_shape()`。
+> 萌萌：每一种图形属性都有一个默认的标度,`scale_`便是将数据空间（标度的定义域）映射到图形属性空间（标度的值域）的常用函数。如，离散性数据的颜色图形属性默认标度名为`scale_colour_hue()`，形状图形属性标度为`scale_shape_shape()`。
 
 
 ### 初步总结
@@ -524,7 +525,7 @@ ggplot(incubation_data, aes(ymax = svalue, ymin = 0, xmax = 2, xmin = 1, fill = 
         strip.text = element_text(size = 12))
 ```
 
->萌萌：`facet_wrap`和`facet_grid`是`ggplot2`常用到的分面函数，在数据对比以及分类显示上有着极为重要的作用。
+> 萌萌：`facet_wrap`和`facet_grid`是`ggplot2`常用到的分面函数，在数据对比以及分类显示上有着极为重要的作用。
 
 ### 搭建拆解
 
@@ -654,7 +655,7 @@ modelsummary(m1,
               locations = cells_body(rows = 7:8))
 ```
 
->萌萌：`modelssummary`可以自定义回归结果表中显示的信息。如，重命名、重新排序 选择要显示的拟合优度； 显示各种“稳健”标准误差或置信区间； 添加标题、脚注或源注释； 插入星号或自定义字符以指示统计显着性水平。
+> 萌萌：`modelssummary`可以自定义回归结果表中显示的信息。如，重命名、重新排序 选择要显示的拟合优度； 显示各种“稳健”标准误差或置信区间；添加标题、脚注或源注释； 插入星号或自定义字符以指示统计显着性水平。
 
 ```{r modelOut, eval = FALSE}
 modelsummary(models, filename = 'table.tex')
@@ -673,7 +674,7 @@ library(dotwhisker)
 dwplot(m1)
 ```
 
->萌萌：`dotwhisker`能够快速绘制回归结果图。
+> 萌萌：`dotwhisker`能够快速绘制回归结果图。
 
 ### 多重模型
 
@@ -815,7 +816,7 @@ get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>%
   ggmap()
 ```
 
->萌萌：`ggmap`和`ggplot2`一样可以实现图形的分层语法，其基本思路是使用下载的地图图像，同时使用ggplot2将其作为背景层，然后在地图上绘制数据，统计信息或模型等图层。
+> 萌萌：`ggmap`和`ggplot2`一样可以实现图形的分层语法，其基本思路是使用下载的地图图像，同时使用ggplot2将其作为背景层，然后在地图上绘制数据，统计信息或模型等图层。
 
 ## 总结
 
