@@ -593,15 +593,9 @@ ggplot(incubation_data,
 df_likert
 ```
 
-<<<<<<< HEAD
 
 ## 案例1：Likert-Scale指数
 
-=======
-
-## 案例1：Likert-Scale指数
-
->>>>>>> 4ab3983c15841d109c8cfa0675749f1ab1fbae58
 ```{r likert, exercise = TRUE, exercise.eval = TRUE}
 if (!require(likert)) install.packages("likert")
 library(likert)
@@ -633,7 +627,6 @@ likert(df_likert) %>%
 
 ```{r m1}
 m1 <- lm(mpg ~ cyl + gear + wt, data = mtcars) #进行OLS回归
-<<<<<<< HEAD
 
 summary(m1)
 ```
@@ -663,37 +656,6 @@ modelsummary(models, filename = 'table.jpeg')
 modelsummary(models, filename = 'table.png')
 ```
 
-=======
-
-summary(m1)
-```
-
-### 插播：制表之真Publishable
-
-```{r modeltable}
-library(modelsummary)
-library(gt)
-
-modelsummary(m1,
-         stars = TRUE,
-         title =  gt::md('This is *the* title'),
-         subtitle = 'And a subtitle',
-         output = "gt") %>% 
-  tab_style(style = cell_fill(color = 'lightblue'),
-              locations = cells_body(rows = 7:8))
-```
-
-输出格式
-
-```{r modelOut, eval = FALSE}
-modelsummary(models, filename = 'table.tex')
-modelsummary(models, filename = 'table.rtf')
-modelsummary(models, filename = 'table.html')
-modelsummary(models, filename = 'table.jpeg')
-modelsummary(models, filename = 'table.png')
-```
-
->>>>>>> 4ab3983c15841d109c8cfa0675749f1ab1fbae58
 ### Dot-whisker plot
 
 ```{r dotwhisker}
@@ -742,19 +704,6 @@ dwplot(list(m1, m2, m3)) %>%
 ### Small_multiple
 
 ```{r smallMultiple}
-<<<<<<< HEAD
-#small_multiple(list(m1, m2, m3)) +
-  #ylab("Coefficient Estimate") +
- # geom_hline(yintercept = 0,
-             #colour = "grey60",
-             #linetype = 2) +
-  #ggtitle("Predicting Gas Mileage") +
- # theme(
-   # plot.title = element_text(face = "bold"),
-   # legend.position = "none",
-   # axis.text.x  = element_text(angle = 60, hjust = 1)
- # )
-=======
 small_multiple(list(m1, m2, m3)) +
   ylab("Coefficient Estimate") +
   geom_hline(yintercept = 0,
@@ -766,7 +715,6 @@ small_multiple(list(m1, m2, m3)) +
     legend.position = "none",
     axis.text.x  = element_text(angle = 60, hjust = 1)
   )
->>>>>>> 4ab3983c15841d109c8cfa0675749f1ab1fbae58
 ```
 
 
