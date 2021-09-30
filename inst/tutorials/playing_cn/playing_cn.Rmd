@@ -127,7 +127,6 @@ median(x = 1:10); x
 
 ```
 
-> 萌萌：对象赋值是R语言最基本的操作。我习惯简单把这个动作理解成给箭头右边的对象（一条或一组数据、一个数据结果、一幅图等等）取个名字，嘿嘿😋
 
 ## 数据读取
 
@@ -377,12 +376,12 @@ knitr::include_graphics("images/excel-r2.png")
 
 ### 教学数据
 
-我们采用瑞典学者Hans Rosling在[TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare)中使用的人口数据作为案例来进行下面的讲述。
+我们采用密歇根大学政治学教授Inglehart在[World Values Survey](https://www.worldvaluessurvey.org/wvs.jsp)中使用的数据作为案例来进行下面的讲述。
 让我们首先来看看数据
 
 ```{r toy}
-library(gapminder)
-gapminder
+wvs7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/code/WVS7.rds")
+View(wvs7)
 ```
 
 ### 行合并
@@ -391,17 +390,29 @@ gapminder
 knitr::include_graphics("images/rowBind.png")
 ```
 
-假设我们有亚洲和欧洲人口数据，如何把它们合并在一起呢？
+假设我们有中国和日本人际信任的数据，如何把它们合并在一起呢？
 
 ```{r ex_append, exercise = TRUE, exercise.eval = TRUE}
-gapminder_asia <- gapminder[gapminder$continent == "Asia", 1:2]
-gapminder_europe <- gapminder[gapminder$continent == "Europe", 1:2]
+wvs7_China <- wvs7[wvs7$country == "156", 96:98]
+wvs7_Japan <- wvs7[wvs7$country == "392", 96:98]
+
+# rename cloname
+wvs7_China <- rename(wvs7_China, 
+                     "trustCom" = "Q57",
+                     "trustFam"="Q58",
+                     "trustNei"="Q59")
+wvs7_Japan <- rename(wvs7_Japan,
+                     "trustCom" = "Q57",
+                     "trustFam"="Q58",
+                     "trustNei"="Q59")
+
 ```
 
 ```{r ex_append-solution}
 library(dplyr)
 
-gapminder_eurasia <- bind_rows(gapminder_asia, gapminder_europe) #按行连接，不需要列名相同
+wvs7_asia <- bind_rows(wvs7_China, wvs7_Japan) 
+#按行连接，不需要列名相同
 ```
 
 ### 列合并
@@ -413,12 +424,12 @@ knitr::include_graphics("images/columnBind.png")
 ```
 
 ```{r ex_columnBind, exercise = TRUE}
-gapminder_country <- gapminder$country
-gapminder_year <- gapminder$year
+wvs7_country <- wvs7$country
+wvs7_year <- wvs7$year
 ```
 
 ```{r ex_columnBind-solution}
-bind_cols(gapminder_country, gapminder_year) #按列结合时需要行名相同
+bind_cols(wvs7_country, wvs7_year) #按列结合时需要行名相同
 ```
 
 ### 索引合并
@@ -446,15 +457,14 @@ right_join(x, y, by = "key")
 如果我们有两组数据分别来自不同的源头，又有不同的行数，该如何把它们准确的合并在一起呢？
 
 ```{r ex_join, exercise = TRUE}
-gapminder_country <- select(gapminder, country, year)
-gapminder_year <- select(gapminder, year, pop)
+wvs7_country <- select(wvs7,country, year)
+wvs7_year <- select(wvs7,year, D_INTERVIEW)
 ```
 
 ```{r ex_join-solution}
-gapminder_countryYear<- left_join(gapminder_country, gapminder_year)
+wvs7_countryYear<- left_join(wvs7_country, wvs7_year)
 ```
 
-> 萌萌：在操作上，行合并的关键是每行都有相同的列，列合并则需要每列行数相同。索引合并时，一定要确定两个数据的索引内容是能很好对应的，否则后果惨烈……请不要问我是怎么知道的~
 
 ## 数据输出
 
@@ -463,15 +473,15 @@ gapminder_countryYear<- left_join(gapminder_country, gapminder_year)
 ### 储存为R数据
 
 ```{r saving, eval = FALSE}
-saveRDS(gapminder_country, file = "gapminder_country.rds")
-save(gapminder_country, gapminder_year, file = "gapminder.rdata")
+saveRDS(wvs7_country, file = "wvs7_country.rds")
+save(wvs7_country, wvs7_year, file = "wvs7_countryYear.rdata")
 ```
 
 
 ### 储存为csv文件
 
 ```{r savingCSV, eval = FALSE}
-write.csv(gapminder_country, file = "gapminder_country.csv")
+write.csv(wvs7_country, file = "wvs7_country.csv")
 ```
 
 提示: 如果你的数据是中文的，可能会出现存储csv乱码现象。

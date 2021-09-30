@@ -114,8 +114,6 @@ print(dfSummary(gapminder,
 knitr::include_graphics("images/dfSummary.png")
 ```
 
-> 萌萌：描述性统计描述的是单一变量，向读者说明某个变量是怎么一个“变”法~
-
 ## 分析性统计
 
 ### 二元分析

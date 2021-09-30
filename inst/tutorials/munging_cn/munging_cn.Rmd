@@ -12,7 +12,6 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(tidyverse)
-library(gapminder)
 ```
 
 # 数据整理
@@ -35,12 +34,12 @@ library(gapminder)
 
 ### 教学数据
 
-我们采用瑞典学者Hans Rosling在[TED 演讲](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare)中使用的人口数据作为案例来进行下面的讲述。
+我们采用密歇根大学政治学教授Inglehart在[World Values Survey](https://www.worldvaluessurvey.org/wvs.jsp)中使用的数据作为案例来进行下面的讲述。
 让我们首先来看看数据
 
 ```{r toy}
-library(gapminder)
-gapminder
+wvs7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/wvs7.rds")
+View(wvs7)
 ```
 
 ## 数据探索
@@ -52,9 +51,9 @@ gapminder
 
 
 ```{r glimpse, exercise = TRUE, exercise.eval = TRUE}
-head(gapminder, n = 6) # 查看数据框中的前6行
+head(wvs7, n = 6) # 查看数据框中的前6行
 
-tail(gapminder, n = 3) # 后三行
+tail(wvs7, n = 3) # 后三行
 ```
 
 ### 提：总结数据结构
@@ -64,14 +63,14 @@ tail(gapminder, n = 3) # 后三行
 * 数据结构总览
 
 ```{r systemView, exercise = TRUE}
-gapminder
+wvs7
 ```
 
 ```{r systemView-solution}
-nrow(gapminder) # 获取数据的行数
-ncol(gapminder) # 获取数据的列数
-names(gapminder) # 获取变量名/列名
-str(gapminder) # 获取变量名、变量名类型、行数、列数
+nrow(wvs7) # 获取数据的行数
+ncol(wvs7) # 获取数据的列数
+names(wvs7) # 获取变量名/列名
+str(wvs7) # 获取变量名、变量名类型、行数、列数
 ```
 
 
@@ -80,21 +79,19 @@ str(gapminder) # 获取变量名、变量名类型、行数、列数
 比如人口变量, 我们可能想知道国家人口的一般水平是多少，哪个国家的人口最多／最少, 还有其他内容。 
 他们都被存成了什么类？
 
-> 萌萌：还记得类不？类是指对对象属性结构的规定。
-
 ```{r variable, exercise = TRUE}
-head(gapminder$year, n = 10) #查看年份前10行
+head(wvs7$year, n = 10) #查看年份前10行
 ```
 
 ```{r variable-solution}
-mean(gapminder$year, na.rm = TRUE) #求取年份的平均值，na.rm = TRUE表示忽略NA
-median(gapminder$year) #求取年份的中间值
-min(gapminder$year) #求取年份的最小值
-max(gapminder$year) #求取年份的最大值
-length(gapminder$year) #求取年份的长度（此处为行数）
-summary(gapminder$year) #获取年份的上述所有信息
-class(gapminder$gdpPercap) #查看年份结构：vector、matrix、array、dataframe、list
-typeof(gapminder$gdpPercap) #查看年份元素类型
+mean(wvs7$year, na.rm = TRUE) #求取年份的平均值，na.rm = TRUE表示忽略NA
+median(wvs7$year) #求取年份的中间值
+min(wvs7$year) #求取年份的最小值
+max(wvs7$year) #求取年份的最大值
+length(wvs7$year) #求取年份的长度（此处为行数）
+summary(wvs7$year) #获取年份的上述所有信息
+class(wvs7$year) #查看年份结构：vector、matrix、array、dataframe、list
+typeof(wvs7$year) #查看年份元素类型
 ```
 
 ## 数据归纳
@@ -122,8 +119,7 @@ knitr::include_graphics("images/tidyverseHive.png")
 ## install.packages("tidyverse")
 library("tidyverse")
 ```
-
-> 萌萌：`tidyverse`中数据包各有独特功用，我们之后将频繁和它们打交道。
+。
 
 ### `dplyr`包
 
@@ -135,7 +131,6 @@ library("tidyverse")
 knitr::include_graphics("images/simple.png")
 ```
 
-> 萌萌：`dplyr`是对数据整理的伟大发明，我觉得它最厉害的地方是让计算机在数据整理的时候能“说人话”😘
 
 + 组合性
 
@@ -160,17 +155,17 @@ knitr::include_graphics("images/desc.png")
 
 ###
 
-将数据根据人口由少到多（或者有多到少）排列？
+将数据根据采访年份排列？
 
 ```{r ex_arrange, exercise = TRUE}
-gapminder
+wvs7
 ```
 
 ```{r ex_arrange-solution}
-gapminder %>%
-  arrange(pop) # arrange函数用于排序，此处为按照人口规模从小到大进行排序
+wvs7 %>%
+  arrange(year) # arrange函数用于排序，此处为按照人口规模从小到大进行排序
 
-arrange(gapminder, desc(pop)) #此处为按照人口规模进行降序排列
+arrange(wvs7, desc(year)) #此处为按照人口规模进行降序排列
 ```
 
 ### `count`
@@ -178,15 +173,15 @@ arrange(gapminder, desc(pop)) #此处为按照人口规模进行降序排列
 数据中对于每个大洲各有多少个观测值？每个国家各有多少个（请按大洲排列）？
 
 ```{r ex_count, exercise = TRUE}
-gapminder %>%
+wvs7 %>%
   count(continent)
 
-# gapminder %>%
+# wvs7 %>%
 #   add_count(continent) # adding the count number to the dataset.
 ```
 
 ```{r ex_count-solution}
-gapminder %>%
+wvs7 %>%
   count(continent, country)
 ```
 
@@ -202,7 +197,7 @@ knitr::include_graphics("images/summarise.png")
 人均国民生产总值和预期寿命的中位数分别是什么?
 
 ```{r ex_summary, exercise = TRUE}
-gapminder %>%
+wvs7 %>%
   summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
 ```
 
@@ -217,7 +212,7 @@ knitr::include_graphics("images/group_by.png")
 *每个大洲的*人均国民生产总值和预期寿命的中位数分别是多少？
 
 ```{r ex_summaryG, exercise = TRUE}
-gapminder %>%
+wvs7 %>%
   group_by(continent) %>%
   summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
 ```
@@ -237,12 +232,12 @@ knitr::include_graphics("images/filter.png")
 如何知道*2007*年哪个国家的人口数量最多？
 
 ```{r ex_filter, exercise = TRUE, exercise.eval = TRUE}
-gapminder %>%
+wvs7 %>%
   arrange(desc(pop))
 ```
 
 ```{r ex_filter-solution}
-gapminder %>%
+wvs7 %>%
   filter(year == 2007) %>% #filter函数筛选出年份为2007年
   arrange(desc(pop)) #再根据人口规模进行降序排列
 ```
@@ -260,15 +255,15 @@ knitr::include_graphics("images/select.png")
 ###
 
 ```{r ex_select, exercise = TRUE}
-gapminder %>%
+wvs7 %>%
   select(country, year, pop) #选择国家、年份、人口规模
 ```
 
 ```{r ex_select-solution}
-gapminder %>%
+wvs7 %>%
   select(-continent) #去掉大洲
 
-gapminder %>%
+wvs7 %>%
   select(starts_with("co")) #匹配以“co”开头的名称
 ```
 
@@ -278,7 +273,6 @@ gapminder %>%
 
 想要从跨年数据中提取2007年的国家极其人口数量和预期寿命，应该怎么做？
 
-> 萌萌：小提示——being Bruce Lee!
 
 ```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/comboAttack.gif")
@@ -287,11 +281,11 @@ knitr::include_graphics("images/comboAttack.gif")
 ###
 
 ```{r ex_combo, exercise = TRUE}
-gapminder
+wvs7
 ```
 
 ```{r ex_combo-solution}
-gapminder %>%
+wvs7 %>%
   filter(year == 2007) %>%
   arrange(desc(pop)) %>%
   select(country, pop, lifeExp)
@@ -316,7 +310,7 @@ knitr::include_graphics("images/mutate.png")
 知道了人口和人均生产总值，如何知道国民生产总值?
 
 ```{r ex_mutate, exercise = TRUE}
-gapminder %>%
+wvs7 %>%
   mutate(gdp = pop * gdpPercap) %>% #可根据已有变量添加新的变量，将新添加的列到已有列的末尾
     select(country, pop, gdpPercap, gdp)
 ```
@@ -327,21 +321,19 @@ gapminder %>%
 让我们看看如何通过这些函数实现将数据中所有的非整数变量都四舍五入取整？
 
 ```{r ex_batch, exercise = TRUE}
-gapminder %>%
+wvs7 %>%
   mutate(across(where(is.double), round, digits = 0))
 ```
-
-> 萌萌：`across`和`where`在很多`dplyr`函数中都能使用，比如`arrange`、`filter`、`summarise`等。而有的`dplyr`函数还有自己独有的条件筛选命令，比如和`select`配套的就有`starts_with`、`ends_with`、`contains`、`matches`等等。好学如你，请去尽情挖掘吧！
 
 ### 根本原则
 
 基于`tidyverse`的数据整理，有一个重要的核心前提：“不改变原始数据”——这也是所有数据分析者都应遵守的原则。
-你会发现无论你使用以上命令对原数据做了什么, 你实际都<span style="color:red">没有</span>增加或改变`gapminder`的任何东西。
+你会发现无论你使用以上命令对原数据做了什么, 你实际都<span style="color:red">没有</span>增加或改变`wvs7`的任何东西。
 
 如果你想把变化保存下来, 你要把结果赋值给一个新的对象，而保持你原来数据的完整性。
 
 ```{r eval = FALSE}
-gapminderNew <- gapminder %>% ...
+wvs7New <- wvs7 %>% ...
 ```
 
 ## 总结
