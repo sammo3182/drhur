@@ -458,7 +458,7 @@ right_join(x, y, by = "key")
 
 ```{r ex_join, exercise = TRUE}
 wvs7_country <- select(wvs7,country, year)
-wvs7_year <- select(wvs7,year, D_INTERVIEW)
+wvs7_year <- select(wvs7,year,id)
 ```
 
 ```{r ex_join-solution}
