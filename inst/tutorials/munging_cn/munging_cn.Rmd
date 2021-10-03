@@ -163,28 +163,22 @@ wvs7
 
 ```{r ex_arrange-solution}
 wvs7 %>%
-  arrange(year) # arrange函数用于排序，此处为按照人口规模从小到大进行排序
+  arrange(year) # arrange函数用于排序，此处为按照采访时间从小到大进行排序
 
-arrange(wvs7, desc(year)) #此处为按照人口规模进行降序排列
+arrange(wvs7, desc(year)) #此处为按照采访年进行降序排列
 ```
 
 ### `count`
 
-数据中对于每个大洲各有多少个观测值？每个国家各有多少个（请按大洲排列）？
+数据中对于每个国家各有多少个观测值？
 
 ```{r ex_count, exercise = TRUE}
 wvs7 %>%
-  count(continent)
+  count(country)
 
 # wvs7 %>%
-#   add_count(continent) # adding the count number to the dataset.
+#   add_count(country) # adding the count number to the dataset.
 ```
-
-```{r ex_count-solution}
-wvs7 %>%
-  count(continent, country)
-```
-
 
 ### `summary`
 
@@ -194,11 +188,11 @@ knitr::include_graphics("images/summarise.png")
 
 ###
 
-人均国民生产总值和预期寿命的中位数分别是什么?
+年龄和受教育年限的中位数分别是什么?
 
 ```{r ex_summary, exercise = TRUE}
 wvs7 %>%
-  summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
+  summarise(mean_age = mean(age), median_edu = median(edu))
 ```
 
 ### `group_by`
@@ -209,12 +203,12 @@ knitr::include_graphics("images/group_by.png")
 
 ###
 
-*每个大洲的*人均国民生产总值和预期寿命的中位数分别是多少？
+*每个国家的*年龄和受教育年限的中位数分别是多少？
 
 ```{r ex_summaryG, exercise = TRUE}
 wvs7 %>%
-  group_by(continent) %>%
-  summarise(mean_gdp = mean(gdpPercap), median_life = median(lifeExp))
+  group_by(country) %>%
+  summarise(mean_age = mean(age), median_edu = median(edu))
 ```
 
 ## 数据提取
@@ -229,17 +223,17 @@ knitr::include_graphics("images/filter.png")
 
 ###
 
-如何知道*2007*年哪个国家的人口数量最多？
+如何知道*2018*年哪个国家的人口数量最多？
 
 ```{r ex_filter, exercise = TRUE, exercise.eval = TRUE}
 wvs7 %>%
-  arrange(desc(pop))
+  arrange(desc(id))
 ```
 
 ```{r ex_filter-solution}
 wvs7 %>%
   filter(year == 2007) %>% #filter函数筛选出年份为2007年
-  arrange(desc(pop)) #再根据人口规模进行降序排列
+  arrange(desc(id)) #再根据采访id进行降序排列
 ```
 
 ### `select`
@@ -261,17 +255,16 @@ wvs7 %>%
 
 ```{r ex_select-solution}
 wvs7 %>%
-  select(-continent) #去掉大洲
+  select(-country) #去掉国家
 
 wvs7 %>%
   select(starts_with("co")) #匹配以“co”开头的名称
 ```
 
-> 萌萌：有些同学很容易将`filter`和`select`搞混，给大家一个小口诀“select挑列，filter选行”。
 
 ### 挑战时间？
 
-想要从跨年数据中提取2007年的国家极其人口数量和预期寿命，应该怎么做？
+想要从跨年数据中提取2018年的国家及其年龄和受教育程度，应该怎么做？
 
 
 ```{r out.width = "80%", echo = FALSE}
@@ -280,24 +273,17 @@ knitr::include_graphics("images/comboAttack.gif")
 
 ###
 
-```{r ex_combo, exercise = TRUE}
-wvs7
-```
-
 ```{r ex_combo-solution}
 wvs7 %>%
-  filter(year == 2007) %>%
-  arrange(desc(pop)) %>%
-  select(country, pop, lifeExp)
+  filter(year == 2018) %>%
+  arrange(desc(age)) %>%
+  select(country, age, edu)
 ```
 
 ## 数据调整
 
 在数据分析中，我们常常要将数据进行调整和再加工，`mutate`可以帮你做到这一点。
 英文中“mutate”表示“变异”，也就是说这个函数可以实现的并不是无中生有，而是改头换面。
-
-
-> 萌萌：“正经”的知识：前几年大火的“金刚狼”、“X战警”、“黑凤凰” 都在描绘一群身体变异的超级英雄故事。这群英雄有个统一的“类”叫“变种人”，英文就是“mutants”，是`mutate`函数非常形象的诠释。
 
 ### `mutate`
 
@@ -307,12 +293,12 @@ knitr::include_graphics("images/mutate.png")
 
 ###
 
-知道了人口和人均生产总值，如何知道国民生产总值?
+知道了年龄和受教育程度，如何知道受教育水平/比例?
 
 ```{r ex_mutate, exercise = TRUE}
 wvs7 %>%
-  mutate(gdp = pop * gdpPercap) %>% #可根据已有变量添加新的变量，将新添加的列到已有列的末尾
-    select(country, pop, gdpPercap, gdp)
+  mutate(age_edu = edu/age) %>% #可根据已有变量添加新的变量，将新添加的列到已有列的末尾
+    select(country, age,edu)
 ```
 
 ### 条件性改变
