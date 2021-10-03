@@ -253,7 +253,6 @@ vec_fac2 <- factor(c(1, 2, 2, 3), levels = c(3, 2, 1), labels = c("Apple", "Pear
 vec_fac2
 ```
 
-> 萌萌：你可以通过`?factor`和[`forcats`手册](https://forcats.tidyverse.org/)了解更多关于类别变量的知识。
 
 ###
 
@@ -379,7 +378,7 @@ knitr::include_graphics("images/excel-r2.png")
 我们采用密歇根大学政治学教授Inglehart在[World Values Survey](https://www.worldvaluessurvey.org/wvs.jsp)中使用的数据作为案例来进行下面的讲述。
 让我们首先来看看数据
 
-```{r toy}
+```{r toy, exercise = TRUE}
 wvs7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/wvs7.rds")
 View(wvs7)
 ```
@@ -392,7 +391,7 @@ knitr::include_graphics("images/rowBind.png")
 
 假设我们有中国和日本人际信任的数据，如何把它们合并在一起呢？
 
-```{r ex_append, exercise = TRUE, exercise.eval = TRUE}
+```{r ex_append, exercise = TRUE}
 wvs7_China <- wvs7[wvs7$country == "156", 9:11]
 wvs7_Japan <- wvs7[wvs7$country == "392", 9:11]
 ```

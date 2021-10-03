@@ -157,11 +157,7 @@ knitr::include_graphics("images/desc.png")
 
 将数据根据采访年份排列？
 
-```{r ex_arrange, exercise = TRUE}
-wvs7
-```
-
-```{r ex_arrange-solution}
+```{r ex_arrange-solution, exercise = TRUE}
 wvs7 %>%
   arrange(year) # arrange函数用于排序，此处为按照采访时间从小到大进行排序
 
@@ -250,7 +246,7 @@ knitr::include_graphics("images/select.png")
 
 ```{r ex_select, exercise = TRUE}
 wvs7 %>%
-  select(country, year, pop) #选择国家、年份、人口规模
+  dplyr::select(country, year, pop) #选择国家、年份、人口规模
 ```
 
 ```{r ex_select-solution}
@@ -298,7 +294,7 @@ knitr::include_graphics("images/mutate.png")
 ```{r ex_mutate, exercise = TRUE}
 wvs7 %>%
   mutate(age_edu = edu/age) %>% #可根据已有变量添加新的变量，将新添加的列到已有列的末尾
-    select(country, age,edu)
+    dplyr::select(country, age,edu)
 ```
 
 ### 条件性改变
@@ -337,7 +333,7 @@ wvs7New <- wvs7 %>% ...
 
 ## Bonus
 
-```{r df_coalesce, echo = FALSE}
+```{r df_coalesce, exercise = TRUE}
 df_toy <- data.frame(x = sample(c(1:2, NA, NA, NA)),
                      y = c(1, 2, NA, NA, 5),
                      z = c(NA, NA, 3, 4, 5))
