@@ -277,7 +277,7 @@ knitr::include_graphics("images/comboAttack.gif")
 wvs7 %>%
   filter(year == 2018) %>%
   arrange(desc(age)) %>%
-  select(country, age, edu)
+  dplyr::select(country, age, edu)
 ```
 
 ## 数据调整
