@@ -445,8 +445,8 @@ right_join(x, y, by = "key")
 如果我们有两组数据分别来自不同的源头，又有不同的行数，该如何把它们准确的合并在一起呢？
 
 ```{r ex_join, exercise = TRUE}
-wvs7_country <- select(wvs7,country, year)
-wvs7_year <- select(wvs7,year,id)
+wvs7_country <- dplyr::select(wvs7,country, year)
+wvs7_year <- dplyr::select(wvs7,year,id)
 ```
 
 ```{r ex_join-solution}
