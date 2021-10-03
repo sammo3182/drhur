@@ -393,19 +393,8 @@ knitr::include_graphics("images/rowBind.png")
 假设我们有中国和日本人际信任的数据，如何把它们合并在一起呢？
 
 ```{r ex_append, exercise = TRUE, exercise.eval = TRUE}
-wvs7_China <- wvs7[wvs7$country == "156", 96:98]
-wvs7_Japan <- wvs7[wvs7$country == "392", 96:98]
-
-# rename cloname
-wvs7_China <- rename(wvs7_China, 
-                     "trustCom" = "Q57",
-                     "trustFam"="Q58",
-                     "trustNei"="Q59")
-wvs7_Japan <- rename(wvs7_Japan,
-                     "trustCom" = "Q57",
-                     "trustFam"="Q58",
-                     "trustNei"="Q59")
-
+wvs7_China <- wvs7[wvs7$country == "156", 9:11]
+wvs7_Japan <- wvs7[wvs7$country == "392", 9:11]
 ```
 
 ```{r ex_append-solution}
