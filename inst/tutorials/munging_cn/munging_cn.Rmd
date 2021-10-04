@@ -38,8 +38,8 @@ library(tidyverse)
 让我们首先来看看数据
 
 ```{r toy}
-#wvs7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/wvs7.rds")
-#View(wvs7)
+#WVS7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/WVS7.rds")
+#View(WVS7)
 ```
 
 ## 数据探索
@@ -51,9 +51,9 @@ library(tidyverse)
 
 
 ```{r glimpse, exercise = TRUE, exercise.eval = TRUE}
-head(wvs7, n = 6) # 查看数据框中的前6行
+head(WVS7, n = 6) # 查看数据框中的前6行
 
-tail(wvs7, n = 3) # 后三行
+tail(WVS7, n = 3) # 后三行
 ```
 
 ### 提：总结数据结构
@@ -63,14 +63,14 @@ tail(wvs7, n = 3) # 后三行
 * 数据结构总览
 
 ```{r systemView, exercise = TRUE}
-wvs7
+WVS7
 ```
 
 ```{r systemView-solution}
-nrow(wvs7) # 获取数据的行数
-ncol(wvs7) # 获取数据的列数
-names(wvs7) # 获取变量名/列名
-str(wvs7) # 获取变量名、变量名类型、行数、列数
+nrow(WVS7) # 获取数据的行数
+ncol(WVS7) # 获取数据的列数
+names(WVS7) # 获取变量名/列名
+str(WVS7) # 获取变量名、变量名类型、行数、列数
 ```
 
 
@@ -80,18 +80,18 @@ str(wvs7) # 获取变量名、变量名类型、行数、列数
 他们都被存成了什么类？
 
 ```{r variable, exercise = TRUE}
-head(wvs7$year, n = 10) #查看年份前10行
+head(WVS7$year, n = 10) #查看年份前10行
 ```
 
 ```{r variable-solution}
-mean(wvs7$year, na.rm = TRUE) #求取年份的平均值，na.rm = TRUE表示忽略NA
-median(wvs7$year) #求取年份的中间值
-min(wvs7$year) #求取年份的最小值
-max(wvs7$year) #求取年份的最大值
-length(wvs7$year) #求取年份的长度（此处为行数）
-summary(wvs7$year) #获取年份的上述所有信息
-class(wvs7$year) #查看年份结构：vector、matrix、array、dataframe、list
-typeof(wvs7$year) #查看年份元素类型
+mean(WVS7$year, na.rm = TRUE) #求取年份的平均值，na.rm = TRUE表示忽略NA
+median(WVS7$year) #求取年份的中间值
+min(WVS7$year) #求取年份的最小值
+max(WVS7$year) #求取年份的最大值
+length(WVS7$year) #求取年份的长度（此处为行数）
+summary(WVS7$year) #获取年份的上述所有信息
+class(WVS7$year) #查看年份结构：vector、matrix、array、dataframe、list
+typeof(WVS7$year) #查看年份元素类型
 ```
 
 ## 数据归纳
@@ -158,10 +158,10 @@ knitr::include_graphics("images/desc.png")
 将数据根据采访年份排列？
 
 ```{r ex_arrange-solution, exercise = TRUE}
-wvs7 %>%
+WVS7 %>%
   arrange(year) # arrange函数用于排序，此处为按照采访时间从小到大进行排序
 
-arrange(wvs7, desc(year)) #此处为按照采访年进行降序排列
+arrange(WVS7, desc(year)) #此处为按照采访年进行降序排列
 ```
 
 ### `count`
@@ -169,10 +169,10 @@ arrange(wvs7, desc(year)) #此处为按照采访年进行降序排列
 数据中对于每个国家各有多少个观测值？
 
 ```{r ex_count, exercise = TRUE}
-wvs7 %>%
+WVS7 %>%
   count(country)
 
-# wvs7 %>%
+# WVS7 %>%
 #   add_count(country) # adding the count number to the dataset.
 ```
 
@@ -187,7 +187,7 @@ knitr::include_graphics("images/summarise.png")
 年龄和受教育年限的中位数分别是什么?
 
 ```{r ex_summary, exercise = TRUE}
-wvs7 %>%
+WVS7 %>%
   summarise(mean_age = mean(age), median_edu = median(edu))
 ```
 
@@ -202,7 +202,7 @@ knitr::include_graphics("images/group_by.png")
 *每个国家的*年龄和受教育年限的中位数分别是多少？
 
 ```{r ex_summaryG, exercise = TRUE}
-wvs7 %>%
+WVS7 %>%
   group_by(country) %>%
   summarise(mean_age = mean(age), median_edu = median(edu))
 ```
@@ -222,12 +222,12 @@ knitr::include_graphics("images/filter.png")
 如何知道*2018*年哪个国家的人口数量最多？
 
 ```{r ex_filter, exercise = TRUE, exercise.eval = TRUE}
-wvs7 %>%
+WVS7 %>%
   arrange(desc(id))
 ```
 
 ```{r ex_filter-solution}
-wvs7 %>%
+WVS7 %>%
   filter(year == 2007) %>% #filter函数筛选出年份为2007年
   arrange(desc(id)) #再根据采访id进行降序排列
 ```
@@ -245,15 +245,15 @@ knitr::include_graphics("images/select.png")
 ###
 
 ```{r ex_select, exercise = TRUE}
-wvs7 %>%
+WVS7 %>%
   dplyr::select(country, year, pop) #选择国家、年份、人口规模
 ```
 
 ```{r ex_select-solution}
-wvs7 %>%
+WVS7 %>%
   select(-country) #去掉国家
 
-wvs7 %>%
+WVS7 %>%
   select(starts_with("co")) #匹配以“co”开头的名称
 ```
 
@@ -270,7 +270,7 @@ knitr::include_graphics("images/comboAttack.gif")
 ###
 
 ```{r ex_combo-solution}
-wvs7 %>%
+WVS7 %>%
   filter(year == 2018) %>%
   arrange(desc(age)) %>%
   dplyr::select(country, age, edu)
@@ -292,7 +292,7 @@ knitr::include_graphics("images/mutate.png")
 知道了年龄和受教育程度，如何知道受教育水平/比例?
 
 ```{r ex_mutate, exercise = TRUE}
-wvs7 %>%
+WVS7 %>%
   mutate(age_edu = edu/age) %>% #可根据已有变量添加新的变量，将新添加的列到已有列的末尾
     dplyr::select(country, age,edu)
 ```
@@ -303,19 +303,19 @@ wvs7 %>%
 让我们看看如何通过这些函数实现将数据中所有的非整数变量都四舍五入取整？
 
 ```{r ex_batch, exercise = TRUE}
-wvs7 %>%
+WVS7 %>%
   mutate(across(where(is.double), round, digits = 0))
 ```
 
 ### 根本原则
 
 基于`tidyverse`的数据整理，有一个重要的核心前提：“不改变原始数据”——这也是所有数据分析者都应遵守的原则。
-你会发现无论你使用以上命令对原数据做了什么, 你实际都<span style="color:red">没有</span>增加或改变`wvs7`的任何东西。
+你会发现无论你使用以上命令对原数据做了什么, 你实际都<span style="color:red">没有</span>增加或改变`WVS7`的任何东西。
 
 如果你想把变化保存下来, 你要把结果赋值给一个新的对象，而保持你原来数据的完整性。
 
 ```{r eval = FALSE}
-wvs7New <- wvs7 %>% ...
+WVS7New <- WVS7 %>% ...
 ```
 
 ## 总结
