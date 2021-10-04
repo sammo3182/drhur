@@ -38,8 +38,8 @@ library(tidyverse)
 让我们首先来看看数据
 
 ```{r toy}
-wvs7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/wvs7.rds")
-View(wvs7)
+#wvs7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/wvs7.rds")
+#View(wvs7)
 ```
 
 ## 数据探索
