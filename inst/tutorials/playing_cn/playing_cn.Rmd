@@ -379,8 +379,8 @@ knitr::include_graphics("images/excel-r2.png")
 让我们首先来看看数据
 
 ```{r toy, exercise = TRUE}
-#wvs7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/wvs7.rds")
-#View(wvs7)
+#WVS7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/WVS7.rds")
+#View(WVS7)
 ```
 
 ### 行合并
@@ -392,14 +392,14 @@ knitr::include_graphics("images/rowBind.png")
 假设我们有中国和日本人际信任的数据，如何把它们合并在一起呢？
 
 ```{r ex_append, exercise = TRUE}
-wvs7_China <- wvs7[wvs7$country == "156", 9:11]
-wvs7_Japan <- wvs7[wvs7$country == "392", 9:11]
+WVS7_China <- WVS7[WVS7$country == "156", 9:11]
+WVS7_Japan <- WVS7[WVS7$country == "392", 9:11]
 ```
 
 ```{r ex_append-solution}
 library(dplyr)
 
-wvs7_asia <- bind_rows(wvs7_China, wvs7_Japan) 
+WVS7_asia <- bind_rows(WVS7_China, WVS7_Japan) 
 #按行连接，不需要列名相同
 ```
 
@@ -412,12 +412,12 @@ knitr::include_graphics("images/columnBind.png")
 ```
 
 ```{r ex_columnBind, exercise = TRUE}
-wvs7_country <- wvs7$country
-wvs7_year <- wvs7$year
+WVS7_country <- WVS7$country
+WVS7_year <- WVS7$year
 ```
 
 ```{r ex_columnBind-solution}
-bind_cols(wvs7_country, wvs7_year) #按列结合时需要行名相同
+bind_cols(WVS7_country, WVS7_year) #按列结合时需要行名相同
 ```
 
 ### 索引合并
@@ -445,12 +445,12 @@ right_join(x, y, by = "key")
 如果我们有两组数据分别来自不同的源头，又有不同的行数，该如何把它们准确的合并在一起呢？
 
 ```{r ex_join, exercise = TRUE}
-wvs7_country <- dplyr::select(wvs7,country, year)
-wvs7_year <- dplyr::select(wvs7,year,id)
+WVS7_country <- dplyr::select(WVS7,country, year)
+WVS7_year <- dplyr::select(WVS7,year,id)
 ```
 
 ```{r ex_join-solution}
-wvs7_countryYear<- left_join(wvs7_country, wvs7_year)
+WVS7_countryYear<- left_join(WVS7_country, WVS7_year)
 ```
 
 
@@ -461,15 +461,15 @@ wvs7_countryYear<- left_join(wvs7_country, wvs7_year)
 ### 储存为R数据
 
 ```{r saving, eval = FALSE}
-saveRDS(wvs7_country, file = "wvs7_country.rds")
-save(wvs7_country, wvs7_year, file = "wvs7_countryYear.rdata")
+saveRDS(WVS7_country, file = "WVS7_country.rds")
+save(WVS7_country, WVS7_year, file = "WVS7_countryYear.rdata")
 ```
 
 
 ### 储存为csv文件
 
 ```{r savingCSV, eval = FALSE}
-write.csv(wvs7_country, file = "wvs7_country.csv")
+write.csv(WVS7_country, file = "WVS7_country.csv")
 ```
 
 提示: 如果你的数据是中文的，可能会出现存储csv乱码现象。
