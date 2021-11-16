@@ -37,10 +37,6 @@ library(tidyverse)
 我们采用密歇根大学政治学教授Inglehart在[World Values Survey](https://www.worldvaluessurvey.org/wvs.jsp)中使用的数据作为案例来进行下面的讲述。
 让我们首先来看看数据
 
-```{r toy}
-#WVS7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/WVS7.rds")
-#View(WVS7)
-```
 
 ## 数据探索
 
@@ -71,6 +67,12 @@ nrow(WVS7) # 获取数据的行数
 ncol(WVS7) # 获取数据的列数
 names(WVS7) # 获取变量名/列名
 str(WVS7) # 获取变量名、变量名类型、行数、列数
+
+#改变数据类型
+WVS7$edu <- as.factor(WVS7$edu)
+WVS7$sex <- as.factor(WVS7$sex)
+WVS7$socialLevel <- as.factor(WVS7$socialLevel)
+WVS7$incomeLevel <- as.numeric(WVS7$incomeLevel)
 ```
 
 

@@ -378,11 +378,6 @@ knitr::include_graphics("images/excel-r2.png")
 我们采用密歇根大学政治学教授Inglehart在[World Values Survey](https://www.worldvaluessurvey.org/wvs.jsp)中使用的数据作为案例来进行下面的讲述。
 让我们首先来看看数据
 
-```{r toy, exercise = TRUE}
-#WVS7 <- readRDS("/Users/zhumeng/Desktop/Fall semester_2021/Politics analysis/WVS7.rds")
-#View(WVS7)
-```
-
 ### 行合并
 
 ```{r out.width = "95%", echo = FALSE}
