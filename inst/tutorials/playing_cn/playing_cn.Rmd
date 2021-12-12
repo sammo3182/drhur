@@ -127,6 +127,8 @@ median(x = 1:10); x
 
 ```
 
+###
+
 > 萌萌：对象赋值是R语言最基本的操作。我习惯简单把这个动作理解成给箭头右边的对象（一条或一组数据、一个数据结果、一幅图等等）取个名字，嘿嘿😋
 
 ## 数据读取
@@ -254,6 +256,8 @@ vec_fac2 <- factor(c(1, 2, 2, 3), levels = c(3, 2, 1), labels = c("Apple", "Pear
 vec_fac2
 ```
 
+###
+
 > 萌萌：你可以通过`?factor`和[`forcats`手册](https://forcats.tidyverse.org/)了解更多关于类别变量的知识。
 
 ###
@@ -262,7 +266,7 @@ vec_fac2
 
 `as.POSIXct` (numeric input), `as.POSIXlt` (character input)
 其中POSIXct是整数存储、POSIXlt是列表存储
-```{r time, exercise}
+```{r time, exercise = TRUE, exercise.eval = FALSE}
 Sys.time() # 获取当前时间
 today()   # 获取当日的 年月日
 now()  # 获取当日的 年月日 时分秒  时区
@@ -277,6 +281,8 @@ time2$wday # week of the day
 ```
 
 ```{r time-solution}
+library("lubridate")
+
 Sys.Date()
 date1 <- as.Date("2019-01-02")
 class(date1)  # 查看数据类型
@@ -453,6 +459,8 @@ gapminder_year <- select(gapminder, year, pop)
 ```{r ex_join-solution}
 gapminder_countryYear<- left_join(gapminder_country, gapminder_year)
 ```
+
+###
 
 > 萌萌：在操作上，行合并的关键是每行都有相同的列，列合并则需要每列行数相同。索引合并时，一定要确定两个数据的索引内容是能很好对应的，否则后果惨烈……请不要问我是怎么知道的~
 
