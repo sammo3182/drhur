@@ -1,0 +1,12 @@
+name: visualizing
+title: visualizing
+username:
+account: huyue
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2058944
+bundleId: 3002508
+url: https://huyue.shinyapps.io/visualizing/
+when: 1586680620.62841
+asMultiple: FALSE
+asStatic: FALSE

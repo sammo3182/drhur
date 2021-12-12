@@ -1,0 +1,128 @@
+@import https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz;
+@import https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic;
+@import https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700;
+
+@font-face {
+  font-family: 'Yanone Kaffeesatz';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Yanone Kaffeesatz Regular'), local('YanoneKaffeesatz-Regular');
+}
+@font-face {
+  font-family: 'Droid Serif';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Droid Serif'), local('DroidSerif');
+}
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Code Pro'), local('SourceCodePro-Regular');
+}
+
+body { 
+  font-family: 'Noto Sans SC','Helvetica', 'STHeiti', 'Microsoft YaHei', 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Songti SC', serif; 
+}
+h1, h2, h3 {
+  font-family: 'Yanone Kaffeesatz', 'Helvetica', 'STHeiti', 'Microsoft YaHei', 'SimHei', 'Palatino Linotype', 'Book Antiqua', Palatino;
+  font-weight: normal;
+}
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace; }
+
+
+/*Colorful letters */
+
+.red {color: #BD472A;}
+
+.golden{color: #FFCD00;}
+
+.green{color: #00664F;}
+.greenLight{color: #00AF66;}
+
+.orange{color: #FF8200}
+
+.navy{color: #00558C;}
+
+.blue{color: #00A9E0;}
+
+.gray{color: #63666A;}
+.grayLight{color: #BBBCBC;}
+
+/*Colorful links*/
+
+/* unvisited link */
+a:link {
+  color: green;
+}
+
+/* visited link */
+a:visited {
+  color: orange;
+}
+
+/* mouse over link */
+a:hover {
+  color: #FFCD00; /*golden*/
+}
+
+/* selected link */
+a:active {
+  color: blue;
+}
+
+/*Customize letter size*/
+
+h1 {
+  color: #FFCD00; /*golden*/
+}
+
+h2{
+  color: #cca400; /*green*/
+  font-size: 25px !important
+}
+
+h3 {
+  color: #cca400; /*green*/
+  /*color: #00AF66; greenLight*/
+  font-size: 35px !important
+}
+
+.Huge {font-size: 120px; }
+.huge {font-size: 90px; }
+.Large { font-size: 60px; }
+.large { font-size: 50px; }
+.normal{ font-size: 35px; }
+.Small { font-size: 25px; }
+.small { font-size: 20px; }
+.Tiny{ font-size: 15px; }
+.tiny{ font-size: 10px; }
+
+
+.footnote {
+  position: absolute;
+  bottom: 1em;
+  padding-right: 4em;
+  font-size: 80%;
+}
+
+img, video, iframe {
+  max-width: 100%;
+}
+blockquote {
+  border-left: solid 5px lightgray;
+  padding-left: 1em;
+}
+
+
+/*Table format*/
+
+table {
+  margin: auto;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+tr:nth-child(even) { background: #eee }
+
