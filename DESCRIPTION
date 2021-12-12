@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Package: drhur
 Type: Package
 Title: Learning R with Dr. Hu
@@ -39,3 +40,48 @@ Imports:
 RoxygenNote: 7.1.1
 Suggests: 
     rmarkdown
+=======
+Package: drhur
+Type: Package
+Title: Learning R with Dr. Hu
+Version: 0.1.999999
+Authors@R: c(
+    person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
+    person("Yufei", "Sun", role = c("aut"), email = "sunyf20@mails.tsinghua.edu.cn")
+    )
+Maintainer: Yufei Sun <sunyf20@mails.tsinghua.edu.cn>
+Description: Tutarials of R learning easily and happily.
+License: MIT + file LICENSE
+VignetteBuilder: knitr
+Encoding: UTF-8
+BugReports: https://github.com/sammo3182/drhur/issues
+LazyData: true
+Depends:
+  R(>= 3.6.0),
+  learnr(>= 0.10.1)
+Imports:
+  gapminder,
+  scales,
+  gt,
+  modelsummary,
+  dotwhisker,
+  interplot,
+  likert,
+  ggthemes,
+  ggeffects,
+  summarytools,
+  knitr,
+  tidyverse,
+  car,
+  arm,
+  nnet,
+  ordinal,
+  moments,
+  tibble,
+  performance
+RoxygenNote: 7.1.2
+Suggests: 
+    testthat (>= 3.0.0),
+    rmarkdown
+Config/testthat/edition: 3
+>>>>>>> 3a983c6f125b66dff4ba20aa8b35d8d24c49f4ef
