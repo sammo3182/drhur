@@ -1,163 +1,290 @@
 ---
-title: "Learning R with Dr. Hu and His Friends"
+title: "与胡悦老师和他的朋友一起学R"
+author: "胡悦（清华大学政治学系副教授）"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
-    css: "style_ui.css"
+    # css: "style_ui.css"
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
+library(drhur)
 library(learnr)
 library(tidyverse)
-library(gapminder) 
+library(lubridate) 
 ```
 
-# 数据输入／输出
+
+# 与R的初会
 
 ## 导语
 
-大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
+大家好，欢迎来到“Learning R with Dr. Hu and His Friends”!
+这是一门专门为系统学习R语言设计的课程。
+在课程中，我们将带领大家和R交流、对话，进而交上朋友，让它成为你科研、工作上的强大助力。
+与其他既有课程和教材相比，这本教材有四个突出特点：
 
-现在你进入的是通往`R expert`之路的第一站，胡老师和我将引领你走入R的世界，领略其中风采。
+*第一，文科生的编程书。*
+这门课程缘起于我建立“让文科生也学得会编程课程”的夙愿。
+我本身就是纯文科出身，在接触R之前对编程几乎没有了解。
+但后来因为科研原因，陆续学习、使用R语言，并在之后又学习了Python、C++等，也推出了数个R语言软件包(我们会在之后的课程中陆续介绍到它们)，至今获得了全球二十余万的下载量。
+学习的过程中，我走了不少弯路，但也有比理工科同事理解的更快、更好的时候。
+这本教材将我这些年学习、教学R语言的经验进行了系统梳理总结。
+内容上并不会比那些理工科教材浅薄或零碎，而无论是课程安排还是教学角度上却都有很好的“文科向”，方便理解和记忆。
 
-希望这节课能让你初步了解R语言的**说话风格**！对，就是“说话风格”——R作为一种编程语言，本质上就是一种与计算机对话的方式。
-我们常见的C++, Java和Python也是如此。
-了解一种语言的“说话方式”的特点有助于我们更好的通过它与计算机进行“**沟通**”。
+*第二，一群人的学习。*
+在多年的编程和方法论教学过程中，我发现学习的难处往往不在于所授知识有多深、操作有多复杂，而在于“会的教不会的”这个状态。
+正所谓“会者不难”，“会者”也往往不再记得“不会”的难处，以及是怎么从不会到会的。
+因此我们这个教材，引入了集体教学模式。
+现在正在学习的，不仅仅有屏幕前的你，还有飞宝、萌萌、哲哥等几位小朋友。
+他们会伴随你走过整个学习过程，也会把他们对于某些他们觉得“之前不明白，但之后明白了”的知识点，用学生的话表述出来，希望能给当下正在学习的你们带来帮助。
 
-## 知识点
+*第三，活的教科书。*
+这本教材课程设置将分为两个阶段，我称之为“R Survivors”和“R Expert"。
+前一个阶段筑基，后一个阶段进阶。
+两个阶段的着眼点不同，复杂程度也不同，但有一点相同：那就是贯穿每一节课程，你都可以在各个知识点原地进行练习。
+教材通过`R Shiny`将教材与R系统关联起来，实现学与用的无缝联系，免去照着书本一个个字敲的古早学习方式，最大程度减少无必要精力耗费，增强学习效率。
+同时，在这种互动操作方式下，你的所有错误操作都会得到和在R里一样的错误或者警告反馈，让你能够实时检查，错在哪，为啥错。
+正如美籍匈牙利数学家乔治·波利亚所说，真正学会一件事“除了要正确理解它，还必须知道如何误解它。”
 
-### 对象是什么？
+*第四，真的分析实践。*
+本教材的第四个特点是采用真实的社会科学数据。
+本书大部分举例将采用从世界价值观调查（World Value Survey，WVS）采集的样本数据。
+WVS是政治学、社会学、经济学等领域学者都常用到的跨时间、跨地域考察的个体社会经济情况和社会政治态度的调查数据。
+我们后面的大部分课程演示都将使用从其中摘取的一个小数据集进行，让读者能够切身感受处理真实数据的感觉和可能遇到的问题，为其开发自己的研究做足准备。
+当然，感兴趣的读者也可以从WVS官方网站上下载完整数据，进行演练。
 
-R是对象指向型编程（Object-oriented programming）语言。
-这类语言的基本操作单位是类（class）和对象（object）。
+以上就是对本教材的一点小简介，希望能激起你对学习R的热情，树立学习的信心。
+下面，我们的学习正式开始。
+
+
+## 与R握个手
+
+现在你进入了是通往`R expert`之路的第一站，对R有个概括性的了解。
+我称之为“和R握个手”，要和谁交朋友，总要先有个认识不是？
+这里包含三个步骤：“看面相”（R语言概貌），“请进门”（R程序安装）和“喝点水”（R语言包安装）。
+
+### 看面相
+
+（见课件）
+
+### 请进门
+
+相过面后，如果你决定要和R做朋友，那就要把她请到你的本地电脑或者服务器上。
+方法和安装任何软件一样，你在任何浏览器上搜索“R language”，通常第一个蹦出来的就是R语言的主页[https://www.r-project.org/about.html](https://www.r-project.org/about.html)。
+你在侧边栏“Download”下的“CRAN”链接里你就可以找到R语言的下载镜像。
+你可以选择第一个“0-Cloud”或者在地区上离你最近的那个镜像，比如北京的朋友们可以选择[清华](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)的或者[北外](https://mirrors.bfsu.edu.cn/CRAN/)的。
+
+下载安装完成后，我还推荐大家一个R专属的Integrated Development Environment (IDE)。
+它本质上就是个浏览器，让R语言程序和反馈都能更好的显示和排布。
+现在世界上最流行的IDE当属Rstudio，我们这里也推荐大家使用这个。
+安装方法也很简单，在任何浏览器里搜索“Rstudio”， 进而转到其官方网站[https://www.rstudio.com/], 在里面就可以免费下载到[Rstudio Desktop IDE](https://www.rstudio.com/download/)。
+下载安装完成后，恭喜你，R已经成功进门，可以进行下一步的交流了。
+
+> 萌萌：请注意！请注意！请注意！安装上述软件时候，强烈建议大家安装到没有中文、没有空格的安装路径，比如“C:\R”或“~/R”。Rstudio也是。这一点几乎对于所有编程语言都适用。如果你的安装路径里有中文或者空格，这些程序都有很大几率表现异常——尤其是在Windows系统里——其异常程度，嗯，令人发指！
+
+### 喝点水
+
+请客进门后，作为主人，我们通常要端上饮品，拿些点心。
+一方面表现好客，另一方面也是客人理解主人的一种途径。
+比如，主人端上的咖啡加西点，那主人可能比较喜好西洋风；但如果端上的是酽茶加瓜子，那主人则更可能是个中国风爱好者。
+对于R语言来说，安装后，我们要进行一步程序包的安装工作，就相当是这一步：通过安装不同的程序包，R就能理解你最长从事的工作或最需要进行的分析有哪些，她好提前做好准备。
+程序包不必也不可能一次性装全，可以随用随装，不断加深R对你的理解。
+
+下面以安装我们互动教材`drhur`的程序包举例加以说明。
+安装可以通过两种方式进行：一种是实在Rstudio里通过“Package-Install”来实现，另外一种是通过代码实现，代码如下：
+
+```{r install-drhur, eval = FALSE}
+install.packages("drhur", dependencies = TRUE)
+```
+
+这也是我们向大家引介的第一个R语言命令函数。
+关于命令函数，我们之后会专门介绍，这里仅做简要说明：`install.package`是函数名，`"drhur"`是处理的数据，这里就是一个程序包的名字，`dependencies = TRUE`则是对处理过程提的一个条件，意思是对能让这个包顺利运行的基础包也请自动安装。
+
+> 萌萌：请记得在输入任（！）何（！）R语言命令时候把输入法调回英文，请自行脑补我是怎么花了4个小时研究知道的……
+
+以上命令是从CRAN安装R的过程，对大部分R程序包都适用。
+但由于CRAN对于R程序包有一个相对较高的集成化标准和相对繁琐的审核过程，有的研究者不想在这个上面多花时间，就会把自己还在开发阶段的程序包或者适用版本放在开源共享平台上，比如Github, Gitlab等等。
+要想安装这些包，则需要另一个命令。
+比如要想安装`drhur`的开发者版本则需要以下命令:
+
+```{r install-github, eval = FALSE}
+remotes::install_github("sammo3182/drhur", dependencies = TRUE)
+```
+
+
+## 和R聊两句
+
+Ok, 现在R已经被你请进门、安顿住。
+我们这一章的目的是进一步她进行了解，知道她的身世、喜好，并据此跟她进行交流。
+我们要完成以下三个任务：
+
+1. 了解R语言的核心语言逻辑
+1. 了解R语言的数据类型
+1. 学会如何将数据读进R和存出来。
+
+### R语言的核心语言逻辑
+
+和R交流，最为重要的是熟悉她的对话模式，亦即R作为编程语言的内部逻辑，知道她能听懂什么、不能听懂什么，听懂了能干什么、不能干什么。
+要了解这一点我们首先要了解两个重要概念：
+
+### 对象
+
+对象是对编程语言处理目标的描述。
+R在编程语言分类上，属于“对象指向型编程”（Object-oriented programming, OOP）语言。
+这类语言的基本操作单元是类（class）和对象（object）。
 其中，类是概括性的，规定了其所属对象的属性类型，是其所辖对象的模板，比如在`国家`这一类下，所有个体都包含人口、疆域、政权类型等属性。
-对象是类模板的一个具象，比如基于`国家`类可以创建的对象`中国`、`法国`、`爱尔兰`等。
+对象则是类模板的一个具象，比如基于`国家`类可以创建的对象`中国`、`法国`、`爱尔兰`等。
 
+在R里面创建对象需要通过赋值符，箭头（`<-`）实现，语法如下：
 
-### 函数是什么？
-
-```{r out.width = "80%", echo = FALSE}
-knitr::include_graphics("images/handShadow.gif")
-```
-
-```{r funIllustration, eval = FALSE}
-light <- function(finger){
-  {{shadow <- finger + 5}}
-}
-handShadow <- light(finger = 3)
-handShadow
-```
-
-### 数据包是什么
-
-数据包（package）相当于你智能手机里的app。
-当你买到手机的时候，功能都是有限的。
-通过app，你可以让手机的功能极大丰富起来。
-
-###
-
-本章节我们将要学习的知识点有以下几个方面：
-
-1.  输入/输出数据
-2.  保存数据
-3.  合并数据
-
-## 数据输入
-
-### 对象赋值 `<-`
-
-语法：<名称> `<-` <对象>
+语法：<名称> `<-` <内容>
 
 举例：
 
-```{r object}
-aValidObject <- 1:5
-aValidObject # 展示对象内容
+```{r object, exercise = TRUE}
+anObject <- 15
+anObject # 展示对象内容
 ```
 
-+ 命名规则
-    1. 不要以数字开头 (错误: `1stday`)
-    1. 除了 `.` 和 `-`以外没有其他特殊符号(错误: `M&M`)
-    1. 区分大小写 (`X != x`) `!表示“非”/“否”，`!=`表示“不等于”
-    1. 如需必要请勿重写内置函数 (避免: `list <- c(1:5)`)
+当然还有另一种赋值符号，等号（`=`），用法和`<-`大体等效。
+但建议大家更多使用 `<-` 而不是 `=`。原因有三：
+第一，指向更直观。
+比如，下面例子中两行命令都是有效的，而且明显看出是把12赋值给了a 然后又把a的内容赋值给了b。
+但`=`就无法达到同样的效果。
+（请尝试把下面的箭头替换成等号，看会有什么结果？想想为什么？）
+
+```{r arrow, exercise = TRUE}
+a <- 12
+a -> b
+```
+
+第二，可以避免和“等于”混淆。在R里面，等号是赋值符号，而表示等于含义则需要用`==`，但由于约定俗成的原因，初学者常常会搞混，造成错误。
+
+第三，可以通过快捷键一次性输入。`<-`并不等于你每次都要按`<`和`-`才能完成输入。
+在各种操作系统中都又快捷键帮助你一次性完成任务。
+
++ PC/Linux: `Alt + -`
++ Mac: `option + -`
+
+当然，也有些情况，你可能更希望使用`=`而不是`<-`，尤其是在函数内部赋值的时候。
+尝试以下例子，看产出什么结果，为什么会有不同
+
+```{r sideEffect, exercise = TRUE}
+median(x <- 10); x
+median(x = 10); x
+```
 
 
-### 另一种赋值符 `=`
-
-用法和`<-`等效。
-但更多写过更倾向使用 `<-` 而不是 `=`。
-
-Why?
+> 萌萌：“有用”的知识：之所以R多用`<-`作为赋值符，也与她的起源有关。R是奥克兰大学的统计学家Ross Ihaka和 Robert Gentleman基于S语言共同创建的，而S又生发于一种更古老的语言APL，而这种语言是需要特殊键盘操作的（见下图），在这个键盘里`<-`用来表示赋值，而`=`则表示它的原初含义“等于”。这一有趣的小传统，通过APL到S，又到了R，保留到了今天，成为R语言的特色之一。
 
 ```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/APLkeyBoard.png")
 ```
 
-+ 指向直观
+最后，我们来讨论一下R里面对对象命名的规则的。
+对于对象的命名其实比较随意，但有几条基本原则不要违反：
 
-```{r arrow}
-a <- 12
-25 -> b
-```
-
-+ 不可以和“等于”混淆（本章最后一节会详述）
-+ 可以通过快捷键一次性输入
-    + PC: `Alt + -`
-    + Mac: `option + -`
+1. 不要以数字开头 (错误: `1stday`)
+1. 除了 `.` 和 `-`以外没有其他特殊符号(错误: `M&M`)
+1. 区分大小写 (`X != x`) `!表示“非”/“否”，`!=`表示“不等于”
+1. 如需必要请勿重写内置函数 (避免: `list <- c(1:5)`)
 
 
-### 什么时候用 "="?
-当你不想创建一个对象的时候,请看以下例子
-
-```{r sideEffect, exercise = TRUE}
-median(y <- 1:10); y
-median(x = 1:10); x
-```
-
-### 挑战时间！
-
-请创建一个合规和不合规的对象：
+挑战时间！请创建一个合规和不合规的对象：
 
 ```{r objectEg, exercise = TRUE}
 # 一个合规对象
-
 # 试着创建一个不合规的对象
-
 ```
 
 
-## 数据读取
+### 函数
 
-### 内置数据
+R语言的function，被中文翻译为“函数”。
+从R的统计学来源来说，这一翻译是准确的，我们也将在之后的课程中保留这一称谓。
+但尤其对于与数学、统计不长打交道的朋友来说，这个翻译并无助于我们理解其在R语言编程中的作用。
+因此，我们更推荐大家把R语言里的function理解为“功能”或“作用”——一个处理、修改、转化*对象*的过程。
+下面用一个例子加以说明：
 
-```{r mtcars, exercise}
+```{r out.width = "80%", echo = FALSE}
+knitr::include_graphics("images/handShadow.gif")
+```
+
+上图表现了一个自然现象：光打在手上，在墙上形成影像；随着光角度变化，影像也随之改变——但手还是那只手。
+对于R语言来说，函数的作用就是这里光的作用：面对同一个数据对象（那只手），不同的函数（不同角度的光）会给出不同的结果对象（不同样子的影像）。
+在R里面，这一过程可以大体描绘成以下的命令。
+
+在这里我们定义(这个概念我们一会儿细谈)了两个函数，或者说两种光线：30度光（`light30`）和50度光(`light50`)。
+它们分别对数据对象手（`hand = 5`)进行变化，生成结果对象手影（`handShadow`）。
+请观察在采用不同函数时候，手影结果产生什么变化。
+你也可以尝试更换原始数据对象的数值，比如`hand = 10`，观察结果又产生了什么变化。
+
+
+```{r funIllustration, exercise = TRUE}
+light30 <- function(hand){
+  {{shadow <- hand * 30}}
+}
+
+light50 <- function(hand){
+  {{shadow <- hand * 50}}
+}
+
+hand <- 5
+
+handShadow <- light30(hand)
+handShadow
+
+
+handShadow <- light50(hand)
+handShadow
+```
+
+
+其实我们之前提到的赋值符`<-`、`=`，本质上也都是一种函数。
+
+### 小结
+
+使用函数处理对象，是R语言的基础逻辑。
+对象是告诉R，你们要一起处理的材料是什么，而函数则是告诉R如何对这些项目、数据进行处理的方法。
+在R收到信息后，则会按照你给出的材料和方法进行操作，并把结果输出到一个指定好的新对象里。
+
+> 萌萌：作为一个吃货，我觉得对象就像一个盘子，你把想要处理的食材放进去，然后还要写明是要红烧还是清炖，然后R就像个厨师，按照你的交代把食材编程变成一道菜，装到另一个盘子里端出来给你。
+
+在下面一节中，我们将对对象、函数概念进行应用，并通过它们了解如何把数据输入给R，以及如何整合和输出数据。
+
+
+## 数据输入
+
+这一节里，我们介绍三类数据的输入方法：内置数据、R数据和其他数据。
+内置数据是R自带的供你“玩耍”的数据，装上R的那一刻就已经可以使用，也不需要另创建对象储存，直接使用`data`函数呼出即可：
+
+```{r mtcars, exercise = TRUE}
 data(mtcars)
-#data(gapminder::gapminder)
 ```
 
-### 可直接读取数据
-
-可读取数据类型
+可读取数据，是R不需要数据格式转换就能图区的数据，包含以下四种。
 
 - `.RDS` (单一对象)
 - `.RData` (多个对象)
 - `.txt` 
 - `.csv`
 
+调用语法如下：
+
 语法： <名称>`<-` <读取函数>(<数据路径>)
 
 ```{r input, eval = FALSE}
-df_rds <- readRDS("aDataset.rds")
-df_txt <- read.table("D:/aDataset.txt")
-df_csv <- read.csv("./aDataset.csv")
+df_rds <- readRDS("<FileName>.rds")
+df_txt <- read.table("D:/<FileName>.txt")
+df_csv <- read.csv("./<FileName>.csv")
 ```
 
 
-### 调用包读取数据
-
-通过`library`或者`require`调用数据包，然后使用其中的命令。
+除了以上两种之外，在软件包的加成下，R几乎可以读取任何种类的数据。
+以下对于常见集中数据类型和需要调用的软件包进行了总结。
 
 
 ```{r eval=FALSE}
@@ -165,14 +292,14 @@ df_csv <- read.csv("./aDataset.csv")
 library(haven)
 df_spss <- read_spss("<FileName>.sav")
 df_stata <- read_dta("<FileName>.dta")
-df_sas <- read_sas("<FileName>.sas7bdat")  
+df_sas <- read_sas("<FileName>.sas7bdat") 
 
-# 表格的快速导入
+# 复杂csv表格
 library（reader）
 df_csv <- read.csv("<FileName>.csv")
 df_table <- read.table("<FileName>.csv/txt")
 
-# Excel表格
+# Excel
 library(readxl)
 df_excel <- read_excel("<FileName>.xls")
 df_excel2 <- read_excel("<FileName>.xlsx")
@@ -190,55 +317,98 @@ df_html <- readHTMLTable(url, which=3)
 
 ## 数据分类
 
-1. 向量 (vector)
-2. 矩阵 (matrix)
-3. 数据框 (data frame)
-4. 列表 (list)
-5. 阵列 (array)
+数据被输入R后会被存储为不同的类型，如向量、矩阵、数据框等等。
+（这些也就是我们之前提到的“类”这个概念。）
+而这些类型内部还会包含一些子类型，比如向量里就包含了数字向量、字符向量等等。
+选择适合的类型存储数据，将很大程度提高数据处理效率。
+很多分析程序也对对象的数据类型进行了规定。
+本节由简入繁介绍五种基本R的数据类型。
 
 
 ### 向量
 
-向量（vector）是R语言中最基本的数据类型，执行组合功能的函数`c()`可用来创建向量
+向量是R语言中基本的数据类型。
+作为统计学家设计的语言，无论是前面的“函数”还是这里的“向量”（vector)，其定义和呈现方式，都和其数学表达呈现高度一致。
+所以这里的向量就是我们在高中数学里学到的向量，后面的“矩阵”（matrix)也是同样。
+当然如果你对这些概念不熟悉，也没关系。
+我们对于向量就可以简单理解为一个集合或者一个变量（variable)，是将属于同一个性质的值打包在一起。
+这个打包过程通常通过组合函数`c()`来创建。
 
-+ 数字向量（numeric vector）
+R中常用的向量有五种：
+
++ 数字向量（numeric vector），用于存储数字，又可以区分为整数型和小数型两种。整数和小数，不需要在创建中进行特意区分，R会自动帮你分开。具体数据类型可以通过`class`函数进行查看。以下就建立了三种不同的数字变量，请辨析其差异性：
 
 ```{r numeric, exercise = TRUE}
-vec_num1 <- c(1, 2, 3) #整数
+vec_num1 <- c(1, 3, 5) #整数
 vec_num2 <- c(1:5) #表示1-5 
 vec_num3 <- c(1.5, -2.34, NA)
 
-vec_num1; vec_num2; vec_num3
+vec_num1
+class(vec_num1)
 
-# c(1.5:3) 的结果是什么?
+vec_num2
+class(vec_num2)
+
+vec_num3
+class(vec_num3)
+
+# c(1.5:3) 的结果会是什么?
 ```
 
-注意: 1. `NA`表示的是: not available
-      2. 单个向量中的数据必须拥有相同的类型（数值型、字符型或逻辑型）
+注意: 
+1\. `NA`(Not Available)，是R中表示缺失值的方式；
+2\. 单个向量中的值们必须拥有相同的类型的值或NA值。
+
+对于数字向量，我们可以进行各种运算，常用运算方式，我们罗列在这里了，非常直接易懂：
+
+
+```{r math, exercise = TRUE}
+x <- y <- 42
+# 基础数学
+x + (1 - 2) * 3 / 4
+# 高等数学
+x ^ 2
+sqrt(x)
+log(x)
+exp(x)
+# 矩阵运算
+z <- matrix(1:4, ncol = 2)
+z + z - z
+z %*% z  # inner multiplication
+z %o% z  # outter multiplication
+# 布尔逻辑计算
+x == y
+x != y
+x & y
+x | y
+x > y
+x <= y
+```
+
+在[这里](https://towardsdatascience.com/intro-to-r-linear-algebra-2a4de2506c93)可以查看更多R的数学运算方法。
 
 ###
 
-+ 字符向量（character vector）
++ 字符向量（character vector）用于储存字符或文本。每个单元可长，可短，可以是一个字母，也可以是一句乃至一段话。请在下面框内自己创建几个字符向量：
 
 ```{r character, exercise = TRUE}
-vec_chr <- c("R is hard.", "But I can nail it.")
+vec_chr <- c("R", "I can comprehend it.")
 vec_chr
 ```
 
 ###
 
-+ 逻辑向量（logic vector）
++ 逻辑向量（logic vector）用于储存逻辑判断符：真（TRUE或T）和假（FALSE或F)。两值同时对应数字值1和0。请在观察和理解逻辑变量含义后，在下框内运行`c(TRUE, TRUE, FALSE) == c(1, 1, 0)`，尝试理解结果含义。
 
 ```{r logic, exercise = TRUE}
 vec_tf <- c(TRUE, TRUE, FALSE)
 vec_tf
-# c(TRUE, TRUE, FALSE) == c(1, 1, 0)
 ```
 
 
 ###
 
-+ 类别向量（factor vector）
++ 类别向量（factor vector）用于储存定类或定序变量，比如“苹果、橘子、梨”或“弱、中、强”。观察下框内例子，并试图思考在你学科内是否有定类或定序变量？可否尝试创建一个？
 
 ```{r factor, exercise = TRUE}
 vec_fac <- factor(c(1, 2, 2, 3), labels = c("Apple", "Pear", "Orange"))
@@ -246,7 +416,7 @@ vec_fac
 levels(vec_fac)
 ```
 
-水平(Levels)和标签(Lables)
+类别变量的创建还可以设置两个条件：水平(Level)和标签(Label)。前者用于表示类别之间的潜在顺序（比如“1，2，3”是用来表示“弱、中、强”还是“强、中、弱”），后者则用来控制类别输出的样子（比如输入时可以记作“1， 2， 2， 3”，输出则可以表现为“苹果，梨，梨，橘子”。
 
 ```{r level, exercise = TRUE}
 vec_fac2 <- factor(c(1, 2, 2, 3), levels = c(3, 2, 1), labels = c("Apple", "Pear", "Orange"))
@@ -256,25 +426,21 @@ vec_fac2
 
 ###
 
-+ 时间向量（POSIXct/POSXlt vector）
++ 时间向量（POSIXct/POSXlt vector）用于记录时间。R可以从数字和字符来创建时间的函数：`as.POSIXct` (numeric input), `as.POSIXlt` (character input)。对于经常要处理时间的朋友可以考虑加装`lubridate`包，里面有很多方便的函数帮你获取或coding时间。请看以下例子：
 
-`as.POSIXct` (numeric input), `as.POSIXlt` (character input)
-其中POSIXct是整数存储、POSIXlt是列表存储
-```{r time, exercise}
+```{r time, exercise = TRUE}
 Sys.time() # 获取当前时间
 today()   # 获取当日的 年月日
 now()  # 获取当日的 年月日 时分秒  时区
 # CST为操作时电脑ip所在的时区
-
 # The full pack
 time1 <- Sys.time()
 time2 <- as.POSIXlt(Sys.time())
 time2$wday # week of the day
-
 ## 如果我只在乎日期呢？
 ```
 
-```{r time-solution}
+```{r time-solution, exercise = TRUE}
 Sys.Date()
 date1 <- as.Date("2019-01-02")
 class(date1)  # 查看数据类型
@@ -282,101 +448,112 @@ class(date1)  # 查看数据类型
 
 ### 矩阵
 
-矩阵（matrix）是具有维度属性的向量，矩阵都是二维的，和向量类似，矩阵中也仅能包含一种数据类型
+一般而言，矩阵（matrix）是两个或两个以上向量的集合。
+感性上，经典电影《黑客帝国》也对矩阵做了比较形象的诠释，有兴趣的朋友可以去看看。
+和向量类似，矩阵中也仅能包含一类数值或NA值。
+
 
 ```{r out.width = "80%", echo = FALSE}
 knitr::include_graphics("images/matrix.gif")
 ```
 
-###
 
-创建矩阵主要有三种方法：
+在R中，矩阵是最基本的多维数据存储方式，在很多统计和计量经济学分析过程中，输入数据也都会转化成矩阵形式进行运算。
+使用者可以通过三种创建矩阵。
+第一，`matrix`函数限定行、列数创建：
 
-+ 手动创建: `matrix`
 ```{r matrixR}
 A <- matrix(1:20, ncol = 4) #创建一个数字1-20，5行4列的矩阵（col为列，row为行）
 A
 A[2, 3]
 ```
 
-###
 
-+ 矢量+维度: `dim()`
-```{r}
+第二，`dim()`函数将向量“截”成矩阵
+
+```{r dim, exercise = TRUE}
 M <- c(1:20)
 dim(M) <- c(4,5) #4行5列       
 M
 ```
 
-###
+第三，使用`cbind()`和`rbind()`对同等长度的向量进行行或者列绑定
 
-+ 绑定行/列: `cbind()`和`rbind()`
-```{r}
+```{r bind, exercise = TRUE}
 x <- 1:4
 y <- 5:8
 cbind (x, y)
 rbind (x, y)
 ```
 
-### 阵列
+### 数据框
 
-阵列，顾名思义就是列的“阵”，可用于记录更高维度的数据，可通过`array`函数创建。
+数据框（Data Frame）是一种特殊的矩阵，最大特点是有行和列的严格界定：数据框中的列代表一个维度或者一个变量，行则代表一个观测单元（比如一个人、一个国家等）
+数据框其实就是我们在各种分析软件分析数据时常见的数据表现方式。
+在R中，创建数据框可以使用使用`data.frame()`函数。比如下面一个简单的例子：
 
-```{r array}
-# 创建两个长度不同的向量。
-vector1 <- c(5,9,3)
-vector2 <- c(10,11,12,13,14,15)
-
-# 把这些向量输入到数组中。
-result <- array(c(vector1,vector2),dim = c(3,3,2))
-result
+```{r dataframe, exercise = TRUE}
+df_toy <- data.frame(female = c(0,1,1,0),
+           age = c(29, 39, 38, 12),
+           name = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America"))
+df_toy
 ```
+
 
 ### 列表
 
 列表（list）是一种可包含多种不同类型对象的向量，是一些对象（或成分，component）的有序集合，列表中既可以有向量也可以有矩阵等。
+列表在各种编程软件中都能见到，含义也基本近似。
+在某种意义上，数据框也可以以列表的形式储存，比如下面的例子就是将上面数据框里面的数据存入了列表里。
+为了展示列表特征，我们对数据稍作改动，`female`里包含了8个值，而`age`里包含了4个值，`name`里包含了5个值。
+上面提到，数据框是一种特殊的矩阵，所以行数和列数必须相等。
+基于这一原则以上数据是没法构成一个数据框的，但确实能构成一个列表。
 
-```{r list}
-ls_monks <- list(name = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
-                 power = c(100, 20, 90, 40),
-                 buddha = c(TRUE, TRUE, FALSE, FALSE))
+```{r list, exercise = TRUE}
+ls_toy <- list(
+  female = c(0, 1, 1, 0, 0, 0, 0, 0),
+  age = c(29, 39, 38, 12),
+  name = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America", "Spiderman")
+)
 
-ls_monks
+ls_toy
 ```
 
-### 数据框
 
-数据框（Data Frame）是一种特殊的列表/矩阵，其中所用元素长度都相等，列表中的每个元素都可以看作一列，每个元素的长度可以看作行数。
+### 阵列
 
-在Excel中:
+阵列（array），可用于记录更高维度的数据，可通过`array`函数创建。
+正如矩阵是向量的集合，阵列可以视为是矩阵的集合。
+我们上面说到的矩阵也好、数据框也好，都是列联表形式，也就是能通过行-列的二维表记录。
+阵列则用于记录和表达更多维的数据。
+请观察下例：
 
-```{r excel, out.width = "80%", echo = FALSE}
-knitr::include_graphics("images/excel-r1.png")
-```
+```{r array, exercise = TRUE}
+vector1 <- c(5,9,3)
+vector2 <- c(10,11,12,13,14,15)
 
-在R中，使用`data.frame()`创建数据框
-
-```{r dataframe}
-df_toy <- data.frame(female = c(0,1,1,0),
-           age = c(29, 39, 38, 12),
-           name = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America"))
-
-df_toy
-```
-
-在Rstudio中:
-
-```{r rstudio}
-knitr::include_graphics("images/excel-r2.png")
+result <- array(c(vector1,vector2),dim = c(3,3,2))
+result
 ```
 
 
 ## 合并数据
 
-### 教学数据
+R比起一般数据分析软件的一个重要优势是能够通过将数据转化成对象的方式实现多数据间的连接和对话。
 
-我们采用密歇根大学政治学教授Inglehart在[World Values Survey](https://www.worldvaluessurvey.org/wvs.jsp)中使用的数据作为案例来进行下面的讲述。
+我们采用密歇根大学政治学教授Ronald Inglehart在[World Values Survey](https://www.worldvaluessurvey.org/wvs.jsp)中的第七波数据作为案例来进行下面的讲述。
 让我们首先来看看数据
+
+```{r toy, exercise = TRUE}
+data("WVS7")
+
+WVS7
+```
+
+在R里面实现数据链接有两种方法，即手动模式和索引模式。
+手动模式是将两个或两个以上数据保持观测点顺序不变，直接粘合在一起。
+这种粘合可以以行为单位粘合，也可以以列为单位粘合。
+我们逐一通过案例来讲解。
 
 ### 行合并
 
@@ -384,97 +561,137 @@ knitr::include_graphics("images/excel-r2.png")
 knitr::include_graphics("images/rowBind.png")
 ```
 
-假设我们有中国和日本人际信任的数据，如何把它们合并在一起呢？
+行合并的操作效果见上图。
+下面我们在真实数据上实操一下。
+WVS7中关于中国和日本两国人际信任进行了考察，询问了三个问题，即列9到11。
+其数据我们已经分别导入`wvs7_China`和`wvs7_Japan`两个对象中
+假使要进行两国比较研究，你能否根据上图，使用`rbind`命令把它们合并在一起呢？
+
+```{r fakeRow, echo = FALSE}
+data("WVS7")
+wvs7_China <- WVS7[WVS7$country == "156", 9:11]
+wvs7_Japan <- WVS7[WVS7$country == "392", 9:11]
+```
 
 ```{r ex_append, exercise = TRUE}
-WVS7_China <- WVS7[WVS7$country == "156", 9:11]
-WVS7_Japan <- WVS7[WVS7$country == "392", 9:11]
+wvs7_China
+wvs7_Japan
 ```
 
 ```{r ex_append-solution}
-library(dplyr)
+wvs7_CJ <- rbind(wvs7_China, wvs7_Japan) 
 
-WVS7_asia <- bind_rows(WVS7_China, WVS7_Japan) 
-#按行连接，不需要列名相同
+wvs7_CJ
 ```
 
-### 列合并
+> 萌萌：如果一时想不出来的话，没关系，请点击solution，答案就在那里！
 
-如果我们有一系列的变量，都是来自同一组国家的，如何把他们整合在一起？
+### 列合并
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/columnBind.png")
 ```
 
+列合并效果见上图。
+我们再做一次实操演练。
+假使这次我们有来自各国调研者的id编码以及他们的国籍，但这两个数据被分别储存在`wvs7_id`和`wvs7_country`两个对象中。
+你能否根据上图，使用`cbind`命令把它们合并在一起呢？
+
+```{r fakeCol, echo = FALSE}
+wvs7_country <- WVS7$country
+wvs7_id <- WVS7$id
+```
+
 ```{r ex_columnBind, exercise = TRUE}
-WVS7_country <- WVS7$country
-WVS7_year <- WVS7$year
+wvs7_country
+wvs7_year
 ```
 
 ```{r ex_columnBind-solution}
-bind_cols(WVS7_country, WVS7_year) #按列结合时需要行名相同
+wvs7_CY <- cbind(wvs7_country, wvs7_year) 
+wvs7_CY
 ```
 
 ### 索引合并
 
-`dplyr::*_joint`函数
+手动合并简单明了，但对复杂数据却往往力不从心：比如数据的行列顺序不是一致的或者一条A数据集里的数据要对应多条B数据集里的数据等等。
+这时候就要使用到索引合并的方法。这里我们可以引入`dplyr`中的`*_joint`系列函数来实现操作（见下图）。
+索引合并的唯一要求是两个数据间共享一个索引变量。
+所谓“共享”就是指这个变量里的值具有对应关系，即所谓的“key”。
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/join.png")
 ```
 
-1. 左连接（left_jion): 保留x中的所有观测,如果x中的key变量,在y中有多个同样的key,那么所有的结合可能都会罗列出来。
+最常用的是左连接和右连接：
+
+1. 左连接（left_join): 保留x中的所有观测,如果x中的key变量,在y中有多个同样的key,那么所有的结合可能都会罗列出来。
 
 ```{r left_jion, eval=FALSE}
 left_join(x, y, by = "key")
 ```
 
-2. 右连接(right_jion): 保留 y 中的所有观测
+2. 右连接(right_join): 保留 y 中的所有观测
 
 ```{r right_jion, eval=FALSE}
 right_join(x, y, by = "key")
 ```
 
-### 挑战时间
+> 萌萌：`key`可以是多个变量哦！只要用`c()`把变量名括起来设置即可，如`left_join(x, y, by = c("key1", "key2"))`。
 
-如果我们有两组数据分别来自不同的源头，又有不同的行数，该如何把它们准确的合并在一起呢？
+我们用最常见的`left_joint`来做一个实操演练：
+比如我们现在有两个数据，一个数据是被采访人的的受教育水平，这个人和人之间都可能不同；而另一个数据里是这些人来自哪些国家，很多被采访人可能来自同一个国家。
+如果我们要想比较不同国家的受教育水平，前提条件就是把这两个数据准确地合并起来。
+这个时候就可以使用索引合并，利用共同的`id`作为key，实现数据整合：
+
+```{r}
+wvs7_edu <- dplyr::select(WVS7, id, edu)
+wvs7_country <- dplyr::select(WVS7,id, country)
+```
+
 
 ```{r ex_join, exercise = TRUE}
-WVS7_country <- dplyr::select(WVS7,country, year)
-WVS7_year <- dplyr::select(WVS7,year,id)
+wvs7_edu
+wvs7_country
 ```
 
 ```{r ex_join-solution}
-WVS7_countryYear<- left_join(WVS7_country, WVS7_year)
+wvs7_eduCountry<- left_join(wvs7_edu, wvs7_country)
 ```
 
 
 ## 数据输出
 
+我们的数据清理和分析工作不一定一次就能完成的，有时候还要和合作者分享推进。
+这时候不可避免地问题就是如何将做了处理的数据保存下来。
+以下介绍两种常见方法：
+
+### 储存为`.rds`或`.rdata`数据
+
 语法：<函数>(<代存数据>，file = <存储路径>)
 
-### 储存为R数据
-
 ```{r saving, eval = FALSE}
-saveRDS(WVS7_country, file = "WVS7_country.rds")
-save(WVS7_country, WVS7_year, file = "WVS7_countryYear.rdata")
-```
+saveRDS(wvs7_country, file = "d:/data/wvs7_country.rds")
 
+save(wvs7_country, wvs7_year, file = "d:/data/wvs7_countryYear.rdata")
+```
 
 ### 储存为csv文件
 
 ```{r savingCSV, eval = FALSE}
-write.csv(WVS7_country, file = "WVS7_country.csv")
+write.csv(wvs7_country, file = "wvs7_country.csv")
 ```
 
-提示: 如果你的数据是中文的，可能会出现存储csv乱码现象。
-这个我们之后遇到时候再讲解。
+> 萌萌: 如果你的数据是中文的，可能会出现存储csv乱码现象。需要在储存时候将编码(encoding)设置为“UTF-8”。
 
-当然了，你可以把数据以STATA, SPSS, Excel格式存储下来, 不过你真的想这样吗？
+###
 
-### 体面地储存数据
+当然了，你可以通过R把数据以STATA, SPSS, Excel格式存储下来, 让这些软件可以直接认读。
+但在储存效率上就要小心了，我做过一个不那么严格的实验，发现一个在STATA (.dta, \<14)里3.16 G 的数据在R (.rds)只有0.5 G大小。
 
-STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
+当然，不同的软件包也有自己的存储数据方式。下面两个表对比了包括R自带函数和一些软件包函数储存和读取相同大小数据的时间，供躲着参考：
+
+
 
 | **Method**       | **Average Time** | **Minimum** | **Maximum** |
 |:-----------------|:----------------:|:-----------:|:-----------:|
@@ -483,7 +700,7 @@ STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
 | haven::read\_sav |      104.78      |    101.00   |    111.85   |
 | qs::qread        |       3.33       |     3.00    |     4.24    |
 
-: 四种在R中读取GSS数据的方式所用的平均时间（以秒计）
+: 读取（以秒计）
 
 | **Method**      | **Average Time** | **Minimum** | **Maximum** | **File Size** |
 |:----------------|:----------------:|:-----------:|:-----------:|:-------------:|
@@ -491,33 +708,8 @@ STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
 | fst::write\_fst |       2.70       |     1.86    |     4.05    |    122.1 MB   |
 | qs::qsave       |       5.03       |     4.35    |     6.62    |    44.6 MB    |
 
-: 在R中写入GSS数据（及文件大小）所用的平均时间
+: 储存（秒，MB）
 
-
-## 数学计算
-
-```{r math, exercise = TRUE}
-x <- y <- 42
-
-# 基础数学
-x + (1 - 2) * 3 / 4
-
-# 高等数学
-x^2;sqrt(x);log(x);exp(x)
-
-# 矩阵运算
-z <- matrix(1:4, ncol = 2)
-z + z - z
-z %*% z  # inner multiplication
-z %o% z  # outter multiplication
-
-# 布尔逻辑计算
-x == y; x != y
-x & y; x | y
-x > y; x <= y
-```
-
-在[这里](https://towardsdatascience.com/intro-to-r-linear-algebra-2a4de2506c93)查看更多线性代数在 R 中的应用。
 
 ## 总结
 
@@ -525,18 +717,15 @@ x > y; x <= y
     + `readTYPE`
     + `read_type`
     + `read.type`
-1. 保存
+1. 类型
     + 向量
-    + 矩阵/data.frame
-    + 列表, 数组
+    + 矩阵/数据框
+    + 列表, 阵列
+1.合并
+    + `rbind`, `cbind`
+    + `*_join`
 1. 输出
     + `save`
     + `saveTYPE`
 
 ### 感谢聆听，下次再见！
-
-<i class="fa fa-envelope fa-lg"></i> <yuehu@tsinghua.edu.cn>
-
-<i class="fa fa-globe fa-lg"></i> <https://sammo3182.github.io/>
-
-<i class="fab fa-github fa-lg"></i> [sammo3182](https://github.com/sammo3182)
