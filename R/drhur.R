@@ -6,10 +6,8 @@
 #'
 #' @details The list of workshop available for the current version:
 #' \itemize{
-#' \item \code{playing}: Intro to basic data structure in R; inputting, outputting, and creating data (English and Chinese).
-#' \item \code{munging}: Generalizing (such as sorting and summarizing) and extracting (selecting or adjusting certain columns or rows) data frames (English and Chinese).
-#' \item \code{analyzing}: Analyze data with descriptive and multivariate tools and diagnoses (English and Chinese).
-#' \item Data presenting (\code{visualizing}): Present descriptive and analytic results with `ggplot2` (English and Chinese).
+#' \item \code{math}: Intro to basic syntax of R (Chinese).
+#' \item \code{playing}: Intro to basic data structure in R; inputting, outputting, and creating data.
 #' }
 #'
 #' @import learnr
