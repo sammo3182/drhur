@@ -13,6 +13,8 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
+
+d <- seq(from = 1, to = 5, by = 0.5)
 ```
 
 ## 目的
@@ -145,20 +147,23 @@ format(2.8e+10, scientific = FALSE, big.mark = ',')
 
 ### 向量表达
 
-- 数学：${\displaystyle {\vec {a}}=(1, 2, 3, 4, 5)}$
+- 数学：${\displaystyle {\vec {a}}=(11, 12, 13, 14, 15)}$
     - $\vec {a}_2 = 2; \vec {a}_5 = 5$
-- R：`a <- c(1, 2, 3, 4, 5)`
+- R：`a <- c(11, 12, 13, 14, 15)`
     - `c`: Concatenate/combine
 
 ```{r vector}
-a <- c(1, 2, 3, 4, 5)
+a <- c(11, 12, 13, 14, 15)
 
 a[2]
 a[5]
 ```
 
 - `<-`: 赋值符(assign)
-- `:`: `a <- 1:5`。
+- `:`: `a <- 1:5`
+- `TRUE`留`FALSE`不留
+
+###
 
 ```{r colon}
 b <- 10 * 1:5
@@ -201,15 +206,41 @@ c
 #d
 ```
 
+###
+
+`seq()`另一个功能是体现元素位置。
+
+比如：如何选出`d`的偶数项
+
+```{r index, exercise = TRUE}
+
+```
+
+<div id="index-hint">
+**提示:** 
+
+1. 确定索引；
+1. 找出索引中的各位是否是偶数位（是否能被2整除），是用`TRUE`标明；
+1. 在第二步基础上根据“`TRUE`留`FALSE`不留”的规则将向量中为偶数位的元素保留成为一个新向量。
+</div>
+
+```{r index-solution}
+d[seq(d) %% 2 == 0]
+```
+
+
 ### 向量四则运算
 
 - 加减法：$$\vec{a} \pm \vec{b} = (a_1 \pm b_1, a_2 \pm b_2, ..., a_n \pm b_n).$$
-- 乘法：
-    1. 向量&middot;向量的标量积（即俗称的“点乘”）：$\vec{a}\cdot \vec{b} = \sum a_ib_i$。
-        - 这里包含一种特殊情况，纯量&times;向量：$c\vec{x} = (cx_1, cx_2,..., cx_n).$
-    1. 向量&times;向量的向量积（即俗称的“叉乘”）：$\vec{a}\cdot \vec{b} = |\vec{a}||\vec{b}|cos\theta$，其中&theta;是两个向量的夹角。
+- 乘法则要略微复杂，有不同类型。
+    - 点乘：可以有两种表达方式
+        1. 代数表达式：$\vec{a}\cdot \vec{b} = \sum a_ib_i$。
+            - 这里包含一种特殊情况，纯量&times;向量：$c\vec{x} = (cx_1, cx_2,..., cx_n).$
+        1. 几何表达式：$\vec{a}\cdot \vec{b} = ||\vec{a}||||\vec{b}||cos\theta$，其中$||\vec{a}||$是向量的欧几里得范数（$\sqrt{a^{2}_1 + \ldots + a^{2}_n}$），&theta;是两个向量的夹角。
+        - R中用`*`连接两个向量，输出点乘结果。
+    - 叉乘：将两个变量在共同的单位向量上相乘的方法。
+        - 使用`%o%`连接两个向量或者使用`outer()`命令计算。
 
-> R中用`*`连接两个向量代表的是标量积。
 
 ```{r vec-cal}
 a + b
@@ -227,6 +258,39 @@ a
 e <- c(1, 2)
 
 a * e
+```
+
+
+###
+
+叉乘在R中其实还能做一些数据之外的事情。
+
+举例：用这个功能来用R推演一下天干地支。
+
+
+```{r tiandi, exercise = TRUE}
+tiangan <- c("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸")
+dizhi <- c("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
+```
+
+<div id="tiandi-hint">
+**提示:** 
+
+阅者诸君周知，有十天干，十二地支。
+它们共有一百二十种组合，先民取其中六十种组为干支纪年。
+选择方法是阳（奇）数配阳数，阴（偶）数配阴数。
+</div>
+
+
+```{r tiandi-solution}
+tg_yang <- tiangan[seq(tiangan) %% 2 == 1]
+tg_yin <- tiangan[seq(tiangan) %% 2 == 0]
+
+dz_yang <- dizhi[seq(dizhi) %% 2 == 1]
+dz_yin <- dizhi[seq(dizhi) %% 2 == 0]
+
+outer(tg_yang, dz_yang, FUN = paste0)
+outer(tg_yin, dz_yin, FUN = paste0)
 ```
 
 
@@ -253,6 +317,9 @@ var(a)
 ```
 
 > 这些命令在之后基于数据的变量运算中均可通用。
+
+
+
 
 
 ## 矩阵
@@ -330,6 +397,7 @@ B %*% D
 
 用R解一个三元一次方程组:
 
+$$
 \begin{equation}
 \begin{cases}
 x + y + z = 6, \\
@@ -337,10 +405,31 @@ x + y + z = 6, \\
 2x + 2y - 6z = 4.
 \end{cases}
 \end{equation}
+$$
 
 - 矩阵**E**代表方程系数
 - $b$为方程的右侧
 - $x$是方程的解
+
+$$
+\begin{align}
+\vec{b} =& \vec{E}\vec{x},\\
+\begin{bmatrix}
+6 \\
+9 \\
+4
+\end{bmatrix} 
+=& 
+\begin{bmatrix}
+1 & 1 & 1 \\
+3 & 2 & 4 \\
+2 & 2 & -6
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+\end{align}.
+$$
 
 
 ```{r equations}
@@ -352,6 +441,21 @@ b <- c(6, 9, 4)
 x <- solve(E, b)
 x
 ```
+
+###
+
+解方程组的一个直接应用就是解回归方程。
+回归方程通常可以以线性代数方式表达：
+比如，对一个基本的回归就可以写成如下形式，就和我们上面解的方程组非常相似了：
+
+$$
+\begin{align}
+y& =& &\beta_0 + \beta_1x_1 + \beta_2x_2 + ... + \beta_nx_n + \epsilon\\
+\vec{y}& =& &\vec{x}\vec{\beta} + \vec{\epsilon}.\\
+\uparrow& & &\uparrow\uparrow\\
+\vec{b}& =& &\vec{E}\vec{x}
+\end{align}
+$$
 
 
 ## 要点总结
