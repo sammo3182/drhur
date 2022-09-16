@@ -172,7 +172,7 @@ b
 
 ###
 
-```{r colon, excercise = TRUE}
+```{r colon2, excercise = TRUE}
 # 结果是什么？
 c(1.5:3)
 ```
