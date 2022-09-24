@@ -17,7 +17,6 @@ Depends:
   R(>= 3.6.0),
   learnr(>= 0.10.1)
 Imports:
-  gapminder,
   scales,
   gt,
   modelsummary,
@@ -26,7 +25,6 @@ Imports:
   likert,
   ggthemes,
   ggeffects,
-  summarytools,
   knitr,
   tidyverse,
   car,
