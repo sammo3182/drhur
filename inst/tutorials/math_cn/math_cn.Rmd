@@ -1,7 +1,7 @@
 ---
 title: "基础语法: 线性代数"
 subtitle: "Learning R with Dr. Hu and His Friends"
-author: "胡悦（清华大学政治学系副教授）"
+author: "胡悦（清华大学政治学系）"
 output: 
   learnr::tutorial:
     language: "zh"

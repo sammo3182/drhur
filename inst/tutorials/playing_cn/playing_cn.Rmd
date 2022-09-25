@@ -1,7 +1,7 @@
 ---
 title: "基础语法: 输入输出"
 subtitle: "Learning R with Dr. Hu and His Friends"
-author: "胡悦（清华大学政治学系副教授）"
+author: "胡悦（清华大学政治学系）"
 output: 
   learnr::tutorial:
     language: "zh"
@@ -432,7 +432,7 @@ save(df_toy, ls_monks, file = "test.rdata")
 write.csv(df_toy, file = "toy.csv")
 ```
 
-提示: 如果你的数据是中文的，可能会出现存储csv乱码现象。
+> 提示: 如果你的数据是中文的，可能会出现存储csv乱码现象。
 
 ###
 
