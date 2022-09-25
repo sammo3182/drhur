@@ -74,7 +74,7 @@
 #     confidence_parties,
 #     confidence_tv
 #   ) %>%
-#   filter(country != "China")
+#   filter(!(country %in% c("China", "Hong Kong SAR China")))
 # 
 # 
 # save(
@@ -83,5 +83,5 @@
 # )
 
 load("data-raw/wvs7.rda")
-usethis::use_data(wvs7)
+usethis::use_data(wvs7, overwrite = TRUE)
 

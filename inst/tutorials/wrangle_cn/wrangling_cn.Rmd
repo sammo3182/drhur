@@ -265,11 +265,31 @@ mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) %>%
 ```{r select, exercise=TRUE}
 select(wvs7, country, age, education, confidence_gov)
 
-# 如果我们想看到关于信心的所有变量，除了一个一个的列出来以外还能怎么做？
+# 如果我们想看到关于信心的所有变量，除了逐个列出来以外还能怎么做？
 ```
 
 ```{r select-solution}
 select(wvs7, country, age, education, starts_with("confidence"))
+```
+
+和`starts_with`类似的还有`ends_with`和`matches`。
+
+> 提示：注意第三人称变单数😝
+
+### 
+
+删除变量可以通过`-`实现：
+
+```{r deselect}
+select(wvs7, -(country:education))
+```
+
+###
+
+一个`select`衍生体是`rename`，语法为`new.name = old.name`
+
+```{r rename, exercise = TRUE}
+rename(wvs7, nationality = country)
 ```
 
 
@@ -277,190 +297,161 @@ select(wvs7, country, age, education, starts_with("confidence"))
 
 `arrange(<data>,...)`
 
-
-比如我们好奇那些最年轻的人谁对国家机关特别没信心，然后了解一下他们来自的国家、年龄、教育水平等信息。
+比如我们好奇最年轻的人群对国家机关的信心，并对应他们的教育水平、收入水平等信息。
 
 ```{r arrange, exercise = TRUE}
-arrange(wvs7, confidence_gov) 
-
-arrange(wvs7, desc(confidence_gov)) 
+select(wvs7, age, confidence_gov, education, incomeLevel)
 ```
 
-### 数值筛选
-
-### `count`
-
-数据中对于每个国家各有多少个观测值？
-
-```{r ex_count, exercise = TRUE}
-wvs7 %>%
-  count(country)
-
-# wvs7 %>%
-#   add_count(country) # adding the count number to the dataset.
+```{r arrange-solution}
+select(wvs7, age, confidence_gov, education, incomeLevel) %>% 
+  arrange(age)
 ```
 
-### `summary`
+那最年长的那群人呢？
 
-```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/summarise.png")
+```{r arrangeDesc, exercise = TRUE}
+select(wvs7, age, confidence_gov, education, incomeLevel) %>% 
+  arrange(desc(age))
+
+## 如果我们想知道最年轻又教育最高的人呢？
 ```
 
-###
-
-年龄和受教育年限的中位数分别是什么?
-
-```{r ex_summary, exercise = TRUE}
-wvs7 %>%
-  summarise(mean_age = mean(age), median_edu = median(edu))
+```{r arrangeDesc-solution}
+select(wvs7, age, confidence_gov, education, incomeLevel) %>% 
+  arrange(age, desc(education))
 ```
 
-### `group_by`
+### 变量值筛选
 
-```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/group_by.png")
-```
+前面提到`select`是对数据库变量的筛选，`filter`则基于变量值的筛选。
+延续上面的例子，如果我们好奇*美国*最年轻的一群人对国家机关的信心以及他们的教育水平和收入水平。
 
-###
-
-*每个国家的*年龄和受教育年限的中位数分别是多少？
-
-```{r ex_summaryG, exercise = TRUE}
-wvs7 %>%
-  group_by(country) %>%
-  summarise(mean_age = mean(age), median_edu = median(edu))
-```
-
-## 数据筛选
-
-`dplyr`中也能帮助我们实现数据提取，主要通过`filter`和`select`实现。
-
-### `filter`
-
-```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/filter.png")
-```
-
-###
-
-如何知道*2018*年哪个国家的人口数量最多？
-
-```{r ex_filter, exercise = TRUE, exercise.eval = FALSE}
-wvs7 %>%
-  arrange(desc(id))
-```
-
-```{r ex_filter-solution}
-wvs7 %>%
-  filter(year == 2007) %>% #filter函数筛选出年份为2007年
-  arrange(desc(id)) #再根据采访id进行降序排列
-```
-
-### `select`
-
-```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/select.png")
-```
-
-1. 提取国家，年份和人口
-2. 除了大洲的一切
-3. 以"co"开头的变量
-
-###
-
-```{r ex_select, exercise = TRUE}
-wvs7 %>%
-  dplyr::select(country, year, pop) #选择国家、年份、人口规模
-```
-
-```{r ex_select-solution}
-wvs7 %>%
-  select(-country) #去掉国家
-
-wvs7 %>%
-  select(starts_with("co")) #匹配以“co”开头的名称
+```{r filter, exercise=TRUE}
+select(wvs7, age, confidence_gov, education, incomeLevel) %>% 
+  arrange(age)
 ```
 
 
-### 挑战时间？
+```{r filter-solution}
+select(wvs7, age, confidence_gov, education, incomeLevel, country) %>% 
+  filter(country == "United States") %>% 
+  arrange(age)
 
-想要从跨年数据中提取2018年的国家及其年龄和受教育程度，应该怎么做？
-
-
-```{r out.width = "80%", echo = FALSE}
-knitr::include_graphics("images/comboAttack.gif")
+select(wvs7, age, confidence_gov, education, incomeLevel, country) %>% 
+  filter(country == "United States") %>% 
+  filter(age == min(age, na.rm = TRUE))
 ```
 
-###
-
-<!-- ```{r ex_combo-solution} -->
-<!-- wvs7 %>% -->
-<!--   filter(year == 2018) %>% -->
-<!--   arrange(desc(age)) %>% -->
-<!--   dplyr::select(country, age, edu) -->
-<!-- ``` -->
-
-## 数据修改
+### 数据修改
 
 在数据分析中，我们常常要将数据进行调整和再加工，`mutate`可以帮你做到这一点。
 英文中“mutate”表示“变异”，也就是说这个函数可以实现的并不是无中生有，而是改头换面。
 
-### `mutate`
-
-```{r out.width = "95%", echo = FALSE}
-knitr::include_graphics("images/mutate.png")
-```
 
 ###
 
-知道了年龄和受教育程度，如何知道受教育水平/比例?
+如果我们关心教育水平对收入水平差异的影响，我们可以建立一个比例变量
 
-```{r ex_mutate, exercise = TRUE}
-wvs7 %>%
-  mutate(age_edu = edu/age) %>% #可根据已有变量添加新的变量，将新添加的列到已有列的末尾
-    dplyr::select(country, age,edu)
+```{r mutate, exercise = TRUE}
+mutate(wvs7, ratio_incomeEdu = incomeLevel / (education + 1)) %>%
+  select(country, incomeLevel, education, ratio_incomeEdu) %>%
+  arrange(desc(ratio_incomeEdu))
+
+# 如果要把`ratio_incomeEdu`变成一个百分数，怎么办？
 ```
 
-### 条件性改变
+```{r mutate-solution}
+mutate(wvs7, 
+       ratio_incomeEdu = incomeLevel / (education + 1),
+       ratio_incomeEdu = as.numeric(ratio_incomeEdu) %>%
+         scales::percent()) %>%
+  select(country, ratio_incomeEdu)
+```
+
+
+### 
+
+`dplyr`还允许批量修改
 
 如何对变量进行批量修改？`dplyr`和它的朋友`tidyselect`提供了`across`和`where`函数。
-让我们看看如何通过这些函数实现将数据中所有的非整数变量都四舍五入取整？
+比如出于某种需要，我们要给每个数字变量都取对数。
 
-```{r ex_batch, exercise = TRUE}
+> 流程： 判断 &rarr; 筛选 &rarr; 修改
+
+```{r mutateBatch, exercise = TRUE}
 wvs7 %>%
-  mutate(across(where(is.double), round, digits = 0))
+  mutate(across(where(is.numeric), log))
+
+# 是否能使用这套技巧将所有人际信任变量都倒叙？
 ```
 
-### 根本原则
-
-基于`tidyverse`的数据整理，有一个重要的核心前提：“不改变原始数据”——这也是所有数据分析者都应遵守的原则。
-你会发现无论你使用以上命令对原数据做了什么, 你实际都<span style="color:red">没有</span>增加或改变`wvs7`的任何东西。
-
-如果你想把变化保存下来, 你要把结果赋值给一个新的对象，而保持你原来数据的完整性。
-
-```{r eval = FALSE}
-wvs7New <- wvs7 %>% ...
+```{r mutateBatch-solution}
+wvs7 %>% 
+  mutate(across(starts_with("trust"), ~ 5 - .))
 ```
 
-## 数据整合
-### 直接合并
-### 索引合并
-## 总结
 
-1. 行动<span style="color:red">之前</span> 想清楚;
-1. 巧妙且综合地使用 `dplyr` 函数;
-    + 探索: `glimpse`
-    + 归纳: `arrange`, `count`, `summarise`
-    + 提取: `filter`, `select`
-    + 调整: `mutate`
-1. 条件性操作
-    + `group_by`
-    + `across` & `where`
-    + `starts_with`, etc.
+### 数值统计
+
+`count`用来基于数据计数。
+比如，可以使用count来计算我们的数据中男性、女性各有多少人。^[这种列表在人口普查等统计数据中非常常见。]
+
+```{r count, exercise = TRUE}
+wvs7 %>%
+  count(female)
+
+# 如果想知道不同年龄段的男女数量怎么办呢？
+```
+
+```{r count-solution}
+wvs7 %>%
+  count(age, female)
+```
+
+
+### 
+
+`summarise` 用来将个体数据转换成统计数据。
+比如，我们想获得样本的年龄和教育水平平均数
+
+
+```{r summarise, exercise = TRUE}
+wvs7 %>%
+  summarise(age = mean(age, na.rm = TRUE),
+            edu = mean(education, na.rm = TRUE))
+```
+
+### 
+
+我们前面提到的`across`, `start_with`等同样可以在这里使用：
+比如我们想获得所有关于机构信心变量的平均值：
+
+```{r summariseBatch, exercise = TRUE}
+wvs7 %>%
+  summarise(across(starts_with("confidence"), mean, na.rm = TRUE))
+```
+
+### 
+
+`group_by`使分组操作成为可能：
+
+```{r ex_summaryG, exercise = TRUE}
+wvs7 %>%
+  group_by(female) %>% 
+  summarise(age = mean(age, na.rm = TRUE),
+            edu = mean(education, na.rm = TRUE))
+```
+
+`group_by`实际是为现有数据建立群体索引，之后的所有操作都将在分组进行。
+这一命令的逆操作是`ungroup`。
+
 
 ## Bonus
 
-```{r df_coalesce, exercise = TRUE}
+怎么样才能填补缺失的 `x`, 然后把 `y` 和 `z` 合并成一个变量呢?
+
+```{r coalesce, exercise = TRUE}
 df_toy <- data.frame(x = sample(c(1:2, NA, NA, NA)),
                      y = c(1, 2, NA, NA, 5),
                      z = c(NA, NA, 3, 4, 5))
@@ -468,16 +459,109 @@ df_toy <- data.frame(x = sample(c(1:2, NA, NA, NA)),
 df_toy
 ```
 
-###
 
-怎么样才能填补缺失的 `x`, 然后把 `y` 和 `z` 合并成一个变量呢?
-
-```{r coalesce, exercise = TRUE}
+```{r coalesce-solution}
 df_toy %>%
   mutate(x = coalesce(x, 0L),
-         yz = coalesce(y, z))
+         yz = coalesce(y, z)) # Ta-da~~~
 ```
 
 
-### 感谢聆听，下次再见！
+## 数据整理原则
+
+我们上面的一系列操作都有一个共同的特点，你发现了吗？
+
+```{r rawData}
+head(wvs7)
+```
+
+- <span style="color:red">不碰</span>原始数据
+- 对象覆盖需谨慎
+
+```{r overwrite, exercise}
+wvs7 <- mutate(wvs7, female = as.numeric(female))
+```
+
+
+## 数据整合
+### 直接合并
+
+直接合并的前提基本和矩阵运算是基本一致的：只有前列数对得上后行才能进行。
+
+- 行合并： 列数<span style="color:red">相等</span>(并不是~)
+- 列合并： 行数<span style="color:red">相等</span>
+
+分别举个例子：
+
+```{r bindRow, exercise = TRUE}
+wvs7_us <- filter(wvs7, country == "Unitied States")
+wvs7_russia <- filter(wvs7, country == "Russia")
+
+# 创建一个美俄数据
+
+bind_rows(wvs7_us, wvs7_russia)
+
+# 不等列行合并会发生什么？
+```
+
+```{r bindRow-hint}
+# Try this
+bind_rows(tibble(x = 1:3), tibble(y = 1:4))
+```
+
+```{r bindCol, exercise = TRUE}
+wvs7_conf <- select(wvs7, starts_with("confidence"))
+wvs7_trust <- select(wvs7, starts_with("trust"))
+
+# 创建一个信心-信任数据
+
+bind_cols(wvs7_conf, wvs7_trust)
+```
+
+
+### 索引合并
+
+索引合并指的是基于共享的索引序列（可以是任何变量）合并数据。
+
+让我们先创建两个演示数据:
+
+1. 个体层级平等认知数据；
+1. 国家层级人口变量数据。
+
+如果`wvs7_eq`是调查数据，`wvs7_country`是人口统计数据，我们的研究需要将这两组数据合并分析个体层级和国家层级变量间的关系。
+
+```{r join, exercise = TRUE}
+wvs7_eq <- select(wvs7, country, starts_with("equal")) %>% 
+  filter(country %in% unique(country)[1:2])
+
+wvs7_country <- group_by(wvs7, country) %>% 
+  summarise(across(female:education, mean, na.rm = TRUE)) %>% 
+  ungroup %>% 
+  filter(country %in% unique(country)[2:3])
+```
+
+```{r join-solution}
+inner_join(wvs7_eq, wvs7_country)
+left_join(wvs7_eq, wvs7_country)
+right_join(wvs7_eq, wvs7_country)
+full_join(wvs7_eq, wvs7_country)
+```
+
+
+
+
+
+## 总结
+
+1. 行动<span style="color:red">之前</span> 想清楚;
+1. 巧妙且综合地使用 `dplyr` 函数;
+    + 探索: `glimpse`, `head`, `tail`
+        - 结构：`nrow`, `ncol`, `names`, `str`
+        - 特征：`table`, `levels`
+        - 属性：`length`, `unique`, `summary`, `class`, `typeof`
+    + 梳理: `dplyr`命令集
+1. 数据整合原则：不碰原数据
+1. 数据合并
+    - 直接合并：`bind_*`
+    - 索引合并：`*_join`
 
