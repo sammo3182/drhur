@@ -262,6 +262,19 @@ ggplot(data = wvs7, aes(age)) +
   theme_minimal()
 ```
 
+在R中，我们也可以很容易地将多个变量直方图放在一个面板中展示。
+比起分布表格，我认为这是更好展现变量分布特征的方式（除非选择`datasummary_skim`这种图加表的方式）。
+
+```{r histPanel, echo=FALSE}
+select(wvs7, 2:7) %>% 
+  mutate(across(everything(), as.integer)) %>% 
+  pivot_longer(cols = everything(), names_to = "variable") %>% 
+  ggplot(aes(value)) +
+  facet_wrap(~variable, scales = 'free') +
+  geom_histogram()
+```
+
+
 密度图是直方图通过Kernel smoothing处理之后的结果。
 比起直方图，它在细节上有所损失，但能更好地体现分布特征和总体趋势。
 
