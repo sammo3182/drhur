@@ -1,10 +1,12 @@
 ---
-title: "Dr. Hu's R Workshop"
+title: "基础可视化"
+subtitle: "Learning R with Dr. Hu and His Friends"
+author: "胡悦（清华大学政治学系）"
 output: 
   learnr::tutorial:
+    language: "zh"
     progressive: true
     allow_skip: true
-    css: "style_ui.css"
 runtime: shiny_prerendered
 ---
 
@@ -22,137 +24,31 @@ library(tidyverse)
 library(gapminder)
 
 
-# 函数预加载
 set.seed(114)
-
-# 潜伏期的数据
-
-incubation_data = data.frame(
-  sname = factor(
-    c(
-      "Minimum\n0%",
-      "2.5%",
-      "Median\n50%",
-      "Average",
-      "97.5%",
-      "Maximum\n100%"
-    ),
-    levels = c(
-      "Minimum\n0%",
-      "2.5%",
-      "Median\n50%",
-      "Average",
-      "97.5%",
-      "Maximum\n100%"
-    ),
-    ordered = TRUE
-  ),
-  svalue = c(0, 2.2, 5.1, 5.5, 11.5, 14),
-  stext = c(
-    "\n(Unknown)",
-    "\n2.2 days",
-    "\n5.1 days",
-    "\n5.5 days",
-    "\n11.5 days",
-    "\n14 days"
-  )
-)
-
-## cfr的数据
-
-age_groups <-
-  c("≤9",
-    "10-19",
-    "20-29",
-    "30-39",
-    "40-49",
-    "50-59",
-    "60-69",
-    "70-79",
-    "≥80")
-cfr_china <-
-  data.frame(
-    age = factor(age_groups, levels = age_groups, ordered = TRUE),
-    deaths = c(0, 1, 7, 18, 38, 130, 309, 312, 208),
-    cases = c(416, 549, 3619, 7600, 8571, 10008, 8583, 3918, 1408),
-    cfr = 0.01 * c(0, 0.18, 0.19, 0.23, 0.44, 1.3, 3.6, 8., 14.8)
-  )
-
-## liker的数据
-
-input <- ("
-  Mask    Bleach  WashHand
-  3       2       4
-  5       4       4
-  4       2       4
-  4       2       4
-  4       1       5
-  4       2       3
-  4       3       5
-  4       2       4
-  5       2       4
-  5       3       3
-")
-
-df_likert <- read.table(textConnection(input), header = TRUE)
-
-df_likert$Mask <- factor(df_likert$Mask,
-                   levels = c("1", "2", "3", "4", "5"),
-                   ordered = TRUE)
-
-df_likert$Bleach <- factor(df_likert$Bleach,
-                     levels = c("1", "2", "3", "4", "5"),
-                     ordered = TRUE)
-
-df_likert$WashHand <- factor(df_likert$WashHand,
-                     levels = c("1", "2", "3", "4", "5"),
-                     ordered = TRUE)
-
-m1 <- lm(mpg ~ cyl + hp + wt, data = mtcars)
-m2 <- lm(mpg ~ cyl + hp + wt + hp, data = mtcars)
-m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
-
-m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 ```
 
 # 数据可视化
 
+## 知识点
 
-## 导语
+- 自带可视化
+- `ggplot`
+    - 基础语法
+    - 绘图与变换
+    - 功能扩展
 
-哈！大家好，我是萌萌！欢迎来到“Learning R with Dr. Hu and His Friends”!
+## 演示数据
 
-现在你进入的是通往`R expert`之路的“数据可视化”教学环节。
-胡老师和我将带大家领略R语言最强悍的功能之一，数据图标功能。
-在本节中，胡老师将为大家展示R画图的“万能模板”——一个你学会后散点图、柱状图、扇形图……几乎所有图都适用的画图方法。
+我们在这部分依旧使用WVS7的一个样本进行演示。
+具体变量信息可通过`?drhur::wvs7`查看。
 
-Ready? Go!
-
-## 一图顶千言
-
-```{r out.width = "80%", echo = FALSE}
-knitr::include_graphics("images/picThanWords.jpg")
+```{r wvs7}
+library(drhur)
+data("wvs7")
 ```
 
-## R常见可视化举例
-
-### 关系图
-
-<div class="centered">
-<img src="images/hiveplot.png" height="450"/>
-</div>
-
-### 地图
-
-<div class="center">
-<img src="images/ggmap.png" height="600"/>
-</div>
-
-### 动图
-
-<div class="center">
-<img src="images/interactive3D.gif" height="550"/>
-</div>
+在网络和地图绘制过程中，还会用到一些软件包自带的数据。
+因为只要安装了软件包就能使用，待到相关章节我们再做介绍。
 
 ## 知识点
 
@@ -823,12 +719,3 @@ get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>%
 1. 好看 &prop; 复杂性。
 1. 更酷炫不意味着更好。
 
-###
-
-### 感谢聆听，下次再见！
-
-<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
-
-<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
-
-<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)

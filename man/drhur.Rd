@@ -17,8 +17,9 @@ The function calls a \code{\link[learnr]{run_tutorial}} function to open a \code
 \details{
 The list of workshop available for the current version:
 \itemize{
-\item \code{math}: Basic syntax of R (Chinese).
+\item \code{calculate}: Basic syntax of R (Chinese).
 \item \code{play}: Basic data structure in R; inputting, outputting, and creating data.
 \item \code{wrangle}: Generalizing (such as sorting and summarizing) and extracting (selecting or adjusting certain columns or rows) data frames (English and Chinese).
+\item \code{describe}: Skills to describe variable and data.
 }
 }
