@@ -1,0 +1,479 @@
+---
+title: "基础语法: 输入输出"
+subtitle: "Learning R with Dr. Hu and His Friends"
+author: "胡悦（清华大学政治学系）"
+output: 
+  learnr::tutorial:
+    language: "zh"
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(lubridate)
+library(here)
+library(rio)
+library(tidyverse)
+library(drhur)
+```
+
+
+<!-- https://appsilon.com/oop-in-r-with-r6/ -->
+<!-- https://matloff.wordpress.com/2022/07/25/comments-on-the-new-r-oop-system-r7/ -->
+
+## 知识点
+
+- 基础概念
+- 数据输入
+- 数据种类
+- 数据属性
+- 数据输出
+
+## 基础概念
+### 面对对象的编程语言
+
+- Object-Oriented Programming (OOP)
+    - C++ (first applied)
+    - Python (first from the ground up)
+    - R
+
+- **类(Classes)**: 使用者可自定义的*对象*结构及其特征和*方法*。
+- **对象(Objects)**: 特定类别的具体实例，如“中国”之于“国家”，“R”之于“字母”。这些实例均具备其所属类的*属性*。
+- **方法(Methods)**: 在类内定义的一些命令，这些命令可以用来表现该类对象的一些特征行为，比如人会吃喝拉撒睡，那么这“吃喝拉撒睡”就是人的“方法”。
+- **属性(Properties)**: 用于描述某对象的一些方面，比如发色、肤色、身高、体重之于一个人。这些属性是同一类中所有对象都具备的，但具体取值可能各有不同。可以将属性想象成这个对象的“参数”。
+
+###
+
+- **Encapsulation**: 把一个对象的所有属性和方法都打包在一起。这些东西其他对象都不能从外看多或进行改变，只能加以影响。比如，你不能把一个变温动物变成一个恒温动物，但你可以通过调节室外气温来影响一个变温动物的体温。
+- **Polymorphism**: 一个命令可以对不同对象进行不同的处理。最典型的例子是`summary()`
+
+```{r polymorphism, exercise=TRUE}
+summary(wvs7)
+summary(wvs7$year)
+```
+
+- **Inheritance**: 所谓继承就是指对于同一个父类的所有子类都自动具备了父类的特征。做个类比，如果人有双腿，那么每个人类个体都将有这个性质。
+
+- **Safty**: 命令作用于对象时，会对对象的类进行判断，如果不是命令定义范围内能处理的对象，则会停止运行，给出错误提示。
+
+
+### 命令
+
+- R = Function + Object
+- Function：~~函数~~、功能、*命令*
+
+> OOP之信仰：*不触碰*数据，让命令去做。    
+> 语法：<命令名>(<目标数据>, <条件1>, <条件2>, ...)
+
+
+![](images/handShadow.gif){height=500}
+
+```{r funIllustration, eval = FALSE}
+light <- function(finger){
+  {{shadow <- finger + 5}}
+}
+handShadow <- light(finger = 3)
+handShadow
+```
+
+### 数据包
+
+- 命令合集
+- App
+- `r nrow(available.packages())` in CRAN (more in Github)
+- `install.packages("drur")`
+- `devtools::install_github("sammo3182/drhur")`
+
+![](images/hives_horizontal.png){height=300}
+
+### `<-`
+
+赋值符，`assign()`命令默认行为的简写
+
+> 语法：<名称> `<-` <对象>
+
+```{r object}
+aValidObject <- 1:5
+aValidObject
+```
+
+
+### `->`, `=`, `<<-`
+
+R中赋值的四种符合：
+
+1. `assign()`
+1. `<-`
+1. `<<-`
+1. `=`
+
+
+### Why `<-`
+
+![](images/APLkeyBoard.png)
+
++ 指向直观
+
+```{r arrow}
+a <- 12
+25 -> b
+```
+
++ 不和“等于”混淆
++ 快捷键输入
+    + PC: `Alt + -`
+    + Mac: `option + -`
+
+
+### 何时用
+
+- `=`: 不想创建对象
+
+```{r sideEffect, exercise = TRUE}
+median(y <- 1:10); y
+median(x = 1:10); x
+```
+
+- `<<-`: 援引父级变量
+
+```{r}
+new_counter <- function() {
+  i <- 0
+  function() {
+    # do something useful, then ...
+    i <<- i + 1
+    i
+  }
+}
+```
+
+
+### 命名规则
+
+1. 不以数字开头 (错误: `1stday`)
+1. 除了 `.` 和 `-`以外没有其他特殊符号(错误: `M&M`)
+1. 区分大小写 (`X != x`) `!表示“非”/“否”，`!=`表示“不等于”
+1. 如需必要请勿重写内置函数 (避免: `list <- c(1:5)`)
+1. 表意命名
+
+
+请创建一个合规和不合规的对象：
+
+```{r objectEg, exercise = TRUE}
+# 创建一个不合规的对象
+
+# 一个合规对象
+
+```
+
+
+## 数据输入
+
+### 内置数据
+
+```{r mtcars, exercise = TRUE}
+data()
+```
+
+### 可直读数据
+
+- `.RDS` (单一对象)
+- `.RData` (多个对象)
+- `.txt` 
+- `.csv`
+
+> 语法： <名称>`<-` <读取函数>(<数据路径>)
+
+```{r input, eval = FALSE}
+df_rds <- readRDS("aDataset.rds")
+df_txt <- read.table("D:/aDataset.txt")
+df_csv <- read.csv("./aDataset.csv")
+```
+
+
+### 调用包读取数据
+
+通过`library`或者`require`调用数据包，然后使用其中的命令。
+
+```{r eval=FALSE}
+# SPSS, Stata, SAS
+library(haven)
+df_spss <- read_spss("<FileName>.sav")
+df_stata <- read_dta("<FileName>.dta")
+df_sas <- read_sas("<FileName>.sas7bdat")  
+
+# 表格的快速导入
+library（reader）
+df_csv <- read.csv("<FileName>.csv")
+df_table <- read.table("<FileName>.csv/txt")
+
+# Excel表格
+library(readxl)
+df_excel <- read_excel("<FileName>.xls")
+df_excel2 <- read_excel("<FileName>.xlsx")
+
+# JSON (JavaScript Object Notation)
+library(rjson)
+df_json <- fromJSON(file = "<FileName>.json" )
+
+# XML/Html
+library(xml)
+df_xml <- xmlTreeParse("<url>")
+df_html <- readHTMLTable(url, which=3)
+```
+
+###
+
+数据读取界的瑞士军刀：`rio`
+
+```{r eval = FALSE}
+library(rio)
+df_anything <- import(<AnyTypeOfData>)
+```
+
+
+## 数据种类
+
+1. 向量 (vector) &#x237b;
+2. 矩阵 (matrix) &#x2713;
+3. 数据框 (data frame)
+4. 列表 (list)
+5. 阵列 (array)
+
+
+### 向量
+
+执行组合功能的函数`c()`可用来创建向量
+
+### 
+
+- 数字向量（numeric vector）
+
+```{r numeric, exercise = TRUE}
+vec_integer <- c(1, -2, NA)
+vec_double <- c(1.5, -2.34, 1/3)
+```
+
+注意: 1. `NA`表示的是: not available
+      2. 单个向量中的数据必须拥有相同的类型（数值型、字符型或逻辑型）
+
+###
+
+- 字符向量（character vector）
+
+```{r character, exercise = TRUE}
+vec_chr <- c("牛", "^_^", "R is hard，but I can nail it.")
+```
+
+###
+
+- 逻辑向量（logic vector）
+
+```{r logic, exercise = TRUE}
+vec_tf <- c(TRUE, TRUE, FALSE)
+vec_tf
+# c(TRUE, TRUE, FALSE) == c(1, 1, 0)
+```
+
+
+###
+
+- 类别向量（factor vector）
+    - 定序变量 (ordinal vector)
+
+```{r factor, exercise = TRUE}
+vec_fac <- factor(c(1, 2, 2, 3))
+```
+
+```{r factor-hint}
+vec_ord <- ordered(c(1, 2, 2, 3))
+vec_fac2 <- factor(c(1, 2, 2, 3), 
+                   levels = c(3, 2, 1), 
+                   labels = c("Apple", "Pear", "Orange"))
+```
+
+
+###
+
+- 时间向量（POSIXct/POSXlt vector）
+    - `as.POSIXct` (numeric input), 整数存储
+    - `as.POSIXlt` (character input), 列表存储
+
+```{r time, exercise = TRUE}
+Sys.time() # 获取当前时间
+today()   # 获取当日的 年月日
+now()  # 获取当日的 年月日 时分秒  时区
+# CST为操作时电脑ip所在的时区
+
+# The full pack
+time1 <- Sys.time()
+time2 <- as.POSIXlt(Sys.time())
+time2$wday # week of the day
+
+## 如果我只在乎日期呢？
+```
+
+```{r time-hint}
+Sys.Date()
+date1 <- as.Date("2019-01-02")
+class(date1)  # 查看数据类型
+```
+
+###
+
+时间数据的瑞士军刀：`lubridate`
+
+```{r date, exercise = TRUE}
+library(lubridate)
+
+ymd("20221016")
+mdy("10-16-2022")
+dmy("16/10/2022")
+ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
+```
+
+```{r date-hint}
+OlsonNames()
+```
+
+
+### 矩阵
+
+矩阵（matrix）见`drhur(algebra)`。
+
+### 阵列
+
+阵列(array): 顾名思义就是列的“阵”，可用于记录二维以上的数据，可通过`array`函数创建。
+
+```{r array}
+# 创建两个长度不同的向量。
+vector1 <- c(5, 9, 3)
+vector2 <- c(10, 11, 12, 13, 14, 15)
+
+# 把这些向量输入到数组中。
+result <- array(c(vector1, vector2), dim = c(3, 3, 2))
+result
+```
+
+### 列表
+
+列表（list）: 可包含多种不同类型对象的“串”。
+
+```{r list}
+ls_monks <- list(name = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
+                 power = c(100, 20, 90, 40),
+                 buddha = c(TRUE, TRUE, FALSE, FALSE))
+
+ls_monks
+```
+
+### 数据框
+
+数据框（Data Frame）：一种特殊的列表/矩阵
+
+- 列：“变量”，所有列长度都相等
+- 行：“观测量”
+
+在Excel中:
+
+![](images/excel-r1.png)
+
+在R中:
+
+```{r dataframe}
+df_toy <- data.frame(female = c(0,1,1,0),
+           age = c(29, 39, 38, 12),
+           name = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America"))
+
+df_toy
+```
+
+在Rstudio中:
+
+![](images/excel-r2.png)
+
+## 数据属性
+
+```{r attribute, exercise = TRUE}
+class(vec_double)
+typeof(vec_integer)
+
+nchar(vec_chr)
+levels(vec_fac)
+
+length(vec_double)
+length(ls_monks)
+length(df_toy)
+
+nrow(df_toy)
+ncol(df_toy)
+dim(df_toy)
+```
+
+
+
+## 数据输出
+
+> 语法：<函数>(<待存数据>，file = <存储路径>)
+
+### 储存为R数据
+
+```{r saving, eval = FALSE}
+saveRDS(df_toy, file = "df_toy.rds")
+save(df_toy, ls_monks, file = "test.rdata")
+```
+
+### 储存为csv文件
+
+```{r savingCSV, eval = FALSE}
+write.csv(df_toy, file = "toy.csv")
+```
+
+> 提示: 如果你的数据是中文的，可能会出现存储csv乱码现象。
+
+###
+
+当然了，你可以通过专门软件包或“瑞士军刀”（`rio::export`）把数据以STATA, SPSS, SAS Excel, JSON, Matlab, HTML等格式存储下来, 不过你真的想这样吗？
+
+
+STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
+
+| **Method**       | **Average Time** | **Minimum** | **Maximum** |
+|:-----------------|:----------------:|:-----------:|:-----------:|
+| base::readRDS    |       19.65      |    18.64    |    21.01    |
+| fst::read\_fst   |       1.39       |     0.56    |     3.41    |
+| haven::read\_sav |      104.78      |    101.00   |    111.85   |
+| qs::qread        |       3.33       |     3.00    |     4.24    |
+
+: 四种在R中读取GSS数据的方式所用的平均时间（以秒计）
+
+| **Method**      | **Average Time** | **Minimum** | **Maximum** | **File Size** |
+|:----------------|:----------------:|:-----------:|:-----------:|:-------------:|
+| base::saveRDS   |       98.36      |    93.09    |    103.24   |    30.9 MB    |
+| fst::write\_fst |       2.70       |     1.86    |     4.05    |    122.1 MB   |
+| qs::qsave       |       5.03       |     4.35    |     6.62    |    44.6 MB    |
+
+: 在R中写入GSS数据（及文件大小）所用的平均时间
+
+## 总结
+
+- 基础概念
+    - OOP
+    - 命令
+    - 数据包
+    - 赋值
+- 数据输入
+    - 内置/cvs
+    - 数据包辅助
+- 数据种类
+    - 向量
+    - 矩阵
+    - 阵列
+    - 列表
+    - 数据框
+- 数据属性
+- 数据输出
+    - 储存为R数据
+    - 储存为其他数据类型

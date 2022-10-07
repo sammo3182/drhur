@@ -49,26 +49,10 @@ library(tidyverse)
 wvs7
 ```
 
-```{r glimpse-hint}
-library(drhur)
-
-glimpse(wvs7)
-```
-
 - Tidy data（`tibble`）
     - 行：观测单元
     - 列：变量
     - 单元：数值
-
-### 有限数据呈现
-
-对于复杂数据，我们或许不需要看到全貌
-
-```{r headTail}
-head(wvs7, n = 6)
-tail(wvs7, n = 7)
-```
-
 
 ### 了解数据结构
 
@@ -107,25 +91,13 @@ wvs7$country
 ### 变量特征
 
 变量信息提取与上一节中的向量信息提取完全一致。
-比如获取年龄变量的总和、平均数、中位数、最小值、最大值、方差、IQR
+我们也可以通过`table`命令获得变量分布，通过`summary`命令获得常见变量信息。
+当然，R也支持获取年龄变量的总和、平均数、中位数、最小值、最大值、方差、IQR等，这些方法我们会在下一节仔细讨论。
 
 ```{r varCal, exercise = TRUE}
-
+table(wvs7$age)
+summary(wvs7$age)
 ```
-
-```{r varCal-solution}
-sum(wvs7$age)
-mean(wvs7$age) #求取年份的平均值，na.rm = TRUE表示忽略NA
-median(wvs7$age) #求取年份的中间值
-min(wvs7$age) #求取年份的最小值
-max(wvs7$age) #求取年份的最大值
-var(wvs7$age, na.rm = TRUE)
-quantile(wvs7$age, 3/4, na.rm = TRUE)
-quantile(wvs7$age, 1/4, na.rm = TRUE)
-IQR(wvs7$age, na.rm = TRUE) # quantile(x, 3/4) - quantile(x, 1/4)
-```
-
-> 提示：`na.rm` 是指如何对待缺失变量，通常是逻辑值，取`TRUE`表示命令运行前去除缺失变量。
 
 对于非数值型变量，我们可以通过总结表的形式获取他们的信息
 
@@ -133,6 +105,7 @@ IQR(wvs7$age, na.rm = TRUE) # quantile(x, 3/4) - quantile(x, 1/4)
 table(wvs7$female)
 table(wvs7$marital)
 ```
+
 
 对于基于factor的变量，我们还能提取他们的层级信息
 

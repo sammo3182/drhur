@@ -1,0 +1,479 @@
+---
+title: "基础语法: 线性代数"
+subtitle: "Learning R with Dr. Hu and His Friends"
+author: "胡悦（清华大学政治学系）"
+output: 
+  learnr::tutorial:
+    language: "zh"
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+
+d <- seq(from = 1, to = 5, by = 0.5)
+```
+
+## 知识点
+
+- R语言的基础逻辑
+- 简单代数
+- 线性代数
+
+
+## 初等代数
+
+### 四则运算
+
+```{r algebra-basic}
+1 + 2; 1.5 + 2.4
+3 - 4; -6 - 7
+5 * 6; 23 * 14
+7 / 8; -9 / 0.2
+```
+
+`;` 在R中有连接两个独立命令行的作用。
+
+请根据以上命令，求解下题：
+
+$$\frac{\frac{365}{12}}{\frac{28 + 24}{10} - (36 + 72) \times 5}$$
+
+```{r algebra, exercise = TRUE}
+
+```
+
+```{r algebra-solution}
+(365 / 12) / ((28 + 24)/10 - (36 + 72) * 5)
+```
+
+### 复杂代数
+
+```{r complex-math}
+sqrt(9)
+10^2
+5%%3 #余数
+log(11)
+log10(100)
+exp(12)
+```
+
+###
+
+乃至三角函数：
+
+```{r triangle}
+sin(pi)
+cos(pi)
+tan(pi/2)
+
+acos(1)
+asin(1)
+atan(0.5)
+```
+
+### 科学计数法
+
+```{r scientific-notation}
+tan(pi/2)
+```
+
+
+一个数被写成一个实数a与一个10的n次幂的积。
+其中E（exponential）用来表示10的幂
+举几个例子：
+
+$$200 = 2e + 2, $$
+$$0.002 = 2e-3,$$
+$$333.3 = 3.333e + 2,$$
+$$-45,000 = -4.5e + 4.$$
+
+2.8e + 10 代表什么？
+
+```{r sn, exercise = TRUE}
+
+```
+
+```{r sn-solution}
+format(2.8e+10, scientific = FALSE, big.mark = ',')
+```
+
+
+### 布尔代数（Boolean algebra）
+
+- 基础是逻辑判断: 真用`TRUE`代表，假用`FALSE`代表，也可以简写为`T`和`F`。
+- 常见运算符:
+    - 否(`!`)、等于（`==`）、不等于（`!=`）、大于（`>`）、小于（`<`）、与（`&`）、并（`|`）
+    - 当然还能衍生出复合型的大于等于(`>=`）、小于等于(`<=`)。
+
+举几个例子：
+
+```{r boolean}
+1 == 2
+1 != 2
+1 > 2
+1 < 2
+1 >= 2
+1 <= 2
+1 & 2 > 2
+1 | 2 > 2
+```
+
+下面这个式子的结果是什么？
+
+```{r judge, exercise = TRUE}
+3 > 2 > 1
+```
+
+```{r judge-solution}
+(3 > 2) & (2 > 1)
+```
+
+
+> 很多朋友在刚使用编程语言时候都会不习惯用两个等号（`==`）来表示“等于”，但从理解的角度，可将其视作`==, !=, >=, <=`中的一员看待。
+
+
+## 向量
+
+在R中，向量也是最基础的数据呈现方式。
+
+- 数学：一串有方向的数，或者说用一串数来记录一个有方向动作。
+    - 如果方向被拿掉了就变成了纯量（scalar）。
+- 数据：与变量（variable）对等，创建一个向量就可被视作创建了一个变量。
+
+> 从这个意义上，变量可被视作“有概念意义的向量”。
+
+### 向量表达
+
+- 数学：${\displaystyle {\vec {a}}=(11, 12, 13, 14, 15)}$
+    - $\vec {a}_2 = 2; \vec {a}_5 = 5$
+- R：`a <- c(11, 12, 13, 14, 15)`
+    - `c`: Concatenate/combine
+
+```{r vector}
+a <- c(11, 12, 13, 14, 15)
+
+a[2]
+a[5]
+```
+
+- `<-`: 赋值符(assign)
+- `:`: `a <- 1:5`
+- `TRUE`留`FALSE`不留
+
+###
+
+```{r colon}
+b <- 10 * 1:5
+b
+```
+
+###
+
+```{r colon2, excercise = TRUE}
+# 结果是什么？
+c(1.5:3)
+```
+
+
+
+如何表示$\vec {b}=(1, 3, 4, 5, 6, 7, 9)$?
+
+```{r vecColon, exercise = TRUE}
+
+```
+
+```{r vecColon-solution}
+b <- c(1, 3:7, 9)
+```
+
+
+###
+
+- `seq()`
+    - `seq`
+    - `()`
+    
+重复上面的例子：
+
+```{r sequence}
+a <- seq(from = 1, to = 5)
+a
+```
+
+###
+
+`seq()`的便捷之处在于可以定义步长:
+
+```{r increment, exercise = TRUE}
+c <- seq(from = 1, to = 5, by = 3)
+c
+
+#d <- seq(from = 1, to = 5, by = 0.5)
+#d
+```
+
+###
+
+`seq()`另一个功能是体现元素位置。
+
+比如：如何选出`d`的偶数项
+
+```{r index, exercise = TRUE}
+
+```
+
+<div id="index-hint">
+**提示:** 
+
+1. 确定索引；
+1. 找出索引中的各位是否是偶数位（是否能被2整除），是用`TRUE`标明；
+1. 在第二步基础上根据“`TRUE`留`FALSE`不留”的规则将向量中为偶数位的元素保留成为一个新向量。
+</div>
+
+```{r index-solution}
+d[seq(d) %% 2 == 0]
+```
+
+
+### 向量四则运算
+
+- 加减法：$$\vec{a} \pm \vec{b} = (a_1 \pm b_1, a_2 \pm b_2, ..., a_n \pm b_n).$$
+- 乘法则要略微复杂，有不同类型。
+    - 点乘：可以有两种表达方式
+        1. 代数表达式：$\vec{a}\cdot \vec{b} = \sum a_ib_i$。
+            - 这里包含一种特殊情况，纯量&times;向量：$c\vec{x} = (cx_1, cx_2,..., cx_n).$
+        1. 几何表达式：$\vec{a}\cdot \vec{b} = ||\vec{a}||||\vec{b}||cos\theta$，其中$||\vec{a}||$是向量的欧几里得范数（$\sqrt{a^{2}_1 + \ldots + a^{2}_n}$），&theta;是两个向量的夹角。
+        - R中用`*`连接两个向量，输出点乘结果。
+    - 叉乘：将两个变量在共同的单位向量上相乘的方法。
+        - 使用`%o%`连接两个向量或者使用`outer()`命令计算。
+
+
+```{r vec-cal}
+a + b
+a - b
+a * b
+a / b
+```
+
+###
+
+> 当进行运算的向量不等长时，短向量的元素将依序循环使用，如下例：
+
+```{r cycle}
+a
+e <- c(1, 2)
+
+a * e
+```
+
+
+###
+
+叉乘在R中其实还能做一些数据之外的事情。
+
+举例：用这个功能来用R推演一下天干地支。
+
+
+```{r tiandi, exercise = TRUE}
+tiangan <- c("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸")
+dizhi <- c("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
+```
+
+<div id="tiandi-hint">
+**提示:** 
+
+阅者诸君周知，有十天干，十二地支。
+它们共有一百二十种组合，先民取其中六十种组为干支纪年。
+选择方法是阳（奇）数配阳数，阴（偶）数配阴数。
+</div>
+
+
+```{r tiandi-solution}
+tg_yang <- tiangan[seq(tiangan) %% 2 == 1]
+tg_yin <- tiangan[seq(tiangan) %% 2 == 0]
+
+dz_yang <- dizhi[seq(dizhi) %% 2 == 1]
+dz_yin <- dizhi[seq(dizhi) %% 2 == 0]
+
+outer(tg_yang, dz_yang, FUN = paste0)
+outer(tg_yin, dz_yin, FUN = paste0)
+```
+
+
+### 向量性质
+
+```{r vec-property}
+a
+
+#长度
+length(a)
+
+#最值
+max(a)
+min(a)
+
+#平均值
+mean(a)
+
+#中位数
+median(a)
+
+#方差
+var(a)
+```
+
+> 这些命令在之后基于数据的变量运算中均可通用。
+
+
+
+
+
+## 矩阵
+
+- 数学：
+
+$$
+A_{2\times2} = \left(\begin{array}{cc} 
+                  1 & 3\\
+                  2 & 4
+                  \end{array}\right)
+$$
+
+- R：
+
+```{r matrixA}
+A <- matrix(1:4, nrow = 2)
+A
+```
+
+###
+
+- 数学： 在矩阵$A_{2\times2}$中，它的元素通常以行&times;列的方式标记，比如$A_{12}$就代表矩阵第*1*行、第*2*列的元素，即$3$。
+- R:
+
+```{r element}
+A[1, 2]
+A[1, ]
+A[ , 2]
+```
+
+### 单一矩阵运算
+
+```{r matrixB}
+B <- matrix(1:6, nrow = 3)
+B
+
+dim(B)
+t(B)
+t(t(B))
+```
+
+
+> `t(t(B))` 嵌套的做法。
+
+### 矩阵运算
+
+- 加（减）法：只能在同型矩阵间进行（同行数、同列数），$A \pm B = a_{ij} \pm b_{ij}$;
+- 乘法：纯量乘积、一般乘积、Hadamard积、Kronecker积等。这里仅介绍和之后数据处理较为相关的纯量乘积、一般乘积。
+    - 纯量乘积：${\displaystyle (rA)_{ij}=r\cdot a_{ij}\ }$，与代数乘法方法相同。
+    - 一般乘积：只有在前矩阵列数与后矩阵行数相等时才有定义，其运算也就是对应的前列与后行的代数乘积之和，如下图所示，
+    ![](images/math_matrixTimes.gif)。
+    
+> 在R中，将两个符合定义性质的向量用`%*%`连接就可以进行这种运算。
+        
+```{r matrix_times}
+B
+C <- matrix(7:12, nrow = 3)
+
+B + C
+B - C
+
+10 * B
+
+D <- matrix(1:6, nrow = 2)
+D
+
+dim(B)
+dim(D)
+
+B %*% D
+```
+
+## 方程组
+
+用R解一个三元一次方程组:
+
+$$
+\begin{equation}
+\begin{cases}
+x + y + z = 6, \\
+3x + 2y + 4z = 9, \\
+2x + 2y - 6z = 4.
+\end{cases}
+\end{equation}
+$$
+
+- 矩阵**E**代表方程系数
+- $b$为方程的右侧
+- $x$是方程的解
+
+$$
+\begin{align}
+\vec{b} =& \vec{E}\vec{x},\\
+\begin{bmatrix}
+6 \\
+9 \\
+4
+\end{bmatrix} 
+=& 
+\begin{bmatrix}
+1 & 1 & 1 \\
+3 & 2 & 4 \\
+2 & 2 & -6
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+\end{align}.
+$$
+
+
+```{r equations}
+E <- matrix(c(1, 3, 2, 1, 2, 2, 1, 4, -6), nrow = 3)
+E
+
+b <- c(6, 9, 4)
+
+x <- solve(E, b)
+x
+```
+
+###
+
+解方程组的一个直接应用就是解回归方程。
+回归方程通常可以以线性代数方式表达：
+比如，对一个基本的回归就可以写成如下形式，就和我们上面解的方程组非常相似了：
+
+$$
+\begin{align}
+y& =& &\beta_0 + \beta_1x_1 + \beta_2x_2 + ... + \beta_nx_n + \epsilon\\
+\vec{y}& =& &\vec{x}\vec{\beta} + \vec{\epsilon}.\\
+\uparrow& & &\uparrow\uparrow\\
+\vec{b}& =& &\vec{E}\vec{x}
+\end{align}
+$$
+
+
+## 要点总结
+
+- 简单代数
+    - 科学计数法
+    - 布尔代数
+- 线性代数
+    - 向量
+    - 矩阵
+    - 方程组
+    
