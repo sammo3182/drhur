@@ -46,7 +46,7 @@ library(drhur)
 
 ###
 
-- **Encapsulation**: 把一个对象的所有属性和方法都打包在一起。这些东西其他对象都不能从外看多或进行改变，只能加以影响。比如，你不能把一个变温动物变成一个恒温动物，但你可以通过调节室外气温来影响一个变温动物的体温。
+- **Encapsulation**: 把一个对象的所有属性和方法都打包在一起。这些东西其他对象都不能从外看到或进行改变，只能加以影响。比如，你不能把一个变温动物变成一个恒温动物，但你可以通过调节室外气温来影响一个变温动物的体温。
 - **Polymorphism**: 一个命令可以对不同对象进行不同的处理。最典型的例子是`summary()`
 
 ```{r polymorphism, exercise=TRUE}
@@ -102,7 +102,7 @@ aValidObject
 
 ### `->`, `=`, `<<-`
 
-R中赋值的四种符合：
+R中赋值的四种符号：
 
 1. `assign()`
 1. `<-`
@@ -162,9 +162,15 @@ new_counter <- function() {
 请创建一个合规和不合规的对象：
 
 ```{r objectEg, exercise = TRUE}
+
 # 创建一个不合规的对象
 
+# 5var_name <- data_frame(wvs7$education)
+
+
 # 一个合规对象
+
+var_name5 <- data_frame(wvs7$education)
 
 ```
 
