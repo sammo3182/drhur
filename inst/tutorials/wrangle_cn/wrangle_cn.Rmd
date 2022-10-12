@@ -11,12 +11,17 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
-library(drhur)
-library(lubridate)
-library(here)
-library(rio)
-library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      out.width="100%")
+
+if (!require(pacman)) install.packages("pacman")
+
+p_load(drhur,
+       here,
+       rio,
+       tidyverse)
 ```
 
 
