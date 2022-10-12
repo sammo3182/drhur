@@ -1,14 +1,6 @@
-<<<<<<< HEAD
-^.*\.Rproj$
-^\.Rproj\.user$
-^_pkgdown\.yml$
-^docs$
-^pkgdown$
-=======
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^data-raw$
->>>>>>> 3a983c6f125b66dff4ba20aa8b35d8d24c49f4ef
