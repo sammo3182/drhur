@@ -11,7 +11,7 @@
 #'   \item{\code{religious}}{Independently of whether the respondent attend religious services or not, did the respondent identify him/herself as a religious person, not a religious person, or an atheist?}
 #'   \item{\code{marital}}{Marital status of the respondent.}
 #'   \item{\code{incomeLevel}}{The income group the respondent believes his/her household belonged.}
-#'   \item{\code{equalIncentive}}{Respondent's view between "Incomes should be made more equal" and "Thereshould be greater incentives for individual effort".}
+#'   \item{\code{equalIncentive}}{Respondent's view between "Incomes should be made more equal" and "There should be greater incentives for individual effort".}
 #'   \item{\code{equalFreedom}}{Most people consider both freedom and equality to be important, but if one had to choose between them, which one would the respondent consider more important?}
 #'   \item{\code{corruption_state}}{How many state authorities did the respondent believe were involved in corruption.}
 #'   \item{\code{corruption_local}}{How many local authorities did the respondent believe were involved in corruption.}

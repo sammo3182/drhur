@@ -76,13 +76,16 @@ df_wvs7s <- df_wvs7 %>%
     confidence_parties,
     confidence_tv
   ) %>%
-  filter(!(country %in% c("China", "Hong Kong SAR China", "Taiwan")))
+  filter(!(country %in% c("China", "Hong Kong SAR China", "Taiwan"))) %>%
+  mutate(across(where(is.numeric), as.numeric))
 
+wvs7 <- df_wvs7s
 
 save(
-  df_wvs7,
-  file = here::here("data", "wvs7.rda")
+  wvs7,
+  file = here::here("data-raw", "wvs7.rda")
 )
+
 
 load("data-raw/wvs7.rda")
 usethis::use_data(wvs7, overwrite = TRUE)
