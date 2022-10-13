@@ -11,17 +11,12 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-                      message = FALSE,
-                      warning = FALSE,
-                      out.width="100%")
-
-if (!require(pacman)) install.packages("pacman")
-
-p_load(drhur,
-       here,
-       rio,
-       tidyverse)
+library(learnr)
+library(drhur)
+library(lubridate)
+library(here)
+library(rio)
+library(tidyverse)
 ```
 
 
@@ -542,4 +537,34 @@ full_join(wvs7_eq, wvs7_country)
 1. 数据合并
     - 直接合并：`bind_*`
     - 索引合并：`*_join`
+    
+    
+## 练一练
 
+建立一个长度为`1:length(wvs7$country)`命名为“index”列表，将其与wvs7数据**直接合并**，并储存在名为data的对象中。
+请对data数据中index变量进行简单描述。
+请将data数据分割成gender和education两个数据，并分别包含“index, female”和“index, education”变量。
+下列指令请借助管道函数用一个连续的命令完成。请对gender数据进行筛选，只保留女性的数据，并以其为基础将education数据合并进来，并保存为名为genderEdu的对象中。
+
+```{r}
+
+library(gender)
+
+index <- list(1:length(wvs7$country))
+names(index) <- "index"
+
+data <- cbind(index, wvs7)
+
+summary(data$index)
+
+gender <- data %>% 
+  dplyr::select(index, female)
+
+education <- data %>% 
+  dplyr::select(index, education)
+
+genderEdu <- gender %>% 
+  dplyr::filter(female == TRUE) %>% 
+  dplyr::left_join(education)
+
+```
