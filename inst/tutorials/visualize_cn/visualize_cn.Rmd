@@ -16,11 +16,13 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       out.width="100%")
 
-library(learnr)
-library(ggthemes) 
-library(scales)
-library(tidyverse)
-library(drhur)
+if (!require(pacman)) install.packages("pacman")
+
+p_load(
+  scales,
+  tidyverse,
+  drhur
+)
 
 set.seed(114)
 ```

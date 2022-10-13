@@ -12,7 +12,10 @@ runtime: shiny_prerendered
 
 
 ```{r setup, include=FALSE}
-library(learnr)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      out.width="100%")
 
 d <- seq(from = 1, to = 5, by = 0.5)
 ```

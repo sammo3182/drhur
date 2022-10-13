@@ -11,12 +11,20 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
-library(lubridate)
-library(here)
-library(rio)
-library(tidyverse)
-library(drhur)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      out.width="100%")
+
+if (!require(pacman)) install.packages("pacman")
+
+p_load(
+  lubridate,
+  here,
+  rio,
+  tidyverse,
+  drhur
+)
 ```
 
 
@@ -83,7 +91,7 @@ handShadow
 - 命令合集
 - App
 - `r nrow(available.packages())` in CRAN (more in Github)
-- `install.packages("drur")`
+- `install.packages("drhur")`
 - `devtools::install_github("sammo3182/drhur")`
 
 ![](images/hives_horizontal.png){height=300}
@@ -155,7 +163,7 @@ new_counter <- function() {
 1. 不以数字开头 (错误: `1stday`)
 1. 除了 `.` 和 `-`以外没有其他特殊符号(错误: `M&M`)
 1. 区分大小写 (`X != x`) `!表示“非”/“否”，`!=`表示“不等于”
-1. 如需必要请勿重写内置函数 (避免: `list <- c(1:5)`)
+1. 如需必要请勿重写内置命令 (避免: `list <- c(1:5)`)
 1. 表意命名
 
 
@@ -190,7 +198,7 @@ data()
 - `.txt` 
 - `.csv`
 
-> 语法： <名称>`<-` <读取函数>(<数据路径>)
+> 语法： <名称>`<-` <读取命令>(<数据路径>)
 
 ```{r input, eval = FALSE}
 df_rds <- readRDS("aDataset.rds")
@@ -251,7 +259,7 @@ df_anything <- import(<AnyTypeOfData>)
 
 ### 向量
 
-执行组合功能的函数`c()`可用来创建向量
+执行组合功能的命令`c()`可用来创建向量
 
 ### 
 
@@ -351,7 +359,7 @@ OlsonNames()
 
 ### 阵列
 
-阵列(array): 顾名思义就是列的“阵”，可用于记录二维以上的数据，可通过`array`函数创建。
+阵列(array): 顾名思义就是列的“阵”，可用于记录二维以上的数据，可通过`array`命令创建。
 
 ```{r array}
 # 创建两个长度不同的向量。
@@ -422,7 +430,7 @@ dim(df_toy)
 
 ## 数据输出
 
-> 语法：<函数>(<待存数据>，file = <存储路径>)
+> 语法：<命令>(<待存数据>，file = <存储路径>)
 
 ### 储存为R数据
 
@@ -471,7 +479,7 @@ STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
     - 数据包
     - 赋值
 - 数据输入
-    - 内置/csv
+    - 内置/cvs
     - 数据包辅助
 - 数据种类
     - 向量
@@ -483,26 +491,3 @@ STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
 - 数据输出
     - 储存为R数据
     - 储存为其他数据类型
-    
-## 练一练
-
-诸如“非常满意”、“满意”、“一般”、“不满意”、“非常不满意”的量表题，往往会以“5”、“4”、“3”、“2”、“1”等数值储存在数据中。
-因此，“编码”往往是是我们处理问卷数据的第一步。那就利用今天所学，使用示例的WVS7数据进行编码练习吧。请完成下列要求：
-
-读取WVS7数据，将其储存在R的内存中，并命名为“data”。将“data”中的“education”变量作为**类别向量**储存在名为“a”的对象中，类别名称使用联合国教科文组织所采用的“ISCED-2011”(0-幼儿教育，1-小学教育，2-初中教育，3-高中教育，4-中学后非高等教育，5-短周期高等教育，6-学士或同等学历，7-硕士或同等学历，8-博士或同等学历)。
-在完成后将a转换成数据框，并写入"education.csv"文件中。
-
-```{r}
-
-data <- wvs7
-
-head(data)
-
-a <- factor(data$education, levels = c(0, 1, 2, 3, 4, 5, 6, 7, 8), 
-                   labels = c("幼儿教育", "小学教育", "初中教育", "高中教育", "中学后非高等教育", "短周期高等教育", "学士或同等学历", "硕士或同等学历", "博士或同等学历"))
-
-write_csv(as.data.frame(a), "data.csv")
-
-```
-
-
