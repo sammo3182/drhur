@@ -1,7 +1,7 @@
 Package: drhur
 Type: Package
 Title: Learning R with Dr. Hu
-Version: 0.1.999999
+Version: 1.0.0
 Authors@R: c(
     person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
     person("Yufei", "Sun", role = c("aut"), email = "sunyf20@mails.tsinghua.edu.cn")
@@ -16,24 +16,11 @@ LazyData: true
 Depends:
   R(>= 3.6.0),
   learnr(>= 0.10.1)
-Imports:
-  scales,
-  gt,
-  modelsummary,
-  dotwhisker,
-  interplot,
-  likert,
-  ggthemes,
-  ggeffects,
-  knitr,
-  tidyverse,
-  car,
-  arm,
-  nnet,
-  ordinal,
-  moments,
-  tibble,
-  performance
 RoxygenNote: 7.2.1
 Suggests: 
-    rmarkdown
+    rmarkdown,
+    scales,
+    modelsummary,
+    likert,
+    knitr,
+    tidyverse

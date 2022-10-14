@@ -23,14 +23,14 @@ A data frame with 1330 rows and 24 variables:
   \item{\code{trust_neighbor}}{Respondent's trust of his/her neighborhood.}
   \item{\code{trust_stranger}}{Respondent's trust of people s/he meet for the first time.}
   \item{\code{trust_foreigner}}{Respondent's trust of people of another nationality.}
-  \item{\code{confident_armedForce}}{Respondent's confidence in the armed forces.}
-  \item{\code{confident_policy}}{Respondent's confidence in the armed forces.}
-  \item{\code{confident_court}}{Respondent's confidence in the courts.}
-  \item{\code{confident_gov}}{Respondent's confidence in the government.}
-  \item{\code{confident_parliament}}{Respondent's confidence in the paliament.}
-  \item{\code{confident_civil}}{Respondent's confidence in the civil service.}
-  \item{\code{confident_parties}}{Respondent's confidence in the political parties.}
-  \item{\code{confident_tv}}{Respondent's confidence in the television.}
+  \item{\code{confidence_armedForce}}{Respondent's confidence in the armed forces.}
+  \item{\code{confidence_policy}}{Respondent's confidence in the armed forces.}
+  \item{\code{confidence_court}}{Respondent's confidence in the courts.}
+  \item{\code{confidence_gov}}{Respondent's confidence in the government.}
+  \item{\code{confidence_parliament}}{Respondent's confidence in the paliament.}
+  \item{\code{confidence_civil}}{Respondent's confidence in the civil service.}
+  \item{\code{confidence_parties}}{Respondent's confidence in the political parties.}
+  \item{\code{confidence_tv}}{Respondent's confidence in the television.}
 }
 }
 \source{

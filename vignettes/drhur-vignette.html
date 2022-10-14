@@ -28,38 +28,31 @@ document.addEventListener('DOMContentLoaded', function(e) {
   }
 });
 </script>
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
 
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
   }
-});
-</script>
-<script>$(document).ready(function(){
-    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-    if ($('[data-toggle="popover"]').popover === 'function') {
-        $('[data-toggle="popover"]').popover();
-    }
-});
-</script>
-
-
-<style type="text/css">code{white-space: pre;}</style>
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -128,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -142,6 +142,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -337,90 +338,45 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">drhur: Learn R with Dr. Hu Easily and Happily</h1>
+<h1 class="title toc-ignore">drhur: Learn R with Dr. Hu Easily and
+Happily</h1>
 <h4 class="author">Yue Hu and Yufei Sun</h4>
 
 
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Learning a programming language such as R is tough. <code>drhur</code> is a pedagogical software make the R learners’ life a little bit easier and more happily. The package includes (and is going to include more) tutorials of basic and advanced data science skills with R, such as data cleaning, analyzing, and visualization. The goal of the package is to provide an interactive platform for learners to enter the R world easily and efficiently.</p>
-<p>The package is built upon the <code>learnr</code> function which will open a shiny app for learners to interact with the instructions and tasks. The best way to learn these skills together with the “Learning R with Dr. Hu” online/offline workshops. One can get more information about the workshops through my website or contact me directly.</p>
+<p>Learning a programming language such as R is tough.
+<code>drhur</code> is a pedagogical software make the R learners’ life a
+little bit easier and more happily. The package includes (and is going
+to include more) tutorials of basic and advanced data science skills
+with R, such as data cleaning, analyzing, and visualization. The goal of
+the package is to provide an interactive platform for learners to enter
+the R world easily and efficiently.</p>
+<p>The package is built upon the <code>learnr</code> function which will
+open a shiny app for learners to interact with the instructions and
+tasks. The best way to learn these skills together with the “Learning R
+with Dr. Hu” online/offline workshops. One can get more information
+about the workshops through my website or contact me directly.</p>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
-<p>One can easily load the package and call the tutorials through the function <code>drhur()</code>. For instance, one can initiate the visualization tutorial with the following commands:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(drhur)) <span class="kw">install.packages</span>(<span class="st">&quot;drhur&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(drhur)</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">drhur</span>(<span class="st">&quot;visualization&quot;</span>)</span></code></pre></div>
-<p>The current available tutorials include：</p>
-<table class="table" style="width: auto !important; ">
-<thead>
-<tr>
-<th style="text-align:left;">
-Function
-</th>
-<th style="text-align:left;">
-Description
-</th>
-<th style="text-align:left;">
-Usage
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;font-weight: bold;font-family: monospace;border-right:1px solid;">
-<a href="#playing">playing</a>
-</td>
-<td style="text-align:left;width: 28em; ">
-<strong>Playing around with R:</strong> Intro to basic data structure in R; inputting, outputting, and creating data.
-</td>
-<td style="text-align:left;width: 28em; ">
-<code>drhur(&#39;playing&#39;)</code>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-family: monospace;border-right:1px solid;">
-<a href="#munging">munging</a>
-</td>
-<td style="text-align:left;width: 28em; ">
-<strong>Data munging: </strong> Generalizing (such as sorting and summarizing) and extracting (selecting or adjusting certain columns or rows) data frames.
-</td>
-<td style="text-align:left;width: 28em; ">
-<code>drhur(&#39;munging&#39;)</code>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-family: monospace;border-right:1px solid;">
-<a href="#analyzing">analyzing</a>
-</td>
-<td style="text-align:left;width: 28em; ">
-<strong>Data analyzing:</strong> Analyze data with descriptive and multivariate tools and diagnoses.
-</td>
-<td style="text-align:left;width: 28em; ">
-<code>drhur(&#39;analyzing&#39;)</code>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-family: monospace;border-right:1px solid;">
-<a href="#visualizing">visualizing</a>  
-</td>
-<td style="text-align:left;width: 28em; ">
-<strong>Data presenting:</strong> Present descriptive and analytic results with ‘ggplot2’
-</td>
-<td style="text-align:left;width: 28em; ">
-<code>drhur(&#39;visualizing&#39;)</code>
-</td>
-</tr>
-</tbody>
-</table>
+<p>One can easily load the package and call the tutorials through the
+function <code>drhur()</code>. For instance, one can initiate the
+visualization tutorial with the following commands:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(drhur)) <span class="fu">install.packages</span>(<span class="st">&quot;drhur&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(drhur)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">drhur</span>(<span class="st">&quot;visualize&quot;</span>)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p><code>drhur</code> aims to help R learners to get in touch with the most common applied skills of the programming language. We encourage users to consult the help files for more details.</p>
-<p>The development of the package is ongoing. Please contact us with any questions, bug reports, and comments. Free to open an issue on <a href="https://github.com/sammo3182/drhur/issues">GitHub</a> if you have any question or a feature request.</p>
+<p><code>drhur</code> aims to help R learners to get in touch with the
+most common applied skills of the programming language. We encourage
+users to consult the help files for more details.</p>
+<p>The development of the package is ongoing. Please contact us with any
+questions, bug reports, and comments. Free to open an issue on <a href="https://github.com/sammo3182/drhur/issues">GitHub</a> if you have
+any question or a feature request.</p>
 </div>
 <div id="affiliation" class="section level2">
 <h2>Affiliation</h2>
