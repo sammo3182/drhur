@@ -11,10 +11,12 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-                      message = FALSE,
-                      warning = FALSE,
-                      out.width="100%")
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%"
+)
 
 if (!require(pacman)) install.packages("pacman")
 
@@ -90,7 +92,7 @@ handShadow
 
 - 命令合集
 - App
-- `r nrow(available.packages())` in CRAN (more in Github)
+- `r nrow(available.packages(contrib.url("https://mirrors.tuna.tsinghua.edu.cn/CRAN/")))` in CRAN (more in Github)
 - `install.packages("drhur")`
 - `devtools::install_github("sammo3182/drhur")`
 
