@@ -689,6 +689,8 @@ SPSS, SAS Excel, JSON, Matlab, HTML等格式存储下来,
 <li>储存为R数据</li>
 <li>储存为其他数据类型 
 <script type="application/shiny-prerendered" data-context="server-start">
+chooseCRANmirror(graphics = FALSE, ind = 1)
+
 knitr::opts_chunk$set(
   echo = TRUE,
   message = FALSE,
@@ -736,9 +738,9 @@ output$`tutorial-exercise-polymorphism-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "polymorphism", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "polymorphism", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "polymorphism", 
@@ -778,9 +780,9 @@ output$`tutorial-exercise-sideEffect-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "sideEffect", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "sideEffect", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "sideEffect", code = "median(y <- 1:10); y\nmedian(x = 1:10); x", 
@@ -819,9 +821,9 @@ output$`tutorial-exercise-objectEg-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "objectEg", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "objectEg", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "objectEg", code = "\n# 创建一个不合规的对象\n\n# 5var_name <- data_frame(wvs7$education)\n\n\n# 一个合规对象\n\nvar_name5 <- data_frame(wvs7$education)\n", 
@@ -862,9 +864,9 @@ output$`tutorial-exercise-mtcars-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "mtcars", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "mtcars", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "mtcars", code = "data()", 
@@ -903,9 +905,9 @@ output$`tutorial-exercise-numeric-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "numeric", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "numeric", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "numeric", code = "vec_integer <- c(1, -2, NA)\nvec_double <- c(1.5, -2.34, 1/3)", 
@@ -944,9 +946,9 @@ output$`tutorial-exercise-character-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "character", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "character", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "character", code = "vec_chr <- c(\"牛\", \"^_^\", \"R is hard，but I can nail it.\")", 
@@ -985,9 +987,9 @@ output$`tutorial-exercise-logic-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "logic", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "logic", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "logic", code = "vec_tf <- c(TRUE, TRUE, FALSE)\nvec_tf\n# c(TRUE, TRUE, FALSE) == c(1, 1, 0)", 
@@ -1027,9 +1029,9 @@ output$`tutorial-exercise-factor-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "factor", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "factor", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "factor", code = "vec_fac <- factor(c(1, 2, 2, 3))", 
@@ -1068,9 +1070,9 @@ output$`tutorial-exercise-time-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "time", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "time", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "time", code = "Sys.time() # 获取当前时间\ntoday()   # 获取当日的 年月日\nnow()  # 获取当日的 年月日 时分秒  时区\n# CST为操作时电脑ip所在的时区\n\n# The full pack\ntime1 <- Sys.time()\ntime2 <- as.POSIXlt(Sys.time())\ntime2$wday # week of the day\n\n## 如果我只在乎日期呢？", 
@@ -1113,9 +1115,9 @@ output$`tutorial-exercise-date-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "date", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "date", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "date", code = "library(lubridate)\n\nymd(\"20221016\")\nmdy(\"10-16-2022\")\ndmy(\"16/10/2022\")\nymd_hms(\"2022-10-16 09:00:00\", tz = \"Etc/GMT+8\")", 
@@ -1155,9 +1157,9 @@ output$`tutorial-exercise-attribute-output` <- renderUI({
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "attribute", global_setup = structure(c("knitr::opts_chunk$set(", 
-"  echo = TRUE,", "  message = FALSE,", "  warning = FALSE,", 
-"  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
+learnr:::store_exercise_cache(structure(list(label = "attribute", global_setup = structure(c("chooseCRANmirror(graphics = FALSE, ind = 1)", 
+"", "knitr::opts_chunk$set(", "  echo = TRUE,", "  message = FALSE,", 
+"  warning = FALSE,", "  out.width = \"100%\"", ")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
 "", "p_load(", "  lubridate,", "  here,", "  rio,", "  tidyverse,", 
 "  drhur", ")"), chunk_opts = list(label = "setup", include = FALSE)), 
     setup = NULL, chunks = list(list(label = "attribute", code = "class(vec_double)\ntypeof(vec_integer)\n\nnchar(vec_chr)\nlevels(vec_fac)\n\nlength(vec_double)\nlength(ls_monks)\nlength(df_toy)\n\nnrow(df_toy)\nncol(df_toy)\ndim(df_toy)", 
