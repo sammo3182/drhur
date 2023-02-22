@@ -4,3 +4,4 @@
 ^docs$
 ^pkgdown$
 CONDUCT.md
+data-raw/
