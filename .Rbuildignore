@@ -5,3 +5,5 @@
 ^pkgdown$
 CONDUCT.md
 data-raw/
+^doc$
+^Meta$

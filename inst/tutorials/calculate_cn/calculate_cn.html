@@ -15,7 +15,7 @@
 <meta name="allow-skip" content="true" />
 <meta name="learnr-version-prerender" content="0.11.2" />
 
-<title>基础可视化</title>
+<title>基础语法: 线性代数</title>
 
 <!-- header-includes START -->
 <!-- HEAD_CONTENT -->
@@ -110,482 +110,545 @@ if (window.hljs) {
 
 <article class="topics" id="learnr-tutorial-content">
 
-<!-- 宇飞，请检查编码是否可以运行 -->
-<div id="section-数据可视化" class="section level1">
-<h1>数据可视化</h1>
 <div id="section-知识点" class="section level2">
 <h2>知识点</h2>
 <ul>
-<li>研究问题： <strong>经济不平等会带来怎样的社会政治影响呢？</strong>
-<ul>
-<li>经济不平等会影响受教育水平吗？
-<ul>
-<li>家庭的经济状况是如何影响平均受教育水平的呢？</li>
-<li>家庭是否信仰宗教是否会使家庭的经济状况对平均教育水平的影响发生改变吗？</li>
-</ul></li>
-<li>经济不平等会影响政治信任吗？
-<ul>
-<li>家庭收入水平怎么影响个体对国家机制（政府、法庭、议会、军队、媒体）的信任呢？</li>
-</ul></li>
-</ul></li>
-<li>Build-in可视化</li>
-<li><code>lattice</code></li>
-<li><code>ggplot</code></li>
+<li>R语言的基础逻辑</li>
+<li>简单代数</li>
+<li>线性代数</li>
 </ul>
 </div>
-<div id="section-演示数据" class="section level2">
-<h2>演示数据</h2>
-<p>我们在这部分依旧使用WVS7的一个样本进行演示。
-具体变量信息可通过<code>?drhur::wvs7</code>查看。</p>
-<pre class="r"><code>library(drhur)
-data(&quot;wvs7&quot;)</code></pre>
-</div>
-<div id="section-可视化引擎" class="section level2">
-<h2>可视化引擎</h2>
-<p>在R语言中，可以通过三种引擎实现数据可视化：</p>
-<ul>
-<li>Build-In引擎</li>
-<li><code>lattice</code>引擎</li>
-<li><code>ggplot2</code>引擎</li>
-</ul>
-<p>我们下面基于散点图进行演示。
-我们关注的实际问题是：不同年龄层的人群对收入分配的看法是否有所不同。
-对于收入看法，我们采用<code>wvs7</code>中的<code>equalIncentive</code>来测量。</p>
-</div>
-<div id="section-build-in可视化" class="section level2">
-<h2>Build-In可视化</h2>
-<p>Build-in
-可视化引擎是R自带的可视化方式，不用调用任何软件包即可使用，它有以下特点：</p>
-<p><strong>优点</strong></p>
-<ul>
-<li>不用安装</li>
-<li>反应迅速</li>
-<li>很多3D和空间视图的基础</li>
-</ul>
-<p><strong>缺点</strong></p>
-<ul>
-<li>不精致</li>
-<li>灵活性差</li>
-</ul>
-<div id="section-家境-教育关系散点图" class="section level3">
-<h3>家境-教育关系散点图</h3>
-<div class="tutorial-exercise" data-label="scatterBasic"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>plot(wvs7$incomeLevel, wvs7$education)
-
-## 添加装饰</code></pre>
+<div id="section-初等代数" class="section level2">
+<h2>初等代数</h2>
+<div id="section-四则运算" class="section level3">
+<h3>四则运算</h3>
+<pre class="r"><code>1 + 2; 1.5 + 2.4</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre><code>## [1] 3.9</code></pre>
+<pre class="r"><code>3 - 4; -6 - 7</code></pre>
+<pre><code>## [1] -1</code></pre>
+<pre><code>## [1] -13</code></pre>
+<pre class="r"><code>5 * 6; 23 * 14</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre><code>## [1] 322</code></pre>
+<pre class="r"><code>7 / 8; -9 / 0.2</code></pre>
+<pre><code>## [1] 0.875</code></pre>
+<pre><code>## [1] -45</code></pre>
+<p><code>;</code> 在R中有连接两个独立命令行的作用。</p>
+<p>请根据以上命令，求解下题：</p>
+<p><span class="math display">\[\frac{\frac{365}{12}}{\frac{28 + 24}{10}
+- (36 + 72) \times 5}\]</span></p>
+<div class="tutorial-exercise" data-label="algebra" data-completion="1"
+data-diagnostics="1" data-startover="1" data-lines="0">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<div class="tutorial-exercise-support"
-data-label="scatterBasic-solution" data-completion="1"
+<div class="tutorial-exercise-support" data-label="algebra-solution"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>(365 / 12) / ((28 + 24)/10 - (36 + 72) * 5)</code></pre>
+</div>
+</div>
+<div id="section-复杂代数" class="section level3">
+<h3>复杂代数</h3>
+<pre class="r"><code>sqrt(9)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>10^2</code></pre>
+<pre><code>## [1] 100</code></pre>
+<pre class="r"><code>5%%3 #余数</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>log(11)</code></pre>
+<pre><code>## [1] 2.397895</code></pre>
+<pre class="r"><code>log10(100)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>exp(12)</code></pre>
+<pre><code>## [1] 162754.8</code></pre>
+</div>
+<div id="section-section" class="section level3">
+<h3></h3>
+<p>乃至三角函数：</p>
+<pre class="r"><code>sin(pi)</code></pre>
+<pre><code>## [1] 1.224606e-16</code></pre>
+<pre class="r"><code>cos(pi)</code></pre>
+<pre><code>## [1] -1</code></pre>
+<pre class="r"><code>tan(pi/2)</code></pre>
+<pre><code>## [1] 1.633124e+16</code></pre>
+<pre class="r"><code>acos(1)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>asin(1)</code></pre>
+<pre><code>## [1] 1.570796</code></pre>
+<pre class="r"><code>atan(0.5)</code></pre>
+<pre><code>## [1] 0.4636476</code></pre>
+</div>
+<div id="section-科学计数法" class="section level3">
+<h3>科学计数法</h3>
+<pre class="r"><code>tan(pi/2)</code></pre>
+<pre><code>## [1] 1.633124e+16</code></pre>
+<p>一个数被写成一个实数a与一个10的n次幂的积。
+其中E（exponential）用来表示10的幂 举几个例子：</p>
+<p><span class="math display">\[200 = 2e + 2, \]</span> <span
+class="math display">\[0.002 = 2e-3,\]</span> <span
+class="math display">\[333.3 = 3.333e + 2,\]</span> <span
+class="math display">\[-45,000 = -4.5e + 4.\]</span></p>
+<p>2.8e + 10 代表什么？</p>
+<div class="tutorial-exercise" data-label="sn" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>plot(
-  wvs7$incomeLevel, wvs7$education,
-  main = &quot;Family Income and Education&quot;,
-  xlab = &quot;Family Income&quot;,
-  ylab = &quot;Education Level&quot;
-)
-
-abline(lm(education ~ incomeLevel, data = wvs7), col = &quot;red&quot;) # regression
-lines(lowess(wvs7$incomeLevel, wvs7$education, delta = 0.01 * diff(range(wvs7$age, na.rm = TRUE))), col = &quot;blue&quot;) # lowess line (x,y)</code></pre>
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+<div class="tutorial-exercise-support" data-label="sn-solution"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>format(2.8e+10, scientific = FALSE, big.mark = &#39;,&#39;)</code></pre>
 </div>
 </div>
-<div id="section-保存输出" class="section level3">
-<h3>保存输出</h3>
+<div id="section-布尔代数boolean-algebra" class="section level3">
+<h3>布尔代数（Boolean algebra）</h3>
 <ul>
-<li>兼容模式:<code>.jpg</code>, <code>.png</code>, <code>.wmf</code>,
-<code>.pdf</code>, <code>.bmp</code>, and <code>postscript</code>.</li>
-<li>过程:
+<li>基础是逻辑判断:
+真用<code>TRUE</code>代表，假用<code>FALSE</code>代表，也可以简写为<code>T</code>和<code>F</code>。</li>
+<li>常见运算符:
+<ul>
+<li>否(<code>!</code>)、等于（<code>==</code>）、不等于（<code>!=</code>）、大于（<code>&gt;</code>）、小于（<code>&lt;</code>）、与（<code>&amp;</code>）、并（<code>|</code>）</li>
+<li>当然还能衍生出复合型的大于等于(<code>&gt;=</code>）、小于等于(<code>&lt;=</code>)。</li>
+</ul></li>
+</ul>
+<p>举几个例子：</p>
+<pre class="r"><code>1 == 2</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>1 != 2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 &gt; 2</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>1 &lt; 2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 &gt;= 2</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>1 &lt;= 2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 &amp; 2 &gt; 2</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>1 | 2 &gt; 2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>下面这个式子的结果是什么？</p>
+<div class="tutorial-exercise" data-label="judge" data-completion="1"
+data-diagnostics="1" data-startover="1" data-lines="0">
+<pre class="text"><code>3 &gt; 2 &gt; 1</code></pre>
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+<div class="tutorial-exercise-support" data-label="judge-solution"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>(3 &gt; 2) &amp; (2 &gt; 1)</code></pre>
+</div>
+<blockquote>
+<p>很多朋友在刚使用编程语言时候都会不习惯用两个等号（<code>==</code>）来表示“等于”，但从理解的角度，可将其视作<code>==, !=, &gt;=, &lt;=</code>中的一员看待。</p>
+</blockquote>
+</div>
+</div>
+<div id="section-向量" class="section level2">
+<h2>向量</h2>
+<p>在R中，向量也是最基础的数据呈现方式。</p>
+<ul>
+<li>数学：一串有方向的数，或者说用一串数来记录一个有方向动作。
+<ul>
+<li>如果方向被拿掉了就变成了纯量（scalar）。</li>
+</ul></li>
+<li>数据：与变量（variable）对等，创建一个向量就可被视作创建了一个变量。</li>
+</ul>
+<blockquote>
+<p>从这个意义上，变量可被视作“有概念意义的向量”。</p>
+</blockquote>
+<div id="section-向量表达" class="section level3">
+<h3>向量表达</h3>
+<ul>
+<li>数学：<span class="math inline">\({\displaystyle {\vec {a}}=(11, 12,
+13, 14, 15)}\)</span>
+<ul>
+<li><span class="math inline">\(\vec {a}_2 = 2; \vec {a}_5 =
+5\)</span></li>
+</ul></li>
+<li>R：<code>a &lt;- c(11, 12, 13, 14, 15)</code>
+<ul>
+<li><code>c</code>: Concatenate/combine</li>
+</ul></li>
+</ul>
+<pre class="r"><code>a &lt;- c(11, 12, 13, 14, 15)
+
+a[2]</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>a[5]</code></pre>
+<pre><code>## [1] 15</code></pre>
+<ul>
+<li><code>&lt;-</code>: 赋值符(assign)</li>
+<li><code>:</code>: <code>a &lt;- 1:5</code></li>
+<li><code>TRUE</code>留<code>FALSE</code>不留</li>
+</ul>
+</div>
+<div id="section-section-1" class="section level3">
+<h3></h3>
+<pre class="r"><code>b &lt;- 10 * 1:5
+b</code></pre>
+<pre><code>## [1] 10 20 30 40 50</code></pre>
+</div>
+<div id="section-section-2" class="section level3">
+<h3></h3>
+<pre class="r"><code># 结果是什么？
+c(1.5:3)</code></pre>
+<pre><code>## [1] 1.5 2.5</code></pre>
+<p>如何表示<span class="math inline">\(\vec {b}=(1, 3, 4, 5, 6, 7,
+9)\)</span>?</p>
+<div class="tutorial-exercise" data-label="vecColon" data-completion="1"
+data-diagnostics="1" data-startover="1" data-lines="0">
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+<div class="tutorial-exercise-support" data-label="vecColon-solution"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>b &lt;- c(1, 3:7, 9)</code></pre>
+</div>
+</div>
+<div id="section-section-3" class="section level3">
+<h3></h3>
+<ul>
+<li><code>seq()</code>
+<ul>
+<li><code>seq</code></li>
+<li><code>()</code></li>
+</ul></li>
+</ul>
+<p>重复上面的例子：</p>
+<pre class="r"><code>a &lt;- seq(from = 1, to = 5)
+a</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+</div>
+<div id="section-section-4" class="section level3">
+<h3></h3>
+<p><code>seq()</code>的便捷之处在于可以定义步长:</p>
+<div class="tutorial-exercise" data-label="increment"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>c &lt;- seq(from = 1, to = 5, by = 3)
+c
+
+#d &lt;- seq(from = 1, to = 5, by = 0.5)
+#d</code></pre>
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+</div>
+<div id="section-section-5" class="section level3">
+<h3></h3>
+<p><code>seq()</code>另一个功能是体现元素位置。</p>
+<p>比如：如何选出<code>d</code>的偶数项</p>
+<div class="tutorial-exercise" data-label="index" data-completion="1"
+data-diagnostics="1" data-startover="1" data-lines="0">
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+<blockquote>
+<p><strong>提示:</strong> 确定索引 →
+找出索引中的各位是否是偶数位（是否能被2整除），是用<code>TRUE</code>标明
+→
+在第二步基础上根据“<code>TRUE</code>留<code>FALSE</code>不留”的规则将向量中为偶数位的元素保留成为一个新向量。</p>
+</blockquote>
+<div class="tutorial-exercise-support" data-label="index-solution"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>d[seq(d) %% 2 == 0]</code></pre>
+</div>
+</div>
+<div id="section-向量四则运算" class="section level3">
+<h3>向量四则运算</h3>
+<ul>
+<li>加减法：<span class="math display">\[\vec{a} \pm \vec{b} = (a_1 \pm
+b_1, a_2 \pm b_2, ..., a_n \pm b_n).\]</span></li>
+<li>乘法则要略微复杂，有不同类型。
+<ul>
+<li>点乘：可以有两种表达方式
 <ol style="list-style-type: decimal">
-<li>启用装置</li>
-<li>画图</li>
-<li>关闭装置</li>
-</ol></li>
-</ul>
-<pre class="r"><code>png(&quot;scatterBasic.png&quot;)
-plot(wvs7$incomeLevel, wvs7$education)
-dev.off()</code></pre>
-</div>
-</div>
-<div id="section-lattice可视化" class="section level2">
-<h2><code>lattice</code>可视化</h2>
-<p><code>lattice</code>是印度统计学院副教授Deepayan
-Sarkar发展的作图工具，旨在将“trellis graph”作图理念带入R可视化，优化R
-build-in作图引擎。
-这个系列中，作图命令更加系统化，也拥有了更大的自由度：</p>
-<div class="tutorial-exercise" data-label="scatterLattice"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>library(lattice)
-
-xyplot(education ~ incomeLevel, data = wvs7)</code></pre>
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
-<div class="tutorial-exercise-support"
-data-label="scatterLattice-solution" data-completion="1"
-data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>xyplot(
-  education ~ incomeLevel,
-  group = female,
-  type = c(&quot;p&quot;, &quot;g&quot;, &quot;smooth&quot;),
-  main = &quot;Family Income on Education&quot;,
-  xlab = &quot;Income&quot;,
-  ylab = &quot;Education&quot;,
-  data = wvs7,
-  auto.key = TRUE
-)
-
-xyplot(
-  education ~ incomeLevel | religious,
-  group = female,
-  type = c(&quot;p&quot;, &quot;g&quot;, &quot;smooth&quot;),
-  main = &quot;Family Income on Education&quot;,
-  xlab = &quot;Income&quot;,
-  ylab = &quot;Education&quot;,
-  data = wvs7,
-  auto.key = TRUE
-)
-
-cloud(education ~ incomeLevel * religious, data = wvs7)</code></pre>
-</div>
-<div id="section-现学现练" class="section level3">
-<h3>现学现练</h3>
-请以国家为分组，画出教育程度与收入的散点图。
-<div class="tutorial-exercise" data-label="scatterLattice_exercise"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
-<div class="tutorial-exercise-support"
-data-label="scatterLattice_exercise-solution" data-completion="1"
-data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>xyplot(
-  education ~ incomeLevel | country,
-  layout=c(5,3),
-  type = c(&quot;p&quot;, &quot;g&quot;),
-  main = &quot;Family In come on Education&quot;,
-  xlab = &quot;Income&quot;,
-  ylab = &quot;Education&quot;,
-  data = wvs7,
-  auto.key = TRUE
-)</code></pre>
-</div>
-</div>
-</div>
-<div id="section-ggplot2可视化" class="section level2">
-<h2><code>ggplot2</code>可视化</h2>
-<p><code>ggplot2</code>引用了更加系统化的可视化理论，即Leland
-Wilkinson的<em>The Grammar of
-Graphics</em>，从底层逻辑上对R语言可视化进行了改革。
-现在这种可视化语法也成为了R语言领域最流行，发展也最迅速的可视化手段。</p>
-<pre class="r"><code>install.packages(&quot;ggplot2&quot;)
-library(ggplot2)</code></pre>
-<div id="section-ggplot核心概念" class="section level3">
-<h3><code>ggplot</code>核心概念</h3>
+<li>代数表达式：<span class="math inline">\(\vec{a}\cdot \vec{b} = \sum
+a_ib_i\)</span>。
 <ul>
-<li><code>mapping</code>: 美观映射 (<code>aes</code>,
-<code>alpha</code>)—颜色, 形状, 大小等。
-<ul>
-<li>从一幅图中可以感知到的性质。</li>
-<li>每一种美观性可以被映射到一个变量，或是被设置成一个常量。</li>
+<li>这里包含一种特殊情况，纯量×向量：<span
+class="math inline">\(c\vec{x} = (cx_1, cx_2,..., cx_n).\)</span></li>
 </ul></li>
-<li><code>geom_*</code>: 几何对象—点, 线,
-条等，用于规定数据的呈现方式。<br />
-<img src="images/ggplot_geom.png" style="width:100.0%" /></li>
-</ul>
-</div>
-<div id="section-万能模板" class="section level3">
-<h3>万能模板</h3>
-<pre class="r"><code>ggplot(data = &lt;数据&gt;) +
-  geom_&lt;形状1&gt;(
-    mapping = aes(x = &lt;横轴变量&gt;, y =  &lt;纵轴变量&gt;,
-                  color = &lt;边框颜色&gt;,
-                  fill = &lt;填充颜色&gt;,
-                  size  = &lt;粗细大小&gt;,
-                  ......),
-    alpha  = &lt;透明度，0--1&gt;
-  ) + 
-  geom_&lt;形状2&gt; + 
-  &lt;标度、坐标系统、配色主题&gt;... </code></pre>
-</div>
-<div id="section-应用案例" class="section level3">
-<h3>应用案例</h3>
-<p><img src="visualize_cn_files/figure-html/eg-1.png" width="100%" /><img src="visualize_cn_files/figure-html/eg-2.png" width="100%" /><img src="visualize_cn_files/figure-html/eg-3.png" width="100%" /></p>
-</div>
-<div id="section-案例1" class="section level3">
-<h3>案例1</h3>
-<p>散点图：经济和文化因素对个体教育水平的影响</p>
-<blockquote>
-<p>要点：ggplot作图和我们常见的PS修图很像，先把基本图做出来，然后一层一层叠加滤镜效果。</p>
-</blockquote>
-<div class="tutorial-exercise" data-label="scatterSteps"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>wvs7_narm &lt;-
-  filter(wvs7,
-         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))
-
-ggplot(data = wvs7_narm,
-       aes(x = incomeLevel, y = education, color = religious))</code></pre>
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
-<div class="tutorial-exercise-support"
-data-label="scatterSteps-solution" data-completion="1"
-data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>ggplot(data = wvs7_narm,
-       aes(x = incomeLevel, y = education, color = religious)) +
-    geom_point(size = 2, alpha = 0.3) +
-    geom_smooth(aes(color = NULL), se=TRUE) +
-    geom_xsidedensity(
-        aes(
-            y    = after_stat(density),
-            fill = religious
-        ),
-        alpha    = 0.5,
-        size     = 1
-        ,
-        position = &quot;stack&quot;
-    ) +
-    geom_ysidedensity(
-        aes(
-            x    = after_stat(density),
-            fill = religious
-        ),
-        alpha    = 0.5,
-        size     = 1
-        ,
-        position = &quot;stack&quot;
-    ) +
-    labs(title = &quot;Economy on Education&quot; ,
-         subtitle = &quot;Scatter plot + density distribution&quot;,
-         x = &quot;Family Income&quot;, y = &quot;Education&quot;) +
-  theme_minimal() +
-    theme(
-        ggside.panel.scale = 0.4
-    )</code></pre>
-</div>
-</div>
-<div id="section-案例2" class="section level3">
-<h3>案例2</h3>
-<p>柱状图：经济对平均教育水平的影响在文化因素上的差异性</p>
-<blockquote>
-<p>要点：每一种图形属性都有一个默认的标尺，在作图中标尺不仅可以用来改换比例，也可以用来更改颜色。</p>
-</blockquote>
-<div class="tutorial-exercise" data-label="barSteps" data-completion="1"
-data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>wvs7_agg &lt;- group_by(wvs7_narm, incomeLevel, religious) %&gt;% 
-  summarise(mean_ed = mean(education), 
-            sd_ed = sd(education),
-            se_ed = sd_ed / sqrt(n()),
-            lb_ed = mean_ed - stats::qnorm(1 - (1 - 0.95) / 2) * se_ed,
-            ub_ed = mean_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)
-
-ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious))</code></pre>
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
-<div class="tutorial-exercise-support" data-label="barSteps-solution"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>wvs7_agg &lt;- group_by(wvs7_narm, incomeLevel, religious) %&gt;% 
-  summarise(mean_ed = mean(education), 
-            sd_ed = sd(education),
-            se_ed = sd_ed / sqrt(n()),
-            lb_ed = mean_ed - stats::qnorm(1 - (1 - 0.95) / 2) * se_ed,
-            ub_ed = mean_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)
-
-ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious)) +
-  geom_bar(stat = &quot;identity&quot;,
-           color = &quot;black&quot;,
-           position = position_dodge()) +
-  geom_errorbar(aes(ymin = lb_ed, ymax = ub_ed),
-                width = 0.2,
-                position = position_dodge(.9)) +
-  geom_point(
-    data = wvs7_narm,
-    aes(y = education, shape = religious),
-    position = position_jitterdodge(),
-    alpha = 0.3
-  ) +
-  labs(
-    title = &quot;Economy on Education over Culture&quot; ,
-    subtitle = &quot;Mean Bar, Error Intervals, and Jitter Plots&quot;,
-    x = &quot;Family Income&quot;,
-    y = &quot;Education&quot;
-  ) +
-  theme_minimal() +
-  theme(legend.position = &quot;top&quot;) +
-  scale_fill_viridis_d()</code></pre>
-</div>
-</div>
-<div id="section-案例3" class="section level3">
-<h3>案例3</h3>
-<p>雷达图：家庭经济水平对个体机制信心的影响</p>
-<blockquote>
-<p>要点：通过分面来凸显效果</p>
-</blockquote>
-<div class="tutorial-exercise" data-label="radarSteps"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>income_qnt &lt;- quantile(wvs7$incomeLevel, seq(0, 1, .25), na.rm = TRUE)
-
-wvs7_agg2 &lt;- filter(wvs7, !is.na(incomeLevel)) %&gt;%
-  mutate(group = cut(incomeLevel, income_qnt, include.lowest = TRUE) %&gt;% ordered(label = c(
-    &quot;Low&quot;, &quot;Medium-Low&quot;, &quot;Medium-High&quot;, &quot;High&quot;
-  ))) %&gt;%
-  group_by(group) %&gt;%
-  summarise(across(
-    c(
-      confidence_armedForce,
-      confidence_gov,
-      confidence_court,
-      confidence_parliament,
-      confidence_tv
-    ),
-    mean,
-    na.rm = TRUE
-  )) %&gt;%
-  mutate(across(-group, rescale)) %&gt;%
-  rename(
-    Military = confidence_armedForce,
-    Government = confidence_gov,
-    Court = confidence_court,
-    Parliament = confidence_parliament,
-    TV = confidence_tv
-  )
-
-library(ggradar)
-
-wvs7_agg2 %&gt;% 
-  ggradar(
-    axis.label.size = 2,
-    group.point.size = 0.5,
-    group.line.width = 1,
-    grid.label.size = 3,
-    fill = TRUE,
-    fill.alpha = 0.3,
-    plot.title = &quot;Economy on Institutional Confidence&quot;
-  ) +
-  theme_minimal() +
-  theme(legend.position = &quot;bottom&quot;)</code></pre>
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
-<div class="tutorial-exercise-support" data-label="radarSteps-solution"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>income_qnt &lt;- quantile(wvs7$incomeLevel, seq(0, 1, .25), na.rm = TRUE)
-
-wvs7_agg2 &lt;- filter(wvs7, !is.na(incomeLevel)) %&gt;%
-  mutate(group = cut(incomeLevel, income_qnt, include.lowest = TRUE) %&gt;% ordered(label = c(
-    &quot;Low&quot;, &quot;Medium-Low&quot;, &quot;Medium-High&quot;, &quot;High&quot;
-  ))) %&gt;%
-  group_by(group) %&gt;%
-  summarise(across(
-    c(
-      confidence_armedForce,
-      confidence_gov,
-      confidence_court,
-      confidence_parliament,
-      confidence_tv
-    ),
-    mean,
-    na.rm = TRUE
-  )) %&gt;%
-  mutate(across(-group, rescale)) %&gt;%
-  rename(
-    Military = confidence_armedForce,
-    Government = confidence_gov,
-    Court = confidence_court,
-    Parliament = confidence_parliament,
-    TV = confidence_tv
-  )
-
-wvs7_agg2 %&gt;% 
-  ggradar(
-    axis.label.size = 2,
-    group.point.size = 0.5,
-    group.line.width = 1,
-    grid.label.size = 3,
-    fill = TRUE,
-    fill.alpha = 0.3,
-    plot.title = &quot;Economy on Institutional Confidence&quot;
-  ) +
-  theme_minimal() +
-  theme(legend.position = &quot;bottom&quot;) +
-  facet_wrap(~ group, ncol = 4)</code></pre>
-</div>
-</div>
-<div id="section-案例4" class="section level3">
-<h3>案例4</h3>
-<p>如果交叉分类得到许多个交叉组， 每组有一个数量需要展示，
-用堆叠或者并排条形图可能过于复杂， 结果很难判读。</p>
-<p>可以用x轴和y轴分别表示两种分类， 在坐标交叉处用色块颜色代表数量，
-称为热力图。</p>
-<p>比如，现在想看一下不同教育程度、收入程度的人对政府信任的平均水平</p>
-<div class="tutorial-exercise" data-label="heatmap" data-completion="1"
-data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>wvs7 %&gt;%
-  select(education, incomeLevel, confidence_gov) %&gt;%
-  group_by(education,incomeLevel) %&gt;%
-  summarise(confidence_gov = median(confidence_gov, na.rm=TRUE)) %&gt;%
-  ungroup() -&gt; wvs7_confidence</code></pre>
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
-<div class="tutorial-exercise-support" data-label="heatmap-solution"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>wvs7 %&gt;%
-  select(education, incomeLevel, confidence_gov) %&gt;%
-  group_by(education,incomeLevel) %&gt;%
-  summarise(confidence_gov = median(confidence_gov, na.rm=TRUE)) %&gt;%
-  ungroup() -&gt; wvs7_confidence
-
-p &lt;- ggplot(data = wvs7_confidence, mapping = aes(
-  x = education, y = incomeLevel, fill = confidence_gov))
-p + geom_tile() +
-  scale_fill_viridis_c()</code></pre>
-</div>
-</div>
-<div id="section-总结与补充" class="section level3">
-<h3>总结与补充</h3>
-<ul>
-<li><code>data</code>: 你想要可视化的数据</li>
-<li><code>aes</code>: 美学映射</li>
-<li><code>geoms</code>: 几何对象</li>
-<li><code>labs</code>:
-<ul>
-<li><code>title, subtitle</code>: 标题</li>
-<li><code>x, y</code>: 坐标轴标签</li>
-<li><code>caption</code>: 注释</li>
-</ul></li>
-<li><code>theme</code>: 背景</li>
-<li><code>scales</code>: 将数据与映射联系起来
-<ul>
-<li><code>facet</code>: 一个构面规范描述了如何将数据分解为集合</li>
-<li><code>coord</code>:
-一个描述数据坐标如何映射到图形平面的坐标系统</li>
-</ul></li>
-<li><code>stats</code>: 统计转换</li>
-</ul>
-</div>
-<div id="section-保存输出-1" class="section level3">
-<h3>保存输出</h3>
-<ul>
-<li><code>ggsave(&lt;plot project&gt;, "&lt;name + type&gt;")</code>:
-<ul>
-<li>当省略<code>&lt;plot project&gt;</code>时，R将保存最后显示的图。</li>
-<li>用户还可以使用其他参数来调整大小，路径，比例等。</li>
-</ul></li>
-</ul>
-<pre class="r"><code>ggsave(&quot;cfr.png&quot;)</code></pre>
-</div>
-</div>
-<div id="section-最后的嘱咐" class="section level2">
-<h2>最后的嘱咐</h2>
-<ol style="list-style-type: decimal">
-<li>好看 ∝ 复杂性。</li>
-<li>更酷炫不意味着更好。</li>
+<li>几何表达式：<span class="math inline">\(\vec{a}\cdot \vec{b} =
+||\vec{a}||||\vec{b}||cos\theta\)</span>，其中<span
+class="math inline">\(||\vec{a}||\)</span>是向量的欧几里得范数（<span
+class="math inline">\(\sqrt{a^{2}_1 + \ldots +
+a^{2}_n}\)</span>），θ是两个向量的夹角。</li>
 </ol>
+<ul>
+<li>R中用<code>*</code>连接两个向量，输出点乘结果。</li>
+</ul></li>
+<li>叉乘：将两个变量在共同的单位向量上相乘的方法。
+<ul>
+<li>使用<code>%o%</code>连接两个向量或者使用<code>outer()</code>命令计算。</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre class="r"><code>a + b</code></pre>
+<pre><code>## [1] 11 22 33 44 55</code></pre>
+<pre class="r"><code>a - b</code></pre>
+<pre><code>## [1]  -9 -18 -27 -36 -45</code></pre>
+<pre class="r"><code>a * b</code></pre>
+<pre><code>## [1]  10  40  90 160 250</code></pre>
+<pre class="r"><code>a / b</code></pre>
+<pre><code>## [1] 0.1 0.1 0.1 0.1 0.1</code></pre>
+</div>
+<div id="section-section-6" class="section level3">
+<h3></h3>
+<blockquote>
+<p>当进行运算的向量不等长时，短向量的元素将依序循环使用，如下例：</p>
+</blockquote>
+<pre class="r"><code>a</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<pre class="r"><code>e &lt;- c(1, 2)
+
+a * e</code></pre>
+<pre><code>## [1] 1 4 3 8 5</code></pre>
+</div>
+<div id="section-section-7" class="section level3">
+<h3></h3>
+<p>叉乘在R中其实还能做一些数据之外的事情。</p>
+<p>举例：用这个功能来用R推演一下天干地支。</p>
+<div class="tutorial-exercise" data-label="tiandi" data-completion="1"
+data-diagnostics="1" data-startover="1" data-lines="0">
+<pre class="text"><code>tiangan &lt;- c(&quot;甲&quot;, &quot;乙&quot;, &quot;丙&quot;, &quot;丁&quot;, &quot;戊&quot;, &quot;己&quot;, &quot;庚&quot;, &quot;辛&quot;, &quot;壬&quot;, &quot;癸&quot;)
+dizhi &lt;- c(&quot;子&quot;, &quot;丑&quot;, &quot;寅&quot;, &quot;卯&quot;, &quot;辰&quot;, &quot;巳&quot;, &quot;午&quot;, &quot;未&quot;, &quot;申&quot;, &quot;酉&quot;, &quot;戌&quot;, &quot;亥&quot;)</code></pre>
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+<blockquote>
+<p><strong>提示:</strong> 阅者诸君周知，有十天干，十二地支。
+它们共有一百二十种组合，先民取其中六十种组为干支纪年。
+选择方法是阳（奇）数配阳数，阴（偶）数配阴数。</p>
+</blockquote>
+<div class="tutorial-exercise-support" data-label="tiandi-solution"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>tg_yang &lt;- tiangan[seq(tiangan) %% 2 == 1]
+tg_yin &lt;- tiangan[seq(tiangan) %% 2 == 0]
+
+dz_yang &lt;- dizhi[seq(dizhi) %% 2 == 1]
+dz_yin &lt;- dizhi[seq(dizhi) %% 2 == 0]
+
+outer(tg_yang, dz_yang, FUN = paste0)
+outer(tg_yin, dz_yin, FUN = paste0)</code></pre>
+</div>
+</div>
+<div id="section-向量性质" class="section level3">
+<h3>向量性质</h3>
+<pre class="r"><code>a</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<pre class="r"><code>#长度
+length(a)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>#最值
+max(a)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>min(a)</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>#平均值
+mean(a)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>#中位数
+median(a)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>#方差
+var(a)</code></pre>
+<pre><code>## [1] 2.5</code></pre>
+<blockquote>
+<p>这些命令在之后基于数据的变量运算中均可通用。</p>
+</blockquote>
+</div>
+</div>
+<div id="section-矩阵" class="section level2">
+<h2>矩阵</h2>
+<ul>
+<li>数学：</li>
+</ul>
+<p><span class="math display">\[
+A_{2\times2} = \left(\begin{array}{cc}
+                  1 &amp; 3\\
+                  2 &amp; 4
+                  \end{array}\right)
+\]</span></p>
+<ul>
+<li>R：</li>
+</ul>
+<pre class="r"><code>A &lt;- matrix(1:4, nrow = 2)
+A</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    3
+## [2,]    2    4</code></pre>
+<div id="section-section-8" class="section level3">
+<h3></h3>
+<ul>
+<li>数学： 在矩阵<span
+class="math inline">\(A_{2\times2}\)</span>中，它的元素通常以行×列的方式标记，比如<span
+class="math inline">\(A_{12}\)</span>就代表矩阵第<em>1</em>行、第<em>2</em>列的元素，即<span
+class="math inline">\(3\)</span>。</li>
+<li>R:</li>
+</ul>
+<pre class="r"><code>A[1, 2]</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>A[1, ]</code></pre>
+<pre><code>## [1] 1 3</code></pre>
+<pre class="r"><code>A[ , 2]</code></pre>
+<pre><code>## [1] 3 4</code></pre>
+</div>
+<div id="section-单一矩阵运算" class="section level3">
+<h3>单一矩阵运算</h3>
+<pre class="r"><code>B &lt;- matrix(1:6, nrow = 3)
+B</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<pre class="r"><code>dim(B)</code></pre>
+<pre><code>## [1] 3 2</code></pre>
+<pre class="r"><code>t(B)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    4    5    6</code></pre>
+<pre class="r"><code>t(t(B))</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<blockquote>
+<p><code>t(t(B))</code> 嵌套的做法。</p>
+</blockquote>
+</div>
+<div id="section-矩阵运算" class="section level3">
+<h3>矩阵运算</h3>
+<ul>
+<li>加（减）法：只能在同型矩阵间进行（同行数、同列数），<span
+class="math inline">\(A \pm B = a_{ij} \pm b_{ij}\)</span>;</li>
+<li>乘法：纯量乘积、一般乘积、Hadamard积、Kronecker积等。这里仅介绍和之后数据处理较为相关的纯量乘积、一般乘积。
+<ul>
+<li>纯量乘积：<span class="math inline">\({\displaystyle
+(rA)_{ij}=r\cdot a_{ij}\ }\)</span>，与代数乘法方法相同。</li>
+<li>一般乘积：只有在前矩阵列数与后矩阵行数相等时才有定义，其运算也就是对应的前列与后行的代数乘积之和，如下图所示，
+<img src="images/math_matrixTimes.gif" />。</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>在R中，将两个符合定义性质的向量用<code>%*%</code>连接就可以进行这种运算。</p>
+</blockquote>
+<pre class="r"><code>B</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<pre class="r"><code>C &lt;- matrix(7:12, nrow = 3)
+
+B + C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    8   14
+## [2,]   10   16
+## [3,]   12   18</code></pre>
+<pre class="r"><code>B - C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]   -6   -6
+## [2,]   -6   -6
+## [3,]   -6   -6</code></pre>
+<pre class="r"><code>10 * B</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]   10   40
+## [2,]   20   50
+## [3,]   30   60</code></pre>
+<pre class="r"><code>D &lt;- matrix(1:6, nrow = 2)
+D</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    3    5
+## [2,]    2    4    6</code></pre>
+<pre class="r"><code>dim(B)</code></pre>
+<pre><code>## [1] 3 2</code></pre>
+<pre class="r"><code>dim(D)</code></pre>
+<pre><code>## [1] 2 3</code></pre>
+<pre class="r"><code>B %*% D</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    9   19   29
+## [2,]   12   26   40
+## [3,]   15   33   51</code></pre>
+</div>
+</div>
+<div id="section-方程组" class="section level2">
+<h2>方程组</h2>
+<p>用R解一个三元一次方程组:</p>
+<p><span class="math display">\[
+\begin{equation}
+\begin{cases}
+x + y + z = 6, \\
+3x + 2y + 4z = 9, \\
+2x + 2y - 6z = 4.
+\end{cases}
+\end{equation}
+\]</span></p>
+<ul>
+<li>矩阵<strong>E</strong>代表方程系数</li>
+<li><span class="math inline">\(b\)</span>为方程的右侧</li>
+<li><span class="math inline">\(x\)</span>是方程的解</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+\vec{b} =&amp; \vec{E}\vec{x},\\
+\begin{bmatrix}
+6 \\
+9 \\
+4
+\end{bmatrix}
+=&amp;
+\begin{bmatrix}
+1 &amp; 1 &amp; 1 \\
+3 &amp; 2 &amp; 4 \\
+2 &amp; 2 &amp; -6
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+\end{align}.
+\]</span></p>
+<pre class="r"><code>E &lt;- matrix(c(1, 3, 2, 1, 2, 2, 1, 4, -6), nrow = 3)
+E</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    1    1
+## [2,]    3    2    4
+## [3,]    2    2   -6</code></pre>
+<pre class="r"><code>b &lt;- c(6, 9, 4)
+
+x &lt;- solve(E, b)
+x</code></pre>
+<pre><code>## [1] -5 10  1</code></pre>
+<div id="section-section-9" class="section level3">
+<h3></h3>
+<p>解方程组的一个直接应用就是解回归方程。
+回归方程通常可以以线性代数方式表达：
+比如，对一个基本的回归就可以写成如下形式，就和我们上面解的方程组非常相似了：</p>
+<p><span class="math display">\[
+\begin{align}
+y&amp; =&amp; &amp;\beta_0 + \beta_1x_1 + \beta_2x_2 + ... + \beta_nx_n
++ \epsilon\\
+\vec{y}&amp; =&amp; &amp;\vec{x}\vec{\beta} + \vec{\epsilon}.\\
+\uparrow&amp; &amp; &amp;\uparrow\uparrow\\
+\vec{b}&amp; =&amp; &amp;\vec{E}\vec{x}
+\end{align}
+\]</span></p>
+</div>
+</div>
+<div id="section-要点总结" class="section level2">
+<h2>要点总结</h2>
+<ul>
+<li>简单代数
+<ul>
+<li>科学计数法</li>
+<li>布尔代数</li>
+</ul></li>
+<li>线性代数
+<ul>
+<li>向量</li>
+<li>矩阵</li>
+<li>方程组</li>
+</ul></li>
+</ul>
 <p>
 <script type="application/shiny-prerendered" data-context="server-start">
 knitr::opts_chunk$set(echo = TRUE,
@@ -593,21 +656,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       out.width="100%")
 
-if (!require(pacman)) install.packages("pacman")
-if(!require(ggradar)) devtools::install_github("ricardo-bion/ggradar", dependencies = TRUE)
-
-p_load(
-  scales,
-  tidyverse,
-  drhur,
-  ggside
-)
-
-wvs7_narm <-
-  filter(wvs7,
-         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))
-
-set.seed(114)
+d <- seq(from = 1, to = 5, by = 0.5)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -631,38 +680,29 @@ session$onSessionEnded(function() {
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-scatterBasic-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-scatterBasic-code-editor`)), session)
-output$`tutorial-exercise-scatterBasic-output` <- renderUI({
-  `tutorial-exercise-scatterBasic-result`()
+`tutorial-exercise-algebra-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-algebra-code-editor`)), session)
+output$`tutorial-exercise-algebra-output` <- renderUI({
+  `tutorial-exercise-algebra-result`()
 })
 </script>
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "scatterBasic", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
+learnr:::store_exercise_cache(structure(list(label = "algebra", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
 "                      message = FALSE,", "                      warning = FALSE,", 
-"                      out.width=\"100%\")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
-"if(!require(ggradar)) devtools::install_github(\"ricardo-bion/ggradar\", dependencies = TRUE)", 
-"", "p_load(", "  scales,", "  tidyverse,", "  drhur,", "  ggside", 
-")", "", "wvs7_narm <-", "  filter(wvs7,", "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-"", "set.seed(114)"), chunk_opts = list(label = "setup", include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "scatterBasic", 
-        code = "plot(wvs7$incomeLevel, wvs7$education)\n\n## 添加装饰", 
-        opts = list(label = "\"scatterBasic\"", exercise = "TRUE"), 
-        engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("plot(", "  wvs7$incomeLevel, wvs7$education,", 
-    "  main = \"Family Income and Education\",", "  xlab = \"Family Income\",", 
-    "  ylab = \"Education Level\"", ")", "", "abline(lm(education ~ incomeLevel, data = wvs7), col = \"red\") # regression", 
-    "lines(lowess(wvs7$incomeLevel, wvs7$education, delta = 0.01 * diff(range(wvs7$age, na.rm = TRUE))), col = \"blue\") # lowess line (x,y)"
-    ), chunk_opts = list(label = "scatterBasic-solution")), tests = NULL, 
-    options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "visualize_cn_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "visualize_cn_files/figure-html/", 
+"                      out.width=\"100%\")", "", "d <- seq(from = 1, to = 5, by = 0.5)"
+), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
+    chunks = list(list(label = "algebra", code = "", opts = list(
+        label = "\"algebra\"", exercise = "TRUE"), engine = "r")), 
+    code_check = NULL, error_check = NULL, check = NULL, solution = structure("(365 / 12) / ((28 + 24)/10 - (36 + 72) * 5)", chunk_opts = list(
+        label = "algebra-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "calculate_cn_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "calculate_cn_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -671,283 +711,38 @@ learnr:::store_exercise_cache(structure(list(label = "scatterBasic", global_setu
         interval = 1, aniopts = "controls,loop", warning = FALSE, 
         error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
         child = NULL, engine = "r", split = FALSE, include = TRUE, 
-        purl = TRUE, max.print = 1000, label = "scatterBasic", 
-        exercise = TRUE, code = c("plot(wvs7$incomeLevel, wvs7$education)", 
-        "", "## 添加装饰"), out.width.px = "100%", out.height.px = 384, 
-        params.src = "scatterBasic, exercise=TRUE", fig.num = 0, 
+        purl = TRUE, max.print = 1000, label = "algebra", exercise = TRUE, 
+        code = "", out.width.px = "100%", out.height.px = 384, 
+        params.src = "algebra, exercise = TRUE", fig.num = 0L, 
         exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-scatterLattice-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-scatterLattice-code-editor`)), session)
-output$`tutorial-exercise-scatterLattice-output` <- renderUI({
-  `tutorial-exercise-scatterLattice-result`()
+`tutorial-exercise-sn-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-sn-code-editor`)), session)
+output$`tutorial-exercise-sn-output` <- renderUI({
+  `tutorial-exercise-sn-result`()
 })
 </script>
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "scatterLattice", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
+learnr:::store_exercise_cache(structure(list(label = "sn", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
 "                      message = FALSE,", "                      warning = FALSE,", 
-"                      out.width=\"100%\")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
-"if(!require(ggradar)) devtools::install_github(\"ricardo-bion/ggradar\", dependencies = TRUE)", 
-"", "p_load(", "  scales,", "  tidyverse,", "  drhur,", "  ggside", 
-")", "", "wvs7_narm <-", "  filter(wvs7,", "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-"", "set.seed(114)"), chunk_opts = list(label = "setup", include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "scatterLattice", 
-        code = "library(lattice)\n\nxyplot(education ~ incomeLevel, data = wvs7)", 
-        opts = list(label = "\"scatterLattice\"", exercise = "TRUE"), 
-        engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("xyplot(", "  education ~ incomeLevel,", 
-    "  group = female,", "  type = c(\"p\", \"g\", \"smooth\"),", 
-    "  main = \"Family Income on Education\",", "  xlab = \"Income\",", 
-    "  ylab = \"Education\",", "  data = wvs7,", "  auto.key = TRUE", 
-    ")", "", "xyplot(", "  education ~ incomeLevel | religious,", 
-    "  group = female,", "  type = c(\"p\", \"g\", \"smooth\"),", 
-    "  main = \"Family Income on Education\",", "  xlab = \"Income\",", 
-    "  ylab = \"Education\",", "  data = wvs7,", "  auto.key = TRUE", 
-    ")", "", "cloud(education ~ incomeLevel * religious, data = wvs7)"
-    ), chunk_opts = list(label = "scatterLattice-solution")), 
-    tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "visualize_cn_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "visualize_cn_files/figure-html/", 
-        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
-        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
-        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
-        fig.pos = "", out.width = "100%", out.height = NULL, 
-        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
-        interval = 1, aniopts = "controls,loop", warning = FALSE, 
-        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
-        child = NULL, engine = "r", split = FALSE, include = TRUE, 
-        purl = TRUE, max.print = 1000, label = "scatterLattice", 
-        exercise = TRUE, code = c("library(lattice)", "", "xyplot(education ~ incomeLevel, data = wvs7)"
-        ), out.width.px = "100%", out.height.px = 384, params.src = "scatterLattice, exercise = TRUE", 
-        fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
-    engine = "r", version = "4"), class = c("r", "tutorial_exercise"
-)))
-</script>
- 
-<script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-scatterLattice_exercise-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-scatterLattice_exercise-code-editor`)), session)
-output$`tutorial-exercise-scatterLattice_exercise-output` <- renderUI({
-  `tutorial-exercise-scatterLattice_exercise-result`()
-})
-</script>
-
-
-<script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "scatterLattice_exercise", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
-"                      message = FALSE,", "                      warning = FALSE,", 
-"                      out.width=\"100%\")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
-"if(!require(ggradar)) devtools::install_github(\"ricardo-bion/ggradar\", dependencies = TRUE)", 
-"", "p_load(", "  scales,", "  tidyverse,", "  drhur,", "  ggside", 
-")", "", "wvs7_narm <-", "  filter(wvs7,", "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-"", "set.seed(114)"), chunk_opts = list(label = "setup", include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "scatterLattice_exercise", 
-        code = "", opts = list(label = "\"scatterLattice_exercise\"", 
-            exercise = "TRUE"), engine = "r")), code_check = NULL, 
-    error_check = NULL, check = NULL, solution = structure(c("xyplot(", 
-    "  education ~ incomeLevel | country,", "  layout=c(5,3),", 
-    "  type = c(\"p\", \"g\"),", "  main = \"Family In come on Education\",", 
-    "  xlab = \"Income\",", "  ylab = \"Education\",", "  data = wvs7,", 
-    "  auto.key = TRUE", ")", ""), chunk_opts = list(label = "scatterLattice_exercise-solution")), 
-    tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "visualize_cn_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "visualize_cn_files/figure-html/", 
-        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
-        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
-        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
-        fig.pos = "", out.width = "100%", out.height = NULL, 
-        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
-        interval = 1, aniopts = "controls,loop", warning = FALSE, 
-        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
-        child = NULL, engine = "r", split = FALSE, include = TRUE, 
-        purl = TRUE, max.print = 1000, label = "scatterLattice_exercise", 
-        exercise = TRUE, code = "", out.width.px = "100%", out.height.px = 384, 
-        params.src = "scatterLattice_exercise, exercise=TRUE", 
-        fig.num = 0L, exercise.df_print = "paged", exercise.checker = "NULL"), 
-    engine = "r", version = "4"), class = c("r", "tutorial_exercise"
-)))
-</script>
- 
-<script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-scatterSteps-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-scatterSteps-code-editor`)), session)
-output$`tutorial-exercise-scatterSteps-output` <- renderUI({
-  `tutorial-exercise-scatterSteps-result`()
-})
-</script>
-
-
-<script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "scatterSteps", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
-"                      message = FALSE,", "                      warning = FALSE,", 
-"                      out.width=\"100%\")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
-"if(!require(ggradar)) devtools::install_github(\"ricardo-bion/ggradar\", dependencies = TRUE)", 
-"", "p_load(", "  scales,", "  tidyverse,", "  drhur,", "  ggside", 
-")", "", "wvs7_narm <-", "  filter(wvs7,", "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-"", "set.seed(114)"), chunk_opts = list(label = "setup", include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "scatterSteps", 
-        code = "wvs7_narm <-\n  filter(wvs7,\n         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))\n\nggplot(data = wvs7_narm,\n       aes(x = incomeLevel, y = education, color = religious))", 
-        opts = list(label = "\"scatterSteps\"", exercise = "TRUE"), 
-        engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("ggplot(data = wvs7_narm,", 
-    "       aes(x = incomeLevel, y = education, color = religious)) +", 
-    "    geom_point(size = 2, alpha = 0.3) +", "    geom_smooth(aes(color = NULL), se=TRUE) +", 
-    "    geom_xsidedensity(", "        aes(", "            y    = after_stat(density),", 
-    "            fill = religious", "        ),", "        alpha    = 0.5,", 
-    "        size     = 1", "        ,", "        position = \"stack\"", 
-    "    ) +", "    geom_ysidedensity(", "        aes(", "            x    = after_stat(density),", 
-    "            fill = religious", "        ),", "        alpha    = 0.5,", 
-    "        size     = 1", "        ,", "        position = \"stack\"", 
-    "    ) +", "    labs(title = \"Economy on Education\" ,", 
-    "         subtitle = \"Scatter plot + density distribution\",", 
-    "         x = \"Family Income\", y = \"Education\") +", "  theme_minimal() +", 
-    "    theme(", "        ggside.panel.scale = 0.4", "    )"
-    ), chunk_opts = list(label = "scatterSteps-solution")), tests = NULL, 
-    options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "visualize_cn_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "visualize_cn_files/figure-html/", 
-        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
-        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
-        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
-        fig.pos = "", out.width = "100%", out.height = NULL, 
-        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
-        interval = 1, aniopts = "controls,loop", warning = FALSE, 
-        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
-        child = NULL, engine = "r", split = FALSE, include = TRUE, 
-        purl = TRUE, max.print = 1000, label = "scatterSteps", 
-        exercise = TRUE, code = c("wvs7_narm <-", "  filter(wvs7,", 
-        "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-        "", "ggplot(data = wvs7_narm,", "       aes(x = incomeLevel, y = education, color = religious))"
-        ), out.width.px = "100%", out.height.px = 384, params.src = "scatterSteps, exercise = TRUE", 
-        fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
-    engine = "r", version = "4"), class = c("r", "tutorial_exercise"
-)))
-</script>
- 
-<script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-barSteps-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-barSteps-code-editor`)), session)
-output$`tutorial-exercise-barSteps-output` <- renderUI({
-  `tutorial-exercise-barSteps-result`()
-})
-</script>
-
-
-<script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "barSteps", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
-"                      message = FALSE,", "                      warning = FALSE,", 
-"                      out.width=\"100%\")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
-"if(!require(ggradar)) devtools::install_github(\"ricardo-bion/ggradar\", dependencies = TRUE)", 
-"", "p_load(", "  scales,", "  tidyverse,", "  drhur,", "  ggside", 
-")", "", "wvs7_narm <-", "  filter(wvs7,", "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-"", "set.seed(114)"), chunk_opts = list(label = "setup", include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "barSteps", code = "wvs7_agg <- group_by(wvs7_narm, incomeLevel, religious) %>% \n  summarise(mean_ed = mean(education), \n            sd_ed = sd(education),\n            se_ed = sd_ed / sqrt(n()),\n            lb_ed = mean_ed - stats::qnorm(1 - (1 - 0.95) / 2) * se_ed,\n            ub_ed = mean_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)\n\nggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious))", 
-        opts = list(label = "\"barSteps\"", exercise = "TRUE"), 
-        engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("wvs7_agg <- group_by(wvs7_narm, incomeLevel, religious) %>% ", 
-    "  summarise(mean_ed = mean(education), ", "            sd_ed = sd(education),", 
-    "            se_ed = sd_ed / sqrt(n()),", "            lb_ed = mean_ed - stats::qnorm(1 - (1 - 0.95) / 2) * se_ed,", 
-    "            ub_ed = mean_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)", 
-    "", "ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious)) +", 
-    "  geom_bar(stat = \"identity\",", "           color = \"black\",", 
-    "           position = position_dodge()) +", "  geom_errorbar(aes(ymin = lb_ed, ymax = ub_ed),", 
-    "                width = 0.2,", "                position = position_dodge(.9)) +", 
-    "  geom_point(", "    data = wvs7_narm,", "    aes(y = education, shape = religious),", 
-    "    position = position_jitterdodge(),", "    alpha = 0.3", 
-    "  ) +", "  labs(", "    title = \"Economy on Education over Culture\" ,", 
-    "    subtitle = \"Mean Bar, Error Intervals, and Jitter Plots\",", 
-    "    x = \"Family Income\",", "    y = \"Education\"", "  ) +", 
-    "  theme_minimal() +", "  theme(legend.position = \"top\") +", 
-    "  scale_fill_viridis_d()"), chunk_opts = list(label = "barSteps-solution")), 
-    tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "visualize_cn_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "visualize_cn_files/figure-html/", 
-        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
-        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
-        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
-        fig.pos = "", out.width = "100%", out.height = NULL, 
-        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
-        interval = 1, aniopts = "controls,loop", warning = FALSE, 
-        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
-        child = NULL, engine = "r", split = FALSE, include = TRUE, 
-        purl = TRUE, max.print = 1000, label = "barSteps", exercise = TRUE, 
-        code = c("wvs7_agg <- group_by(wvs7_narm, incomeLevel, religious) %>% ", 
-        "  summarise(mean_ed = mean(education), ", "            sd_ed = sd(education),", 
-        "            se_ed = sd_ed / sqrt(n()),", "            lb_ed = mean_ed - stats::qnorm(1 - (1 - 0.95) / 2) * se_ed,", 
-        "            ub_ed = mean_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)", 
-        "", "ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious))"
-        ), out.width.px = "100%", out.height.px = 384, params.src = "barSteps, exercise = TRUE", 
-        fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
-    engine = "r", version = "4"), class = c("r", "tutorial_exercise"
-)))
-</script>
- 
-<script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-radarSteps-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-radarSteps-code-editor`)), session)
-output$`tutorial-exercise-radarSteps-output` <- renderUI({
-  `tutorial-exercise-radarSteps-result`()
-})
-</script>
-
-
-<script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "radarSteps", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
-"                      message = FALSE,", "                      warning = FALSE,", 
-"                      out.width=\"100%\")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
-"if(!require(ggradar)) devtools::install_github(\"ricardo-bion/ggradar\", dependencies = TRUE)", 
-"", "p_load(", "  scales,", "  tidyverse,", "  drhur,", "  ggside", 
-")", "", "wvs7_narm <-", "  filter(wvs7,", "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-"", "set.seed(114)"), chunk_opts = list(label = "setup", include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "radarSteps", code = "income_qnt <- quantile(wvs7$incomeLevel, seq(0, 1, .25), na.rm = TRUE)\n\nwvs7_agg2 <- filter(wvs7, !is.na(incomeLevel)) %>%\n  mutate(group = cut(incomeLevel, income_qnt, include.lowest = TRUE) %>% ordered(label = c(\n    \"Low\", \"Medium-Low\", \"Medium-High\", \"High\"\n  ))) %>%\n  group_by(group) %>%\n  summarise(across(\n    c(\n      confidence_armedForce,\n      confidence_gov,\n      confidence_court,\n      confidence_parliament,\n      confidence_tv\n    ),\n    mean,\n    na.rm = TRUE\n  )) %>%\n  mutate(across(-group, rescale)) %>%\n  rename(\n    Military = confidence_armedForce,\n    Government = confidence_gov,\n    Court = confidence_court,\n    Parliament = confidence_parliament,\n    TV = confidence_tv\n  )\n\nlibrary(ggradar)\n\nwvs7_agg2 %>% \n  ggradar(\n    axis.label.size = 2,\n    group.point.size = 0.5,\n    group.line.width = 1,\n    grid.label.size = 3,\n    fill = TRUE,\n    fill.alpha = 0.3,\n    plot.title = \"Economy on Institutional Confidence\"\n  ) +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")", 
-        opts = list(label = "\"radarSteps\"", exercise = "TRUE"), 
-        engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("income_qnt <- quantile(wvs7$incomeLevel, seq(0, 1, .25), na.rm = TRUE)", 
-    "", "wvs7_agg2 <- filter(wvs7, !is.na(incomeLevel)) %>%", 
-    "  mutate(group = cut(incomeLevel, income_qnt, include.lowest = TRUE) %>% ordered(label = c(", 
-    "    \"Low\", \"Medium-Low\", \"Medium-High\", \"High\"", 
-    "  ))) %>%", "  group_by(group) %>%", "  summarise(across(", 
-    "    c(", "      confidence_armedForce,", "      confidence_gov,", 
-    "      confidence_court,", "      confidence_parliament,", 
-    "      confidence_tv", "    ),", "    mean,", "    na.rm = TRUE", 
-    "  )) %>%", "  mutate(across(-group, rescale)) %>%", "  rename(", 
-    "    Military = confidence_armedForce,", "    Government = confidence_gov,", 
-    "    Court = confidence_court,", "    Parliament = confidence_parliament,", 
-    "    TV = confidence_tv", "  )", "", "wvs7_agg2 %>% ", "  ggradar(", 
-    "    axis.label.size = 2,", "    group.point.size = 0.5,", 
-    "    group.line.width = 1,", "    grid.label.size = 3,", 
-    "    fill = TRUE,", "    fill.alpha = 0.3,", "    plot.title = \"Economy on Institutional Confidence\"", 
-    "  ) +", "  theme_minimal() +", "  theme(legend.position = \"bottom\") +", 
-    "  facet_wrap(~ group, ncol = 4)", "  "), chunk_opts = list(
-        label = "radarSteps-solution")), tests = NULL, options = list(
+"                      out.width=\"100%\")", "", "d <- seq(from = 1, to = 5, by = 0.5)"
+), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
+    chunks = list(list(label = "sn", code = "", opts = list(label = "\"sn\"", 
+        exercise = "TRUE"), engine = "r")), code_check = NULL, 
+    error_check = NULL, check = NULL, solution = structure("format(2.8e+10, scientific = FALSE, big.mark = ',')", chunk_opts = list(
+        label = "sn-solution")), tests = NULL, options = list(
         eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
         tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
         highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
-        strip.white = TRUE, cache = 0, cache.path = "visualize_cn_cache/html/", 
+        strip.white = TRUE, cache = 0, cache.path = "calculate_cn_cache/html/", 
         cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
         autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
-        fig.show = "asis", fig.align = "default", fig.path = "visualize_cn_files/figure-html/", 
+        fig.show = "asis", fig.align = "default", fig.path = "calculate_cn_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -956,62 +751,157 @@ learnr:::store_exercise_cache(structure(list(label = "radarSteps", global_setup 
         interval = 1, aniopts = "controls,loop", warning = FALSE, 
         error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
         child = NULL, engine = "r", split = FALSE, include = TRUE, 
-        purl = TRUE, max.print = 1000, label = "radarSteps", 
-        exercise = TRUE, code = c("income_qnt <- quantile(wvs7$incomeLevel, seq(0, 1, .25), na.rm = TRUE)", 
-        "", "wvs7_agg2 <- filter(wvs7, !is.na(incomeLevel)) %>%", 
-        "  mutate(group = cut(incomeLevel, income_qnt, include.lowest = TRUE) %>% ordered(label = c(", 
-        "    \"Low\", \"Medium-Low\", \"Medium-High\", \"High\"", 
-        "  ))) %>%", "  group_by(group) %>%", "  summarise(across(", 
-        "    c(", "      confidence_armedForce,", "      confidence_gov,", 
-        "      confidence_court,", "      confidence_parliament,", 
-        "      confidence_tv", "    ),", "    mean,", "    na.rm = TRUE", 
-        "  )) %>%", "  mutate(across(-group, rescale)) %>%", 
-        "  rename(", "    Military = confidence_armedForce,", 
-        "    Government = confidence_gov,", "    Court = confidence_court,", 
-        "    Parliament = confidence_parliament,", "    TV = confidence_tv", 
-        "  )", "", "library(ggradar)", "", "wvs7_agg2 %>% ", 
-        "  ggradar(", "    axis.label.size = 2,", "    group.point.size = 0.5,", 
-        "    group.line.width = 1,", "    grid.label.size = 3,", 
-        "    fill = TRUE,", "    fill.alpha = 0.3,", "    plot.title = \"Economy on Institutional Confidence\"", 
-        "  ) +", "  theme_minimal() +", "  theme(legend.position = \"bottom\")"
-        ), out.width.px = "100%", out.height.px = 384, params.src = "radarSteps, exercise = TRUE", 
+        purl = TRUE, max.print = 1000, label = "sn", exercise = TRUE, 
+        code = "", out.width.px = "100%", out.height.px = 384, 
+        params.src = "sn, exercise = TRUE", fig.num = 0L, exercise.df_print = "paged", 
+        exercise.checker = "NULL"), engine = "r", version = "4"), class = c("r", 
+"tutorial_exercise")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+`tutorial-exercise-judge-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-judge-code-editor`)), session)
+output$`tutorial-exercise-judge-output` <- renderUI({
+  `tutorial-exercise-judge-result`()
+})
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::store_exercise_cache(structure(list(label = "judge", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
+"                      message = FALSE,", "                      warning = FALSE,", 
+"                      out.width=\"100%\")", "", "d <- seq(from = 1, to = 5, by = 0.5)"
+), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
+    chunks = list(list(label = "judge", code = "3 > 2 > 1", opts = list(
+        label = "\"judge\"", exercise = "TRUE"), engine = "r")), 
+    code_check = NULL, error_check = NULL, check = NULL, solution = structure("(3 > 2) & (2 > 1)", chunk_opts = list(
+        label = "judge-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "calculate_cn_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "calculate_cn_files/figure-html/", 
+        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
+        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
+        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
+        fig.pos = "", out.width = "100%", out.height = NULL, 
+        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
+        interval = 1, aniopts = "controls,loop", warning = FALSE, 
+        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
+        child = NULL, engine = "r", split = FALSE, include = TRUE, 
+        purl = TRUE, max.print = 1000, label = "judge", exercise = TRUE, 
+        code = "3 > 2 > 1", out.width.px = "100%", out.height.px = 384, 
+        params.src = "judge, exercise = TRUE", fig.num = 0, exercise.df_print = "paged", 
+        exercise.checker = "NULL"), engine = "r", version = "4"), class = c("r", 
+"tutorial_exercise")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+`tutorial-exercise-vecColon-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-vecColon-code-editor`)), session)
+output$`tutorial-exercise-vecColon-output` <- renderUI({
+  `tutorial-exercise-vecColon-result`()
+})
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::store_exercise_cache(structure(list(label = "vecColon", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
+"                      message = FALSE,", "                      warning = FALSE,", 
+"                      out.width=\"100%\")", "", "d <- seq(from = 1, to = 5, by = 0.5)"
+), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
+    chunks = list(list(label = "vecColon", code = "", opts = list(
+        label = "\"vecColon\"", exercise = "TRUE"), engine = "r")), 
+    code_check = NULL, error_check = NULL, check = NULL, solution = structure("b <- c(1, 3:7, 9)", chunk_opts = list(
+        label = "vecColon-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "calculate_cn_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "calculate_cn_files/figure-html/", 
+        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
+        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
+        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
+        fig.pos = "", out.width = "100%", out.height = NULL, 
+        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
+        interval = 1, aniopts = "controls,loop", warning = FALSE, 
+        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
+        child = NULL, engine = "r", split = FALSE, include = TRUE, 
+        purl = TRUE, max.print = 1000, label = "vecColon", exercise = TRUE, 
+        code = "", out.width.px = "100%", out.height.px = 384, 
+        params.src = "vecColon, exercise = TRUE", fig.num = 0L, 
+        exercise.df_print = "paged", exercise.checker = "NULL"), 
+    engine = "r", version = "4"), class = c("r", "tutorial_exercise"
+)))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+`tutorial-exercise-increment-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-increment-code-editor`)), session)
+output$`tutorial-exercise-increment-output` <- renderUI({
+  `tutorial-exercise-increment-result`()
+})
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::store_exercise_cache(structure(list(label = "increment", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
+"                      message = FALSE,", "                      warning = FALSE,", 
+"                      out.width=\"100%\")", "", "d <- seq(from = 1, to = 5, by = 0.5)"
+), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
+    chunks = list(list(label = "increment", code = "c <- seq(from = 1, to = 5, by = 3)\nc\n\n#d <- seq(from = 1, to = 5, by = 0.5)\n#d", 
+        opts = list(label = "\"increment\"", exercise = "TRUE"), 
+        engine = "r")), code_check = NULL, error_check = NULL, 
+    check = NULL, solution = NULL, tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "calculate_cn_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "calculate_cn_files/figure-html/", 
+        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
+        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
+        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
+        fig.pos = "", out.width = "100%", out.height = NULL, 
+        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
+        interval = 1, aniopts = "controls,loop", warning = FALSE, 
+        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
+        child = NULL, engine = "r", split = FALSE, include = TRUE, 
+        purl = TRUE, max.print = 1000, label = "increment", exercise = TRUE, 
+        code = c("c <- seq(from = 1, to = 5, by = 3)", "c", "", 
+        "#d <- seq(from = 1, to = 5, by = 0.5)", "#d"), out.width.px = "100%", 
+        out.height.px = 384, params.src = "increment, exercise = TRUE", 
         fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-heatmap-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-heatmap-code-editor`)), session)
-output$`tutorial-exercise-heatmap-output` <- renderUI({
-  `tutorial-exercise-heatmap-result`()
+`tutorial-exercise-index-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-index-code-editor`)), session)
+output$`tutorial-exercise-index-output` <- renderUI({
+  `tutorial-exercise-index-result`()
 })
 </script>
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "heatmap", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
+learnr:::store_exercise_cache(structure(list(label = "index", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
 "                      message = FALSE,", "                      warning = FALSE,", 
-"                      out.width=\"100%\")", "", "if (!require(pacman)) install.packages(\"pacman\")", 
-"if(!require(ggradar)) devtools::install_github(\"ricardo-bion/ggradar\", dependencies = TRUE)", 
-"", "p_load(", "  scales,", "  tidyverse,", "  drhur,", "  ggside", 
-")", "", "wvs7_narm <-", "  filter(wvs7,", "         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))", 
-"", "set.seed(114)"), chunk_opts = list(label = "setup", include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "heatmap", code = "wvs7 %>%\n  select(education, incomeLevel, confidence_gov) %>%\n  group_by(education,incomeLevel) %>%\n  summarise(confidence_gov = median(confidence_gov, na.rm=TRUE)) %>%\n  ungroup() -> wvs7_confidence", 
-        opts = list(label = "\"heatmap\"", exercise = "TRUE"), 
-        engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("wvs7 %>%", "  select(education, incomeLevel, confidence_gov) %>%", 
-    "  group_by(education,incomeLevel) %>%", "  summarise(confidence_gov = median(confidence_gov, na.rm=TRUE)) %>%", 
-    "  ungroup() -> wvs7_confidence", "", "p <- ggplot(data = wvs7_confidence, mapping = aes(", 
-    "  x = education, y = incomeLevel, fill = confidence_gov))", 
-    "p + geom_tile() +", "  scale_fill_viridis_c()"), chunk_opts = list(
-        label = "heatmap-solution")), tests = NULL, options = list(
+"                      out.width=\"100%\")", "", "d <- seq(from = 1, to = 5, by = 0.5)"
+), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
+    chunks = list(list(label = "index", code = "", opts = list(
+        label = "\"index\"", exercise = "TRUE"), engine = "r")), 
+    code_check = NULL, error_check = NULL, check = NULL, solution = structure("d[seq(d) %% 2 == 0]", chunk_opts = list(
+        label = "index-solution")), tests = NULL, options = list(
         eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
         tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
         highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
-        strip.white = TRUE, cache = 0, cache.path = "visualize_cn_cache/html/", 
+        strip.white = TRUE, cache = 0, cache.path = "calculate_cn_cache/html/", 
         cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
         autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
-        fig.show = "asis", fig.align = "default", fig.path = "visualize_cn_files/figure-html/", 
+        fig.show = "asis", fig.align = "default", fig.path = "calculate_cn_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -1020,11 +910,54 @@ learnr:::store_exercise_cache(structure(list(label = "heatmap", global_setup = s
         interval = 1, aniopts = "controls,loop", warning = FALSE, 
         error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
         child = NULL, engine = "r", split = FALSE, include = TRUE, 
-        purl = TRUE, max.print = 1000, label = "heatmap", exercise = TRUE, 
-        code = c("wvs7 %>%", "  select(education, incomeLevel, confidence_gov) %>%", 
-        "  group_by(education,incomeLevel) %>%", "  summarise(confidence_gov = median(confidence_gov, na.rm=TRUE)) %>%", 
-        "  ungroup() -> wvs7_confidence"), out.width.px = "100%", 
-        out.height.px = 384, params.src = "heatmap, exercise = TRUE", 
+        purl = TRUE, max.print = 1000, label = "index", exercise = TRUE, 
+        code = "", out.width.px = "100%", out.height.px = 384, 
+        params.src = "index, exercise = TRUE", fig.num = 0L, 
+        exercise.df_print = "paged", exercise.checker = "NULL"), 
+    engine = "r", version = "4"), class = c("r", "tutorial_exercise"
+)))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+`tutorial-exercise-tiandi-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-tiandi-code-editor`)), session)
+output$`tutorial-exercise-tiandi-output` <- renderUI({
+  `tutorial-exercise-tiandi-result`()
+})
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::store_exercise_cache(structure(list(label = "tiandi", global_setup = structure(c("knitr::opts_chunk$set(echo = TRUE,", 
+"                      message = FALSE,", "                      warning = FALSE,", 
+"                      out.width=\"100%\")", "", "d <- seq(from = 1, to = 5, by = 0.5)"
+), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
+    chunks = list(list(label = "tiandi", code = "tiangan <- c(\"甲\", \"乙\", \"丙\", \"丁\", \"戊\", \"己\", \"庚\", \"辛\", \"壬\", \"癸\")\ndizhi <- c(\"子\", \"丑\", \"寅\", \"卯\", \"辰\", \"巳\", \"午\", \"未\", \"申\", \"酉\", \"戌\", \"亥\")", 
+        opts = list(label = "\"tiandi\"", exercise = "TRUE"), 
+        engine = "r")), code_check = NULL, error_check = NULL, 
+    check = NULL, solution = structure(c("tg_yang <- tiangan[seq(tiangan) %% 2 == 1]", 
+    "tg_yin <- tiangan[seq(tiangan) %% 2 == 0]", "", "dz_yang <- dizhi[seq(dizhi) %% 2 == 1]", 
+    "dz_yin <- dizhi[seq(dizhi) %% 2 == 0]", "", "outer(tg_yang, dz_yang, FUN = paste0)", 
+    "outer(tg_yin, dz_yin, FUN = paste0)"), chunk_opts = list(
+        label = "tiandi-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "calculate_cn_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "calculate_cn_files/figure-html/", 
+        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
+        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
+        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
+        fig.pos = "", out.width = "100%", out.height = NULL, 
+        out.extra = NULL, fig.retina = 2, external = TRUE, sanitize = FALSE, 
+        interval = 1, aniopts = "controls,loop", warning = FALSE, 
+        error = FALSE, message = FALSE, render = NULL, ref.label = NULL, 
+        child = NULL, engine = "r", split = FALSE, include = TRUE, 
+        purl = TRUE, max.print = 1000, label = "tiandi", exercise = TRUE, 
+        code = c("tiangan <- c(\"甲\", \"乙\", \"丙\", \"丁\", \"戊\", \"己\", \"庚\", \"辛\", \"壬\", \"癸\")", 
+        "dizhi <- c(\"子\", \"丑\", \"寅\", \"卯\", \"辰\", \"巳\", \"午\", \"未\", \"申\", \"酉\", \"戌\", \"亥\")"
+        ), out.width.px = "100%", out.height.px = 384, params.src = "tiandi, exercise = TRUE", 
         fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
@@ -1037,10 +970,9 @@ learnr:::store_exercise_cache(structure(list(label = "heatmap", global_setup = s
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","broom","bslib","cachem","cellranger","checkmate","cli","colorspace","compiler","crayon","curl","datasets","DBI","dbplyr","digest","dplyr","drhur","ellipsis","evaluate","fansi","farver","fastmap","forcats","fs","gargle","generics","ggplot2","ggradar","ggside","glue","googledrive","googlesheets4","graphics","grDevices","grid","gtable","haven","highr","hms","htmltools","htmlwidgets","httpuv","httr","jquerylib","jsonlite","knitr","labeling","later","lattice","learnr","lifecycle","lubridate","magrittr","Matrix","methods","mgcv","mime","modelr","munsell","nlme","pacman","pillar","pkgconfig","promises","purrr","R6","Rcpp","readr","readxl","reprex","rlang","rmarkdown","rprojroot","rstudioapi","rvest","sass","scales","shiny","splines","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","tools","tzdb","utf8","utils","vctrs","viridisLite","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["0.2.1","1.4.1","4.2.1","1.0.1","0.4.2","1.0.6","1.1.0","2.1.0","3.4.1","2.0-3","4.2.1","1.5.2","4.3.3","4.2.1","1.1.3","2.2.1","0.6.29","1.0.10","1.0.9999","0.3.2","0.19","1.0.3","2.1.1","1.1.0","0.5.2","1.5.2","1.2.1","0.1.3","3.4.1","0.2","0.2.1","1.6.2","2.0.0","1.0.1","4.2.1","4.2.1","4.2.1","0.3.1","2.5.1","0.10","1.1.2","0.5.4","1.6.1","1.6.7","1.4.4","0.1.4","1.8.4","1.41","0.4.2","1.3.0","0.20-45","0.11.2","1.0.3","1.8.0","2.0.3","1.5-3","4.2.1","1.8-40","0.12","0.1.9","0.5.0","3.1-157","0.5.1","1.8.1","2.0.3","1.2.0.1","0.3.5","2.5.1","1.0.9","2.1.3","1.4.1","2.0.2","1.0.6","2.19","2.0.3","0.14","1.0.3","0.4.4","1.2.1","1.7.4","4.2.1","4.2.1","1.7.8","1.5.0","3.1.8","1.2.1","1.2.0","1.3.2","4.2.1","0.3.0","1.2.2","4.2.1","0.5.1","0.4.1","2.5.0","0.36","1.3.3","1.8-4","2.3.6"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","cachem","checkmate","cli","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","glue","graphics","grDevices","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","rstudioapi","sass","shiny","stats","stringi","stringr","tools","utils","vctrs","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4.1","4.2.1","0.4.2","1.0.6","2.1.0","3.4.1","4.2.1","4.3.3","4.2.1","0.6.29","0.3.2","0.19","1.1.0","1.6.2","4.2.1","4.2.1","0.5.4","1.6.1","1.6.7","0.1.4","1.8.4","1.41","1.3.0","0.11.2","1.0.3","2.0.3","4.2.1","0.12","1.2.0.1","2.5.1","1.0.9","1.0.6","2.19","2.0.3","0.14","0.4.4","1.7.4","4.2.1","1.7.8","1.5.0","4.2.1","4.2.1","0.5.1","2.5.0","0.36","1.8-4","2.3.6"]}]}]}
 </script>
 <!--/html_preserve-->
-</div>
 </div>
 
 </article> <!-- topics -->
@@ -1052,7 +984,8 @@ learnr:::store_exercise_cache(structure(list(label = "heatmap", global_setup = s
 
 <!-- begin doc-metadata -->
 <div id="doc-metadata">
-<h1 class="title toc-ignore" style="display:none;">基础可视化</h1>
+<h1 class="title toc-ignore" style="display:none;">基础语法:
+线性代数</h1>
 <h2 class="subtitle"><em>Learning R with Dr. Hu and His
 Friends</em></h2>
 <h4 class="author"><em>胡悦（清华大学政治学系）</em></h4>

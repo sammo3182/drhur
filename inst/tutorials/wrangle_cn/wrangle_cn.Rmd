@@ -26,7 +26,14 @@ p_load(drhur,
 
 
 ## 知识点
-
+- 研究问题：
+   - 有几份涉及不同地区的调查数据，包括：非洲政治晴雨表调查数据、亚洲政治晴雨表调查数据、拉美政治晴雨表调查数据。  
+   你想创造一个全球的政治晴雨表调查数据，应该怎么合并这些数据集呢？（提示：行合并）
+   - 现在有两份数据：  
+     数据1：中国各省份年度不平等认知的调查数据  
+     数据2：各省年度省内收入差距数据     
+     如果你想研究省内收入差距对居民不平等认知的影响，你应该如何合并这两份数据呢？（提示：索引合并，以省份与年度为索引）
+   
 - 单数据整理
     - 探索
     - 梳理
@@ -348,28 +355,6 @@ mutate(wvs7,
 ```
 
 
-### 
-
-`dplyr`还允许批量修改
-
-如何对变量进行批量修改？`dplyr`和它的朋友`tidyselect`提供了`across`和`where`函数。
-比如出于某种需要，我们要给每个数字变量都取对数。
-
-> 流程： 判断 &rarr; 筛选 &rarr; 修改
-
-```{r mutateBatch, exercise = TRUE}
-wvs7 %>%
-  mutate(across(where(is.numeric), log))
-
-# 是否能使用这套技巧将所有人际信任变量都倒叙？
-```
-
-```{r mutateBatch-solution}
-wvs7 %>% 
-  mutate(across(starts_with("trust"), ~ 5 - .))
-```
-
-
 ### 数值统计
 
 `count`用来基于数据计数。
@@ -398,16 +383,6 @@ wvs7 %>%
 wvs7 %>%
   summarise(age = mean(age, na.rm = TRUE),
             edu = mean(education, na.rm = TRUE))
-```
-
-### 
-
-我们前面提到的`across`, `start_with`等同样可以在这里使用：
-比如我们想获得所有关于机构信心变量的平均值：
-
-```{r summariseBatch, exercise = TRUE}
-wvs7 %>%
-  summarise(across(starts_with("confidence"), mean, na.rm = TRUE))
 ```
 
 ### 
@@ -472,7 +447,7 @@ wvs7 <- mutate(wvs7, female = as.numeric(female))
 分别举个例子：
 
 ```{r bindRow, exercise = TRUE}
-wvs7_us <- filter(wvs7, country == "Unitied States")
+wvs7_us <- filter(wvs7, country == "United States")
 wvs7_russia <- filter(wvs7, country == "Russia")
 
 # 创建一个美俄数据
@@ -533,7 +508,7 @@ full_join(wvs7_eq, wvs7_country)
 
 1. 行动<span style="color:red">之前</span> 想清楚;
 1. 巧妙且综合地使用 `dplyr` 函数;
-    + 探索: `glimpse`, `head`, `tail`
+    + 探索: `head`, `tail`
         - 结构：`nrow`, `ncol`, `names`, `str`
         - 特征：`table`, `levels`
         - 属性：`length`, `unique`, `summary`, `class`, `typeof`

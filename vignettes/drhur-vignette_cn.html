@@ -13,7 +13,7 @@
 <meta name="author" content="Yue Hu and Yufei Sun" />
 
 
-<title>drhur: Learn R with Dr. Hu Easily and Happily</title>
+<title>drhur: 与胡博士一起学R</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -337,63 +337,49 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">drhur: Learn R with Dr. Hu Easily and
-Happily</h1>
+<h1 class="title toc-ignore">drhur: 与胡博士一起学R</h1>
 <h4 class="author">Yue Hu and Yufei Sun</h4>
 
 
 
-<div id="overview" class="section level2">
-<h2>Overview</h2>
-<p>Learning a programming language such as R can be (rewardingly)
-challenging. <code>drhur</code> is a pedagogical software to make the
-learning process easier and more enjoyable. The package includes
-tutorials on basic data science skills with R, such as basic R syntax,
-data import/export, munging, and visualization. The goal of this package
-is to provide an interactive platform for learners to easily and
-efficiently enter the R world.</p>
-<p>The ideal way to acquire these skills is through the “Learning R with
-Dr. Hu” workshop, conducted by Associate Professor Yue Hu from the
-Department of Political Science at Tsinghua University. The modules
-included in this package correspond to the content of the initial
-chapters of this workshop series and Dr. Hu’s forthcoming textbook on
-the R programming language. The workshop series and the book aim to
-cover knowledge and skills about R, ranging from basic to advanced
-techniques, such as spatial analysis, network analysis, and text
-analysis. You can find more relevant information on the <a href="https://sammo3182.github.io/software/drhur/">author’s website</a>
-or by <a href="mailto:yuehu@tsinghua.edu.cn">contacting him</a>
-directly.</p>
+<div id="概述" class="section level2">
+<h2>概述</h2>
+<p>对很多朋友来说，学习编程语言（比如R）都将会是（伴随满足感的）挑战。
+<code>drhur</code>
+正是一款旨在使这一学习过程更加轻松愉快而研发的教学软件。
+目前版本的软件内含有关于使用R进行基本数据科学技能的教程，如基础R运算、数据的导入/导出、清洗和可视化。
+此软件的目标是为学习者提供一个交互式平台，让他们能够轻松且高效地融入到 R
+的世界。</p>
+<p>使用本软件的最佳方式是配合由清华大学政治学系副教授胡悦博士开设的
+“Learning R with Dr. Hu”工作坊共同使用。
+软件中的模块实际上就是这个工作坊系列部分初期课程，也将被包含至胡博士即将出版的R语言教材。
+工作坊和即将出版的教材覆盖了有关R从基础到高级的技术（如空间分析、网络分析以及文本分析）的大量知识和技能。
+您可以在<a href="https://sammo3182.github.io/software/drhur/">作者的网站</a>上或通过<a href="mailto:yuehu@tsinghua.edu.cn">直接联系他</a>获取更多相关信息。</p>
 </div>
-<div id="usage" class="section level2">
-<h2>Usage</h2>
-<p>This package is constructed using the <code>learnr</code> function,
-which launches a Shiny app allowing learners to interact seamlessly with
-instructions and tasks. One can conveniently load the package and access
-the tutorials through the <code>drhur()</code> function. For example,
-the visualization tutorial can be initiated with the following
-commands:</p>
+<div id="使用" class="section level2">
+<h2>使用</h2>
+<p>此软件包是基于<code>learnr</code>的Shiny应用构建，让学习者能与教程和任务无缝交互。您可以方便地通过
+<code>drhur()</code>
+加载此软件包并接入教程。比如，您可以通过以下命令来启动可视化教程：</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(drhur)) <span class="fu">install.packages</span>(<span class="st">&quot;drhur&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(drhur)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">drhur</span>(<span class="st">&quot;visualize&quot;</span>)</span></code></pre></div>
 </div>
-<div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<p><code>drhur</code> aims to help R learners to get in touch with the
-most common applied skills of the programming language. We encourage
-users to consult the help files for more details.</p>
-<p>The development of the package is ongoing. Please contact us with any
-questions, bug reports, and comments. Free to open <a href="https://github.com/sammo3182/drhur/issues">an issue on the
-software’s GitHub page</a> if you have any question or a feature
-request.</p>
+<div id="结论" class="section level2">
+<h2>结论</h2>
+<p><code>drhur</code> 的目标是帮助学习者掌握该编程语言的常用应用技巧。
+我们鼓励用户查阅帮助文件以获取更多详细信息。</p>
+<p>另外，此软件仍在开发中。
+如果您有任何问题、发现任何错误或者有任何评论，可以在<a href="https://github.com/sammo3182/drhur/issues">软件的 GitHub
+页面</a>上提出问题。</p>
 </div>
-<div id="affiliation" class="section level2">
-<h2>Affiliation</h2>
-<p>Yue Hu</p>
-<p>Political Science,<br />
-Tsinghua Univeristy<br />
+<div id="联系方式" class="section level2">
+<h2>联系方式</h2>
+<p>胡悦</p>
+<p>清华大学政治学系，<br />
 Email: <a href="mailto:yuehu@tsinghua.edu.cn" class="email">yuehu@tsinghua.edu.cn</a><br />
-Website: <a href="https://sammo3182@tsinghua.edu.cn" class="uri">https://sammo3182@tsinghua.edu.cn</a></p>
+网站: <a href="https://sammo3182@tsinghua.edu.cn" class="uri">https://sammo3182@tsinghua.edu.cn</a></p>
 </div>
 
 

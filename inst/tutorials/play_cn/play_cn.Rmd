@@ -12,13 +12,10 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 chooseCRANmirror(graphics = FALSE, ind = 1)
-
-knitr::opts_chunk$set(
-  echo = TRUE,
-  message = FALSE,
-  warning = FALSE,
-  out.width = "100%"
-)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      out.width="100%")
 
 if (!require(pacman)) install.packages("pacman")
 
@@ -37,6 +34,15 @@ p_load(
 
 ## 知识点
 
+- 研究问题：
+   **我们要对不平等认知对社会政治行为影响进行研究，那WVS7能给我们什么有用的相关信息呢？**
+   - 一个人的家庭经济状况会影响其受教育程度吗？
+   - 不同国家的公民对于政府信任的水平如何？
+   - 不平等认知会对人的社会政治行为产生影响吗？   
+  
+     
+       
+       
 - 基础概念
 - 数据输入
 - 数据种类
@@ -63,7 +69,16 @@ p_load(
 
 ```{r polymorphism, exercise=TRUE}
 summary(wvs7)
-summary(wvs7$year)
+summary(wvs7$age)
+```
+
+### 现学现练
+
+R的Polymorphism让我们能够用通用方法或函数来处理那些尚未定义的对象类型，除`summary()`外，`plot()`是另外一个Polymorphism的例子。请使用`plot()`对两种不同的对象进行处理，看看结果如何。
+
+```{r polymorphism_exercise, exercise=TRUE}
+plot(wvs7$age)
+plot(wvs7$age, wvs7$incomeLevel)
 ```
 
 - **Inheritance**: 所谓继承就是指对于同一个父类的所有子类都自动具备了父类的特征。做个类比，如果人有双腿，那么每个人类个体都将有这个性质。
@@ -111,7 +126,6 @@ aValidObject <- 1:5
 aValidObject
 ```
 
-
 ### `->`, `=`, `<<-`
 
 R中赋值的四种符号：
@@ -143,6 +157,7 @@ a <- 12
 
 - `=`: 不想创建对象
 
+
 ```{r sideEffect, exercise = TRUE}
 median(y <- 1:10); y
 median(x = 1:10); x
@@ -165,7 +180,7 @@ new_counter <- function() {
 ### 命名规则
 
 1. 不以数字开头 (错误: `1stday`)
-1. 除了 `.` 和 `-`以外没有其他特殊符号(错误: `M&M`)
+1. 除了 `.` 和 `_`以外没有其他特殊符号(错误: `M&M`)
 1. 区分大小写 (`X != x`) `!表示“非”/“否”，`!=`表示“不等于”
 1. 如需必要请勿重写内置命令 (避免: `list <- c(1:5)`)
 1. 表意命名
@@ -177,13 +192,24 @@ new_counter <- function() {
 
 # 创建一个不合规的对象
 
-# 5var_name <- data_frame(wvs7$education)
+# 5var_name <- data_frame($education)
 
 
 # 一个合规对象
 
 var_name5 <- data_frame(wvs7$education)
 
+```
+
+### 现学现练
+
+```{r vname, echo=FALSE}
+question("请选择所有合规的变量名？",
+  answer("my_data_frame <- data_frame(wvs7$education)", correct = TRUE),
+  answer("mydata&frame <- data_frame(wvs7$education)"),
+  answer("MyDataFrame <- data_frame(wvs7$education)", correct = TRUE),
+  answer("1data_frame <- data_frame(wvs7$education)"),
+  incorrect = "Incorrect")
 ```
 
 
@@ -193,6 +219,22 @@ var_name5 <- data_frame(wvs7$education)
 
 ```{r mtcars, exercise = TRUE}
 data()
+```
+
+### 现学现练
+
+在`data`里选择一个数据打开并通过summary检查其中的变量：
+
+```{r mtcars_exercise, exercise=TRUE}
+
+
+```
+
+```{r mtcars_exercise-solution}
+# 举例
+
+data(uspop)
+summary(uspop)
 ```
 
 ### 可直读数据
@@ -257,7 +299,7 @@ df_anything <- import(<AnyTypeOfData>)
 1. 向量 (vector) &#x237b;
 2. 矩阵 (matrix) &#x2713;
 3. 数据框 (data frame)
-4. 列表 (list)
+4. 列 (list)
 5. 阵列 (array)
 
 
@@ -265,7 +307,6 @@ df_anything <- import(<AnyTypeOfData>)
 
 执行组合功能的命令`c()`可用来创建向量
 
-### 
 
 - 数字向量（numeric vector）
 
@@ -274,8 +315,23 @@ vec_integer <- c(1, -2, NA)
 vec_double <- c(1.5, -2.34, 1/3)
 ```
 
-注意: 1. `NA`表示的是: not available
+注意: 1. `NA`表示的是: not available  
       2. 单个向量中的数据必须拥有相同的类型（数值型、字符型或逻辑型）
+
+### 现学现练
+
+生成一个包含1-100中全部偶数的向量：
+
+```{r numeric_exercise, exercise=TRUE}
+# hint: help(seq)
+
+```
+
+
+```{r numeric_exercise-solution}
+x <- seq(2,100,by=2)
+
+```
 
 ###
 
@@ -284,6 +340,20 @@ vec_double <- c(1.5, -2.34, 1/3)
 ```{r character, exercise = TRUE}
 vec_chr <- c("牛", "^_^", "R is hard，but I can nail it.")
 ```
+
+### 现学现练
+
+生成一个a-z的字母序列：
+
+```{r character_exercise, exercise=TRUE}
+vec_letters <- c("a", "b", "c", "d", "e")
+```
+
+```{r character_exercise-solution}
+letters[1:26]
+
+```
+
 
 ###
 
@@ -295,6 +365,18 @@ vec_tf
 # c(TRUE, TRUE, FALSE) == c(1, 1, 0)
 ```
 
+### 现学现练
+
+假设x为包含(1,1,0)的向量，将它转化为逻辑向量：
+
+```{r logic_exercise, exercise=TRUE}
+
+```
+
+```{r logic_exercise-solution}
+x <- c(1, 1, 0)
+x <- as.logical(x)
+```
 
 ###
 
@@ -312,12 +394,79 @@ vec_fac2 <- factor(c(1, 2, 2, 3),
                    labels = c("Apple", "Pear", "Orange"))
 ```
 
+### 现学现练
+
+在拿到一个数据集后，先要对数据有个大致的了解。
+
+先查看wvs7数据里的变量分别是什么类型：
+
+```{r factor_exercise1, exercise=TRUE}
+
+
+
+```
+
+```{r factor_exercise1-solution}
+
+str(wvs7)
+
+```
+
+
+
+查看数据集里incomeLevel这个变量的性质：
+  
+
+```{r factor_exercise2, exercise=TRUE}
+
+
+
+```
+
+```{r factor_exercise2-solution}
+
+class(wvs7$incomeLevel)
+
+```
+
+
+
+查看incomeLevel的取值和每个取值的频次情况：
+  
+
+```{r factor_exercise3, exercise=TRUE}
+
+
+
+```
+
+```{r factor_exercise3-solution}
+
+table(wvs7$incomeLevel)
+
+```
+
 
 ###
 
-- 时间向量（POSIXct/POSXlt vector）
+- 时间向量（POSIXct/POSIXlt vector）
     - `as.POSIXct` (numeric input), 整数存储
-    - `as.POSIXlt` (character input), 列表存储
+    - `as.POSIXlt` (character input), 列存储
+    - POSIXct用某个时间到UNIX元年（1970-01-01 00:00:00）所经过的秒数来记录时间，即通过计数的方式表示时间（count time）；而POSIXlt用列表方式表示时间（list time），时间的每一部分都是列表的一个元素。
+
+```{r time_POSIXct_POSIXlt}
+#`as.POSIXct`与`as.POSIXlt`的区别
+ct <- as.POSIXct("2023-03-20 10:11:12")
+lt <- as.POSIXlt("2023-03-20 10:11:12")
+
+
+
+```
+
+```{r time_POSIXctandPOSIXlt}
+unlist(ct)
+unlist(lt)
+```
 
 ```{r time, exercise = TRUE}
 Sys.time() # 获取当前时间
@@ -356,10 +505,27 @@ ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
 OlsonNames()
 ```
 
+### 现学现练
+
+当面对顺序不一样的向量时，如:
+```
+x=c("20190101",'01012019','021901')
+```
+应该怎么识别时间呢？
+
+```{r date_exercise, exercise=TRUE}
+#help(parse_date_time)
+
+```
+
+```{r date_exercise-solution}
+parse_date_time(x,orders = c("ymd","dmy","dym"))
+```
+
 
 ### 矩阵
 
-矩阵（matrix）见`drhur(algebra)`。
+矩阵（matrix）见`drhur("algebra")`。
 
 ### 阵列
 
@@ -375,9 +541,9 @@ result <- array(c(vector1, vector2), dim = c(3, 3, 2))
 result
 ```
 
-### 列表
+### 列
 
-列表（list）: 可包含多种不同类型对象的“串”。
+列（list）: 可包含多种不同类型对象的“串”。
 
 ```{r list}
 ls_monks <- list(name = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
@@ -389,7 +555,7 @@ ls_monks
 
 ### 数据框
 
-数据框（Data Frame）：一种特殊的列表/矩阵
+数据框（Data Frame）：一种特殊的列/矩阵
 
 - 列：“变量”，所有列长度都相等
 - 行：“观测量”
@@ -414,7 +580,30 @@ df_toy
 
 ## 数据属性
 
+1. `class`, `typeof`:查询变量属性
+1. `nchars`:获取字符串的长度
+1. `levels`:获取或设置因子的级别
+1. `nrow`:返回指定矩阵的行数
+1. `ncol`:用于返回指定矩阵的列数
+1. `dim`:列向量张成的子空间，即维度
+
 ```{r attribute, exercise = TRUE}
+vec_integer <- c(1, -2, NA)
+
+vec_double <- c(1.5, -2.34, 1/3)
+
+vec_chr <- c("牛", "^_^", "R is hard，but I can nail it.")
+
+vec_fac <- factor(c(1, 2, 2, 3))
+
+ls_monks <- list(name = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
+                 power = c(100, 20, 90, 40),
+                 buddha = c(TRUE, TRUE, FALSE, FALSE))
+
+df_toy <- data.frame(female = c(0,1,1,0),
+           age = c(29, 39, 38, 12),
+           name = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America"))
+
 class(vec_double)
 typeof(vec_integer)
 
@@ -430,6 +619,40 @@ ncol(df_toy)
 dim(df_toy)
 ```
 
+
+### 现学现练
+
+将下面的向量转化为numeric类型:  
+```
+c(FALSE, TRUE)
+```
+
+```{r attribute_exercise1, exercise=TRUE}
+# help(as.numeric)
+
+```
+
+
+```{r attribute_exercise1-solution}
+as.numeric(c(FALSE, TRUE))
+
+```
+
+
+wvs7里的性别变量“female"的数值是“TRUE”、“FALSE”  
+
+在具体分析的时候，字符型变量不便操作，可以把它转换为数值型的0 1变量。
+
+```{r attribute_exercise2, exercise=TRUE}
+
+```
+
+
+```{r attribute_exercise2-solution}
+
+as.numeric(wvs7$female) - 1
+
+```
 
 
 ## 数据输出
@@ -489,7 +712,7 @@ STATA (.dta, \<14): 3.16 G = R (.rds): 0.05 G
     - 向量
     - 矩阵
     - 阵列
-    - 列表
+    - 列
     - 数据框
 - 数据属性
 - 数据输出

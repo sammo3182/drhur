@@ -16,19 +16,21 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-Learning a programming language such as R is tough.
-`drhur` is a pedagogical software make the R learners' life a little bit easier and more happily. 
-The package includes (and is going to include more) tutorials of basic and advanced data science skills with R, such as data cleaning, analyzing, and visualization. 
-The goal of the package is to provide an interactive platform for learners to enter the R world easily and efficiently. 
+Learning a programming language such as R can be (rewardingly) challenging.
+`drhur` is a pedagogical software to make the learning process easier and more enjoyable.
+The package includes tutorials on basic data science skills with R, such as basic R syntax, data import/export, munging, and visualization.
+The goal of this package is to provide an interactive platform for learners to easily and efficiently enter the R world.
 
-The package is built upon the `learnr` function which will open a shiny app for learners to interact with the instructions and tasks. 
-The best way to learn these skills together with the "Learning R with Dr. Hu" online/offline workshops.
-One can get more information about the workshops through my website or contact me directly.
+The ideal way to acquire these skills is through the "Learning R with Dr. Hu" workshop, conducted by Associate Professor Yue Hu from the Department of Political Science at Tsinghua University. 
+The modules included in this package correspond to the content of the initial chapters of this workshop series and Dr. Hu's forthcoming textbook on the R programming language.
+The workshop series and the book aim to cover knowledge and skills about R, ranging from basic to advanced techniques, such as spatial analysis, network analysis, and text analysis.
+You can find more relevant information on the [author's website](https://sammo3182.github.io/software/drhur/) or by [contacting him](mailto:yuehu@tsinghua.edu.cn) directly.
 
 ## Usage
 
-One can easily load the package and call the tutorials through the function `drhur()`.
-For instance, one can initiate the visualization tutorial with the following commands:
+This package is constructed using the `learnr` function, which launches a Shiny app allowing learners to interact seamlessly with instructions and tasks. 
+One can conveniently load the package and access the tutorials through the `drhur()` function. 
+For example, the visualization tutorial can be initiated with the following commands:
 
 ```{r eval = FALSE}
 if (!require(drhur)) install.packages("drhur")
@@ -40,29 +42,17 @@ drhur("visualize")
 
 ## Conclusion
 
-`drhur` aims to help R learners to get in touch with the most common applied skills of the programming language. We encourage users to consult the help files for more details. 
+`drhur` aims to help R learners to get in touch with the most common applied skills of the programming language. 
+We encourage users to consult the help files for more details. 
 
-The development of the package is ongoing. Please contact us with any questions, bug reports, and comments. Free to open an issue on [GitHub](https://github.com/sammo3182/drhur/issues) if you have any question or a feature request.
+The development of the package is ongoing. 
+Please contact us with any questions, bug reports, and comments. Free to open [an issue on the software's GitHub page](https://github.com/sammo3182/drhur/issues) if you have any question or a feature request.
 
 ## Affiliation
 
 Yue Hu
 
-Department of Political Science,
-
-Tsinghua Univeristy
-
-Email: <yuehu@tsinghua.edu.cn>
-
+Political Science,    
+Tsinghua Univeristy   
+Email: <yuehu@tsinghua.edu.cn>    
 Website: <https://sammo3182@tsinghua.edu.cn>
-
-<br></br>
-
-Yuefei Sun
-
-Department of Political Science,
-
-Tsinghua University
-
-Email: <sunyf20@mails.tsinghua.edu.cn>
-

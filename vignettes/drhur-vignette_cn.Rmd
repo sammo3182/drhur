@@ -1,0 +1,55 @@
+---
+title: "drhur: 与胡博士一起学R"
+author: "Yue Hu and Yufei Sun"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{drhur: 与胡博士一起学R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+## 概述
+
+对很多朋友来说，学习编程语言（比如R）都将会是（伴随满足感的）挑战。
+`drhur` 正是一款旨在使这一学习过程更加轻松愉快而研发的教学软件。
+目前版本的软件内含有关于使用R进行基本数据科学技能的教程，如基础R运算、数据的导入/导出、清洗和可视化。
+此软件的目标是为学习者提供一个交互式平台，让他们能够轻松且高效地融入到 R 的世界。
+
+使用本软件的最佳方式是配合由清华大学政治学系副教授胡悦博士开设的 "Learning R with Dr. Hu"工作坊共同使用。
+软件中的模块实际上就是这个工作坊系列部分初期课程，也将被包含至胡博士即将出版的R语言教材。
+工作坊和即将出版的教材覆盖了有关R从基础到高级的技术（如空间分析、网络分析以及文本分析）的大量知识和技能。
+您可以在[作者的网站](https://sammo3182.github.io/software/drhur/)上或通过[直接联系他](mailto:yuehu@tsinghua.edu.cn)获取更多相关信息。
+
+## 使用
+
+此软件包是基于`learnr`的Shiny应用构建，让学习者能与教程和任务无缝交互。您可以方便地通过 `drhur()` 加载此软件包并接入教程。比如，您可以通过以下命令来启动可视化教程：
+
+```{r eval = FALSE}
+if (!require(drhur)) install.packages("drhur")
+library(drhur)
+
+drhur("visualize")
+```
+
+## 结论
+
+`drhur` 的目标是帮助学习者掌握该编程语言的常用应用技巧。
+我们鼓励用户查阅帮助文件以获取更多详细信息。
+
+另外，此软件仍在开发中。
+如果您有任何问题、发现任何错误或者有任何评论，可以在[软件的 GitHub 页面](https://github.com/sammo3182/drhur/issues)上提出问题。
+
+## 联系方式
+
+胡悦
+
+清华大学政治学系，    
+Email: <yuehu@tsinghua.edu.cn>    
+网站: <https://sammo3182@tsinghua.edu.cn>
+

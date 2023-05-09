@@ -7,9 +7,11 @@
 #'
 #' @details The list of workshop available for the current version:
 #' \itemize{
-#' \item \code{play}: Basic data structure in R; inputting, outputting, and creating data (in Chinese).
-#' \item \code{wrangle}: Generalizing (such as sorting and summarizing) and extracting (selecting or adjusting certain columns or rows) data frames (in Chinese).
-#' \item \code{visualize}: Basic visualization skills (in Chinese).
+#' \item \code{calculate}: Doing basic maths with R syntax.
+#' \item \code{play}: Basic data structure in R; inputting, outputting, and creating data.
+#' \item \code{wrangle}: Generalizing (such as sorting and summarizing) and extracting (selecting or adjusting certain columns or rows) data frames.
+#' \item \code{describe}: Skills to describe variable and data.
+#' \item \code{visualize}: Describing variables, exploring patterns, and presenting estimates with visualization tools.
 #' }
 #'
 #' @import learnr

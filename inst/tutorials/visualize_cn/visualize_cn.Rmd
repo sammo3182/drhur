@@ -10,6 +10,9 @@ output:
 runtime: shiny_prerendered
 ---
 
+<!-- 宇飞，请检查编码是否可以运行 -->
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
@@ -17,12 +20,18 @@ knitr::opts_chunk$set(echo = TRUE,
                       out.width="100%")
 
 if (!require(pacman)) install.packages("pacman")
+if(!require(ggradar)) devtools::install_github("ricardo-bion/ggradar", dependencies = TRUE)
 
 p_load(
   scales,
   tidyverse,
-  drhur
+  drhur,
+  ggside
 )
+
+wvs7_narm <-
+  filter(wvs7,
+         if_all(c(incomeLevel, education, religious), ~ !is.na(.)))
 
 set.seed(114)
 ```
@@ -30,6 +39,15 @@ set.seed(114)
 # 数据可视化
 
 ## 知识点
+- 研究问题：
+ **经济不平等会带来怎样的社会政治影响呢？** 
+    -  经济不平等会影响受教育水平吗？
+        - 家庭的经济状况是如何影响平均受教育水平的呢？
+        - 家庭是否信仰宗教是否会使家庭的经济状况对平均教育水平的影响发生改变吗？
+    -  经济不平等会影响政治信任吗？
+       - 家庭收入水平怎么影响个体对国家机制（政府、法庭、议会、军队、媒体）的信任呢？
+
+    
 
 - Build-in可视化
 - `lattice`
@@ -64,7 +82,7 @@ Build-in 可视化引擎是R自带的可视化方式，不用调用任何软件�
 **优点**
 
 * 不用安装
-* 反映迅速
+* 反应迅速
 * 很多3D和空间视图的基础
 
 **缺点**
@@ -123,9 +141,9 @@ xyplot(
   education ~ incomeLevel,
   group = female,
   type = c("p", "g", "smooth"),
-  main = "Equality or Individual Effort across Ages",
-  xlab = "Age",
-  ylab = "Preferring Individual Effort",
+  main = "Family Income on Education",
+  xlab = "Income",
+  ylab = "Education",
   data = wvs7,
   auto.key = TRUE
 )
@@ -134,14 +152,34 @@ xyplot(
   education ~ incomeLevel | religious,
   group = female,
   type = c("p", "g", "smooth"),
-  main = "Equality or Individual Effort across Ages",
-  xlab = "Age",
-  ylab = "Preferring Individual Effort",
+  main = "Family Income on Education",
+  xlab = "Income",
+  ylab = "Education",
   data = wvs7,
   auto.key = TRUE
 )
 
 cloud(education ~ incomeLevel * religious, data = wvs7)
+```
+
+### 现学现练
+请以国家为分组，画出教育程度与收入的散点图。
+```{r scatterLattice_exercise, exercise=TRUE}
+
+```
+
+```{r scatterLattice_exercise-solution}
+xyplot(
+  education ~ incomeLevel | country,
+  layout=c(5,3),
+  type = c("p", "g"),
+  main = "Family In come on Education",
+  xlab = "Income",
+  ylab = "Education",
+  data = wvs7,
+  auto.key = TRUE
+)
+
 ```
 
 
@@ -369,6 +407,13 @@ ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious))
 ```
 
 ```{r barSteps-solution}
+wvs7_agg <- group_by(wvs7_narm, incomeLevel, religious) %>% 
+  summarise(mean_ed = mean(education), 
+            sd_ed = sd(education),
+            se_ed = sd_ed / sqrt(n()),
+            lb_ed = mean_ed - stats::qnorm(1 - (1 - 0.95) / 2) * se_ed,
+            ub_ed = mean_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)
+
 ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious)) +
   geom_bar(stat = "identity",
            color = "black",
@@ -446,6 +491,33 @@ wvs7_agg2 %>%
 
 
 ```{r radarSteps-solution}
+income_qnt <- quantile(wvs7$incomeLevel, seq(0, 1, .25), na.rm = TRUE)
+
+wvs7_agg2 <- filter(wvs7, !is.na(incomeLevel)) %>%
+  mutate(group = cut(incomeLevel, income_qnt, include.lowest = TRUE) %>% ordered(label = c(
+    "Low", "Medium-Low", "Medium-High", "High"
+  ))) %>%
+  group_by(group) %>%
+  summarise(across(
+    c(
+      confidence_armedForce,
+      confidence_gov,
+      confidence_court,
+      confidence_parliament,
+      confidence_tv
+    ),
+    mean,
+    na.rm = TRUE
+  )) %>%
+  mutate(across(-group, rescale)) %>%
+  rename(
+    Military = confidence_armedForce,
+    Government = confidence_gov,
+    Court = confidence_court,
+    Parliament = confidence_parliament,
+    TV = confidence_tv
+  )
+
 wvs7_agg2 %>% 
   ggradar(
     axis.label.size = 2,
@@ -460,6 +532,36 @@ wvs7_agg2 %>%
   theme(legend.position = "bottom") +
   facet_wrap(~ group, ncol = 4)
   
+```
+
+### 案例4
+
+ 
+如果交叉分类得到许多个交叉组， 每组有一个数量需要展示， 用堆叠或者并排条形图可能过于复杂， 结果很难判读。
+
+可以用x轴和y轴分别表示两种分类， 在坐标交叉处用色块颜色代表数量， 称为热力图。
+
+比如，现在想看一下不同教育程度、收入程度的人对政府信任的平均水平
+
+```{r heatmap, exercise = TRUE}
+wvs7 %>%
+  select(education, incomeLevel, confidence_gov) %>%
+  group_by(education,incomeLevel) %>%
+  summarise(confidence_gov = median(confidence_gov, na.rm=TRUE)) %>%
+  ungroup() -> wvs7_confidence
+```
+
+```{r  heatmap-solution}
+wvs7 %>%
+  select(education, incomeLevel, confidence_gov) %>%
+  group_by(education,incomeLevel) %>%
+  summarise(confidence_gov = median(confidence_gov, na.rm=TRUE)) %>%
+  ungroup() -> wvs7_confidence
+
+p <- ggplot(data = wvs7_confidence, mapping = aes(
+  x = education, y = incomeLevel, fill = confidence_gov))
+p + geom_tile() +
+  scale_fill_viridis_c()
 ```
 
 
