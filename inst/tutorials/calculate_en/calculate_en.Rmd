@@ -1,0 +1,479 @@
+---
+title: "Basic Grammar: Linear Algebra"
+subtitle: "Learning R with Dr. Hu and His Friends"
+author: "胡悦（清华大学政治学系）"
+output: 
+  learnr::tutorial:
+    language: "zh"
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      out.width="100%")
+
+d <- seq(from = 1, to = 5, by = 0.5)
+```
+
+## Key Points
+
+- Basic Logic of R Language
+- Simple Algebra
+- Linear Algebra
+
+
+## Elementary Algebra
+
+### Four Basic Operations
+
+```{r algebra-basic}
+1 + 2; 1.5 + 2.4
+3 - 4; -6 - 7
+5 * 6; 23 * 14
+7 / 8; -9 / 0.2
+```
+
+`;` in R is used to connect two independent command lines.
+
+Based on the above command, please solve the following question:
+
+$$\frac{\frac{365}{12}}{\frac{28 + 24}{10} - (36 + 72) \times 5}$$
+
+```{r algebra, exercise = TRUE}
+
+```
+
+```{r algebra-solution}
+(365 / 12) / ((28 + 24)/10 - (36 + 72) * 5)
+```
+
+### Complex Algebra
+
+```{r complex-math}
+sqrt(9)
+10^2
+5%%3 #remainder
+log(11)
+log10(100)
+exp(12)
+```
+
+###
+
+even trigonometric functions:
+
+```{r triangle}
+sin(pi)
+cos(pi)
+tan(pi/2)
+
+acos(1)
+asin(1)
+atan(0.5)
+```
+
+### Scientific Notation
+
+```{r scientific-notation}
+tan(pi/2)
+```
+
+
+A number is written as a real number a multiplied by 10 to the power of n.
+Here, E (exponential) is used to represent the power of 10.
+Here are some examples:
+
+$$200 = 2e + 2, $$
+$$0.002 = 2e-3,$$
+$$333.3 = 3.333e + 2,$$
+$$-45,000 = -4.5e + 4.$$
+
+What does 2.8e + 10 represent?
+
+```{r sn, exercise = TRUE}
+
+```
+
+```{r sn-solution}
+format(2.8e+10, scientific = FALSE, big.mark = ',')
+```
+
+
+### Boolean Algebra
+
+- The foundation is logical judgment: use `TRUE`to represent true, `FALSE`to represent false, and you can also use `T`and `F` as abbreviations.
+- Common operators:
+    - Not(`!`), equal to (`==`), not equal to (`!=`), greater than (`>`), less than (`<`), and (`&`), or (`|`)
+    - Of course, composite operators such as greater than or equal to (`>=`) and less than or equal to (`<=`) can also be derived.
+
+Here are some examples:
+
+```{r boolean}
+1 == 2
+1 != 2
+1 > 2
+1 < 2
+1 >= 2
+1 <= 2
+1 & 2 > 2
+1 | 2 > 2
+```
+
+What is the result of the following formula?
+
+```{r judge, exercise = TRUE}
+3 > 2 > 1
+```
+
+```{r judge-solution}
+(3 > 2) & (2 > 1)
+```
+
+
+> Many students who are new to programming languages may feel uncomfortable using double equal signs (`==`) to represent "equals". However, from a conceptual perspective, it can be viewed as a member of `==, !=, >=, <=`.
+
+
+## Vectors
+
+In R, vectors are also the most basic way of representing data.
+
+- In mathematics, a vector is a sequence of numbers with direction, or a sequence of numbers used to record a directional action.
+    - If the direction is removed, it becomes a scalar.
+- In terms of data, creating a vector is equivalent to creating a variable.
+
+> In this sense, variables can be viewed as "conceptually meaningful vectors".
+
+### Vector Representation
+
+
+- Mathematics: ${\displaystyle {\vec {a}}=(11, 12, 13, 14, 15)}$
+    - $\vec {a}_2 = 2; \vec {a}_5 = 5$
+- R：`a <- c(11, 12, 13, 14, 15)`
+    - `c`: Concatenate/combine
+
+```{r vector}
+a <- c(11, 12, 13, 14, 15)
+
+a[2]
+a[5]
+```
+
+- `<-`: assign
+- `:`: `a <- 1:5`
+- `TRUE`means keep something, `FALSE`means don't keep something
+
+###
+
+```{r colon}
+b <- 10 * 1:5
+b
+```
+
+###
+
+```{r colon2, excercise = TRUE}
+# How about the result?
+c(1.5:3)
+```
+
+
+
+How to express  $\vec {b}=(1, 3, 4, 5, 6, 7, 9)$?
+
+```{r vecColon, exercise = TRUE}
+
+```
+
+```{r vecColon-solution}
+b <- c(1, 3:7, 9)
+```
+
+
+###
+
+- `seq()`
+    - `seq`
+    - `()`
+    
+Repeat the above example:
+
+```{r sequence}
+a <- seq(from = 1, to = 5)
+a
+```
+
+###
+
+The convenience of `seq()` is that the step size can be defined:
+
+```{r increment, exercise = TRUE}
+c <- seq(from = 1, to = 5, by = 3)
+c
+
+#d <- seq(from = 1, to = 5, by = 0.5)
+#d
+```
+
+###
+
+Another function of `seq()` is to reflect the position of the element.
+
+For example: how to select the even number item of `d`
+
+```{r index, exercise = TRUE}
+
+```
+
+> **Hint:**
+Determine the index
+&rarr; Find out whether each bit in the index is an even number (whether it can be divisible by 2), it is marked with `TRUE`
+&rarr; On the basis of the second step, according to the rule of "`TRUE`, `FALSE` is not reserved", the elements with even numbers in the vector are reserved as a new vector.
+
+```{r index-solution}
+d[seq(d) %% 2 == 0]
+```
+
+
+### Four arithmetic operations of vector
+
+- Addition and subtraction: $$\vec{a} \pm \vec{b} = (a_1 \pm b_1, a_2 \pm b_2, ..., a_n \pm b_n).$$
+- Multiplication is slightly more complicated and has different types.
+    - Dot multiplication: There are two ways of expression
+        1. Algebraic expression: $\vec{a}\cdot \vec{b} = \sum a_ib_i$。
+            - This includes a special case, scalar &times; vector: $c\vec{x} = (cx_1, cx_2,..., cx_n).$
+        1. Geometric expression: $\vec{a}\cdot \vec{b} = ||\vec{a}||||\vec{b}||cos\theta$，Where $||\vec{a}||$ is the Euclidean norm of a vector ($\sqrt{a^{2}_1 + \ldots + a^{2}_n}$), &theta;is the angle between two vectors.
+        - Dot product: connect two vectors with`*`in R to output the dot product result.
+    - Cross product: a method of multiplying two variables on a common unit vector.
+        - Connect two vectors using `%o%` or use the `outer()` command to calculate.
+
+
+```{r vec-cal}
+a + b
+a - b
+a * b
+a / b
+```
+
+###
+
+> When the vectors used for calculation are of unequal length, the elements of the shorter vector will be cycled through in sequence, as shown in the following example:
+
+```{r cycle}
+a
+e <- c(1, 2)
+
+a * e
+```
+
+
+###
+
+Cross-product in R can actually be used for more than just manipulating data.
+
+For example, this functionality can be used to calculate the combination of the ten Heavenly Stems and twelve Earthly Branches in Chinese astrology using R.
+
+
+```{r tiandi, exercise = TRUE}
+tiangan <- c("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸")
+dizhi <- c("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
+```
+
+> **Note:** 
+> As you all know, there are ten Heavenly Stems and twelve Earthly Branches in Chinese astrology. 
+There are a total of 120 combinations, but our ancestors selected 60 of them to form the basis of the Chinese zodiac. 
+The selection method is to pair odd numbers with odd numbers and even numbers with even numbers.
+
+
+```{r tiandi-solution}
+tg_yang <- tiangan[seq(tiangan) %% 2 == 1]
+tg_yin <- tiangan[seq(tiangan) %% 2 == 0]
+
+dz_yang <- dizhi[seq(dizhi) %% 2 == 1]
+dz_yin <- dizhi[seq(dizhi) %% 2 == 0]
+
+outer(tg_yang, dz_yang, FUN = paste0)
+outer(tg_yin, dz_yin, FUN = paste0)
+```
+
+### Properties of Vectors
+
+```{r vec-property}
+a
+
+#length
+length(a)
+
+#best value
+max(a)
+min(a)
+
+#average value
+mean(a)
+
+#median
+median(a)
+
+#variance
+var(a)
+```
+
+> These commands can be used commonly in subsequent data-based variable operations.
+
+
+
+
+
+## Matrix
+
+- math:
+
+$$
+A_{2\times2} = \left(\begin{array}{cc} 
+                  1 & 3\\
+                  2 & 4
+                  \end{array}\right)
+$$
+
+- R：
+
+```{r matrixA}
+A <- matrix(1:4, nrow = 2)
+A
+```
+
+###
+
+- Mathematics: In the matrix $A_{2\times2}$, its elements are usually marked in the form of row&times;column, for example, $A_{12}$ represents the element of matrix *1*row and *2*column , which is $3$.
+-R:
+
+```{r element}
+A[1, 2]
+A[1, ]
+A[ , 2]
+```
+
+### Single Matrix Operations
+
+```{r matrixB}
+B <- matrix(1:6, nrow = 3)
+B
+
+dim(B)
+t(B)
+t(t(B))
+```
+
+
+> `t(t(B))` is a nested approach.
+
+### Matrix Operations
+
+- Addition (Subtraction): It can only be performed between matrices of the same shape (same number of rows and columns), where $A \pm B = a_{ij} \pm b_{ij}$.
+- Multiplication: Scalar product, general product, Hadamard product, Kronecker product, etc. Here, we will only introduce the scalar product and general product, which are more relevant to later data processing.
+    - Scalar Product: ${\displaystyle (rA)_{ij}=r\cdot a_{ij}\ }$, same as algebraic multiplication.
+    - General Product: It is defined only when the number of columns in the first matrix is equal to the number of rows in the second matrix. The operation involves taking the algebraic product of corresponding elements from the respective columns and rows, as shown in the diagram below,
+    ![](images/math_matrixTimes.gif)。
+    
+> In R, you can perform this operation by using `%*%` to concatenate two vectors that meet the defined properties.
+        
+```{r matrix_times}
+B
+C <- matrix(7:12, nrow = 3)
+
+B + C
+B - C
+
+10 * B
+
+D <- matrix(1:6, nrow = 2)
+D
+
+dim(B)
+dim(D)
+
+B %*% D
+```
+
+## System of Equations
+
+Use R to solve a system of three linear equations:
+
+$$
+\begin{equation}
+\begin{cases}
+x + y + z = 6, \\
+3x + 2y + 4z = 9, \\
+2x + 2y - 6z = 4.
+\end{cases}
+\end{equation}
+$$
+
+- Matrix **E** represents the coefficients of the equations.
+- $b$ is the right-hand side of the equations.
+- $x$ is the solution to the equations.
+
+
+$$
+\begin{align}
+\vec{b} =& \vec{E}\vec{x},\\
+\begin{bmatrix}
+6 \\
+9 \\
+4
+\end{bmatrix} 
+=& 
+\begin{bmatrix}
+1 & 1 & 1 \\
+3 & 2 & 4 \\
+2 & 2 & -6
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+\end{align}.
+$$
+
+
+```{r equations}
+E <- matrix(c(1, 3, 2, 1, 2, 2, 1, 4, -6), nrow = 3)
+E
+
+b <- c(6, 9, 4)
+
+x <- solve(E, b)
+x
+```
+
+###
+
+One direct application of solving systems of equations is to solve regression equations.
+
+Regression equations can typically be expressed in terms of linear algebra.
+
+For example, a basic regression equation can be written in the following form, which is very similar to the system of equations we solved above:
+
+$$
+\begin{align}
+y& =& &\beta_0 + \beta_1x_1 + \beta_2x_2 + ... + \beta_nx_n + \epsilon\\
+\vec{y}& =& &\vec{x}\vec{\beta} + \vec{\epsilon}.\\
+\uparrow& & &\uparrow\uparrow\\
+\vec{b}& =& &\vec{E}\vec{x}
+\end{align}
+$$
+
+
+## Summary
+
+- Basic Algebra
+    - Scientific Notation
+    - Boolean Algebra: `!`、`==`、`!=`、`>`、`<`、`&`、`|`、`>=`、`<=`
+- Linear Algebra
+    - Vectors: `<-`
+    - Matrices: `%*%`
+    - Systems of Equations
+    
