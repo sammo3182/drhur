@@ -19,7 +19,8 @@
 #' @export
 
 drhur <-
-  function(workshop, language = "cn") {
-    if(language == "cn") workshop <- paste0(workshop, "_cn")
+  function(workshop, lang = "cn") {
+    workshop <-
+      ifelse(lang == "cn", paste0(workshop, "_cn"), paste0(workshop, "_en"))
     learnr::run_tutorial(workshop, package = "drhur")
   }

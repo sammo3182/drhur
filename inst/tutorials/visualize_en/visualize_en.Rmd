@@ -10,9 +10,6 @@ output:
 runtime: shiny_prerendered
 ---
 
-<!-- 宇飞，请检查编码是否可以运行 -->
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
@@ -20,13 +17,12 @@ knitr::opts_chunk$set(echo = TRUE,
                       out.width="100%")
 
 if (!require(pacman)) install.packages("pacman")
-if(!require(ggradar)) devtools::install_github("ricardo-bion/ggradar", dependencies = TRUE)
+if (!require(ggradar)) devtools::install_github("ricardo-bion/ggradar", dependencies = TRUE)
 
 p_load(
   scales,
   tidyverse,
-  drhur,
-  ggside
+  drhur
 )
 
 wvs7_narm <-
@@ -227,44 +223,22 @@ ggplot(data = <data>) +
 
 ```{r eg, echo=FALSE}
 # E.g. 1 ####
-library(dplyr)
 wvs7_narm <-
   filter(wvs7,
          if_all(c(incomeLevel, education, religious), ~ !is.na(.)))
 
-
-library(ggside)
 ggplot(data = wvs7_narm,
        aes(x = incomeLevel, y = education, color = religious)) +
-    geom_point(size = 2, alpha = 0.3) +
-    geom_smooth(aes(color = NULL), se=TRUE) +
-    geom_xsidedensity(
-        aes(
-            y    = after_stat(density),
-            fill = religious
-        ),
-        alpha    = 0.5,
-        size     = 1
-        ,
-        position = "stack"
-    ) +
-    geom_ysidedensity(
-        aes(
-            x    = after_stat(density),
-            fill = religious
-        ),
-        alpha    = 0.5,
-        size     = 1
-        ,
-        position = "stack"
-    ) +
-    labs(title = "Economy on Education" ,
-         subtitle = "Scatter plot + density distribution",
-         x = "Family Income", y = "Education") +
+  geom_point(size = 2, alpha = 0.3) +
+  geom_smooth(aes(color = NULL), se = TRUE)
+labs(
+  title = "Economy on Education" ,
+  subtitle = "Scatter plot + density distribution",
+  x = "Family Income",
+  y = "Education"
+) +
   theme_minimal() +
-    theme(
-        ggside.panel.scale = 0.4
-    )
+  theme(ggside.panel.scale = 0.4)
 
 # E.g. 2 ####
 wvs7_agg <- group_by(wvs7_narm, incomeLevel, religious) %>% 
@@ -325,8 +299,6 @@ wvs7_agg2 <- filter(wvs7, !is.na(incomeLevel)) %>%
     TV = confidence_tv
   )
 
-library(ggradar)
-
 wvs7_agg2 %>% 
   ggradar(
     axis.label.size = 2,
@@ -347,7 +319,7 @@ wvs7_agg2 %>%
 
 Scatter plot: The impact of economic and cultural factors on individuals' education level
 
-> Key Points: ggplotting is similar to commonly used Photoshop editing, where you first create a basic image and then add filter effects layer by layer.
+> Hint: ggplotting is similar to commonly used Photoshop editing, where you first create a basic image and then add filter effects layer by layer.
 
 ```{r scatterSteps, exercise = TRUE}
 wvs7_narm <-
@@ -361,44 +333,25 @@ ggplot(data = wvs7_narm,
 ```{r scatterSteps-solution}
 ggplot(data = wvs7_narm,
        aes(x = incomeLevel, y = education, color = religious)) +
-    geom_point(size = 2, alpha = 0.3) +
-    geom_smooth(aes(color = NULL), se=TRUE) +
-    geom_xsidedensity(
-        aes(
-            y    = after_stat(density),
-            fill = religious
-        ),
-        alpha    = 0.5,
-        size     = 1
-        ,
-        position = "stack"
-    ) +
-    geom_ysidedensity(
-        aes(
-            x    = after_stat(density),
-            fill = religious
-        ),
-        alpha    = 0.5,
-        size     = 1
-        ,
-        position = "stack"
-    ) +
-    labs(title = "Economy on Education" ,
-         subtitle = "Scatter plot + density distribution",
-         x = "Family Income", y = "Education") +
+  geom_point(size = 2, alpha = 0.3) +
+  geom_smooth(aes(color = NULL), se = TRUE)
+labs(
+  title = "Economy on Education" ,
+  subtitle = "Scatter plot + density distribution",
+  x = "Family Income",
+  y = "Education"
+) +
   theme_minimal() +
-    theme(
-        ggside.panel.scale = 0.4
-    )
+  theme(ggside.panel.scale = 0.4)
 ```
 
 
 
 ### Case 2
 
-Histogram: The differential impact of the economy on average education levels across cultural factors.
+Bar plot: The differential impact of the economy on average education levels across cultural factors.
 
-> Key Points: Each type of graphical attribute has a default scale, which can be used not only to change the ratio but also to change the color in plotting.
+> Hint: Each type of graphical attribute has a default scale, which can be used not only to change the ratio but also to change the color in plotting.
 
 ```{r barSteps, exercise = TRUE}
 wvs7_agg <- group_by(wvs7_narm, incomeLevel, religious) %>% 
