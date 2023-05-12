@@ -72,7 +72,7 @@ data("wvs7")
 
 我们下面基于散点图进行演示。
 我们关注的实际问题是：不同年龄层的人群对收入分配的看法是否有所不同。
-对于收入看法，我们采用`wvs7`中的`equalIncentive`来测量。
+对于收入分配的看法，我们采用`wvs7`中的`equalIncentive`来测量。
 
 ## Build-In可视化
 
@@ -123,6 +123,15 @@ png("scatterBasic.png")
 plot(wvs7$incomeLevel, wvs7$education)
 dev.off()
 ```
+
+* `ggsave(<plot project>, "<name + type>")`:
+    + 当省略`<plot project>`时，R将保存最后显示的图。
+    + 用户还可以使用其他参数来调整大小，路径，比例等。
+
+```{r save, eval = FALSE}
+ggsave("cfr.png")
+```
+
 
 ## `lattice`可视化
 
@@ -540,17 +549,6 @@ p + geom_tile() +
     + `coord`: 一个描述数据坐标如何映射到图形平面的坐标系统
 + `stats`: 统计转换
 
-
-
-### 保存输出
-
-* `ggsave(<plot project>, "<name + type>")`:
-    + 当省略`<plot project>`时，R将保存最后显示的图。
-    + 用户还可以使用其他参数来调整大小，路径，比例等。
-
-```{r save, eval = FALSE}
-ggsave("cfr.png")
-```
 
 
 ## 最后的嘱咐

@@ -116,15 +116,15 @@ if (window.hljs) {
 <li>Research Question:
 <ul>
 <li>There are several survey data covering different regions, including:
-Afrobarometer, Asian Barometer and Latino Barómetro. You want to create
-a global political barometer survey data, how should these data sets be
-combined? (hint: line merge)</li>
-<li>Now there are two data: Data 1: Survey data on the perceptive
-inequality in various provinces in China Data 2: Annual intra-provincial
-income gap data for each province If you want to study the impact of
-intra-provincial income gap on residents’ perceptive inequality, how can
-you combine these two data sets? (Hint: index merge, with the province
-and year as the index)</li>
+Afrobarometer, Asian Barometer and Latino Barómetro. If you want to
+create a global political barometer survey data, how should should you
+combine the data sets of different regions ?(hint: line merge)</li>
+<li>There are two data sets: Data set 1: Survey data on the perceptive
+inequality in various provinces in China Data set 2: Annual
+intra-provincial income gap data for each province If you want to study
+the impact of intra-provincial income gap on residents’ inequality
+perception, how should you merge these two data sets? (Hint: index
+merge, with the province and year as the index)</li>
 </ul></li>
 <li>Single Data Collation
 <ul>
@@ -181,7 +181,7 @@ data-diagnostics="1" data-startover="1" data-lines="0">
 <h3>Understand Data Structures</h3>
 <ul>
 <li>observations</li>
-<li>variable name and quantity</li>
+<li>Variable name and number of variables</li>
 <li>data structure</li>
 </ul>
 <div class="tutorial-exercise" data-label="systemView"
@@ -193,8 +193,8 @@ data-lines="0">
 <div class="tutorial-exercise-support" data-label="systemView-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>nrow(wvs7) # get the number of rows of data
-ncol(wvs7) # get the number of columns of data
+<pre class="text"><code>nrow(wvs7) # get the number of rows of data set
+ncol(wvs7) # get the number of columns of data set
 names(wvs7) # get variable name/column name
 str(wvs7) # get variable name, variable name type, number of rows, number of columns</code></pre>
 </div>
@@ -237,7 +237,7 @@ summary(wvs7$age)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>For non-numeric variables, we can obtain their information in the
-form of a summary table</p>
+form of a summary table.</p>
 <pre class="r"><code>table(wvs7$female)</code></pre>
 <pre><code>## 
 ## FALSE  TRUE 
@@ -262,7 +262,7 @@ meaningless for them.</p>
 <p>But all variables have some attribute characteristics, such as
 variable length, category, feature value, etc.</p>
 <p>The extraction commands for these features are also common.</p>
-<pre class="r"><code>length(wvs7$age) # find the length of the year (here is the number of rows)</code></pre>
+<pre class="r"><code>length(wvs7$age) # get the length of the year (here is the number of rows)</code></pre>
 <pre><code>## [1] 1629</code></pre>
 <pre class="r"><code>unique(wvs7$age)</code></pre>
 <pre><code>##  [1] 63 59 68 49 56 24 40 30 43 54 62 28 50 39 38 23 48 21 53 65 26 58 20 33 45
@@ -360,12 +360,12 @@ variable length, category, feature value, etc.</p>
 <h2>Data Combing</h2>
 <p>If data exploration is to look at variables from data, then data
 combing is to use variables as an index to understand data.</p>
-<p>From a practical point of view, here we directly introduce how to use
+<p>Considering the practicality, here we directly introduce how to use
 <code>tidyverse</code> for data combing.</p>
 <p>But in fact, most of the data combing can be done through R’s own
-statements.<br />
-We also place the actions of the own statement for the same task in the
-“prompt” unit.</p>
+statements.</p>
+<p>We also place the actions of the own statement for the same task in
+the “Hint” unit.</p>
 <!-- 睿哲，请使用R基础语句完成以下操作，放置在hint中。 -->
 <div id="section-section" class="section level3">
 <h3></h3>
@@ -390,8 +390,7 @@ library(&quot;tidyverse&quot;)</code></pre>
 <p>The component in <code>tidyverse</code> is responsible for data
 cleaning, and implements the style of doing one thing with one
 function.</p>
-<p><img src="images/simple.png" />
-<!-- 睿哲，请在网上找到中文cheatsheet,截图替换，并标明出处 --></p>
+<p><img src="images/simple.png" /></p>
 </div>
 <div id="section-pipe" class="section level3">
 <h3>Pipe</h3>
@@ -429,7 +428,7 @@ eat(
 </div>
 <div id="section-section-2" class="section level3">
 <h3></h3>
-<p>After using the pipe, it can be written like this</p>
+<p>After using the pipe, it can be written like this:</p>
 <pre class="r"><code>eat_dumpling &lt;- 
 mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) %&gt;% 
   fill(with = wrapper) %&gt;% 
@@ -869,8 +868,8 @@ learnr:::store_exercise_cache(structure(list(label = "systemView", global_setup 
 ), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
     chunks = list(list(label = "systemView", code = "wvs7", opts = list(
         label = "\"systemView\"", exercise = "TRUE"), engine = "r")), 
-    code_check = NULL, error_check = NULL, check = NULL, solution = structure(c("nrow(wvs7) # get the number of rows of data", 
-    "ncol(wvs7) # get the number of columns of data", "names(wvs7) # get variable name/column name", 
+    code_check = NULL, error_check = NULL, check = NULL, solution = structure(c("nrow(wvs7) # get the number of rows of data set", 
+    "ncol(wvs7) # get the number of columns of data set", "names(wvs7) # get variable name/column name", 
     "str(wvs7) # get variable name, variable name type, number of rows, number of columns"
     ), chunk_opts = list(label = "systemView-solution")), tests = NULL, 
     options = list(eval = FALSE, echo = TRUE, results = "markup", 
