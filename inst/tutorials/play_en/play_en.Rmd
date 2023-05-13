@@ -58,10 +58,10 @@ p_load(
     - Python (first from the ground up)
     - R
 
-- **Classes**: A user-definable *object* structure with its characteristics and *methods*.
-- **Objects**: Concrete examples of specific categories, such as "China" for "country", "R" for "letter". Each of these instances has *properties* of the class it belongs to.
-- **Methods**: Some commands defined in the class can be used to express some characteristic behaviors of objects of this class, for example, people will eat, drink and sleep, then this "eating, drinking and sleeping" is the "method" of people.
-- **Properties**: Used to describe some aspects of an object, such as hair color, skin color, height, and weight to a person. These attributes are common to all objects in the same class, but the specific values may be different. Properties can be thought of as "parameters" for this object.
+- **Classes**: User-definable *object* structure with its characteristics and *methods*.
+- **Objects**: Concrete examples of specific categories, such as "China" for "country", "R" for "letter". Each of these instances has *Properties* of the class it belongs to.
+- **Methods**: Some commands defined in the class can be used to express some characteristic behaviors of objects of this class, for example, people will eat, drink and sleep, then "eating, drinking and sleeping" is the "method" of people.
+- **Properties**: Used to describe some aspects of an object, such as hair color, skin color, height, and weight to a person. These Properties are common to all objects in the same class, but the specific values may be different. Properties can be thought of as "parameters" for this object.
 
 ###
 
@@ -82,9 +82,9 @@ plot(wvs7$age)
 plot(wvs7$age, wvs7$incomeLevel)
 ```
 
-- **Inheritance**: The so-called inheritance means that all subclasses of the same parent class automatically have the characteristics of the parent class. As an analogy, if humans had legs, then every individual human being would have this property.
+- **Inheritance**: The so-called inheritance means that all sub-classes of the same parent class automatically have the characteristics of the parent class. As an analogy, if humans had legs, then every individual human being would have this property.
 
-- **Safty**: When the command acts on the object, it will judge the class of the object. If it is not an object that can be processed within the scope of the command definition, it will stop running and give an error message.
+- **Safety**: When the command acts on the object, it will judge the class of the object. If it is not an object that can be processed within the scope of the command definition, it will stop running and give an error message.
 
 ### Function
 
@@ -149,7 +149,7 @@ a <- 12
 25 -> b
 ```
 
-+ Will not be confused with "="
++ Will not be confused with `=`
 + Shortcut input
     + PC: `Alt + -`
     + Mac: `option + -`
@@ -164,7 +164,7 @@ median(y <- 1:10); y
 median(x = 1:10); x
 ```
 
-- `<<-`: Invoke parent variables
+- `<<-`: Invoking parent variables
 
 ```{r}
 new_counter <- function() {
@@ -182,9 +182,9 @@ new_counter <- function() {
 
 1. Don't start with a number (Error: `1stday`).
 1. No special symbols except `.` and `_` (Error: `M&M`).
-1. Case sensitive (`X != x`) `! means "not"/"no", `!=` means "not equal to".
+1. Case sensitive (`X != x`),  `!` means "not"/"no", `!=` means "not equal to".
 1. Don't override built-in commands if necessary(avoid: `list <- c(1:5)`).
-1. Ideographic Naming.
+1. Ideographic
 
 
 Please create a compliant and non-compliant object:
@@ -288,7 +288,7 @@ df_html <- readHTMLTable(url, which=3)
 
 ###
 
-The Swiss Army Knife of data reading:`rio`
+`rio`:the Swiss Army Knife of data reading.
 
 ```{r eval = FALSE}
 library(rio)
@@ -308,7 +308,7 @@ df_anything <- import(<AnyTypeOfData>)
 
 ### Vector
 
-The command `c()` which performs a composition function can be used to create a vector
+The command `c()` which performs a composition function can be used to create a vector.
 
 
 - numeric vector
@@ -318,8 +318,8 @@ vec_integer <- c(1, -2, NA)
 vec_double <- c(1.5, -2.34, 1/3)
 ```
 
-Notes: 1. `NA` means: not available  
-      2. The data in a single vector must have the same type (numeric, character, or logical)
+Notes: 1. `NA` means not available.
+      2. The data in a single vector must have the same type (numeric, character, or logical).
 
 ### Learning by Doing
 
@@ -402,7 +402,7 @@ vec_fac2 <- factor(c(1, 2, 2, 3),
 
 After getting a data set, you must first have a general understanding of the data.
 
-First check the types of variables in the wvs7 data:
+check the types of variables in the wvs7 data:
 
 ```{r factor_exercise1, exercise=TRUE}
 
@@ -418,7 +418,7 @@ str(wvs7)
 
 
 
-Check the properties of the incomeLevel variable in the data set:
+check the properties of the incomeLevel variable in the data set:
   
 
 ```{r factor_exercise2, exercise=TRUE}
@@ -435,7 +435,7 @@ class(wvs7$incomeLevel)
 
 
 
-View the value of incomeLevel and the frequency of each value:
+view the value of incomeLevel and the frequency of each value:
   
 
 ```{r factor_exercise3, exercise=TRUE}
@@ -474,28 +474,28 @@ unlist(lt)
 ```
 
 ```{r time, exercise = TRUE}
-Sys.time() # Get the current time
-today() # Get the year, month, and day of the day
-now() # Get the current day's year, month, day, hour, minute, and second time zone
+Sys.time() # get the current time
+today() # get the year, month, and day of the day
+now() # get the current day's year, month, day, hour, minute, and second time zone
 # CST is the time zone where the computer ip is located during operation
 
-# The full pack
+# the full pack
 time1 <- Sys.time()
 time2 <- as.POSIXlt(Sys.time())
 time2$wday # week of the day
 
-## What if I only care about the date?
+## What if we only care about the date?
 ```
 
 ```{r time-hint}
 Sys.Date()
 date1 <- as.Date("2019-01-02")
-class(date1)  # Check data type
+class(date1)  # check type of data
 ```
 
 ###
 
-The Swiss Army Knife of Time Data：`lubridate`
+`lubridate`: the swiss army knife of time data
 
 ```{r date, exercise = TRUE}
 library(lubridate)
@@ -517,7 +517,7 @@ When facing vectors with different orders, such as:
 ```
 x=c("20190101",'01012019','021901')
 ```
-How should we recognize the time?
+How should we identify the time?
 
 ```{r date_exercise, exercise=TRUE}
 #help(parse_date_time)
@@ -538,11 +538,11 @@ See `drhur("algebra")` for matrix.
 Array : As the name implies, it is an "array" of columns, which can be used to record data of more than two dimensions, and can be created by the `array` command.
 
 ```{r array}
-# Create two vectors of different lengths.
+# create two vectors of different lengths
 vector1 <- c(5, 9, 3)
 vector2 <- c(10, 11, 12, 13, 14, 15)
 
-# Enter these vectors into an array.
+# enter these vectors into an array
 result <- array(c(vector1, vector2), dim = c(3, 3, 2))
 result
 ```
@@ -679,7 +679,7 @@ save(df_toy, ls_monks, file = "test.rdata")
 write.csv(df_toy, file = "toy.csv")
 ```
 
-> Tip: If your data is in Chinese, there may be garbled characters in the stored csv.
+> Hint: If your data is in Chinese, there may be garbled characters in the stored csv.
 
 ###
 

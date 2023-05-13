@@ -115,20 +115,20 @@ if (window.hljs) {
 <div id="section-key-points" class="section level2">
 <h2>Key Points</h2>
 <ul>
-<li>Research Question： <strong>Does economic inequality affect
-educational levels?</strong>
+<li>Research Question： <strong>Does economic inequality have social and
+political consequences?</strong>
 <ul>
 <li>Does economic inequality affect educational levels?
 <ul>
-<li>How does the economic status of a household affect the average
-education level?</li>
+<li>How does a person’s family economic status affect the average level
+of education?</li>
 <li>Does a family’s religious belief change the impact of their economic
 status on the average education level?</li>
 </ul></li>
 <li>Does economic inequality affect political trust?
 <ul>
-<li>How does household income level affect an individual’s trust in the
-state institutions (government, court, parliament, military,
+<li>How does a person’s family income level affect an individual’s trust
+in state institutions (eg, government, courts, parliament, army,
 media)?</li>
 </ul></li>
 </ul></li>
@@ -154,10 +154,12 @@ used for data visualization:</p>
 <li><code>lattice</code> Engine</li>
 <li><code>ggplot2</code> Engine</li>
 </ul>
-<p>Below, we will demonstrate using a scatter plot. The practical
-problem we are interested in is whether different age groups have
-different views on income distribution. For income views, we use
-<code>equalIncentive</code> in <code>wvs7</code> to measure.</p>
+<p>We will demonstrate this for scatterplots in the following
+sections.</p>
+<p>The question we are concerned with is whether people of different age
+groups have different views on income distribution. We use
+<code>equalIncentive</code> in <code>wvs7</code> to measure people’s
+perception of income distribution.</p>
 </div>
 <div id="section-build-in-visualization" class="section level2">
 <h2>Build-In Visualization</h2>
@@ -216,6 +218,16 @@ lines(lowess(wvs7$incomeLevel, wvs7$education, delta = 0.01 * diff(range(wvs7$ag
 <pre class="r"><code>png(&quot;scatterBasic.png&quot;)
 plot(wvs7$incomeLevel, wvs7$education)
 dev.off()</code></pre>
+<ul>
+<li><code>ggsave(&lt;plot project&gt;, "&lt;name + type&gt;")</code>:
+<ul>
+<li>When <code>&lt;plot project&gt;</code> is omitted, R will save the
+last displayed plot.</li>
+<li>Users can also use other parameters to adjust size, path, scale,
+etc.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>ggsave(&quot;cfr.png&quot;)</code></pre>
 </div>
 </div>
 <div id="section-lattice-visualization" class="section level2">
@@ -336,9 +348,9 @@ used to specify how data should be presented.<br />
 <p>Scatter plot: The impact of economic and cultural factors on
 individuals’ education level</p>
 <blockquote>
-<p>Hint: ggplotting is similar to commonly used Photoshop editing, where
-you first create a basic image and then add filter effects layer by
-layer.</p>
+<p>Hint: The process of ggplot drawing is very similar to our common PS
+image retouching. The basic image is made first, and then the filter
+effect is superimposed layer by layer.</p>
 </blockquote>
 <div class="tutorial-exercise" data-label="scatterSteps"
 data-completion="1" data-diagnostics="1" data-startover="1"
@@ -373,7 +385,7 @@ labs(
 <p>Bar plot: The differential impact of the economy on average education
 levels across cultural factors.</p>
 <blockquote>
-<p>Hint: Each type of graphical attribute has a default scale, which can
+<p>Hint: Each type of graphical property has a default scale, which can
 be used not only to change the ratio but also to change the color in
 plotting.</p>
 </blockquote>
@@ -425,10 +437,10 @@ ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious)) +
 </div>
 <div id="section-case-3" class="section level3">
 <h3>Case 3</h3>
-<p>Radar Chart: The Impact of Household Economic Level on Individual
-Mechanism Confidence</p>
+<p>Radar Chart: The impact of household economic level on individual
+mechanism confidence</p>
 <blockquote>
-<p>Key Point: Use facets to highlight the effect.</p>
+<p>Hint: Use facets to highlight the effect.</p>
 </blockquote>
 <div class="tutorial-exercise" data-label="radarSteps"
 data-completion="1" data-diagnostics="1" data-startover="1"
@@ -524,9 +536,9 @@ wvs7_agg2 %&gt;%
 <div id="section-case-4" class="section level3">
 <h3>Case 4</h3>
 <p>If there are many cross-classifications resulting in numerous
-cross-groups, and each group has a quantity that needs to be displayed,
-using stacked or parallel bar charts may be too complicated, and the
-results may be difficult to interpret.</p>
+cross-groups, and each group has a quantity that needs to be displayed.
+Using stacked or bar graphs can be overly complex, making the results
+difficult to interpret.</p>
 <p>Instead, a heatmap can be used, where the x-axis and y-axis represent
 the two categories, and the quantity is represented by the color of the
 block at the intersection of the coordinates.</p>
@@ -579,25 +591,12 @@ coordinates are mapped to the plane of the graphic</li>
 <li><code>stats</code>: statistical transformations</li>
 </ul>
 </div>
-<div id="section-save-output-1" class="section level3">
-<h3>Save Output</h3>
-<ul>
-<li><code>ggsave(&lt;plot project&gt;, "&lt;name + type&gt;")</code>:
-<ul>
-<li>When <code>&lt;plot project&gt;</code> is omitted, R will save the
-last displayed plot.</li>
-<li>Users can also use other parameters to adjust size, path, scale,
-etc.</li>
-</ul></li>
-</ul>
-<pre class="r"><code>ggsave(&quot;cfr.png&quot;)</code></pre>
-</div>
 </div>
 <div id="section-final-tips" class="section level2">
 <h2>Final Tips</h2>
 <ol style="list-style-type: decimal">
 <li>good-looking ∝ complexity</li>
-<li>Being more cool does not necessarily mean being better.</li>
+<li>Cooler graphics doesn’t mean better.</li>
 </ol>
 <p>
 <script type="application/shiny-prerendered" data-context="server-start">
@@ -1042,7 +1041,7 @@ learnr:::store_exercise_cache(structure(list(label = "heatmap", global_setup = s
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","cachem","checkmate","cli","colorspace","compiler","curl","datasets","digest","dplyr","drhur","ellipsis","evaluate","fansi","farver","fastmap","fontawesome","forcats","generics","ggplot2","ggradar","glue","graphics","grDevices","grid","gtable","highr","hms","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","labeling","later","lattice","learnr","lifecycle","lubridate","magrittr","Matrix","methods","mgcv","mime","munsell","nlme","pacman","parallel","pillar","pkgconfig","promises","purrr","R6","Rcpp","readr","rlang","rmarkdown","rprojroot","rstudioapi","sass","scales","shiny","splines","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","timechange","tools","tzdb","utf8","utils","vctrs","viridisLite","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4.1","4.4.0","0.4.2","1.0.8","2.2.0","3.6.1","2.1-0","4.4.0","5.0.0","4.4.0","0.6.31","1.1.2","1.0.1","0.3.2","0.21","1.0.4","2.1.1","1.1.1","0.5.1","1.0.0","0.1.3","3.4.2.9000","0.2","1.6.2","4.4.0","4.4.0","4.4.0","0.3.3","0.10","1.1.3","0.5.5","1.6.2","1.6.9","0.1.4","1.8.4","1.42","0.4.2","1.3.1","0.21-8","0.11.3","1.0.3","1.9.2","2.0.3","1.5-4","4.4.0","1.8-42","0.12","0.5.0","3.1-162","0.5.1","4.4.0","1.9.0","2.0.3","1.2.0.1","1.0.1","2.5.1","1.0.10","2.1.4","1.1.1","2.21","2.0.3","0.14","0.4.6","1.2.1","1.7.4","4.4.0","4.4.0","1.7.12","1.5.0","3.2.1","1.3.0","1.2.0","2.0.0","0.2.0","4.4.0","0.3.0","1.2.3","4.4.0","0.6.2","0.4.2","2.5.0","0.39","1.8-4","2.3.7"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","cachem","checkmate","cli","colorspace","compiler","curl","datasets","digest","dplyr","drhur","ellipsis","evaluate","fansi","farver","fastmap","fontawesome","forcats","generics","ggplot2","ggradar","glue","graphics","grDevices","grid","gtable","highr","hms","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","labeling","later","lattice","learnr","lifecycle","lubridate","magrittr","Matrix","methods","mgcv","mime","munsell","nlme","pacman","parallel","pillar","pkgconfig","promises","purrr","R6","Rcpp","readr","rlang","rmarkdown","rprojroot","rstudioapi","sass","scales","shiny","splines","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","timechange","tools","tzdb","utf8","utils","vctrs","viridisLite","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4.1","4.2.2","0.4.2","1.0.7","2.2.0","3.6.1","2.1-0","4.2.2","5.0.0","4.2.2","0.6.31","1.1.2","1.0.9999","0.3.2","0.20","1.0.4","2.1.1","1.1.1","0.5.1","1.0.0","0.1.3","3.4.2","0.2","1.6.2","4.2.2","4.2.2","4.2.2","0.3.3","0.10","1.1.3","0.5.5","1.6.2","1.6.9","0.1.4","1.8.4","1.42","0.4.2","1.3.0","0.20-45","0.11.3","1.0.3","1.9.2","2.0.3","1.5-4","4.2.2","1.8-41","0.12","0.5.0","3.1-162","0.5.1","4.2.2","1.9.0","2.0.3","1.2.0.1","1.0.1","2.5.1","1.0.10","2.1.4","1.1.0","2.21","2.0.3","0.14","0.4.5","1.2.1","1.7.4","4.2.2","4.2.2","1.7.12","1.5.0","3.2.1","1.3.0","1.2.0","2.0.0","0.2.0","4.2.2","0.3.0","1.2.3","4.2.2","0.6.2","0.4.1","2.5.0","0.39","1.8-4","2.3.7"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>

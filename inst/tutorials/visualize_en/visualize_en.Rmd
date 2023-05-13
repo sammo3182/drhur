@@ -36,12 +36,12 @@ set.seed(114)
 
 ## Key Points
 - Research Question：
- **Does economic inequality affect educational levels?** 
+ **Does economic inequality have social and political consequences?** 
     -  Does economic inequality affect educational levels?
-        - How does the economic status of a household affect the average education level?
+        - How does a person's family economic status affect the average level of education?
         - Does a family's religious belief change the impact of their economic status on the average education level?
     -  Does economic inequality affect political trust?
-       - How does household income level affect an individual's trust in the state institutions (government, court, parliament, military, media)?
+       - How does a person's family income level affect an individual's trust in state institutions (eg, government, courts, parliament, army, media)?
 
 
 - Build-in Visualization
@@ -67,7 +67,10 @@ In the R programming language, there are three engines that can be used for data
 - `lattice` Engine
 - `ggplot2` Engine
 
-Below, we will demonstrate using a scatter plot. The practical problem we are interested in is whether different age groups have different views on income distribution. For income views, we use `equalIncentive` in `wvs7` to measure.
+We will demonstrate this for scatterplots in the following sections.
+
+The question we are concerned with is whether people of different age groups have different views on income distribution. 
+We use `equalIncentive` in `wvs7` to measure people's perception of income distribution.
 
 
 ## Build-In Visualization
@@ -121,6 +124,15 @@ png("scatterBasic.png")
 plot(wvs7$incomeLevel, wvs7$education)
 dev.off()
 ```
+
+* `ggsave(<plot project>, "<name + type>")`:
+    + When `<plot project>` is omitted, R will save the last displayed plot.
+    + Users can also use other parameters to adjust size, path, scale, etc.
+
+```{r save, eval = FALSE}
+ggsave("cfr.png")
+```
+
 
 ## `lattice` Visualization
 
@@ -319,7 +331,7 @@ wvs7_agg2 %>%
 
 Scatter plot: The impact of economic and cultural factors on individuals' education level
 
-> Hint: ggplotting is similar to commonly used Photoshop editing, where you first create a basic image and then add filter effects layer by layer.
+> Hint: The process of ggplot drawing is very similar to our common PS image retouching. The basic image is made first, and then the filter effect is superimposed layer by layer.
 
 ```{r scatterSteps, exercise = TRUE}
 wvs7_narm <-
@@ -351,7 +363,7 @@ labs(
 
 Bar plot: The differential impact of the economy on average education levels across cultural factors.
 
-> Hint: Each type of graphical attribute has a default scale, which can be used not only to change the ratio but also to change the color in plotting.
+> Hint: Each type of graphical property has a default scale, which can be used not only to change the ratio but also to change the color in plotting.
 
 ```{r barSteps, exercise = TRUE}
 wvs7_agg <- group_by(wvs7_narm, incomeLevel, religious) %>% 
@@ -399,9 +411,9 @@ ggplot(wvs7_agg, aes(x = incomeLevel, y = mean_ed, fill = religious)) +
 
 ### Case 3
 
-Radar Chart: The Impact of Household Economic Level on Individual Mechanism Confidence
+Radar Chart: The impact of household economic level on individual mechanism confidence
 
-> Key Point: Use facets to highlight the effect.
+> Hint: Use facets to highlight the effect.
 
 ```{r radarSteps, exercise = TRUE}
 income_qnt <- quantile(wvs7$incomeLevel, seq(0, 1, .25), na.rm = TRUE)
@@ -494,7 +506,7 @@ wvs7_agg2 %>%
 
 ### Case 4
 
-If there are many cross-classifications resulting in numerous cross-groups, and each group has a quantity that needs to be displayed, using stacked or parallel bar charts may be too complicated, and the results may be difficult to interpret.
+If there are many cross-classifications resulting in numerous cross-groups, and each group has a quantity that needs to be displayed. Using stacked or bar graphs can be overly complex, making the results difficult to interpret.
 
 Instead, a heatmap can be used, where the x-axis and y-axis represent the two categories, and the quantity is represented by the color of the block at the intersection of the coordinates.
 
@@ -540,19 +552,8 @@ p + geom_tile() +
 
 
 
-### Save Output
-
-* `ggsave(<plot project>, "<name + type>")`:
-    + When `<plot project>` is omitted, R will save the last displayed plot.
-    + Users can also use other parameters to adjust size, path, scale, etc.
-
-```{r save, eval = FALSE}
-ggsave("cfr.png")
-```
-
-
 ## Final Tips
 
 1. good-looking &prop; complexity
-1. Being more cool does not necessarily mean being better.
+1. Cooler graphics doesn't mean better.
 
