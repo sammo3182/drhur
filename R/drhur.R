@@ -18,9 +18,9 @@
 #'
 #' @export
 
-drhur <-
-  function(workshop, lang = "cn") {
-    workshop <-
-      ifelse(lang == "cn", paste0(workshop, "_cn"), paste0(workshop, "_en"))
-    learnr::run_tutorial(workshop, package = "drhur")
-  }
+drhur <- function(workshop, language = "cn") {
+  lang_suffix <- ifelse(language == "cn", "_cn", "_en")
+  workshop <- paste0(workshop, lang_suffix)
+  learnr::run_tutorial(workshop, package = "drhur")
+}
+ 

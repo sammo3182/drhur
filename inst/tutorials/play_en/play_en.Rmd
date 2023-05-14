@@ -96,7 +96,7 @@ plot(wvs7$age, wvs7$incomeLevel)
 
 
 
-![](images/handShadow.gif){height=500}
+![](../play_cn/images/handShadow.gif){height=500}
 
 ```{r funIllustration, eval = FALSE}
 light <- function(finger){
@@ -114,7 +114,7 @@ handShadow
 - `install.packages("drhur")`
 - `devtools::install_github("sammo3182/drhur")`
 
-![](images/hives_horizontal.png){height=300}
+![](../play_cn/images/hives_horizontal.png){height=300}
 
 ### `<-`
 
@@ -139,7 +139,7 @@ Four symbols for assignment in R:
 
 ### Why `<-`
 
-![](images/APLkeyBoard.png)
+![](../play_cn/images/APLkeyBoard.png)
 
 + Intuitive
 
@@ -570,7 +570,7 @@ A special kind of column/matrix
 In Excel:
 
 
-![](images/excel-r1.png)
+![](../play_cn/images/excel-r1.png)
 
 In R:
 
@@ -584,7 +584,7 @@ df_toy
 
 In Rstudio:
 
-![](images/excel-r2.png)
+![](../play_cn/images/excel-r2.png)
 
 ## Data Attributes
 

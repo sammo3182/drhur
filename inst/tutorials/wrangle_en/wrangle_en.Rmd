@@ -23,6 +23,12 @@ p_load(drhur,
        here,
        rio,
        tidyverse)
+if (!require("dplyr")) {
+  install.packages("dplyr")
+  library("dplyr")
+} else {
+  library("dplyr")
+}
 ```
 
 ## Key Points
@@ -45,7 +51,7 @@ p_load(drhur,
 
 ## Sample Data
 
-![](images/wvs7.jfif){height=400}
+![](../wrangle_cn/images/wvs7.jfif){height=400}
 
   We demonstrate this from a sample of the seventh wave of data (WVS7) from the [World Values  Survey] (https://www.worldvaluessurvey.org/wvs.jsp), founded by the late political science professor Ronald Inglehart.
 This sample is 2% of the data in WVS7 and contains 24 variables.
@@ -179,7 +185,7 @@ Let me introduce the `tidyverse`
 + is a bunch of [R packages](https://www.tidyverse.org/packages/)!
 + Like the Marvel and DC comics universes, all `tidyverse` members work in the same data structure and can talk to each other and use it together.
 
-![](images/tidyverseHive.png){height=300}
+![](../wrangle_cn/images/tidyverseHive.png){height=300}
 
 
 ### Package Installation 
@@ -194,7 +200,7 @@ library("tidyverse")
 
 The component in `tidyverse` is responsible for data cleaning, and implements the style of doing one thing with one function.
 
-![](images/simple.png)
+![](../wrangle_cn/images/simple.png)
 
 
 ### Pipe
@@ -206,7 +212,7 @@ The examples that follow use the latter.
 
 In R, the Pipe is used to connect continuous actions for the same object, which is equivalent to "scraping" a continuous skill in an action game.
 
-![](images/comboAttack.gif){height=400}
+![](../wrangle_cn/images/comboAttack.gif){height=400}
 
 ###
 

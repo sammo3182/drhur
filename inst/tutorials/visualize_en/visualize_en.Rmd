@@ -211,7 +211,7 @@ library(ggplot2)
     + Properties that can be perceived from a plot.
     + Each aesthetic can be mapped to a variable or set as a constant.
 * `geom_*`: Geometric objects---points, lines, bars, etc., used to specify how data should be presented.   
-  ![](images/ggplot_geom.png){width=100%}
+  ![](../visualize_cn/images/ggplot_geom.png){width=100%}
 
 
 ### Universal Template

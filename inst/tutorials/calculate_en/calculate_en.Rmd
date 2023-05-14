@@ -380,7 +380,7 @@ t(t(B))
 - Multiplication: Scalar product, general product, Hadamard product, Kronecker product, etc. Here, we will only introduce the scalar product and general product, which are more relevant to later data processing.
     - Scalar Product: ${\displaystyle (rA)_{ij}=r\cdot a_{ij}\ }$, same as algebraic multiplication.
     - General Product: It is defined only when the number of columns in the first matrix is equal to the number of rows in the second matrix. The operation involves taking the algebraic product of corresponding elements from the respective columns and rows, as shown in the diagram below,
-    ![](images/math_matrixTimes.gif).
+    ![](../calculate_cn/images/math_matrixTimes.gif).
     
 > In R, you can perform this operation by using `%*%` to concatenate two vectors that meet the defined properties.
         

@@ -4,7 +4,7 @@
 \alias{drhur}
 \title{Calling for an Exercise in Dr Hu's R Workshop}
 \usage{
-drhur(workshop, lang = "cn")
+drhur(workshop, language = "cn")
 }
 \arguments{
 \item{workshop}{A character vector indicating the name of the workshop to open. See details for the workshop list.}
