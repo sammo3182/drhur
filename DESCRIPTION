@@ -4,8 +4,8 @@ Title: Learning R with Dr. Hu
 Version: 1.1.0
 Authors@R: c(
     person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
-    person("Xinyi", "Ye", role = c("aut"), email = "yexinyi98@outlook.com"),
-    person("Yufei", "Sun", role = c("aut"), email = "sunyf20@mails.tsinghua.edu.cn")
+    person("Xinyi", "Ye", role = c("ctb", "trl"), email = "yexinyi98@outlook.com"),
+    person("Yufei", "Sun", role = c("ctb"), email = "sunyf20@mails.tsinghua.edu.cn")
     )
 Maintainer: Yue Hu <yuehu@tsinghua.edu.cn>
 Description: Tutarials of R learning easily and happily.

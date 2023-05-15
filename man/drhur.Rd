@@ -4,12 +4,12 @@
 \alias{drhur}
 \title{Calling for an Exercise in Dr Hu's R Workshop}
 \usage{
-drhur(workshop, language = "cn")
+drhur(workshop, lang = "cn")
 }
 \arguments{
 \item{workshop}{A character vector indicating the name of the workshop to open. See details for the workshop list.}
 
-\item{language}{A character vector indicating the display language. The current version includes workshops in English (\code{en}) and simple Chinese (\code{cn}). The default is Chinese.}
+\item{lang}{A character vector indicating the display language. The current version includes workshops in English (\code{en}) and simple Chinese (\code{cn}). The default is Chinese.}
 }
 \description{
 The function calls a \code{\link[learnr]{run_tutorial}} function to open a \code{learnr} project. The project list is continually updated along with the R workshop with Dr. Hu.
