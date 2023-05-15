@@ -1,7 +1,7 @@
 ---
 title: "Basic Visualization"
 subtitle: "Learning R with Dr. Hu and His Friends"
-author: "胡悦（清华大学政治学系）"
+author: "Yue Hu (Political Science, Tsinghua University)"
 output: 
   learnr::tutorial:
     language: "en"
