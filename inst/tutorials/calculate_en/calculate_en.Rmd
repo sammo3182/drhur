@@ -4,7 +4,7 @@ subtitle: "Learning R with Dr. Hu and His Friends"
 author: "Yue Hu (Political Science, Tsinghua University)"
 output: 
   learnr::tutorial:
-    language: "en"
+    language: "zh"
     progressive: true
     allow_skip: true
 runtime: shiny_prerendered
@@ -65,7 +65,7 @@ exp(12)
 
 ###
 
-trigonometric functions:
+even trigonometric functions:
 
 ```{r triangle}
 sin(pi)
@@ -84,7 +84,7 @@ tan(pi/2)
 ```
 
 
-A number is written as a real number "a" multiplied by 10 to the power of "n".
+A number is written as a real number a multiplied by 10 to the power of n.
 Here, E (exponential) is used to represent the power of 10.
 Here are some examples:
 
@@ -135,7 +135,7 @@ What is the result of the following formula?
 ```
 
 
-> Many programming language beginners may feel uncomfortable when using double equal signs (`==`) to represent "equals". However, it can be viewed as a member of `==, !=, >=, <=`.
+> Many students who are new to programming languages may feel uncomfortable using double equal signs (`==`) to represent "equals". However, from a conceptual perspective, it can be viewed as a member of `==, !=, >=, <=`.
 
 
 ## Vectors
@@ -146,7 +146,7 @@ In R, vectors are also the most basic way of representing data.
     - If the direction is removed, it becomes a scalar.
 - In terms of data, creating a vector is equivalent to creating a variable.
 
-> Variables can be viewed as "conceptually meaningful vectors".
+> In this sense, variables can be viewed as "conceptually meaningful vectors".
 
 ### Vector Representation
 
@@ -165,7 +165,7 @@ a[5]
 
 - `<-`: assign
 - `:`: `a <- 1:5`
-- `TRUE` means keep something, `FALSE` means don't keep something
+- `TRUE`means keep something, `FALSE`means don't keep something
 
 ###
 
@@ -183,7 +183,7 @@ c(1.5:3)
 
 
 
-How to represent $\vec {b}=(1, 3, 4, 5, 6, 7, 9)$?
+How to express  $\vec {b}=(1, 3, 4, 5, 6, 7, 9)$?
 
 ```{r vecColon, exercise = TRUE}
 
@@ -223,7 +223,7 @@ c
 
 Another function of `seq()` is to reflect the position of the element.
 
-For example: how to select the even number item of `d`?
+For example: how to select the even number item of `d`
 
 ```{r index, exercise = TRUE}
 
@@ -239,7 +239,7 @@ d[seq(d) %% 2 == 0]
 ```
 
 
-### Four Arithmetic Operations of Vector
+### Four arithmetic operations of vector
 
 - Addition and subtraction: $$\vec{a} \pm \vec{b} = (a_1 \pm b_1, a_2 \pm b_2, ..., a_n \pm b_n).$$
 - Multiplication is slightly more complicated and has different types.
@@ -348,10 +348,7 @@ A
 
 ###
 
-- Mathematics: 
-In the matrix $A_{2\times2}$, its elements are usually marked in the form of row&times;column, for example, $A_{12}$ represents the element of matrix *1* row and *2* column , which is $3$.
-
-
+- Mathematics: In the matrix $A_{2\times2}$, its elements are usually marked in the form of row&times;column, for example, $A_{12}$ represents the element of matrix *1*row and *2*column , which is $3$.
 -R:
 
 ```{r element}
@@ -380,7 +377,7 @@ t(t(B))
 - Multiplication: Scalar product, general product, Hadamard product, Kronecker product, etc. Here, we will only introduce the scalar product and general product, which are more relevant to later data processing.
     - Scalar Product: ${\displaystyle (rA)_{ij}=r\cdot a_{ij}\ }$, same as algebraic multiplication.
     - General Product: It is defined only when the number of columns in the first matrix is equal to the number of rows in the second matrix. The operation involves taking the algebraic product of corresponding elements from the respective columns and rows, as shown in the diagram below,
-    ![](../calculate_cn/images/math_matrixTimes.gif).
+    ![](images/math_matrixTimes.gif)。
     
 > In R, you can perform this operation by using `%*%` to concatenate two vectors that meet the defined properties.
         
@@ -479,3 +476,4 @@ $$
     - Vectors: `<-`
     - Matrices: `%*%`
     - Systems of Equations
+    

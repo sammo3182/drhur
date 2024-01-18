@@ -23,12 +23,6 @@ p_load(drhur,
        here,
        rio,
        tidyverse)
-if (!require("dplyr")) {
-  install.packages("dplyr")
-  library("dplyr")
-} else {
-  library("dplyr")
-}
 ```
 
 ## Key Points
@@ -39,6 +33,7 @@ if (!require("dplyr")) {
      Data set 1: Survey data on the perceptive inequality in various provinces in China
      Data set 2: Annual intra-provincial income gap data for each province
      If you want to study the impact of intra-provincial income gap on residents' inequality perception, how should you merge these two data sets? (hint: index merge, with the province and year as the index)
+
    
 - Single Data Collation
     - explore
@@ -51,7 +46,7 @@ if (!require("dplyr")) {
 
 ## Sample Data
 
-![](../wrangle_cn/images/wvs7.jfif){height=400}
+![](images/wvs7.jfif){height=400}
 
   We demonstrate this from a sample of the seventh wave of data (WVS7) from the [World Values  Survey] (https://www.worldvaluessurvey.org/wvs.jsp), founded by the late political science professor Ronald Inglehart.
 This sample is 2% of the data in WVS7 and contains 24 variables.
@@ -75,7 +70,7 @@ wvs7
 ### Understand Data Structures
 
 - observations
-- Variable name and number of variables
+- variable name and quantity
 - data structure
 
 ```{r systemView, exercise = TRUE}
@@ -83,8 +78,8 @@ wvs7
 ```
 
 ```{r systemView-solution}
-nrow(wvs7) # get the number of rows of data set
-ncol(wvs7) # get the number of columns of data set
+nrow(wvs7) # get the number of rows of data
+ncol(wvs7) # get the number of columns of data
 names(wvs7) # get variable name/column name
 str(wvs7) # get variable name, variable name type, number of rows, number of columns
 ```
@@ -122,6 +117,7 @@ summary(wvs7$age)
 
 For non-numeric variables, we can obtain their information in the form of a summary table.
 
+
 ```{r varCat}
 table(wvs7$female)
 table(wvs7$marital)
@@ -148,7 +144,7 @@ The extraction commands for these features are also common.
 ```
 
 ```{r varAttr-solution}
-length(wvs7$age) # get the length of the year (here is the number of rows)
+length(wvs7$age) # find the length of the year (here is the number of rows)
 unique(wvs7$age)
 
 summary(wvs7$age) #get all the above information of the year
@@ -168,13 +164,10 @@ summary(wvs7)
 
 If data exploration is to look at variables from data, then data combing is to use variables as an index to understand data. 
 
-Considering the practicality, here we directly introduce how to use `tidyverse` for data combing.  
+From a practical point of view, here we directly introduce how to use `tidyverse` for data combing.  
 
 But in fact, most of the data combing can be done through R's own statements.  
-
-We also place the actions of the own statement for the same task in the "Hint" unit.
-
-<!-- 睿哲，请使用R基础语句完成以下操作，放置在hint中。 -->
+We also place the actions of the own statement for the same task in the "prompt" unit.
 
 
 ### 
@@ -185,7 +178,7 @@ Let me introduce the `tidyverse`
 + is a bunch of [R packages](https://www.tidyverse.org/packages/)!
 + Like the Marvel and DC comics universes, all `tidyverse` members work in the same data structure and can talk to each other and use it together.
 
-![](../wrangle_cn/images/tidyverseHive.png){height=300}
+![](images/tidyverseHive.png){height=300}
 
 
 ### Package Installation 
@@ -200,8 +193,8 @@ library("tidyverse")
 
 The component in `tidyverse` is responsible for data cleaning, and implements the style of doing one thing with one function.
 
-![](../wrangle_cn/images/simple.png)
 
+![](images/simple.png)
 
 ### Pipe
 
@@ -212,7 +205,9 @@ The examples that follow use the latter.
 
 In R, the Pipe is used to connect continuous actions for the same object, which is equivalent to "scraping" a continuous skill in an action game.
 
-![](../wrangle_cn/images/comboAttack.gif){height=400}
+
+![](images/comboAttack.gif){height=400}
+
 
 ###
 
@@ -241,7 +236,8 @@ eat(
 
 ###
 
-After using the pipe, it can be written like this:
+After using the pipe, it can be written like this
+
 
 ```{r pipeCode, eval=FALSE}
 eat_dumpling <- 
@@ -301,7 +297,8 @@ rename(wvs7, nationality = country)
 
 `arrange(<data>,...)`
 
-For example, we are curious about the confidence of the youngest people in  state institutions, as well as information such as their education level and income level.
+For example, we are curious about the confidence of the youngest people in state agencies, and correspond to their education level, income level and other information.
+
 
 ```{r arrange, exercise = TRUE}
 select(wvs7, age, confidence_gov, education, incomeLevel)
@@ -313,7 +310,8 @@ select(wvs7, age, confidence_gov, education, incomeLevel) %>%
 ```
 
 
-How about the oldest group?
+What about the oldest group?
+
 
 ```{r arrangeDesc, exercise = TRUE}
 select(wvs7, age, confidence_gov, education, incomeLevel) %>% 
@@ -358,7 +356,7 @@ The word 'mutate' means 'to change or alter,' which implies that the function do
 
 ###
 
-If we care about the effect of education level on differences in income levels, we can create a proportional variable.
+If we care about the effect of education level on differences in income levels, we can create a proportional variable
 
 ```{r mutate, exercise = TRUE}
 mutate(wvs7, ratio_incomeEdu = incomeLevel / (education + 1)) %>%
@@ -381,7 +379,8 @@ mutate(wvs7,
 
 `count` is used to count based on data.  
 
-For example,`count` can be used to calculate the number of men and women in our data. ^[Such lists are very common in statistics such as censuses. ]
+For example, count can be used to calculate the number of men and women in our data. ^[Such lists are very common in statistics such as censuses. ]
+
 
 ```{r count, exercise = TRUE}
 wvs7 %>%
@@ -452,7 +451,8 @@ The above series of operations have a common feature, have you found it?
 head(wvs7)
 ```
 
-- <span style="color:red">Do not touch</span> raw data.
+
+- <span style="color:red">do not touch</span> raw data
 - Be careful with object coverage.
 
 ```{r overwrite, exercise}
@@ -465,7 +465,8 @@ wvs7 <- mutate(wvs7, female = as.numeric(female))
 
 The premise of direct merging is basically the same as that of matrix operations: only the numbers in the first column match the next row.
 
-- Row merge: the number of columns <span style="color:red">equal</span> (Is this requirement necessary?)
+
+- Row merge: the number of columns <span style="color:red">equal</span> (not necessarily)
 - Column Merge: Number of rows <span style="color:red">equal</span>
 
 Give an example respectively:
@@ -490,8 +491,7 @@ bind_rows(tibble(x = 1:3), tibble(y = 1:4))
 wvs7_conf <- select(wvs7, starts_with("confidence"))
 wvs7_trust <- select(wvs7, starts_with("trust"))
 
-# create a confidence-trust data
-
+# Create a confidence-trust data
 bind_cols(wvs7_conf, wvs7_trust)
 ```
 
@@ -500,7 +500,7 @@ bind_cols(wvs7_conf, wvs7_trust)
 
 Index merging refers to merging data based on a shared index sequence (which can be any variable).
 
-Let's  create two sample data:
+Let's first create two sample data:
 
 1. Individual-level equality cognition data;
 1. Country-level data on demographic variables.
@@ -530,14 +530,15 @@ full_join(wvs7_eq, wvs7_country)
 
 ## Summary
 
-1. Think clearly before taking action <span style="color:red"></span>;
-1. Use the `dplyr` function to neatly and comprehensively;
+
+1. Clever and comprehensive use of `dplyr` functions;
     + Explore: `head`, `tail`
-        - structure: `nrow`, `ncol`, `names`, `str`
+        - Structure: `nrow`, `ncol`, `names`, `str`
         - features: `table`, `levels`
-        - properties: `length`, `unique`, `summary`, `class`, `typeof`
+        - Attributes: `length`, `unique`, `summary`, `class`, `typeof`
     + Combing: `dplyr` command set
-1. Principle of data integration : do not touch the original data
+1. Data integration principle: do not touch the original data
 1. Data Merging
     - direct merge: `bind_*`
     - Index merge: `*_join`
+
