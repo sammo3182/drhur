@@ -20,20 +20,13 @@ knitr::opts_chunk$set(echo = TRUE,
 
 if (!require(pacman)) install.packages("pacman")
 
-pacman::p_load(
-  lubridate,
-  here,
-  rio,
-  tidyverse,
-  drhur
-)
+pacman::p_load(lubridate, tidyverse, drhur)
 ```
 
 
 ## Key Points
 
-- Foundational concepts (object-oriented programming)
-- Basic syntax (functions, packages, assignment, naming)
+- Foundational concepts (OOP, classes, objects)
 - Data types
 - Data attributes
 - Data input and output
@@ -41,55 +34,32 @@ pacman::p_load(
 
 ## Object-Oriented Programming
 
-The previous chapter introduced how R realises the content of mathematics and statistics textbooks. The present chapter shifts perspective and presents R's foundational concepts from the standpoint of programming. On that basis, we take the first practical step in working with R: importing and exporting data — the two ends of any data analysis pipeline. We shall also examine how to interrogate basic features of a dataset, such as its size, its variable count, and its number of observations.
+**Object-Oriented Programming** (OOP) organises and encapsulates data through *classes* and *objects*. Many widely known languages — C++, Java, Python — adopt OOP, and R does the same.
 
-We begin by sketching R's programming character.
+- **Class:** a user-definable structure of an object, together with its properties and methods.
+- **Object:** a concrete instance of a class — "China" is to "country", "R" is to "letter".
+- **Method:** a command defined within a class.
+- **Property:** an attribute of an object — like hair colour for a person.
 
-###
-
-**Object-Oriented Programming** (OOP) is a widely adopted architecture in modern computer programming. Compared with traditional procedure-oriented programming, OOP organises and encapsulates data so that more complex systems and demands can be handled cleanly. Many widely known languages — C++, Java, Ruby, Python — adopt OOP. R does the same, although in a rather idiosyncratic form (more on this when we discuss functions). Understanding OOP makes much of R's behaviour easier to reason about.
-
-OOP rests on two basic notions: **classes** and **objects**.
-
-- **Class:** a user-definable structure of an *object*, together with its *properties* and *methods*.
-- **Object:** a concrete instance of a particular class — much as "China" is to "country", or "R" is to "letter". Each instance carries the properties defined for its class.
-- **Method:** a command defined within a class that expresses some characteristic action of objects of that class. If a person eats, drinks, sleeps, and so on, then "eating, drinking, sleeping" are the person's methods.
-- **Property:** an attribute used to describe some aspect of an object — hair colour, skin colour, height, weight, and so forth, for a person. All objects of a given class share the same set of properties, though their values may differ. Think of properties as the parameters of an object.
+OOP languages also typically share **encapsulation**, **polymorphism**, **inheritance**, and **safety**.
 
 ###
 
-Beyond these, OOP languages typically share four additional traits.
-
-- **Encapsulation.** All properties and methods of an object are bundled together. Other objects cannot directly inspect or alter the inner state of an object — they may only influence it. One cannot turn an ectotherm into an endotherm, but one can affect a lizard's body temperature by changing the ambient temperature of its tank.
-- **Polymorphism.** A single command can act differently on different object types. The most familiar example in R is `summary()`, which adapts its output to whatever class of object it receives.
+**Polymorphism** lets one command act differently on different object types. The most familiar example is `summary()`:
 
 ```{r polymorphism, exercise = TRUE}
 summary(wvs7)
 summary(wvs7$age)
 ```
 
-### Polymorphism in action
 
-R's polymorphism allows generic functions to handle object types they have not been explicitly programmed for. Beyond `summary()`, `plot()` is another classic polymorphic function. Apply `plot()` to two different kinds of object and observe how the output differs.
+### Functions
 
-```{r polymorphism_exercise, exercise = TRUE}
-plot(wvs7$age)
-plot(wvs7$age, wvs7$incomeLevel)
-```
-
-###
-
-- **Inheritance.** All subclasses of a parent class automatically possess the parent's traits. By analogy: if humans have two legs, every individual human inherits that trait.
-- **Safety.** When a command is applied to an object, R checks the object's class. If the class lies outside the command's defined scope, R halts and returns an error.
-
-
-### Functions: Imperative Sentences with the Adverbial Postposed
-
-R is built from two kinds of building blocks: functions and objects. A **function** can be thought of as an imperative sentence in which the adverbial phrase appears *after* the verb — exactly opposite to typical English word order. The general form is
+A **function** can be thought of as an imperative sentence with the adverbial postposed:
 
 > `<function_name>(<target_data>, <condition_1>, <condition_2>, ...)`
 
-The OOP creed expressed by this design is straightforward: *do not touch the data; let the function act on it.*
+The OOP creed: *do not touch the data; let the function act on it*.
 
 ```{r funIllustration, eval = FALSE}
 light <- function(finger){
@@ -103,7 +73,7 @@ handShadow
 
 ### Packages
 
-A **package** is a curated collection of functions — much like an app on a smartphone. A working snapshot of CRAN holds tens of thousands of registered packages (and many more on GitHub). Two common ways to install packages are:
+A **package** is a curated collection of functions. Two common installation methods:
 
 ```{r install, eval = FALSE}
 install.packages("drhur")                          # from CRAN
@@ -111,9 +81,37 @@ devtools::install_github("sammo3182/drhur")         # from GitHub
 ```
 
 
+### Exercise 1
+
+Show how to install three packages — `regioncode`, `dotwhisker`, `drhur` — in a single call.
+
+```{r install_exercise, exercise = TRUE}
+?install.packages
+
+```
+
+```{r install_exercise-solution}
+install.packages(c("regioncode", "dotwhisker", "drhur"))
+```
+
+
+### Exercise 2
+
+`plot()` is another polymorphic function. Apply it to one variable, then to two.
+
+```{r polymorphism_exercise, exercise = TRUE}
+
+```
+
+```{r polymorphism_exercise-solution}
+plot(mtcars$mpg)              # one variable: index vs value
+plot(mtcars$mpg, mtcars$wt)   # two variables: scatter plot
+```
+
+
 ### The Assignment Arrow `<-`
 
-The arrow `<-` is the assignment operator and is shorthand for the `assign()` function's default behaviour. The general form is
+`<-` is R's standard assignment operator, equivalent to `assign()`:
 
 > `<name> <- <object>`
 
@@ -122,129 +120,240 @@ aValidObject <- 1:5
 aValidObject
 ```
 
-
-### `->`, `=`, `<<-`
-
-R supports four ways to assign:
-
-1. `assign()`
-2. `<-`
-3. `<<-`
-4. `=`
-
-
-### Why `<-`
-
-`<-` is preferred for several reasons:
-
-- *Direction is intuitive.* The arrow makes the data flow visually obvious — from the right-hand object into the left-hand name.
+R supports four assignment symbols: `assign()`, `<-`, `<<-`, `=`. `<-` is preferred — direction is intuitive, and it does not collide with `=` or `==`. Keyboard shortcut: **Alt + -** (Windows/Linux), **Option + -** (macOS).
 
 ```{r arrow}
 a <- 12
 25 -> b   # the rightward arrow also works
 ```
 
-- *No confusion with equality.* Using `<-` for assignment leaves `=` and `==` unambiguous.
-- *A keyboard shortcut exists.*
-    - PC: `Alt + -`
-    - Mac: `Option + -`
-
-
-### When to Use Each
-
-- `=` — when you do *not* want to create a permanent object, for instance when supplying named arguments inside a function call.
-
-```{r sideEffect, exercise = TRUE}
-median(y <- 1:10); y
-median(x = 1:10); x
-```
-
-- `<<-` — to refer to a variable in a parent scope, most often inside closures.
-
-```{r superassign}
-new_counter <- function() {
-  i <- 0
-  function() {
-    # do something useful, then ...
-    i <<- i + 1
-    i
-  }
-}
-```
-
 
 ### Naming Rules
 
-Object names in R must satisfy several constraints:
+Object names must satisfy:
 
-1. They must not begin with a digit (incorrect: `1stday`).
-2. Apart from `.` and `_`, no special characters are allowed (incorrect: `M&M`).
-3. Names are case-sensitive (`X != x`); recall that `!` denotes "not" while `!=` denotes "not equal".
+1. Not begin with a digit (incorrect: `1stday`).
+2. Contain no special characters except `.` and `_` (incorrect: `M&M`).
+3. Are case-sensitive (`X != x`).
 4. Avoid overwriting built-in names (avoid `list <- c(1:5)`).
-5. Choose names that convey meaning.
-
-Try creating one valid and one invalid object below.
-
-```{r objectEg, exercise = TRUE}
-
-# An invalid object name (begins with a digit)
-# 5var_name <- data_frame(wvs7$education)
+5. Convey meaning.
 
 
-# A valid object name
-var_name5 <- data_frame(wvs7$education)
+### Exercise 3
 
+Why does the following line fail?
+
+```{r naming_exercise, exercise = TRUE}
+5var_name <- 1:5
+```
+
+```{r naming_exercise-solution}
+# Object names cannot begin with a digit. "5var_name" violates Rule 1.
+# A valid alternative:
+var_name5 <- 1:5
+var_name5
 ```
 
 
-### Practice
+## Records (Data Storage)
 
-```{r vname, echo = FALSE}
-question("Which of the following are valid variable names?",
-  answer("my_data_frame <- data_frame(wvs7$education)", correct = TRUE),
-  answer("mydata&frame <- data_frame(wvs7$education)"),
-  answer("MyDataFrame <- data_frame(wvs7$education)", correct = TRUE),
-  answer("1data_frame <- data_frame(wvs7$education)"),
-  incorrect = "Not quite — recall that names cannot begin with a digit and may not contain special characters other than `.` and `_`.")
+### Vectors
+
+`c()` builds vectors. A vector's elements must share the same type.
+
+#### Numeric Vectors
+
+```{r numeric}
+vec_integer <- c(1, -2, NA)
+vec_double  <- c(1.5, -2.34, 1/3)
+```
+
+`NA` stands for *not available* — R's representation of a missing value.
+
+
+#### Character Vectors
+
+```{r character}
+vec_chr <- c("R", "is", "useful.")
+vec_chr
 ```
 
 
-## Data Input
+### Exercise 4
+
+Generate the lowercase Roman alphabet `a` to `e` in two ways and check that they match.
+
+```{r character_exercise, exercise = TRUE}
+
+```
+
+```{r character_exercise-solution}
+vec_letters_raw   <- c("a", "b", "c", "d", "e")
+vec_letters_quick <- letters[1:5]
+
+# Check they're identical
+identical(vec_letters_raw, vec_letters_quick)
+```
+
+
+#### Logical Vectors
+
+```{r logic}
+vec_tf <- c(TRUE, TRUE, FALSE)
+vec_tf
+```
+
+
+#### Factor Vectors
+
+A **factor** stores a categorical variable with a fixed set of allowed values (its *levels*).
+
+```{r factor}
+vec_fac  <- factor(c(1, 2, 2, 3))
+vec_ord  <- ordered(c(1, 2, 2, 3))
+vec_fac2 <- factor(c(1, 2, 2, 3),
+                   levels = c(3, 2, 1),
+                   labels = c("Apple", "Pear", "Orange"))
+
+vec_fac
+vec_ord
+vec_fac2
+```
+
+
+#### Date and Time Vectors
+
+R offers two representations of time:
+
+- `as.POSIXct()` — numeric storage, seconds since 1970-01-01.
+- `as.POSIXlt()` — list storage, each component as a separate element.
+
+```{r time-classes}
+ct <- as.POSIXct("2026-04-13 10:11:12")
+lt <- as.POSIXlt("2026-04-13 10:11:12")
+
+unlist(ct)
+unlist(lt)
+```
+
+The Swiss-army knife for dates is **lubridate**:
+
+```{r lubridate}
+ymd("20221016")
+mdy("10-16-2022")
+dmy("16/10/2022")
+ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
+```
+
+
+### Exercise 5
+
+When date strings appear in inconsistent orders, parse them with `parse_date_time()`:
+
+```{r date_exercise, exercise = TRUE}
+raw_dates <- c("20190101", "01012019", "021901")
+
+```
+
+```{r date_exercise-solution}
+library(lubridate)
+raw_dates <- c("20190101", "01012019", "021901")
+
+parsed_dates <- parse_date_time(raw_dates, orders = c("ymd", "dmy", "mdy"))
+parsed_dates
+```
+
+
+### Matrices, Arrays, Lists, and Data Frames
+
+**Matrices** were introduced in `drhur("calculate")`. **Arrays** generalise matrices to higher dimensions:
+
+```{r array}
+vector1 <- c(5, 9, 3)
+vector2 <- c(10, 11, 12, 13, 14, 15)
+
+result <- array(c(vector1, vector2), dim = c(3, 3, 2))
+result
+```
+
+A **list** is a heterogeneous container; elements may differ in type or length:
+
+```{r list}
+ls_monks <- list(
+  name   = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
+  power  = c(100, 20, 90, 40),
+  buddha = c(TRUE, TRUE, FALSE, FALSE)
+)
+
+ls_monks
+```
+
+A **data frame** is a special list (or matrix) where each column is a variable of equal length and each row is an observation:
+
+```{r dataframe}
+df_toy <- data.frame(
+  female = c(0, 1, 1, 0),
+  age    = c(29, 39, 38, 12),
+  name   = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America")
+)
+
+df_toy
+```
+
+
+### Data Attributes
+
+Functions for inspecting variables: `class()`, `typeof()`, `length()`, `dim()`, `nrow()`, `ncol()`, `levels()`, `nchar()`, `summary()`, `head()`.
+
+```{r attribute}
+class(vec_double)
+typeof(vec_integer)
+length(vec_double)
+dim(df_toy)
+nrow(df_toy)
+ncol(df_toy)
+```
+
+
+### Exercise 6
+
+The `wvs7` dataset (a 2 % sample of WVS Wave 7, included in `drhur`) holds 1264 observations on 24 variables. Inspect its basic structure.
+
+```{r wvs_exercise, exercise = TRUE}
+data("wvs7", package = "drhur")
+
+```
+
+```{r wvs_exercise-solution}
+data("wvs7", package = "drhur")
+
+# Basic situation
+class(wvs7)         # "tbl_df" "tbl" "data.frame"
+dim(wvs7)           # 1264   24
+
+# Variable attributes
+head(wvs7$marital)  # first few values
+levels(wvs7$marital)  # factor levels
+
+# Structure verification
+is.data.frame(wvs7)  # TRUE
+is.list(wvs7)        # TRUE (a data frame is a list)
+is.matrix(wvs7)      # FALSE
+```
+
+
+## Data Input and Output
 
 ### Built-in Datasets
 
-R ships with a substantial collection of demonstration datasets, listed by `data()`. Many R packages also include their own datasets; once a package is loaded, its datasets become available in the same way.
+R ships with demonstration datasets, listed by `data()`. Many R packages include their own.
 
-```{r mtcars, exercise = TRUE}
+```{r datasets, eval = FALSE}
 data()
 ```
 
-###
 
-Pick a dataset listed by `data()`, load it, and use `summary()` to inspect its variables.
-
-```{r mtcars_exercise, exercise = TRUE}
-
-
-```
-
-```{r mtcars_exercise-solution}
-# An example
-data(uspop)
-summary(uspop)
-```
-
-
-### Directly Readable Formats
-
-Several common file formats can be read with base R alone:
-
-- `.RDS` — single R object
-- `.RData` — multiple R objects
-- `.txt` — plain-text tabular data
-- `.csv` — comma-separated values
-
-> Syntax: `<name> <- <reader>(<path>)`
+### Direct Reading
 
 ```{r input, eval = FALSE}
 df_rds <- readRDS("aDataset.rds")
@@ -255,453 +364,45 @@ df_csv <- read.csv("./aDataset.csv")
 
 ### Reading via Packages
 
-For other file formats, specialised packages offer dedicated readers. Load them with `library` or `require` and then call the appropriate function.
-
 ```{r read_pkgs, eval = FALSE}
-# SPSS, Stata, SAS
 library(haven)
 df_spss  <- read_spss("<FileName>.sav")
 df_stata <- read_dta("<FileName>.dta")
-df_sas   <- read_sas("<FileName>.sas7bdat")
 
-# Tabular files (fast import)
-library(readr)
-df_csv   <- read_csv("<FileName>.csv")
-df_table <- read_table("<FileName>.txt")
-
-# Excel
 library(readxl)
-df_excel  <- read_excel("<FileName>.xls")
-df_excel2 <- read_excel("<FileName>.xlsx")
+df_excel <- read_excel("<FileName>.xlsx")
 
-# JSON
-library(rjson)
-df_json <- fromJSON(file = "<FileName>.json")
-
-# XML / HTML
-library(xml2)
-df_xml  <- read_xml("<url>")
-df_html <- rvest::html_table(rvest::read_html("<url>"))
-```
-
-###
-
-The Swiss-army knife of data import is **rio**, whose `import()` function dispatches to the appropriate reader based on the file extension:
-
-```{r rio, eval = FALSE}
 library(rio)
 df_anything <- import("<AnyTypeOfData>")
 ```
 
 
-## Data Types
+### Storing Data
 
-1. Vector
-2. Matrix
-3. Data frame
-4. List
-5. Array
-
-
-### Vectors
-
-The function `c()` ("combine") is the workhorse for constructing vectors. A vector's elements must share the same data type — numeric, character, logical, factor, or otherwise.
-
-#### Numeric Vectors
-
-```{r numeric, exercise = TRUE}
-vec_integer <- c(1, -2, NA)
-vec_double  <- c(1.5, -2.34, 1/3)
-```
-
-Two notes:
-
-1. `NA` stands for *not available* — R's representation of a missing value.
-2. All elements of a single vector must share one type; if you mix types, R will silently coerce them to the most general one.
-
-###
-
-Generate a vector containing every even integer from 1 to 100.
-
-```{r numeric_exercise, exercise = TRUE}
-# hint: help(seq)
-
-```
-
-```{r numeric_exercise-solution}
-seq(2, 100, by = 2)
-```
-
-
-#### Character Vectors
-
-```{r character, exercise = TRUE}
-vec_chr <- c("R", "is", "powerful — and so are you.")
-```
-
-###
-
-Generate the sequence of lowercase Roman letters from `a` to `z`.
-
-```{r character_exercise, exercise = TRUE}
-vec_letters <- c("a", "b", "c", "d", "e")
-```
-
-```{r character_exercise-solution}
-letters[1:26]
-```
-
-
-#### Logical Vectors
-
-```{r logic, exercise = TRUE}
-vec_tf <- c(TRUE, TRUE, FALSE)
-vec_tf
-# c(TRUE, TRUE, FALSE) == c(1, 1, 0)
-```
-
-###
-
-Suppose `x` is a vector containing `(1, 1, 0)`. Convert it into a logical vector.
-
-```{r logic_exercise, exercise = TRUE}
-
-```
-
-```{r logic_exercise-solution}
-x <- c(1, 1, 0)
-x <- as.logical(x)
-```
-
-
-#### Factor Vectors
-
-A **factor** stores a categorical variable with a fixed set of allowed values (its *levels*). An *ordered* factor additionally records a meaningful order among the levels.
-
-```{r factor, exercise = TRUE}
-vec_fac <- factor(c(1, 2, 2, 3))
-```
-
-```{r factor-hint}
-vec_ord  <- ordered(c(1, 2, 2, 3))
-vec_fac2 <- factor(c(1, 2, 2, 3),
-                   levels = c(3, 2, 1),
-                   labels = c("Apple", "Pear", "Orange"))
-```
-
-###
-
-When a new dataset arrives, the first task is to develop a rough sense of what is inside. Inspect the variables in `wvs7`:
-
-```{r factor_exercise1, exercise = TRUE}
-
-
-
-```
-
-```{r factor_exercise1-solution}
-str(wvs7)
-```
-
-###
-
-Examine the class of `wvs7$incomeLevel`:
-
-```{r factor_exercise2, exercise = TRUE}
-
-
-
-```
-
-```{r factor_exercise2-solution}
-class(wvs7$incomeLevel)
-```
-
-###
-
-List the values of `incomeLevel` and the frequency of each:
-
-```{r factor_exercise3, exercise = TRUE}
-
-
-
-```
-
-```{r factor_exercise3-solution}
-table(wvs7$incomeLevel)
-```
-
-
-#### Date and Time Vectors
-
-R offers two representations of time:
-
-- `as.POSIXct()` — numeric input, integer storage; counts the seconds since the UNIX epoch (1970-01-01 00:00:00).
-- `as.POSIXlt()` — character input, list storage; each component (year, month, day, and so on) is an element of the list.
-
-```{r time_POSIXct_POSIXlt}
-# The difference between as.POSIXct and as.POSIXlt
-ct <- as.POSIXct("2023-03-20 10:11:12")
-lt <- as.POSIXlt("2023-03-20 10:11:12")
-```
-
-```{r time_POSIXctandPOSIXlt}
-unlist(ct)
-unlist(lt)
-```
-
-```{r time, exercise = TRUE}
-Sys.time()    # current date and time (with time zone)
-today()       # today's date (year, month, day)
-now()         # today's date and time
-# CST is the time zone of the machine running this code
-
-# The full pack
-time1 <- Sys.time()
-time2 <- as.POSIXlt(Sys.time())
-time2$wday    # day of the week
-
-## What if you only care about the date?
-```
-
-```{r time-hint}
-Sys.Date()
-date1 <- as.Date("2019-01-02")
-class(date1)
-```
-
-###
-
-The Swiss-army knife for date handling is **lubridate**:
-
-```{r date, exercise = TRUE}
-library(lubridate)
-
-ymd("20221016")
-mdy("10-16-2022")
-dmy("16/10/2022")
-ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
-```
-
-```{r date-hint}
-OlsonNames()
-```
-
-###
-
-When date strings appear in inconsistent orders, such as
-
-```
-x <- c("20190101", "01012019", "021901")
-```
-
-how would you parse them?
-
-```{r date_exercise, exercise = TRUE}
-# help(parse_date_time)
-
-```
-
-```{r date_exercise-solution}
-x <- c("20190101", "01012019", "021901")
-parse_date_time(x, orders = c("ymd", "dmy", "dym"))
-```
-
-
-### Matrices
-
-For matrices, see the previous chapter — `drhur("calculate")`.
-
-
-### Arrays
-
-An **array** is, as the name suggests, an "array of columns" that can store data of more than two dimensions. Use `array()` to create one.
-
-```{r array}
-# Create two vectors of different lengths
-vector1 <- c(5, 9, 3)
-vector2 <- c(10, 11, 12, 13, 14, 15)
-
-# Feed them into an array
-result <- array(c(vector1, vector2), dim = c(3, 3, 2))
-result
-```
-
-
-### Lists
-
-A **list** is a heterogeneous "string" of objects — its elements may belong to different types or even differ in length:
-
-```{r list}
-ls_monks <- list(name   = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
-                 power  = c(100, 20, 90, 40),
-                 buddha = c(TRUE, TRUE, FALSE, FALSE))
-
-ls_monks
-```
-
-
-### Data Frames
-
-A **data frame** is a special kind of list (or, equivalently, of matrix) in which:
-
-- columns are *variables*, each of equal length;
-- rows are *observations*.
-
-In R:
-
-```{r dataframe}
-df_toy <- data.frame(female = c(0, 1, 1, 0),
-                     age    = c(29, 39, 38, 12),
-                     name   = c("Iron Man", "Black Widow",
-                                "Captain Marvel", "Captain America"))
-
-df_toy
-```
-
-
-## Data Attributes
-
-1. `class`, `typeof` — query the variable's storage class and underlying type.
-2. `nchar` — get the length of a character string.
-3. `levels` — get or set the levels of a factor.
-4. `nrow` — return the number of rows of a matrix or data frame.
-5. `ncol` — return the number of columns of a matrix or data frame.
-6. `dim` — return the dimensions (the subspace spanned by the column vectors).
-
-```{r attribute, exercise = TRUE}
-vec_integer <- c(1, -2, NA)
-
-vec_double <- c(1.5, -2.34, 1/3)
-
-vec_chr <- c("R", "is", "powerful — and so are you.")
-
-vec_fac <- factor(c(1, 2, 2, 3))
-
-ls_monks <- list(name   = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
-                 power  = c(100, 20, 90, 40),
-                 buddha = c(TRUE, TRUE, FALSE, FALSE))
-
-df_toy <- data.frame(female = c(0, 1, 1, 0),
-                     age    = c(29, 39, 38, 12),
-                     name   = c("Iron Man", "Black Widow",
-                                "Captain Marvel", "Captain America"))
-
-class(vec_double)
-typeof(vec_integer)
-
-nchar(vec_chr)
-levels(vec_fac)
-
-length(vec_double)
-length(ls_monks)
-length(df_toy)
-
-nrow(df_toy)
-ncol(df_toy)
-dim(df_toy)
-```
-
-
-### Practice
-
-Convert the following vector into numeric form:
-
-```
-c(FALSE, TRUE)
-```
-
-```{r attribute_exercise1, exercise = TRUE}
-# help(as.numeric)
-
-```
-
-```{r attribute_exercise1-solution}
-as.numeric(c(FALSE, TRUE))
-```
-
-###
-
-In `wvs7`, the variable `female` takes the logical values `TRUE` / `FALSE`.
-
-For analysis, it is often more convenient to recode logical values as numeric 0 / 1.
-
-```{r attribute_exercise2, exercise = TRUE}
-
-```
-
-```{r attribute_exercise2-solution}
-as.numeric(wvs7$female) - 1
-```
-
-
-## Data Output
-
-> Syntax: `<writer>(<object_to_save>, file = <path>)`
-
-### Storing as Native R Data
-
-```{r saving, eval = FALSE}
+```{r save, eval = FALSE}
 saveRDS(df_toy, file = "df_toy.rds")
 save(df_toy, ls_monks, file = "test.RData")
-```
-
-
-### Storing as CSV
-
-```{r savingCSV, eval = FALSE}
 write.csv(df_toy, file = "toy.csv")
 ```
 
-<div class="alert alert-info">
 
-**A note on encoding**
+### Exercise 7
 
-If your dataset contains Chinese (or other non-Latin) text, `write.csv()` may produce mojibake (garbled characters) on some systems. Specifying `fileEncoding = "UTF-8"` or saving with `readr::write_csv()` typically resolves the issue.
+Load the built-in `uspop` dataset and inspect its statistical summary.
 
-</div>
+```{r uspop_exercise, exercise = TRUE}
 
-###
+```
 
-You may export to Stata, SPSS, SAS, Excel, JSON, MATLAB, HTML, and many other formats — but should you? The native R formats are usually faster and more compact:
-
-STATA (.dta, < 14): 3.16 G = R (.rds): 0.05 G
-
-| **Method**       | **Average Time** | **Minimum** | **Maximum** |
-|:-----------------|:----------------:|:-----------:|:-----------:|
-| `base::readRDS`    |       19.65    |    18.64    |    21.01    |
-| `fst::read_fst`    |        1.39    |     0.56    |     3.41    |
-| `haven::read_sav`  |      104.78    |   101.00    |   111.85    |
-| `qs::qread`        |        3.33    |     3.00    |     4.24    |
-
-: Average time (in seconds) to read GSS data in R.
-
-
-| **Method**      | **Average Time** | **Minimum** | **Maximum** | **File Size** |
-|:----------------|:----------------:|:-----------:|:-----------:|:-------------:|
-| `base::saveRDS`   |       98.36    |    93.09    |   103.24    |    30.9 MB    |
-| `fst::write_fst`  |        2.70    |     1.86    |     4.05    |   122.1 MB    |
-| `qs::qsave`       |        5.03    |     4.35    |     6.62    |    44.6 MB    |
-
-: Average time (and file size) to write GSS data in R.
+```{r uspop_exercise-solution}
+data(uspop)
+summary(uspop)
+```
 
 
 ## Summary
 
-- **Foundational concepts**
-    - OOP
-    - Functions and packages
-    - Assignment
-- **Data input**
-    - Built-in datasets and CSV
-    - Package-mediated readers
-- **Data types**
-    - Vectors
-    - Matrices
-    - Arrays
-    - Lists
-    - Data frames
-- **Data attributes**
-- **Data output**
-    - Native R formats
-    - Other tabular formats
+- **Foundational concepts**: OOP (classes, objects); functions and packages; assignment.
+- **Data types**: vectors (numeric, character, logical, factor, date/time); matrices, arrays, lists, data frames.
+- **Data attributes**: `class()`, `dim()`, `summary()`, `head()`.
+- **Data I/O**: `data()`, `read.csv()`, `readRDS()`; `saveRDS()`, `write.csv()`.
