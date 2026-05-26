@@ -24,20 +24,26 @@ The goal of this package is to provide an interactive platform for learners to e
 The ideal way to acquire these skills is through the "Learning R with Dr. Hu" workshop, conducted by Associate Professor Yue Hu from the Department of Political Science at Tsinghua University. 
 The modules included in this package correspond to the content of the initial chapters of this workshop series and Dr. Hu's forthcoming textbook on the R programming language.
 The workshop series and the book aim to cover knowledge and skills about R, ranging from basic to advanced techniques, such as spatial analysis, network analysis, and text analysis.
-You can find more relevant information on the [author's website](https://sammo3182.github.io/software/drhur/) or by [contacting him](mailto:yuehu@tsinghua.edu.cn) directly.
+You can find more relevant information on the [author's website](https://www.drhuyue.site/software/drhur/) or by [contacting him](mailto:yuehu@tsinghua.edu.cn) directly.
 
 ## Usage
 
-This package is constructed using the `learnr` function, which launches a Shiny app allowing learners to interact seamlessly with instructions and tasks. 
-One can conveniently load the package and access the tutorials through the `drhur()` function. 
-For example, the visualization tutorial can be initiated with the following commands:
+Each workshop is a self-contained [Quarto Live](https://r-wasm.github.io/quarto-live/) document whose code cells run directly in the browser via WebAssembly (`webR`), so learners can read the instructions and run the exercises side by side without setting up a local R session.
+One can conveniently load the package and open a workshop through the `drhur()` function, which renders the document and opens it in the browser.
+For example, the data-visualization workshop can be initiated with the following commands:
 
 ```{r eval = FALSE}
 if (!require(drhur)) install.packages("drhur")
 library(drhur)
 
-drhur("visualize")
+# Open as a scrollable HTML live document (the default)
+drhur("visual_basic")
+
+# Or open the same workshop as a reveal.js slide deck
+drhur("visual_basic", style = "slide")
 ```
+
+Rendering requires the [Quarto](https://quarto.org) command-line tool to be installed, and running the interactive code cells requires an internet connection (the `webR` runtime and the workshop's R packages are downloaded in the browser at view time).
 
 
 ## Conclusion
@@ -55,4 +61,4 @@ Yue Hu
 Political Science,    
 Tsinghua Univeristy   
 Email: <yuehu@tsinghua.edu.cn>    
-Website: <https://sammo3182@tsinghua.edu.cn>
+Website: <https://www.drhuyue.site>

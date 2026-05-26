@@ -1,26 +1,32 @@
 Package: drhur
 Type: Package
 Title: Learning R with Dr. Hu
-Version: 1.1.0
+Version: 2.0.0
 Authors@R: c(
     person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
     person("Xinyi", "Ye", role = c("ctb", "trl"), email = "yexinyi98@outlook.com"),
     person("Yufei", "Sun", role = c("ctb"), email = "sunyf20@mails.tsinghua.edu.cn")
     )
-Maintainer: Yue Hu <yuehu@tsinghua.edu.cn>
-Description: Tutarials of R learning easily and happily.
+Description: Provides interactive workshops for learning R easily and happily.
+    Each workshop is a self-contained 'Quarto' Live document whose code cells run
+    in the browser via 'WebAssembly', so learners can read the instructions and
+    run the exercises side by side without a local R setup. The materials
+    accompany the "Learning R with Dr. Hu" workshop series.
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 Encoding: UTF-8
 BugReports: https://github.com/sammo3182/drhur/issues
 LazyData: true
+SystemRequirements: Quarto command-line tool (https://quarto.org)
 Depends:
-  R(>= 3.6.0),
-  learnr(>= 0.10.1)
-RoxygenNote: 7.2.3
-Suggests: 
+  R(>= 3.6.0)
+Imports:
+  quarto
+Suggests:
+    servr,
     rmarkdown,
     scales,
     modelsummary,
     knitr,
     tidyverse
+Config/roxygen2/version: 8.0.0

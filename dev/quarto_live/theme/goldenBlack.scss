@@ -1,0 +1,16 @@
+/*-- scss:defaults --*/
+
+// @import url(./fonts/league-gothic/league-gothic.css);
+// @import url(`https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic`);
+
+// fonts
+$font-family-sans-serif: Lato, "Source Code Pro", 'STHeiti', 'Microsoft YaHei', 'SimHei', sans-serif !default;
+
+// code blocks
+$code-block-bg: transparent !default;
+
+/*-- scss:mixins --*/
+
+@mixin bodyBackground() {
+  @include radial-gradient(rgba(247, 242, 211, 1), rgba(255, 255, 255, 1));
+}

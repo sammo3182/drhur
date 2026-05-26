@@ -1,0 +1,644 @@
+---
+title: "描述性统计"
+subtitle: 基础篇
+author: 胡悦
+institute: Learning R with Dr. Hu and His Friends Workshop Series
+
+webr:
+  repos:
+    - https://sammo3182.r-universe.dev
+  packages:
+    - drhur
+    - dplyr
+    - tidyr
+    - ggplot2
+    - patchwork
+    - modelsummary
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# 描述性统计 {#sec-descriptive}
+
+::: {.callout-note title="本章重点"}
+
+1. 矩在描述数据分布中的作用
+2. 使用 `dplyr` 和 `modelsummary` 制作高质量描述统计表
+3. 直方图、密度图、箱线图与小提琴图的原理与应用
+
+*本章研究问题*：民众的平等观念如何分布，是更看重机会平等还是结果平等？
+
+:::
+
+## 描述统计计算
+
+- 数据分析的核心：寻找规律
+- 描述性统计是寻找规律的起点
+- 用得对、用得好：为后续分析奠定基础，为读者建立"第一印象"
+- 本章核心变量：`equalIncentive`（平等观念）
+- 1 = 完全倾向结果平等，10 = 完全倾向机会平等
+- 中间数代表对两端不同程度的偏向
+
+---
+
+- 最直接的描述方式：看各档位人数
+- 两种常用方法：
+    - R 自带 `table()`：直接计算频数，向量形式
+    - `dplyr::count()`：表格形式，更规整、支持多变量联合计数
+
+```{webr}
+#| label: count
+
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# R 基础函数 table
+table(wvs7$equalIncentive)
+
+# dplyr 的 count
+wvs7 |> count(equalIncentive)
+
+# 多变量联合计数：分国家、分性别的平等观念分布
+wvs7 |> count(country, female, equalIncentive) |> head(10)
+```
+
+---
+
+
+- `table()` 返回向量，每个值出现的次数
+- `count()` 返回 `tibble`，含 `equalIncentive` 与 `n` 两列
+- 多变量计数：第一行结果即"安道尔的某位男性选择了 equalIncentive=2"
+
+---
+
+- 计数直观但难以提炼变量"特点"
+- 统计学家用"矩"描绘变量特征
+- 四阶矩对应四个直观概念：
+    - 一阶矩：平均数
+    - 二阶中心矩：方差（与之相关：标准差 = 方差的平方根）
+    - 三阶标准化中心矩：偏度
+    - 四阶标准化中心矩：峰度
+
+---
+
+- 把每个值的人数画成柱状图，连成一条平滑曲线 → 密度图
+- 四个矩对应这座"山"的四个特征：
+    - 平均值 = 山峰位置
+    - 方差 = 山的宽窄
+    - 偏度 = 山坡陡峭程度
+    - 峰度 = 山顶尖锐程度
+- 知道这些特征，就能大致勾勒出山的样态
+
+```{webr}
+#| label: idealDistribution
+
+library(ggplot2)
+
+# 理想的钟形分布示意（基于正态分布）
+ggplot(data.frame(x = c(1, 10)), aes(x)) +
+  stat_function(
+    fun = dnorm,
+    args = list(mean = 5, sd = 1),
+    color = "darkblue",
+    linewidth = 1.2
+  ) +
+  scale_x_continuous(breaks = 1:10) +
+  labs(x = "平等观念", y = "密度", title = "理想分布")
+```
+
+---
+
+::: {.callout-warning title="矩的悖论"}
+
+- 实际社科数据往往不呈完全钟形分布
+- 比如平等观念真实分布更像"山坡"
+- 平均值常出现在"半山腰"而非山峰
+- 矩的实际描述含义在偏态数据上会打折扣
+- 更稳妥的方式：将原始数据可视化（后文会讲）
+
+:::
+
+```{webr}
+#| label: realDistribution
+
+library(ggplot2)
+library(dplyr)
+
+# 平等观念的真实分布
+ggplot(wvs7, aes(x = equalIncentive)) +
+  geom_density(adjust = 1.5) +
+  geom_vline(
+    xintercept = mean(wvs7$equalIncentive, na.rm = TRUE),
+    linetype = "dashed"
+  ) +
+  scale_x_continuous(breaks = seq(1, 10, by = 1)) +
+  labs(x = "平等观念", y = "密度", title = "实际分布（WVS7）")
+```
+
+---
+
+- 计算具体矩的函数：
+    - `mean()`：平均数
+    - `var()`：方差
+    - `sd()`：标准差
+- `summary()` 一次返回六组：最小值、Q1、中位数、平均数、Q3、最大值
+
+```{webr}
+#| label: moments_calc
+
+# 平均值
+mean(wvs7$equalIncentive, na.rm = TRUE)
+
+# 方差
+var(wvs7$equalIncentive, na.rm = TRUE)
+
+# 标准差
+sd(wvs7$equalIncentive, na.rm = TRUE)
+
+# 六数概括
+summary(wvs7$equalIncentive)
+```
+
+---
+
+::: {.callout-important title="统计量与缺失值"}
+
+- 单独计算矩时通常加 `na.rm = TRUE`
+- R 默认不会忽略任何值——包括缺失值
+- 缺失值含义是"未知"，不是 0、不是"没有"
+- 含 `NA` 的向量直接运算会返回 `NA`
+- `na.rm = TRUE` 显式告诉 R"先移除缺失值再算"
+
+:::
+
+```{webr}
+#| label: mean_na
+
+# 错误示范：直接计算含缺失值的向量
+mean(wvs7$equalIncentive)
+
+# 正确示范：先移除缺失值
+mean(wvs7$equalIncentive, na.rm = TRUE)
+```
+
+---
+
+
+- `dplyr::summarise()` 一次输出多种统计量
+- `group_by()` 让运算在各组中分别进行
+- 二者搭配：群组层级分析的核心组合
+
+---
+
+- 例：考察各国总体教育状况与年龄差异
+- 教育水平用样本均值估计
+- 年龄差异用标准差估计
+
+```{webr}
+#| label: summarise_by_country
+
+# 按国家分组，分别计算多个统计量
+group_by(wvs7, country) |>
+  summarise(
+    equal_mean = mean(equalIncentive, na.rm = TRUE),
+    age_mean = mean(age, na.rm = TRUE),
+    edu_sd = sd(education, na.rm = TRUE)
+  ) |>
+  ungroup() |>
+  head()
+```
+
+---
+
+- `group_by()` 给数据加"分组"元数据
+- `summarise()` 对每组分别执行计算，消耗一层分组
+- `ungroup()` 显式移除剩余分组标记，恢复普通表格
+- 结果：把分析单元从"个人"拔高到"国家"，便于宏观比较
+
+## 现学现练 {.unnumbered}
+
+**练习1**：按收入水平的平等观念分布
+
+**不同收入水平（`incomeLevel`）的群体，他们的平等观念（`equalIncentive`）在分布上是否存在差异？**
+
+请用上面学到的函数回答这个问题。
+
+::: { .hint exercise="income_equality" }
+
+- 参考"按国家分组"的写法
+- 把分组变量改为 `incomeLevel`
+- 用 `filter()` 去掉 `incomeLevel` 的缺失值
+- 用 `summarise()` 计算各组的样本量、均值与标准差
+
+:::
+
+```{webr}
+#| label: income_equality
+#| exercise: income_equality
+
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# 在此完成代码
+
+```
+
+::: { .solution exercise="income_equality" }
+
+```r
+library(dplyr)
+data("wvs7", package = "drhur")
+
+wvs7 |>
+  filter(!is.na(incomeLevel)) |>
+  group_by(incomeLevel) |>
+  summarise(
+    n = n(),
+    equal_mean = mean(equalIncentive, na.rm = TRUE),
+    equal_sd = sd(equalIncentive, na.rm = TRUE)
+  ) |>
+  ungroup()
+
+# 解析：
+# 1. filter 去掉 incomeLevel 缺失观测
+# 2. group_by 按收入档位分组
+# 3. summarise 算每组的样本量、平等观念均值与标准差
+# 4. ungroup 恢复普通表格
+# 5. 观察 equal_mean：高收入组若更高，说明该群体更倾向"机会平等"
+```
+
+:::
+
+## 描述性表格
+
+- 传统描述性统计以表格呈现
+- 但表格对非钟形数据的特征表现有限
+- 越来越多学者倾向使用直方图、密度图、小提琴图等
+- 表格仍是最基本的展示方式
+- 经验丰富者能从描述性表中判断数据质量
+- 但要丰富、全面才能达到这种效果
+- 推荐工具：`modelsummary`（Vincent Arel-Bundock 出品）
+
+---
+
+- `datasummary_skim()`：一行代码生成带直方图的概览表
+- 既有传统统计量（均值、中位数、标准差）
+- 又附带嵌入式直方图，直观看分布
+
+```{webr}
+#| label: datasummary_skim
+
+library(modelsummary)
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# 一行代码生成描述统计表
+select(wvs7, age, equalIncentive, corruption_state) |>
+  datasummary_skim()
+```
+
+---
+
+- 按变量类型分别生成：
+
+```{webr}
+#| label: datasummary_by_type
+
+library(modelsummary)
+
+# 仅数值型变量
+datasummary_skim(wvs7, type = "numeric")
+
+# 仅分类变量
+datasummary_skim(wvs7, type = "categorical")
+```
+
+---
+
+- `datasummary()` 支持完全定制
+- 公式语法：`<变量(行)> ~ <统计量(列)>`
+
+```{webr}
+#| label: datasummary_custom
+
+library(modelsummary)
+
+# 自定义：指定变量与统计量
+datasummary(age + equalIncentive ~ Mean + SD, data = wvs7)
+```
+
+## 现学现练 {.unnumbered}
+
+**练习2**：定制描述统计表
+
+请使用 `datasummary()` 函数为 `wvs7` 创建一个描述性统计表，要求：
+
+1. 分析 `age`、`education`、`equalIncentive` 三个变量
+2. 用 `datasummary` 的公式语法控制内容
+3. 只展示四种统计量：`N`（非缺失观测数）、`Mean`（平均值）、`Median`（中位数）、`SD`（标准差）
+
+::: { .hint exercise="datasummary_custom_ex" }
+
+- 公式语法：`<变量1> + <变量2> + ... ~ <统计量1> + <统计量2> + ...`
+- 三个变量在 `~` 左边
+- 四个统计量在 `~` 右边
+- `data = wvs7` 作为参数
+
+:::
+
+```{webr}
+#| label: datasummary_custom_ex
+#| exercise: datasummary_custom_ex
+
+library(modelsummary)
+data("wvs7", package = "drhur")
+
+# 在此完成代码
+
+```
+
+::: { .solution exercise="datasummary_custom_ex" }
+
+```r
+library(modelsummary)
+data("wvs7", package = "drhur")
+
+# 公式语法：变量(行) ~ 统计量(列)
+datasummary(age + education + equalIncentive ~ N + Mean + Median + SD, data = wvs7)
+
+# 解析：
+# - 对比三变量的 N，可看 equalIncentive 是否比 age、education 缺失更多
+# - 若 age 的 Mean 与 Median 接近 → 分布对称
+# - 若 Mean 明显大于 Median → 分布右偏
+```
+
+:::
+
+## 常用统计图形
+
+- 直方图：最常见的一维分布展示
+- 把数据分成若干区间，矩形高度表示频数
+- 适用于连续变量
+
+```{webr}
+#| label: histogram
+
+library(ggplot2)
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# 年龄直方图（连续变量）
+ggplot(wvs7, aes(x = age)) +
+  geom_histogram(alpha = 0.6) +
+  labs(x = "年龄", y = "频数")
+```
+
+---
+
+- 离散变量更适合条形图（`geom_bar`）
+
+```{webr}
+#| label: barplot
+
+library(ggplot2)
+
+# 平等观念条形图（定序变量）
+ggplot(wvs7, aes(x = factor(equalIncentive))) +
+  geom_bar(alpha = 0.6) +
+  labs(x = "平等观念", y = "频数")
+```
+
+---
+
+- 密度图：直方图的平滑版本
+- 通过核密度估计（kernel density estimation）：每个观测值上放一条"小山丘"曲线，相加后平均化
+- 优点：清晰展示分布形状，尤其在识别多峰分布时
+
+---
+
+- 以三个数据点（0、1、2）为例，演示从直方图到密度图的转变：
+    - **左图**：灰色柱子是原始直方图；在每个数据点上放一条以该点为中心的核函数曲线（"小山丘"）
+    - **中图**：把三条独立曲线（虚线）在每个 x 位置相加，得到"总高度"实线
+    - **右图**：把"总高度"除以观测值数量（这里是 3）做平均化——形状不变，y 轴数值缩小
+
+```{webr}
+#| label: hist2density
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(patchwork)
+
+# 设定演示数据点和绘图参数
+data_points <- c(0, 1, 2)
+bw          <- 0.4
+x_grid      <- seq(-1.5, 3.5, length.out = 400)
+
+# 准备基础数据框
+df_data <- tibble(x = data_points)
+
+# 计算每个点的核密度曲线 (小山丘)
+df_kernels <- expand_grid(x = x_grid, point = data_points) |>
+  mutate(kernel = dnorm(x, mean = point, sd = bw))
+
+# 计算所有核密度曲线的加和
+df_sum_all <- df_kernels |>
+  group_by(x) |>
+  summarise(sum_all = sum(kernel), .groups = "drop")
+
+# 计算最终的密度估计 (加和的平均值)
+df_kde <- df_kernels |>
+  group_by(x) |>
+  summarise(kde = mean(kernel), .groups = "drop")
+
+# 绘图1：直方图 + 独立的核密度曲线
+p_histKernel <- ggplot() +
+  geom_histogram(data = df_data, aes(x = x),
+    binwidth = 0.5, boundary = -0.25,
+    color = "black", fill = "grey80") +
+  geom_line(data = df_kernels, aes(x = x, y = kernel, group = factor(point))) +
+  labs(title = "直方图与核密度", x = "x", y = "核密度 / 频数")
+
+# 绘图2：核密度曲线 + 加和曲线
+p_kernel <- ggplot() +
+  geom_line(data = df_kernels, aes(x = x, y = kernel, group = factor(point)),
+    linetype = "dashed") +
+  geom_line(data = df_sum_all, aes(x = x, y = sum_all), linewidth = 1) +
+  labs(title = "三个核密度叠加", x = "x", y = "核密度")
+
+# 绘图3：最终的密度图
+p_density <- ggplot(df_kde, aes(x = x, y = kde)) +
+  geom_line(linewidth = 1) +
+  labs(title = "叠加求平均", x = "x", y = "核密度估计")
+
+# 拼图展示
+(p_histKernel + p_kernel + p_density) &
+  theme(plot.title = element_text(size = 8))
+```
+
+---
+
+- 把这个原理应用到真实数据：年龄变量同时画直方图与密度曲线
+- 年龄分布大致呈单峰形态，但略有右偏（尾部向右延伸）
+
+```{webr}
+#| label: density_plot
+
+library(ggplot2)
+
+# 年龄分布：直方图 + 密度曲线
+ggplot(wvs7, aes(x = age)) +
+  geom_histogram(aes(y = after_stat(density)), alpha = 0.6) +
+  geom_density(alpha = 0.5, linewidth = 1) +
+  labs(x = "年龄", y = "密度")
+```
+
+---
+
+::: {.callout-warning title="连续变量才适合密度图"}
+
+- 密度图假设变量在连续轴上取值
+- 定序、分类变量两相邻类别间不存在连续空间
+- 核密度估计会在"空白区域"制造虚假趋势
+- 严格来说，经典直方图也是为连续变量设计的
+- 离散变量画"直方图"本质是条形图
+
+:::
+
+---
+
+- 箱线图（box plot, 盒须图）：直接基于描述统计量展示分布
+- 箱体：从 Q1 到 Q3
+- 中间横线：中位数
+- 须线：从箱体向两侧延伸到 ±1.5 IQR 内的极值
+- 须线外的点：潜在离群点
+
+```{webr}
+#| label: boxplot
+
+library(ggplot2)
+
+# 年龄分布箱线图
+ggplot(wvs7, aes(y = age)) +
+  geom_boxplot(alpha = 0.6) +
+  labs(y = "年龄")
+```
+
+---
+
+
+- 从图中可读出：
+    - 中心趋势：中位数约 40 岁
+    - 离散程度：IQR 约 28-53 岁
+    - 偏态：上须线明显比下须线长 → 右偏
+    - 异常值：无（所有数据都在须线内）
+
+---
+
+- 箱线图的局限：完全基于统计量，可能严重误导
+- 三种截然不同的分布可能画出完全相同的箱线图
+- 这是因为统计量恰好一致而原始分布完全不同
+
+```{webr}
+#| label: boxplot_mislead
+
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+set.seed(313)
+n <- 1000
+
+# 三种不同分布
+raw_data <- tibble(
+  dist = rep(c("正态", "双峰", "右偏"), each = n),
+  value = c(
+    rnorm(n, mean = 0, sd = 1),
+    c(rnorm(n / 2, mean = -2, sd = 0.4),
+      rnorm(n / 2, mean =  2, sd = 0.4)),
+    rexp(n, rate = 1)
+  )
+)
+
+# 原始数据散点图
+p_raw <- ggplot(raw_data, aes(x = dist, y = value)) +
+  geom_jitter(width = 0.15, alpha = 0.25, size = 0.5) +
+  labs(x = NULL, y = "取值", title = "原始数据")
+
+# 小提琴图
+p_violin <- ggplot(raw_data, aes(x = dist, y = value)) +
+  geom_violin(alpha = 0.4, fill = alpha("black", 0.4), colour = NA, trim = FALSE) +
+  labs(x = NULL, y = "取值", title = "小提琴图")
+
+# 横向拼接
+p_raw + p_violin + plot_layout(axes = "collect")
+```
+
+---
+
+- 小提琴图（violin plot）：箱线图的更好替代
+- 垂直方向：分布的整体形状
+- 水平方向：核密度估计，宽窄代表密度
+- 与箱线图比：完整揭示分布轮廓（长尾、偏态、多峰、离群点聚集）
+- 与密度图比：在垂直轴上呈现，多组比较更紧凑
+- 例：比较不同平等观念群体的年龄分布
+- 用 `ntile()` 把 10 档简化为 3 组（结果平等更重要 / 二者都重要 / 机会平等更重要）
+
+```{webr}
+#| label: violin_age_equality
+
+library(ggplot2)
+library(dplyr)
+
+# 数据准备：分组
+df_violin <- select(wvs7, equalIncentive, age) |>
+  filter(!is.na(equalIncentive), !is.na(age)) |>
+  mutate(
+    eq_group = ntile(equalIncentive, 3) |>
+      factor(
+        levels = c(1, 2, 3),
+        labels = c("结果平等更重要", "二者都重要", "机会平等更重要")
+      )
+  )
+
+# 小提琴图：比较三组年龄分布
+ggplot(df_violin, aes(x = eq_group, y = age)) +
+  geom_violin(trim = FALSE, fill = alpha("black", 0.6)) +
+  labs(x = "平等观念", y = "年龄")
+```
+
+---
+
+- 关键观察：
+    - 三组分布形态大致相似（集中在 25-50 岁）
+    - "结果平等更重要"组在 25、37.5、50 岁附近各有隆起
+    - "机会平等更重要"组分布更均匀，高龄尾部延伸更长
+- 这些细节是箱线图无法呈现的
+
+
+- 图形函数命名规律：以 `geom_` 开头
+- `geom` = "geometry"（几何）的缩写
+- 后跟图形类型英文：`geom_histogram`、`geom_density`、`geom_boxplot`、`geom_violin`
+- 简单明了，下一章 ggplot2 集中讲
+
+## 本章重点及回顾
+
+- 矩（Moments）
+    - 一阶矩：平均数
+    - 二阶矩：方差 / 标准差
+    - 三阶矩：偏度
+    - 四阶矩：峰度
+- 描述统计计算
+    - 平均值：`mean()`
+    - 标准差 / 方差：`sd()` / `var()`
+    - 频数统计：`table()` / `count()`
+    - 分组聚合：`group_by()` + `summarise()`
+
+---
+
+- 描述统计可视化
+    - 描述统计表：`datasummary_skim()`、`datasummary()`
+    - 直方图：`geom_histogram()`
+    - 密度图：`geom_density()`
+    - 箱线图：`geom_boxplot()`
+    - 小提琴图：`geom_violin()`（重点）

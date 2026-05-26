@@ -1,0 +1,666 @@
+---
+title: "数据整理"
+subtitle: 基础篇
+author: 胡悦
+institute: Learning R with Dr. Hu and His Friends Workshop Series
+
+webr:
+  repos:
+    - https://sammo3182.r-universe.dev
+  packages:
+    - drhur
+    - dplyr
+    - tidyr
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# 数据整理 {#sec-munging}
+
+::: {.callout-note title="本章重点"}
+
+1. 单数据整理
+    - 探索
+    - 梳理
+    - 筛选
+    - 修改
+2. 跨数据整理
+    - 直接合并
+    - 索引合并
+
+*本章研究问题*：基于"民众平等观念影响因素探究"，示例数据 `wvs7` 包含哪些有用信息？
+
+:::
+
+## 数据探索
+
+- 数据探索：对陌生数据的构成、结构、形式、内容做初步了解
+- 是"数据输入"的后续步骤，也是数据分析的第一步
+- 最简单的方法是"看看数据"——直接调用对象名
+
+```{webr}
+#| label: glimpse
+
+# 加载数据
+data("wvs7", package = "drhur")
+
+# 查看数据框的内容
+wvs7
+```
+
+---
+
+::: {.callout-tip title="`tibble` 数据框"}
+
+- `wvs7` 以 `tibble` 格式存储——普通数据框的升级版
+- 包含行、列、单元等维度
+- 绝大多数能用在 `data.frame` 上的函数也适用于 `tibble`
+- 是 tidyverse 工具链的标准格式
+
+:::
+
+
+- 直接看数据简便但数据量大时不适用
+- 需要更系统的方式了解结构和单变量特征
+
+## 数据结构探索
+
+- 数据结构 = 数据的体量与构成特征：观测数、变量数、变量名
+- 探查函数多以英文缩写命名
+- 例：`str` 即 "structure"，列出每个变量的类型、行数、列数
+
+```{webr}
+#| label: systemView
+
+library(dplyr)
+
+# 获取数据的行数
+nrow(wvs7)
+
+# 获取数据的列数
+ncol(wvs7)
+
+# 查看变量名（只看前 6 个）
+head(names(wvs7))
+
+# tidyverse 推荐的结构查看函数
+glimpse(wvs7)
+```
+
+---
+
+- 数据返回信息：1264 行 × 24 列
+- `glimpse()` 以更紧凑的方式展示数据全貌：列名纵向排列；标注每个变量类型（`<fct>` 因子、`<dbl>` 双精度等）；各变量前几个数据点预览
+
+## 变量信息提取
+
+- 提取变量有两种方式：
+    - 矩阵式方括号：`<数据框>[, "变量名"]`
+    - `$` 符号：`<数据框>$<变量名>`（最常用）
+
+```{webr}
+#| label: variable_extract
+
+# 方括号形式（输出过大，仅显示前 6 行）
+head(wvs7[, "country"])
+
+# $ 形式（提取不重复值并只显示前 10 个）
+unique(wvs7$country) |> head(10)
+```
+
+---
+
+- 数值型变量：可用 `mean()`、`median()`、`max()`、`var()`、`summary()` 等
+
+```{webr}
+#| label: varCal_numeric
+
+# 计算受访者平均年龄
+mean(wvs7$age, na.rm = TRUE)
+
+# 查看收入水平分布
+summary(wvs7$incomeLevel)
+```
+
+---
+
+- 定序、定类变量：用 `unique()` 看取值范围、`table()` 看频数分布
+
+```{webr}
+#| label: varCal_categorical
+
+# 年龄的频数分布
+table(wvs7$age)
+
+# 性别的分类统计
+table(wvs7$female)
+
+# 婚姻状况的分类统计
+table(wvs7$marital)
+```
+
+- `table()` 对不同类型变量返回不同信息——又一次 OOP 多态性的体现
+
+## 数据梳理 {.smaller}
+
+- 数据梳理 = 在数据中有目的地挑选变量、筛选观测、对呈现形式加工
+- R 本身提供基础函数；`tidyverse` 让操作更直观
+- 主用：`dplyr`（数据清理）+ 部分 `tidyr`
+
+
+- `tidyverse` 是一组 R 包的集合（meta-package）
+- 子包：`tidyr`、`dplyr`、`stringr`、`tibble` 等
+- 共享同一数据结构与设计哲学（"tidy 宇宙"）
+- 用 `library(tidyverse)` 可一次加载多个核心包
+
+
+- `dplyr` 专门负责数据清理
+- 清理目标：把原始数据整理成方便分析的格式
+- 包括对变量名、变量类型、变量值表示方式等做调整
+
+
+- 通道（pipe）：把上一个命令的结果传给下一个函数
+- R 自带通道符 `|>`，加载 `dplyr` 后还可用 `%>%`
+- 类似动作游戏中"搓"一个连续技：让命令排布按执行顺序、易读
+
+---
+
+- 传统嵌套式写法（从里向外读，难以理解顺序）：
+
+```r
+# 包饺子的嵌套式表达
+eatDumpling <- eat(
+  dip(
+    cook(
+      fill(
+        mix(meat, with = c(salt, soy_sauce, green_onion, ginger)),
+        with = wrapper
+      ),
+      in_water = boiled_water
+    ),
+    in_sauce = vinegar
+  )
+)
+```
+
+---
+
+- 通道式写法（从上向下读，逻辑清晰）：
+
+```r
+# 包饺子的通道式表达
+eatDumpling_pipe <- mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) |>
+  fill(with = wrapper) |>
+  cook(in_water = boiled_water) |>
+  dip(in_sauce = vinegar) |>
+  eat()
+```
+
+---
+
+- 把 `|>` 脑补为"然后"或英文 "and then"，函数表达就接近自然语言
+
+
+::: {.callout-note title="通道符快捷键"}
+
+- Windows / Linux：`Ctrl + Shift + M`
+- Mac：`Cmd + Shift + M`
+
+:::
+
+
+- 数据梳理四种常见操作：选择、排序、修改、统计
+
+## 数据选择
+
+- 选列与选行
+- 对列：用 `select()`
+- 语法：`select(<数据框>, <变量1>, <变量2>, ...)`
+
+```{webr}
+#| label: select
+
+library(dplyr)
+
+# 挑选感兴趣的 5 个变量
+select(wvs7, equalIncentive, incomeLevel, confidence_gov, education, country)
+```
+
+---
+
+- 根据变量名特征批量选择：
+    - `starts_with()`：以某字符串开头
+    - `ends_with()`：以某字符串结尾
+    - `matches()`：用正则表达式匹配任意位置
+
+```{webr}
+#| label: select_startwith
+
+# 批量选取所有以 "corruption" 开头的变量
+select(wvs7, starts_with("corruption"))
+```
+
+::: {.callout-tip title="类似的群组命令"}
+
+- `starts_with`：以指定字符开头
+- `ends_with`：以指定字符结尾
+- `matches`：正则表达式匹配，可定位变量名任何位置
+- 注意：第三人称单数加 s
+
+:::
+
+---
+
+- 去除变量：在变量名前加 `-`
+- `select(wvs7, -corruption_state)` 排除单个变量
+- `select(wvs7, -(varA:varB))` 排除一段连续变量
+- 可与 `starts_with` 等组合使用
+
+```{webr}
+#| label: deselect
+
+# 先选所有腐败变量，再用减号排除国家层级的
+select(wvs7, starts_with("corruption"), -corruption_state)
+```
+
+---
+
+- `rename()` 用来改变变量名
+- 语法：`rename(<数据框>, <新名称> = <旧名称>)`
+- 可同时修改多个变量
+
+```{webr}
+#| label: rename
+
+# 将变量名 'country' 修改为 'nationality'
+rename(wvs7, nationality = country)
+```
+
+---
+
+
+- 注意：`rename()` 只输出预览，并不会自动修改原数据框
+- 若要永久生效，需要用 `<-` 赋值回去
+- 例：`wvs7 <- rename(wvs7, nationality = country)`
+
+## 数据筛选
+
+- `filter()` 基于变量值筛选行
+- 语法：`filter(<数据框>, <条件1>, <条件2>, ...)`
+- 多条件间用逗号分隔，相当于"并且"
+
+```{webr}
+#| label: filter
+
+# 单一条件筛选：只保留韩国数据
+select(wvs7, equalIncentive, country) |>
+  filter(country == "South Korea")
+
+# 列表条件筛选：韩国或日本
+select(wvs7, equalIncentive, country) |>
+  filter(country %in% c("South Korea", "Japan"))
+```
+
+---
+
+- `filter()` 支持任意逻辑判断与不等式
+- 复合条件示例：日本籍 + 年龄 > 50
+
+```{webr}
+#| label: filter_compound
+
+# 同时满足两个条件
+select(wvs7, equalIncentive, country, age) |>
+  filter(country == "Japan", age > 50)
+```
+
+::: {.callout-note title="为什么 rename 没有生效"}
+
+- `rename()` 不会自动覆盖环境中的原数据
+- 想让改动永久，必须 `<-` 赋值回去
+- 否则下一步用 `wvs7` 时，名字依然是原始的
+
+:::
+
+## 数据排序
+
+- `arrange()` 按变量值排序
+- 语法：`arrange(<数据框>, <变量1>, <变量2>, ...)`
+- 默认升序（从小到大）
+
+```{webr}
+#| label: arrange
+
+# 按收入水平从低到高排序
+select(wvs7, equalIncentive, incomeLevel, country) |>
+  filter(country == "Japan") |>
+  arrange(incomeLevel)
+```
+
+---
+
+- 降序两种方式：
+    - 用辅助函数 `desc()` 包裹变量
+    - 数值变量前加 `-`（仅数值型可用）
+
+```{webr}
+#| label: arrange_desc
+
+# 方式一：desc() 辅助函数
+select(wvs7, equalIncentive, incomeLevel, country) |>
+  filter(country == "Japan") |>
+  arrange(desc(incomeLevel))
+
+# 方式二：负号（仅数值型）
+select(wvs7, equalIncentive, incomeLevel, country) |>
+  filter(country == "Japan") |>
+  arrange(-incomeLevel)
+```
+
+---
+
+- `arrange()` 也支持多条件
+- 顺序决定优先级：先按第一个变量排，相同值再按第二个
+
+```{webr}
+#| label: arrange_compound
+
+# 多重排序：先按收入，相同则按年龄
+select(wvs7, equalIncentive, incomeLevel, age) |>
+  arrange(incomeLevel, age)
+```
+
+---
+
+::: {.callout-warning title="条件的顺序"}
+
+- `select` 和 `filter` 中条件顺序不重要
+- `arrange` 中**条件顺序决定排序优先级**
+- 调换顺序结果完全不同
+
+:::
+
+```{webr}
+#| label: arrange_order
+
+# 先按年龄，再按收入
+select(wvs7, equalIncentive, incomeLevel, age) |>
+  arrange(age, incomeLevel)
+```
+
+## 数据加工
+
+- 对变量编码方式进行加工
+- 例：把 10 级收入压缩成"穷/富"二元变量
+- 用 `mutate()`，语法：`mutate(<数据框>, <新变量> = <表达式>)`
+
+```{webr}
+#| label: mutate
+
+# 新建 poor：收入 ≤ 3 为 TRUE
+select(wvs7, equalIncentive, incomeLevel) |>
+  mutate(poor = incomeLevel <= 3)
+```
+
+---
+
+- `mutate()` 可一次加工多个变量，用 `,` 分隔
+- 可基于同一原始变量生成多个新变量
+
+```{webr}
+#| label: mutate_multiple
+
+# 同时创建 poor 和 rich
+select(wvs7, equalIncentive, incomeLevel) |>
+  mutate(
+    poor = incomeLevel <= 3,
+    rich = incomeLevel >= 6
+  )
+```
+
+---
+
+::: {.callout-warning title="重名变量需谨慎"}
+
+- `mutate` 允许同名变量——后定义的覆盖先定义的
+- 同一管道里给同名变量赋两个不同表达式，前者会被丢弃
+
+:::
+
+```{webr}
+#| label: mutate_overwrite
+
+# 演示变量覆盖：后定义的 poor 覆盖前面
+select(wvs7, country, incomeLevel) |>
+  mutate(
+    poor = incomeLevel <= 3,
+    poor = incomeLevel <= 5
+  )
+```
+
+## 直接合并 {.smaller}
+
+- 数据合并：将多个数据框合并为一个新数据框
+- 单一源头信息有限，多源合并能让分析价值倍增
+- 两种方式：直接合并、索引合并
+- 直接合并：把同样结构的数据横向或纵向堆叠
+- 两种：
+    - 行合并：要求列数相等，用 `bind_rows()`
+    - 列合并：要求行数相等，用 `bind_cols()`
+
+```{webr}
+#| label: bindRow
+
+# 模拟数据 1：韩国前 3 行
+wvs7_sk3 <- filter(wvs7, country == "South Korea") |>
+  head(n = 3)
+
+# 模拟数据 2：日本前 3 行
+wvs7_ja3 <- filter(wvs7, country == "Japan") |>
+  head(n = 3)
+
+# 行合并
+bind_rows(wvs7_sk3, wvs7_ja3)
+```
+
+---
+
+::: {.callout-warning title="不等列合并"}
+
+- 列数不等时 `bind_rows` 也能执行
+- 缺失部分自动用 `NA` 填充
+- 这种特性在数据来源结构不一致时很有用
+
+:::
+
+```{webr}
+#| label: bindRow_unequal
+
+# 数据 1：仅含收入与国家
+wvs7_sk3_income <- select(wvs7, incomeLevel, country) |>
+  filter(country == "South Korea") |>
+  head(n = 3)
+
+# 数据 2：仅含国家与政府信心
+wvs7_ja3_confidence <- select(wvs7, country, confidence_gov) |>
+  filter(country == "Japan") |>
+  head(n = 3)
+
+# 不等列合并：列不匹配处自动补 NA
+bind_rows(wvs7_sk3_income, wvs7_ja3_confidence)
+```
+
+---
+
+- 列合并：用 `bind_cols`
+- 注意函数名是复数（"s" 别忘加）
+
+```{webr}
+#| label: bindCols
+
+# 准备数据 1：所有 confidence 变量
+wvs7_confidence <- select(wvs7, starts_with("confidence"))
+
+# 准备数据 2：国家变量
+wvs7_country <- select(wvs7, country)
+
+# 列合并
+bind_cols(wvs7_confidence, wvs7_country)
+```
+
+## 索引合并
+
+- 基于索引变量值匹配合并
+- 比直接合并安全：只要索引变量结构一致，合并质量就有保证
+- 可实现一对一或一对多
+
+
+::: {.callout-important title="结构一致"}
+
+- 结构一致 = 索引变量的编码规则一致
+- 不要求索引变量包含所有可能的值
+- 例：以"性别"为索引，只要 0=男 / 1=女 规则不变，合并就能正确进行
+
+:::
+
+---
+
+- 演示数据：
+    - `wvs7_eq`：个体层级，日本+韩国
+    - `country_info`：国家层级，日本+泰国
+- 两数据中都有国别变量（但名字不同）作为索引
+
+```{webr}
+#| label: join_data
+
+# 数据 1：日本和韩国的个体数据
+wvs7_eq <- select(wvs7, country, equalIncentive, female, education) |>
+  filter(country %in% c("Japan", "South Korea"))
+
+# 数据 2：日本和泰国的国家级宏观数据
+country_info <- filter(wvs7, country %in% c("Japan", "Thailand")) |>
+  group_by(country) |>
+  summarise(across(female:education, \(x) mean(x, na.rm = TRUE))) |>
+  ungroup() |>
+  rename(nation = country)
+
+# 查看
+wvs7_eq
+country_info
+```
+
+---
+
+::: {style="font-size: 0.7em;"}
+
+- `dplyr` 提供四种索引合并：
+    - **左连接 `left_join`**：以左表为基准，右表数据合并进来；右表独有的索引值丢弃
+    - **右连接 `right_join`**：以右表为基准，逻辑相反
+    - **内连接 `inner_join`**：只保留两表都出现的索引值（交集）
+    - **全连接 `full_join`**：保留两表所有索引值（并集），无匹配处用 `NA` 填充
+- 基础语法：`<连接类型>_join(<数据1>, <数据2>, by = join_by(<索引变量>))`
+
+:::
+
+```{webr}
+#| label: join
+
+# 执行四种不同类型的索引合并
+wvs7_lj <- left_join(wvs7_eq, country_info, by = join_by(country == nation))
+wvs7_rj <- right_join(wvs7_eq, country_info, by = join_by(country == nation))
+wvs7_ij <- inner_join(wvs7_eq, country_info, by = join_by(country == nation))
+wvs7_fj <- full_join(wvs7_eq, country_info, by = join_by(country == nation))
+
+# 通过国家列直观对比四种连接的不同逻辑
+wvs7_lj$country |> unique()
+wvs7_rj$country |> unique()
+wvs7_ij$country |> unique()
+wvs7_fj$country |> unique()
+```
+
+## 现学现练 {.unnumbered}
+
+**练习1**：综合数据梳理
+
+请在 `wvs7` 上写一段 `dplyr` 管道，完成以下操作：
+
+1. 新建变量 `avg_confidence`：`confidence_gov` 与 `confidence_court` 的算术平均
+2. 筛选出：
+    - `country` 为 `"Japan"`
+    - 年龄 `age` 大于 40 岁且小于 60 岁
+    - `avg_confidence` 大于 3
+3. 按 `avg_confidence` 降序排列
+4. 最终只保留 `age`、`incomeLevel`、`equalIncentive`、`avg_confidence` 四个变量
+
+::: { .hint exercise="dplyr_pipeline" }
+
+- 用 `mutate()` 新增变量
+- 用 `filter()` 加多重条件
+- 用 `arrange(desc(...))` 降序
+- 用 `select()` 保留指定变量
+- 顺序：mutate → filter → arrange → select
+
+:::
+
+```{webr}
+#| label: dplyr_pipeline
+#| exercise: dplyr_pipeline
+
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# 在此完成 dplyr 管道
+
+```
+
+::: { .solution exercise="dplyr_pipeline" }
+
+```r
+library(dplyr)
+data("wvs7", package = "drhur")
+
+wvs7 |>
+  mutate(avg_confidence = (confidence_gov + confidence_court) / 2) |>
+  filter(
+    country == "Japan",
+    age > 40,
+    age < 60,
+    avg_confidence > 3
+  ) |>
+  arrange(desc(avg_confidence)) |>
+  select(age, incomeLevel, equalIncentive, avg_confidence)
+
+# 解析：
+# 1. mutate：新增 avg_confidence（政府信心 + 法院信心的均值）
+# 2. filter：日本籍、40<age<60、avg_confidence>3 三个条件
+# 3. arrange(desc(...))：按 avg_confidence 从高到低
+# 4. select：仅保留四个目标变量
+```
+
+:::
+
+## 本章重点及回顾 {.smaller}
+
+- 数据探索
+    - 行列数：`nrow()` / `ncol()`
+    - 数据结构：`glimpse()`
+    - 变量名称：`names()`
+    - 唯一值：`unique()`
+    - 频数分布：`table()`
+- 数据梳理
+    - 管道符：`|>`
+    - 选择列：`select()`
+    - 重命名：`rename()`
+    - 筛选行：`filter()`
+    - 排序：`arrange()`
+    - 新增/修改：`mutate()`
+
+---
+
+- 数据合并
+    - 行合并：`bind_rows()`
+    - 列合并：`bind_cols()`
+    - 左连接：`left_join()`
+    - 右连接：`right_join()`
+    - 内连接：`inner_join()`
+    - 全连接：`full_join()`

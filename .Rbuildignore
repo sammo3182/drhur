@@ -9,3 +9,5 @@ data-raw/
 ^dev$
 ^doc$
 ^docs$
+^\.luarc\.json$
+\.quarto$

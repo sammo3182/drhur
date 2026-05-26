@@ -1,0 +1,726 @@
+---
+title: "数据可视化"
+subtitle: 基础篇
+author: 胡悦
+institute: Learning R with Dr. Hu and His Friends Workshop Series
+
+webr:
+  repos:
+    - https://sammo3182.r-universe.dev
+  packages:
+    - drhur
+    - drhutools
+    - dplyr
+    - tidyr
+    - ggplot2
+    - scales
+    - lattice
+    - ggside
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# 数据可视化 {#sec-visualize}
+
+::: {.callout-note title="本章重点"}
+
+1. 基础作图
+2. 棚架图形
+3. 图形语法
+
+*本章研究问题*：收入水平与平等观念之间存在怎样的关系？
+
+:::
+
+---
+
+- 可视化是 R 最具特色的功能之一，能力至今未被超越
+- 三种常用方式：基础作图（base）/ 棚架作图（lattice）/ 图形语法（ggplot2）
+- 变量编码：`equalIncentive` 1 = 完全倾向结果平等，10 = 完全倾向机会平等
+- 正向假设：收入越高越倾向机会平等
+- 负向假设：收入越低越渴望机会平等
+
+## 基础绘图
+
+- R 内置基础绘图系统（base graphics）：函数直接操作图形设备，简单快速
+- 逻辑：逐步绘图，像画师一笔一笔画——函数顺序 = 图形叠加顺序
+- 散点图函数：`plot(<x轴变量>, <y轴变量>)`
+
+```{webr}
+#| label: basicPlot
+
+# 加载数据，固定随机种子（让抖动结果可复现）
+data("wvs7", package = "drhur")
+set.seed(313)
+
+# 预先生成性别标签，供后续分面/分组使用
+wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("男性", "女性"))
+
+# 基础散点图：x 轴收入，y 轴平等观念
+plot(wvs7$incomeLevel, wvs7$equalIncentive)
+```
+
+---
+
+- 两个变量都是整数，散点大量重叠，信息表达不完整
+- 解决：抖动 `jitter()` 给数据点加微小随机噪音，把重叠点"抖开"
+
+```{webr}
+#| label: jitterPlot
+
+# 使用 plot 绘图，但对数据点添加抖动
+plot(
+  # 对 x 轴数据添加 0.3 的随机噪点，避免点重叠
+  jitter(wvs7$incomeLevel, amount = 0.3),
+  # 对 y 轴数据添加 0.3 的随机噪点
+  jitter(wvs7$equalIncentive, amount = 0.3),
+  # 设置 x 轴和 y 轴的标签
+  xlab = "收入水平",
+  ylab = "平等观念（结果 -> 机会）"
+)
+```
+
+---
+
+- 加拟合线判断趋势：斜率为正（左低右高）= 正相关
+- `lm()` 拟合线性模型，`abline()` 把模型画成直线
+
+```{webr}
+#| label: lmPlot
+
+# 绘制基础散点图
+plot(
+  jitter(wvs7$incomeLevel, amount = 0.3),
+  jitter(wvs7$equalIncentive, amount = 0.3),
+  xlab = "收入水平",
+  ylab = "平等观念（结果 -> 机会）"
+)
+
+# 添加线性回归拟合线
+# lm() 计算线性模型，abline() 将模型结果画成直线，col 设置颜色
+abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
+```
+
+- 金线左低右高（斜率为正）→ 收入越高越倾向机会平等
+- 但线很平缓：收入对平等观念有影响，却远没那么剧烈
+
+---
+
+::: {.callout-important title="理论与实际"}
+
+- 教程示例的可视化常清晰可辨；但社科/人文中连续型数据并不常见
+- 离散数据用连续型方法作图，常出现初始 plot 那样的杂乱
+- 这是新文科研究常态，应建立合理预期——问题可用技巧缓解
+
+:::
+
+- 反例：连续变量之间的清晰关系（汽车马力 vs 里程，明显负相关）
+
+```{webr}
+#| label: cleanExample
+
+# 绘制连续变量之间的散点图
+plot(mtcars$hp, mtcars$mpg, xlab = "马力", ylab = "里程/加仑")
+```
+
+---
+
+- 离散数据趋近连续的另一招：核密度平滑（上一章提过核密度）
+- `smoothScatter()`：按密度着色，点多处颜色深、点少处浅
+
+```{webr}
+#| label: smoothScatterPlot
+
+# 使用平滑散点图：用颜色深浅代表数据点的密度
+smoothScatter(
+  wvs7$incomeLevel,
+  wvs7$equalIncentive,
+  xlab = "收入水平",
+  ylab = "平等观念（结果平等 -> 机会平等）"
+)
+```
+
+---
+
+- 保存图片三步（以 png 为例），口诀"铺纸—作画—收纸"：
+    - 铺纸：`png("文件名")` 开启绘图设备
+    - 作画：按前述方式正常绘图
+    - 收纸：`dev.off()` 关闭设备并保存
+- R 兼容多种格式：`.jpg`、`.png`、`.pdf`、`.bmp` 等
+
+```r
+# 铺纸：打开 png 图形设备，指定文件名
+png("plot-incomeEquality.png")
+
+# 作画：绘制散点图
+plot(
+  jitter(wvs7$incomeLevel, amount = 0.3),
+  jitter(wvs7$equalIncentive, amount = 0.3),
+  xlab = "收入水平",
+  ylab = "平等观念（结果 -> 机会）"
+)
+# 修饰：添加拟合线
+abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
+
+# 收纸：关闭图形设备，保存文件
+dev.off()
+```
+
+---
+
+- 多子图对比：`par(mfrow = c(1, 2))` 把画板切成 1 行 2 列
+- 分别绘制男性、女性的散点 + 拟合线，再放在一起比较
+
+```{webr}
+#| label: sexPlot
+
+# 数据拆分：分别提取男性和女性样本
+df_male   <- wvs7 |> filter(female == 0)
+df_female <- wvs7 |> filter(female == 1)
+
+# 布局设置：将画板切分为 1 行 2 列
+par(mfrow = c(1, 2))
+
+# 绘制左图（男性）
+plot(
+  jitter(df_male$incomeLevel, amount = 0.3),
+  jitter(df_male$equalIncentive, amount = 0.3),
+  xlab = "收入水平",
+  ylab = "平等观念（结果 -> 机会）",
+  main = "男性"
+)
+abline(lm(equalIncentive ~ incomeLevel, data = df_male), col = "gold")
+
+# 绘制右图（女性）
+plot(
+  jitter(df_female$incomeLevel, amount = 0.3),
+  jitter(df_female$equalIncentive, amount = 0.3),
+  xlab = "收入水平",
+  ylab = "平等观念（结果 -> 机会）",
+  main = "女性"
+)
+abline(lm(equalIncentive ~ incomeLevel, data = df_female), col = "gold")
+
+# 恢复默认布局：重置为 1 行 1 列
+par(mfrow = c(1, 1))
+```
+
+- 女性整体更倾向结果平等（截距更低），但收入-平等关系趋势两性一致
+- 基础作图缺统一高层语法，精修费力 → 适合快速探索，非最终展示
+
+## 棚架图形 {.smaller}
+
+- 棚架图（Trellis Graph）：按某变量切分多个小图，统一坐标比例便于比较
+- 由统计学家 William Cleveland 等于 1980–1990 年代提出
+- `lattice` 包在 R 中实现：`xyplot(y ~ x | 条件变量)`
+
+```{webr}
+#| label: trellisPlot
+
+# 加载 lattice 包
+library(lattice)
+
+# 确保分面变量有清晰的标签
+wvs7$female_label <- factor(
+  wvs7$female,
+  levels = c(FALSE, TRUE),
+  labels = c("男性", "女性")
+)
+
+# 使用 xyplot 绘图
+xyplot(
+  # 公式：y ~ x | 分面条件
+  jitter(equalIncentive, 0.5) ~ jitter(incomeLevel, 0.5) | female_label,
+  data = wvs7,
+  xlab = "收入水平",
+  ylab = "平等观念（结果 -> 机会）",
+  # 布局：2列 1行
+  layout = c(2, 1),
+  # 自定义面板函数：定义每个小图里画什么
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.lmline(x, y, col = "gold")
+  }
+)
+```
+
+---
+
+- 效果同基础作图，但代码更简洁、规整
+- `lattice` 还能画三维图：`cloud(z ~ x * y)`
+
+```{webr}
+#| label: lattice3D
+
+# 使用 cloud 函数绘制三维云图
+cloud(jitter(equalIncentive, 0.5) ~ jitter(incomeLevel, 0.5) * jitter(education, 0.5), data = wvs7)
+```
+
+- `cloud()` 语法 `z ~ x * y`：z 为高度（因变量），x*y 构成底面
+- 可观察"平等观念"在收入×教育平面上如何起伏
+
+## 保存输出
+
+- `lattice` 返回的是图形对象：可先存对象，再 `print()` 输出
+- 三步：开设备 `png()` → `print(p)` → 关设备 `dev.off()`
+
+```r
+# 将散点图保存为对象
+p <- xyplot(
+  jitter(equalIncentive, 0.5) ~ jitter(incomeLevel, 0.5) | female_label,
+  data = wvs7,
+  xlab = "收入水平",
+  ylab = "平等观念（结果 -> 机会）"
+)
+
+# 打开PNG图形设备
+png("lattice_plot.png", width = 800, height = 600)
+
+# 输出图形对象
+print(p)
+
+# 关闭图形设备
+dev.off()
+```
+
+## 现学现练 {.unnumbered}
+
+**练习1**：分面散点图（lattice）
+
+用 `xyplot()` 画 `education`（x）与 `equalIncentive`（y）的散点图，按 `female_label` 分面，并加一条**红色**线性拟合线；x、y 都做适度抖动。
+
+::: { .hint exercise="latticeExercise" }
+
+- 公式 `y ~ x | 分面变量`：波浪号左边 y、右边 x
+- 用 `jitter(变量, 幅度)` 做抖动
+- `panel = function(x, y, ...)` 内调用 `panel.xyplot()` + `panel.lmline(col = "red")`
+
+:::
+
+```{webr}
+#| label: latticeExercise
+#| exercise: latticeExercise
+
+library(lattice)
+data("wvs7", package = "drhur")
+
+# 性别标签
+wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("男性", "女性"))
+
+# 在此用 xyplot() 完成作图
+
+```
+
+::: { .solution exercise="latticeExercise" }
+
+```r
+library(lattice)
+
+# 确保性别标签已定义（如果之前的代码未运行）
+wvs7$female_label <- factor(
+  wvs7$female,
+  levels = c(FALSE, TRUE),
+  labels = c("男性", "女性")
+)
+
+# 绘制图形
+xyplot(
+  # 公式：y轴变量 ~ x轴变量 | 分面变量
+  # 使用 jitter() 对数据进行抖动处理，避免点重叠
+  jitter(equalIncentive, 0.5) ~ jitter(education, 0.5) | female_label,
+  data = wvs7,
+  xlab = "教育水平",
+  ylab = "平等观念（结果 -> 机会）",
+  # 自定义面板函数
+  panel = function(x, y, ...) {
+    # 绘制散点
+    panel.xyplot(x, y, ...)
+    # 添加线性拟合线，颜色设置为红色
+    panel.lmline(x, y, col = "red")
+  }
+)
+
+# 解析：
+# - 波浪号左边是 y 轴(equalIncentive)，右边是 x 轴(education)，都用 jitter() 抖动
+# - 竖线 | female_label 实现"按性别分面"
+# - panel 函数内先 panel.xyplot() 画散点，再 panel.lmline(col="red") 画红色拟合线
+```
+
+:::
+
+## `ggplot2`可视化 {.smaller}
+
+- 棚架法在灵活性、扩展性上逐渐显出局限
+- Hadley Wickham 引入 Wilkinson 图形语法（Grammar of Graphics），2009 发布 `ggplot2`
+- 引入图层系统、多平面（facet）、统一主题（theme）
+- 把可视化分解为：数据 / 映射 / 几何对象 / 统计变换 / 标度 / 坐标系
+
+- 声明式范式：`ggplot()` 绑数据 → `aes()` 声明映射 → `geom_*()` 指定几何 → `+` 叠加图层
+- 重在描述"数据如何呈现"，具体怎么画交给程序
+- 三大优势：
+    - 数据居核心，各图层共享同一数据框，分组/分面更自然
+    - 统计变换内置，无需预先计算，保护原始数据
+    - 图形对象可保存、可修改，保留开放性与灵活性
+
+## 组件与语法
+
+- 映射 `mapping`（含 `aes`、`alpha` 等）：一张图的"画风"——颜色、形状、大小
+- 每种美观性可映射到变量，或设为常量（如 `color = "red"`）
+- 几何对象 `geom_*`：表达数据的基本图形单位——点、线、条形
+- 不仅是静态图元，也含统计呈现（`geom_smooth` 平滑、`geom_histogram` 直方图）
+- 一个 `geom_*()` 的结果，下文统称一个"图层"
+
+```r
+# ggplot2 万能模板
+ggplot(data = <数据>) +
+  # 几何图层 1
+  geom_<形状1>(
+    # 映射：将数据变量对应到视觉属性
+    mapping = aes(x = <横轴变量>, y =  <纵轴变量>,
+                  color = <边框颜色>,
+                  fill = <填充颜色>,
+                  size  = <粗细大小>,
+                  ......),
+    # 设置：不随数据变化的常量属性
+    alpha  = <透明度，0--1>
+  ) +
+  # 几何图层 2 ...
+  geom_<形状2>(...) +
+  # 其他组件
+  <标度、坐标系统、配色主题>...
+```
+
+- 模板两点说明：
+    - `data` 也可在 `geom_*()` 内单独设——某图层用不同子集/汇总数据时很有用
+    - `aes()` 也可放进 `ggplot()` 让各图层继承；某图层需不同映射，再在其内覆盖
+
+---
+
+- 第一步：初始化画布，绑定数据和全局映射
+
+```{webr}
+#| label: ggplotInit
+
+library(ggplot2)
+
+# 初始化画布，绑定数据和全局映射
+ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive))
+```
+
+---
+
+- 第二步：叠加抖动散点 `geom_jitter()`
+- `width`/`height` 控制 x/y 抖动幅度，`alpha` 设透明度缓解遮挡
+
+```{webr}
+#| label: ggplotStep2
+
+ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
+  # 添加抖动散点图层
+  geom_jitter(width = 0.3, height = 0.3, alpha = 0.7)
+```
+
+---
+
+- 第三步：加线性回归拟合线
+- `method = "lm"` 指线性模型，`se = FALSE` 关掉置信带
+
+```{webr}
+#| label: ggplotStep3
+
+ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
+  geom_jitter(width = 0.3, height = 0.3, alpha = 0.7) +
+  # 添加线性拟合线图层 (method="lm")
+  geom_smooth(method = "lm", se = FALSE, color = "gold", linewidth = 1)
+```
+
+---
+
+- 第四步：补齐轴标签 `labs()`
+
+```{webr}
+#| label: ggplotStep4
+
+ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
+  geom_jitter(width = 0.3, height = 0.3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "gold", linewidth = 1) +
+  # 添加标签图层，规范轴标题
+  labs(x = "收入水平", y = "平等观念（结果 -> 机会）")
+```
+
+---
+
+- 分面只需 `facet_wrap(~ female_label, ncol = 2)`：按性别分组、排成 2 列
+
+```{webr}
+#| label: ggplotFacet
+
+# 确保性别标签存在
+wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("男性", "女性"))
+
+ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
+  geom_jitter(width = 0.5, height = 0.5, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "gold", linewidth = 1) +
+  # 添加分面图层：按性别标签分面，排成 2 列
+  facet_wrap(~ female_label, ncol = 2) +
+  labs(x = "收入水平", y = "平等观念（结果 -> 机会）")
+```
+
+- 趋势一致：收入↑ → 略偏机会平等（两性皆然）
+- 性别微差：女性拟合线截距略低 → 同等收入下更诉求结果平等
+
+## 扩展与丰富 {.smaller}
+
+- 下面再画两个形式完全不同的图，体会"万能模板"的统一逻辑
+- 第一个：带置信区间的柱状图，主旨是**比较**
+- 比较均值还不够，须叠加误差区间展示"不确定性"
+- 先聚合：算各 收入×性别 组的中位数与 95% 置信区间
+
+```{webr}
+#| label: dataBar
+
+# 确保性别标签存在
+wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("男性", "女性"))
+
+# 数据准备：计算均值与置信区间
+wvs7_agg <- select(wvs7, equalIncentive, incomeLevel, female_label) |>
+  # 去除缺失值
+  na.omit() |>
+  # 按收入和性别分组
+  group_by(incomeLevel, female_label) |>
+  # 计算统计量
+  summarise(median_ed = median(equalIncentive),
+            sd_ed = sd(equalIncentive),
+            se_ed = sd_ed / sqrt(n()),
+            # 计算 95% 置信区间下界
+            lb_ed = median_ed - stats::qnorm(1 - (1 - 0.95) / 2) * se_ed,
+            # 计算 95% 置信区间上界
+            ub_ed = median_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)
+```
+
+---
+
+- `geom_bar(stat = "identity")` 画柱（直接用 y 值），`position_dodge()` 让柱子并排
+- `geom_errorbar()` 画误差须线，位置参数需与柱子一致
+
+```{webr}
+#| label: ggplotBar
+
+# 初始化绘图：x轴收入，y轴均值，填充色映射性别
+ggplot(wvs7_agg, aes(x = incomeLevel, y = median_ed, fill = female_label)) +
+  # 绘制柱状图：stat="identity" 表示直接使用y值，position_dodge 使柱子并排
+  geom_bar(stat = "identity",
+          color = "black",
+          position = position_dodge()) +
+  # 绘制误差区间：映射上下界，位置参数需与柱子保持一致 (.9)
+  geom_errorbar(aes(ymin = lb_ed, ymax = ub_ed),
+                width = 0.2,
+                position = position_dodge(.9),
+                color = "darkred") +
+  # 调整标签与图例位置
+  labs(
+    x = "收入水平",
+    y = "平等观念（结果 -> 机会）"
+  ) +
+  theme(legend.position = "top") +
+  # 自定义填充色与图例名称
+  scale_fill_gb(name = "性别", reverse = TRUE)
+```
+
+---
+
+- 第二个：热力图——x/y 表两个变量，再用颜色深浅表第三个变量
+- 第三个变量是连续型时尤其适合（如教育水平 `education`）
+- 先聚合每个 教育×收入 组合的平等观念中位数
+
+```{webr}
+#| label: dataHeat
+
+# 数据准备：计算每个教育-收入组合下的平等观念中位数
+wvs7 |>
+  select(education, incomeLevel, equalIncentive) |>
+  group_by(education, incomeLevel) |>
+  summarise(equalIncentive = median(equalIncentive, na.rm=TRUE)) |>
+  ungroup() -> wvs7_heat
+```
+
+---
+
+- `geom_tile()` 绘制色块，`scale_fill_gb()` 设连续填充色标度
+
+```{webr}
+#| label: ggplotHeat
+
+# 初始化绘图：x教育，y收入，填充色映射平等观念
+ggplot(data = wvs7_heat, mapping = aes(
+  y = incomeLevel, x = education, fill = equalIncentive)) +
+  # 绘制色块
+  geom_tile() +
+  # 设置标签
+  labs(
+    x = "教育水平",
+    y = "收入水平"
+  ) +
+  # 设置填充色标度
+  scale_fill_gb(name = "平等观念", discrete = FALSE)
+```
+
+- 深色集中在右上：高学历 + 高收入者最偏好机会平等
+- 与"既得利益者更偏好机会平等"的直觉一致
+
+## 现学现练 {.unnumbered}
+
+**练习2**：边缘密度散点图（ggside）
+
+用 `ggside` 复刻边缘密度散点图：收入（x）× 教育（y）散点（按 `religious` 上色）+ 平滑拟合线；并在 x 轴上方、y 轴右侧叠加密度图。先去除 `incomeLevel`、`education`、`religious` 三变量的缺失行。
+
+::: { .hint exercise="ggsideExercise" }
+
+- 去缺失：`filter(if_all(c(...), ~ !is.na(.)))`
+- 主图：`geom_point(size = 2, alpha = 0.3)` + `geom_smooth(se = TRUE)`
+- 边缘图：`geom_xsidedensity()` / `geom_ysidedensity()`，`fill = religious`、`position = "stack"`
+
+:::
+
+```{webr}
+#| label: ggsideExercise
+#| exercise: ggsideExercise
+
+library(ggside)
+library(ggplot2)
+data("wvs7", package = "drhur")
+
+# 在此完成 ggside 作图
+
+```
+
+::: { .solution exercise="ggsideExercise" }
+
+```r
+# 加载扩展包
+library(ggside)
+
+# 数据预处理：去除相关变量含有 NA 的行
+# if_all() 检查指定列是否全部非空
+wvs7_narm <- wvs7 |>
+  filter(if_all(c(incomeLevel, education, religious), ~ !is.na(.)))
+
+# 绘图
+ggplot(data = wvs7_narm,
+      aes(x = incomeLevel, y = education, color = religious)) +
+    # 添加主图散点：调整大小和透明度以解决重叠
+    geom_point(size = 2, alpha = 0.3) +
+    # 添加平滑曲线：aes(color = NULL) 意味着不按宗教分组画线，而是画一条总趋势线
+    geom_smooth(aes(color = NULL), se=TRUE) +
+    # 添加 X 轴边缘密度图 (ggside功能)
+    # after_stat(density) 计算密度，position="stack" 堆叠显示
+    geom_xsidedensity(
+        aes(y = after_stat(density), fill = religious),
+        alpha = 0.5, size = 1, position = "stack"
+    ) +
+    # 添加 Y 轴边缘密度图
+    geom_ysidedensity(
+        aes(x = after_stat(density), fill = religious),
+        alpha = 0.5, size = 1, position = "stack"
+    ) +
+    # 设置标签与主题
+    labs(title = "Economy on Education" ,
+         subtitle = "Scatter plot + density distribution",
+         x = "Family Income", y = "Education") +
+    # 调整边缘图占用画板的比例
+    theme(ggside.panel.scale = 0.4)
+
+# 解析：
+# - geom_smooth 内 aes(color = NULL) 覆盖全局映射，避免画出多条彩色拟合线
+# - geom_x/ysidedensity 是 ggside 包的特殊几何对象，在主图边缘画密度图
+# - 一张图同时展示相关性(散点+线)、分布形态(边缘密度)与分类异质性(颜色)
+```
+
+:::
+
+---
+
+- 掌握 `ggplot2` 的核心：理解语法主线与设计理念
+- 复杂图形仍遵循万能公式：声明数据 + 映射 → 叠加 `geom_*`、`labs()`、`scale_*`、`theme()`
+- 越"酷炫"往往代码越长，但基本结构始终如一
+
+::: {.callout-tip title="`ggplot2`的扩展"}
+
+- `ggplot2` 拥有庞大的扩展生态：
+    - `ggrepel`：解决散点图文字标签重叠
+    - `ggsignif`：自动添加显著性检验标记
+    - `gganimate`：让图表"动"起来，制作动画
+- 示例：本书 `drhutools::cdplot()` 画条件密度图
+
+:::
+
+```{webr}
+#| label: extCdplot
+
+# 确保性别标签存在
+wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("男性", "女性"))
+
+# 使用 drhutools 包中的 cdplot 函数
+# 展示不同年龄段中，男女性别比例的变化趋势
+wvs7 |>
+  select(variable = age, group = female_label) |>
+  na.omit() |>
+  drhutools::cdplot()
+```
+
+- 一行命令就能生成专业的条件密度图——这正是 `ggplot2` 生态的魅力
+
+## 保存输出
+
+- `ggplot2` 保存最简单：绘图后运行 `ggsave("文件名.png")`
+- 后缀决定格式；可用 `width`、`height`、`path` 调整大小与路径
+
+```r
+# 绘制图形
+ggplot(data = wvs7_heat, mapping = aes(
+  y = incomeLevel, x = education, fill = equalIncentive)) +
+  geom_tile() +
+  labs(
+    x = "教育水平",
+    y = "收入水平"
+  ) +
+  scale_fill_gb(name = "平等观念", discrete = FALSE)
+
+# 保存最近一次绘制的图形为 png
+ggsave("plot_heat.png")
+```
+
+## 最后的嘱咐
+
+- 网上 `ggplot2` 代码可能长达上百行，别被吓到
+- 核心都是那个万能公式：声明数据、映射关系、添加图层，再加主题、标度
+- 复杂图表不过是在框架上叠加更多图层
+- 本章未细讲配色、尺寸等细节——掌握逻辑后易自学（甚至可问大语言模型）
+- 可视化关键不在炫技，而在如何把数据信息准确递送给读者
+- 一条原则：能第一时间把信息点送到读者眼中的，就是好的可视化
+
+## 本章重点及回顾 {.smaller}
+
+- 散点图：收入水平与平等观念存在微弱正相关
+- 分面图显示：趋势在男女群体一致，但女性同等收入下更偏好结果平等
+
+- 基础绘图
+    - 通用绘图：`plot()`
+    - 散点抖动：`jitter()`
+    - 线性拟合线：`abline(lm(...))`
+    - 画板布局：`par(mfrow = ...)`
+- 棚架图形
+    - 条件散点图：`xyplot()`
+    - 三维散点图：`cloud()`
+
+---
+
+- ggplot2 可视化
+    - 散点图层：`geom_point()` / `geom_jitter()`
+    - 拟合线图层：`geom_smooth()`
+    - 柱状图层（带误差区间）：`geom_bar()` / `geom_errorbar()`
+    - 热力图层：`geom_tile()`
+    - 分面展示：`facet_wrap()`
+    - 设置主题：`theme_*`
+    - 调整标度：`scale_*`
+    - 保存图形：`ggsave()`

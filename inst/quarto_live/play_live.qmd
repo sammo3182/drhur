@@ -1,0 +1,1108 @@
+---
+title: "编程基础概念与数据输入输出"
+subtitle: 基础篇
+author: 胡悦
+institute: Learning R with Dr. Hu and His Friends Workshop Series
+
+webr:
+  repos:
+    - https://sammo3182.r-universe.dev
+  packages:
+    - drhur
+    - lubridate
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# 编程基础概念与数据输入输出 {#sec-play}
+
+::: {.callout-note title="本章重点"}
+
+1. 基础概念
+2. 基础语法
+3. 数据种类
+4. 数据属性
+5. 数据输出
+
+*本章研究问题*：R 语言是如何帮助研究者实现数据存储、数据输入以及数据导出等操作？
+
+:::
+
+## 面向对象编程 {#sec-sub_oop .smaller}
+
+- 面向对象编程（Object-Oriented Programming, OOP）：通过类与对象组织、封装数据
+- C++、Java、Python、R 都采用 OOP 架构
+- 与面向过程编程（POP）相比，OOP 更擅长处理复杂系统和多变需求
+- 两个基本概念：类（`class`）与对象（`object`）
+    - 类：对一组对象的总体规定（如"马"、"主食"）
+    - 对象：类的具体实例（如"白马"、"土豆"）
+    - 属性（property）：对象的特征
+    - 方法（method）：可作用于该类对象的动作
+- OOP 的好处：先归类、再批量操作，避免重复编程；例：脏上衣、脏外裤 → "脏衣物"类 → 统一"放进洗衣机"
+
+## 函数：状语后置的祈使句
+
+- 函数（function）：状语后置的祈使句
+- 数学含义：`y = f(x)` 里的 `f`
+- R 中函数 = 数学映射 = 一组可执行动作
+- 已见：`c()`、`matrix()`、`mean()`
+
+```{webr}
+#| label: function
+
+# 准备数据：创建一个从1到10的向量
+x <- 1:10
+
+# 应用函数：计算 x 的平均值，并赋值给 y
+y <- mean(x)
+
+y
+```
+
+---
+
+- R 函数语法：
+
+`<结果对象名> <- <函数>(<目标数据>, <条件1>, <条件2>, ...)`
+
+- 含义：基于条件对目标数据进行函数操作，结果存到对象名
+- 等价于英语"状语后置的祈使句"
+
+---
+
+- 自定义函数：`function(<数据们>){<动作们>}`
+- 示例：定义 BMI 计算函数（BMI = 体重 / 身高²）
+
+```{webr}
+#| label: bmi
+
+# 定义函数：告诉 R 如何计算 BMI
+# 输入参数：weight (体重), height (身高)
+calculateBMI <- function(weight, height) {
+  weight / (height^2)
+}
+
+# 调用函数：计算一个体重80kg，身高1.69m的人的BMI
+calculateBMI(80, 1.69)
+```
+
+::: {.callout-tip title="自动\"打印\""}
+
+- 直接敲函数名会触发 auto-print：结果显示在控制台
+- 优点：即刻看到结果
+- 缺点：结果不被保存，后续无法调取
+
+:::
+
+---
+
+- 函数命名规则：
+    - 必须以字母开头
+    - 仅限字母、数字、`.` 和 `_`
+    - 区分大小写
+
+::: {.callout-tip title="命名规则的由来"}
+
+- 字母开头：让计算机区分"名字"与"数字"
+- 不含特殊字符：避免与编程符号冲突
+- 大小写敏感：精确性要求
+
+:::
+
+---
+
+- 命名习惯：
+    - 动词或动词短语：`read_rds`、`saveRDS`
+    - 名词：`lm`（linear model）、`dotwhisker`
+    - 常见缩写：`sqrt`（square root）、`exp`（exponential）
+- 名称要表意：让看代码的人能猜出函数功能
+- 避免覆写 R 内置函数（如 `mean`、`list`、`sum`）
+
+## 软件包：函数的集合 {#sec-sub_package}
+
+- 软件包（package）：函数的集合
+- 类比：装着各种工具的"工具箱"
+- 获取途径：
+    - CRAN（综合 R 档案网络）：经审核、有规范保证
+    - GitHub 等开源平台：免审核、含开发版
+
+---
+
+- 加载软件包：`library()` 或 `require()`
+- `require()` 多一步检查包是否已加载，返回逻辑值
+- 安装与加载示例：
+
+```r
+# 从 CRAN 安装包（只需做一次）
+install.packages("drhur")
+
+# 从 GitHub 安装包（开发者版本）
+remotes::install_github("sammo3182/drhur")
+
+# 加载包（每次重启 R 都要做）
+library(drhur)
+
+# 调用包内的函数打开课件
+drhur("play")
+```
+
+---
+
+- 帮助文档调取方式：
+    - `?函数名`：例 `?install.packages`
+    - `help(函数名)`：等价用法
+    - `help.search("关键词")`：搜索
+    - `help.start()`：打开总文档（不常用）
+
+::: {.callout-tip title="安装 R 包的预期时间"}
+
+- 一般几秒到十几秒
+- 第一次安装会连带装依赖包，耗时更长
+- 满屏滚动属于正常现象，静待结束即可
+
+:::
+
+## 现学现练 {.unnumbered}
+
+**练习1**：一次安装多个 R 包
+
+`install.packages` 函数中 "package" 用的是复数，说明可一次安装多个包。请调用帮助文档，探索如何一次性安装 `regioncode`、`dotwhisker`、`drhur` 三个包。
+
+::: { .hint exercise="install_multi" }
+
+- 用 `?install.packages` 查阅 `pkgs` 参数说明
+- 该参数接受一个字符向量
+- 用 `c()` 把多个包名打包成向量
+
+:::
+
+```{webr}
+#| label: install_multi
+#| exercise: install_multi
+
+# 在此尝试一次性安装三个包
+?install.packages
+
+```
+
+
+::: { .solution exercise="install_multi" }
+
+```r
+?install.packages
+
+# 利用 c() 将三个包名打包成字符向量，一次传给 install.packages
+# 这种"批量处理"写法比写三行单独的安装命令高效得多
+install.packages(c("regioncode", "dotwhisker", "drhur"))
+```
+
+:::
+
+## OOP 编程基本性质
+
+- 架构在 OOP 上，R 具有四大特性：
+    - 继承（inheritance）
+    - 封装（encapsulation）
+    - 多态（polymorphism）
+    - 安全（safety）
+
+---
+
+- 继承性：子类可继承母类的全部特性
+- 用 `inherits(对象, "类名")` 检验
+- 例：`ordered()` 创建的定序变量继承自 `factor`
+
+```{webr}
+#| label: inherit
+
+# 创建分类变量 x
+x <- factor(c("A", "B", "C", "D"))
+# 创建定序变量 y
+y <- ordered(c("A", "B", "C", "D"))
+
+# 检查继承性：x 是 factor 吗？
+inherits(x, "factor")
+# 检查继承性：y 是 factor 吗？
+inherits(y, "factor")
+```
+
+---
+
+- 封装性：把一系列命令打包成一个命令组合
+- 调用打包后的命令，R 会按流程跑完所有既定步骤
+- `function()` 就是常用的封装命令
+
+::: {.callout-warning title="封装的可覆写性"}
+
+- R 中函数也是对象，"万物皆可函数"
+- 已定义的函数可被覆写，包括内置函数
+- 危险示例：`mean <- function(x){x^2}` 会让所有 `mean()` 变为平方运算
+- 请谨慎覆盖、修改、删除内置命令
+
+:::
+
+---
+
+- 多态性：同一函数对不同对象有不同处理
+- 典型例子：`summary()`——因材施教
+
+```{webr}
+#| label: polymorphism
+
+# 准备数据：一个分类向量 x，一个数值向量 y
+x <- factor(c("A", "B", "C", "D"))
+y <- 1:10
+
+# 对分类变量做 summary：输出各类的频数统计
+summary(x)
+
+# 对数值变量做 summary：输出均值、极值等描述统计
+summary(y)
+```
+
+---
+
+- 安全性：命令作用前先判断对象类的兼容性
+- 不兼容则停止运行并报错，后续命令不再执行
+
+```{webr}
+#| label: safety
+#| error: true
+
+# 错误演示：尝试让数字和字符串相加
+5 + "hello"
+
+# 这行代码将不会被执行
+1 + 1
+```
+
+---
+
+::: {.callout-important title="命令、方法、函数"}
+
+- *命令*（Command）：任意一行可执行代码（如 `1 + 1`、`y <- sqrt(x)`）
+- *函数*（Function）：一套固定操作，接收输入并返回结果
+- *方法*（Method）：针对特定类对象的函数
+
+:::
+
+- OOP 基本原则：*不直接触碰原始数据*
+- 数据处理采用"对象+命令"方式
+- 优点：每步可回溯、安全性高、便于协作
+
+## 现学现练 {.unnumbered}
+
+**练习2**：解读 plot 的多态性
+
+运行下面的命令，从多态性角度解释为何同一 `plot` 函数会输出不同的图像。
+
+::: { .hint exercise="plot_polymorphism" }
+
+- 输入参数数量决定 plot 的行为
+- 单参数 → 默认以序号为 X 轴
+- 双参数 → 以两者构造散点图
+
+:::
+
+```{webr}
+#| label: plot_polymorphism
+#| exercise: plot_polymorphism
+
+plot(mtcars$mpg)
+
+plot(mtcars$mpg, mtcars$wt)
+
+```
+
+
+::: { .solution exercise="plot_polymorphism" }
+
+```r
+# 单变量调用：以序号 (1, 2, 3, ...) 为 X 轴，向量值为 Y 轴
+plot(mtcars$mpg)
+
+# 双变量调用：第一个向量为 X 轴，第二个向量为 Y 轴 → 散点图
+plot(mtcars$mpg, mtcars$wt)
+
+# plot 函数内部包含应对不同输入情况的多套方案
+# 它能根据参数数量与类型，智能选择最合适的方案
+# 这就是多态性
+```
+
+:::
+
+## 赋值（创建） {.smaller}
+
+- R 中创建数据 = 将现实观察转换为可分析的数据形式
+- R 按类（class）分类记录，每类有各自属性与方法
+- 常见类：向量（vector）、数据框（data frame）、列表（list）
+- 赋值（assign）：给值或对象起个名字、缓存以备调用
+- 最常用赋值符：`<-`
+- 同效命令：`assign()`、`->`、`<<-`、`=`
+- 基础语法：`<名称> <- <对象>`
+
+```{webr}
+#| label: object
+
+# 赋值：将 1-5 的序列存入变量 aValidObject
+aValidObject <- 1:5
+
+# 打印：查看变量内容
+aValidObject
+```
+
+---
+
+- `<-` 与 `->` 方向相反，箭头所指的一方就是被赋值的名称
+
+```{webr}
+#| label: arrow
+
+# 传统赋值：将 12 存入 a
+a <- 12
+
+# 反向赋值：将 25 存入 b
+25 -> b
+```
+
+---
+
+- `=` 也可赋值，与 `<-` 略有不同：
+    - 顶层环境：二者作用域相同
+    - 函数调用括号内：`=` 多用于参数命名，`<-` 多用于创建/修改对象
+
+```{webr}
+#| label: diffAssign
+#| error: true
+
+# 使用 <- : y 被创建在全局环境，打印 y 能看到值
+median(y <- 1:10); y
+
+# 使用 = : x 仅在 median 函数内部有效，外部打印报错（找不到对象）
+median(x = 1:10); x
+```
+
+---
+
+- `<<-` 用来援引/修改父级（全局）变量
+- 在多重环境嵌套时使用，区分作用域
+- 示例：校园公告栏（全局）vs 个人提醒（局部）
+
+```{webr}
+#| label: globalAssign
+
+# 校园公告栏（全局变量）
+campus_bulletin <- "Tonight's lecture is at 7 PM in the main hall."
+
+# 个人提醒函数：用 <- 仅创建局部变量，不影响全局
+write_personal_reminder <- function() {
+  campus_bulletin <- "Finish homework before the lecture!"
+  message("个人提醒：", campus_bulletin)
+}
+
+# 校园公告栏更新函数：用 <<- 修改全局变量
+update_campus_bulletin <- function() {
+  campus_bulletin <<- "LECTURE CANCELED: The professor is sick. Free time tonight!"
+  message("校园公告栏发布了新通知。")
+}
+
+# 查看校园公告栏
+message("公告：", campus_bulletin)
+
+# 写下个人提醒（不影响全局）
+write_personal_reminder()
+message("公告：", campus_bulletin)
+
+# 更新全局通知
+update_campus_bulletin()
+message("公告：", campus_bulletin)
+```
+
+---
+
+- 对象命名规则：
+    - 以字母或 `.` 开头（若以 `.` 开头，下一位不能是数字）
+    - 不能以数字开头
+    - 除 `.` 与 `_` 外，不能含其他特殊符号
+    - 区分大小写：`X != x`
+    - 谨防覆写内置命令（如 `list`、`mean`）
+
+## 现学现练 {.unnumbered}
+
+**练习3**：命名规则
+
+下面两行代码，第一行报错、第二行不报错。请运行并解释为什么。
+
+::: { .hint exercise="naming" }
+
+- R 的命名规则之一：不能以数字开头
+- 第一个名称违反了哪条规则？
+- 第二个名称合规吗？
+
+:::
+
+```{webr}
+#| label: naming
+#| exercise: naming
+
+5var_name <- 1:5
+
+var_name5 <- 1:5
+
+```
+
+
+::: { .solution exercise="naming" }
+
+```r
+# 第一行：5var_name <- 1:5
+# 报错原因：R 规定变量名不能以数字开头
+# "5var_name" 以数字 5 开头，违反命名规则
+
+# 第二行：var_name5 <- 1:5
+# 合规：以字母 v 开头，只包含字母、数字、下划线
+var_name5
+```
+
+:::
+
+## 向量 {.smaller}
+
+- 向量（vector）：R 中所有"一串"数据的统称
+- 用 `c()` 或 `vector()` 创建
+- 严格同质：一个向量内的元素必须同一类型
+- 子类：数值型（numeric）、字符型（character）、逻辑型（logical）、类别型（factor）、时间（POSIXct/POSIXlt）
+
+---
+
+- 数值向量（numeric vector）：可代数运算的数值
+- 子类型：双精度（double，含小数）、整数型（integer）
+- `NA`（not available）：缺失值，是 R 同质向量的"例外"
+
+```{webr}
+#| label: numeric
+
+# 浮点型向量 (double)
+vec_double <- c(1.5, -2.34, 1/3)
+
+# 整数型向量 (integer)
+vec_integer <- c(1, -2, 4, 6)
+
+# 序列生成
+vec_1_100 <- c(1:100)
+
+# 包含缺失值 (NA) 的向量
+vec_miss <- c(1, NA, 3, NA, 24)
+```
+
+---
+
+- 逻辑向量（logic vector）：二元变量 `TRUE/FALSE`（可简写 `T/F`）
+- 应用极广：很多"编程"本质就是"判断真假"
+- `as.logical()` 强制转换为逻辑型
+
+```{webr}
+#| label: logic
+
+# 创建数值向量 (0 代表 FALSE, 非0 代表 TRUE)
+vec_num <- c(1, 2, 0, 1, 1)
+
+# 强制转换为逻辑向量
+vec_logic <- as.logical(vec_num)
+
+# 查看结果
+vec_logic
+```
+
+---
+
+- 类别向量（factor vector）：记录分类信息
+- `factor()` 创建，水平（level）记录类别，标签（label）给水平起名
+- 子类：定序向量（ordinal vector），`ordered()` 创建，水平含顺序
+- 进阶工具：`forcats` 包专门处理分类/定序变量（改水平顺序、添加类别、调整参照组）
+
+```{webr}
+#| label: factor
+
+# 基础因子：自动识别类别 (1, 2, 3)
+vec_fac <- factor(c(1, 2, 2, 3))
+
+# 高级因子：自定义 levels (顺序) 和 labels (标签)
+vec_fac2 <- factor(
+  c(1, 2, 2, 3),
+  levels = c(3, 2, 1),
+  labels = c("Apple", "Pear", "Orange")
+)
+
+# 定序因子：隐含顺序关系
+vec_ord <- ordered(c(1, 2, 2, 3))
+
+vec_fac
+vec_fac2
+vec_ord
+```
+
+---
+
+- 字符向量（character vector）：记录字符形式的值
+- R 不"读懂"字符含义，对中、英、俄等都一视同仁
+- 创建时每个字符值外需加引号
+- 预存字符常量：`letters`、`LETTERS`、`month.abb`、`month.name`
+
+```{webr}
+#| label: character
+
+# 创建字符向量 (注意引号的使用)
+vec_chr <- c("牛", "♥️", "R is hard，but I can nail it.")
+
+vec_chr
+```
+
+---
+
+- 时间向量：R 提供 `POSIXct` 与 `POSIXlt` 两种
+- `POSIXct`：以秒数（自 1970-01-01 起）存储
+- `POSIXlt`：以列表形式存储时间各部分
+- 当前时间：`Sys.time()`、`Sys.Date()`、`Sys.timezone()`
+
+```{webr}
+#| label: time
+
+# 创建 POSIXct 时间对象 (秒数存储)
+vector_ct <- as.POSIXct("2023-03-20 10:11:12")
+
+# 创建 POSIXlt 时间对象 (列表存储)
+vector_lt <- as.POSIXlt("2023-03-20 10:11:12")
+
+# 打印查看（两者显示完全一样，但底层存储天差地别）
+vector_ct
+vector_lt
+
+# 获取当前系统时间与日期
+Sys.time()
+Sys.Date()
+```
+
+---
+
+::: {.callout-tip title="`lubridate` 包"}
+
+- 专门处理时间变量
+- 灵活记录年月日排列、时区转换等
+
+:::
+
+```{webr}
+#| label: lubridate
+
+library(lubridate)
+
+# 解析 "年-月-日" 格式
+ymd("20221016")
+# 解析 "月-日-年" 格式
+mdy("10-16-2022")
+# 解析 "日-月-年" 格式
+dmy("16/10/2022")
+# 解析 "年-月-日 时:分:秒" 并指定时区
+ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
+```
+
+## 现学现练 {.unnumbered}
+
+**练习4**：两种方式生成字母序列
+
+比较下面两个命令生成的向量，并验证是否完全相等。
+
+::: { .hint exercise="letters_compare" }
+
+- `c()` 是手动逐个录入字符
+- `letters` 是 R 预存的小写字母常量
+- 用 `identical()` 验证两个向量是否完全相等
+
+:::
+
+```{webr}
+#| label: letters_compare
+#| exercise: letters_compare
+
+vec_letters_raw <- c("a", "b", "c", "d", "e")
+
+vec_letters_quick <- letters[1:5]
+
+```
+
+
+::: { .solution exercise="letters_compare" }
+
+```r
+vec_letters_raw <- c("a", "b", "c", "d", "e")
+vec_letters_quick <- letters[1:5]
+
+# 验证两者是否完全相等
+identical(vec_letters_raw, vec_letters_quick)
+
+# 结果完全一样，都是 "a"-"e" 五个字符向量
+# vec_letters_raw：手动录入，适合无规律字符
+# vec_letters_quick：利用预存常量，效率更高、适合字母表场景
+```
+
+:::
+
+---
+
+**练习5**：解析混乱时间字符串
+
+`lubridate::parse_date_time()` 可根据多种格式识别并转换混乱的时间字符串。请用这个函数将下列字符向量转化为标准时间格式：
+
+`c("20190101", "01012019", "021901")`
+
+::: { .hint exercise="date_parse" }
+
+- 加载 `lubridate` 包
+- `parse_date_time()` 的 `orders` 参数接受一个猜测列表
+- 用 `c("ymd", "dmy", "mdy")` 提供三种格式猜测
+
+:::
+
+```{webr}
+#| label: date_parse
+#| exercise: date_parse
+
+library(lubridate)
+raw_dates <- c("20190101", "01012019", "021901")
+
+```
+
+
+::: { .solution exercise="date_parse" }
+
+```r
+library(lubridate)
+raw_dates <- c("20190101", "01012019", "021901")
+
+# orders 参数提供格式猜测列表
+# 函数会自动尝试匹配，把乱字符统一转为标准 POSIXct
+parsed_dates <- parse_date_time(raw_dates, orders = c("ymd", "dmy", "mdy"))
+parsed_dates
+```
+
+:::
+
+## 数据框与列表
+
+- 数据框（data frame）：列等长的二维结构，列可异质
+- 新文科实践中"数据"通常指数据框
+- 提取方式：
+    - 坐标法：`df[行, 列]`
+    - 名称法：`df$列名`（最常用）
+
+```{webr}
+#| label: dataframe
+
+# 创建数据框：包含逻辑、数值、字符三种类型的列
+df_toy <- data.frame(
+  female = c(FALSE, TRUE, TRUE, FALSE),
+  age = c(29, 39, 38, 12),
+  name = c("Iron Man", "Black Widow", "Captain Marvel", "Captain America")
+)
+
+# 打印查看
+df_toy
+
+# 坐标法提取：第3行，第3列
+df_toy[3, 3]
+
+# 名称法提取：提取 'name' 列
+df_toy$name
+```
+
+---
+
+- 列表（list）：异质容器，存放一串向量
+- 各向量的大小、长度、顺序无限制
+- 数据框 = 列等长、各列一一对应的特殊列表
+
+```{webr}
+#| label: list
+
+# 创建列表：包含不同长度的向量
+ls_monks <- list(
+  name = c("Wukong Sun", "Sanzang Tang", "Wuneng Zhu", "Wujing Sha"),
+  power = c(100, 20, 90, 40, 26, 78, 10000),
+  buddha = c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE)
+)
+
+# 打印查看
+ls_monks
+
+# 提取列表中的 'name' 组件
+ls_monks$name
+```
+
+---
+
+::: {.callout-tip title="多维数据的阵列 (array)"}
+
+- 用 `array()` 创建，多个维度各保存一个向量
+- 社科人文领域使用机会不多
+
+:::
+
+```{webr}
+#| label: array
+
+# 创建一个 3x3x2 的三维阵列
+an_array <- array(c(5, 9, 3, 10, 11, 12, 13, 14, 15), dim = c(3, 3, 2))
+
+an_array
+```
+
+## 数据属性
+
+- 探针型工具：查询对象属性
+    - `class()` / `typeof()`：变量属性 / 内存存储方式
+    - `nchar()`：字符串长度
+    - `levels()`：因子水平
+    - `length()`：长度（向量看元素、列表看组件、数据框看列数）
+    - `nrow()` / `ncol()` / `dim()`：维度
+    - `summary()`：统计信息
+
+```{webr}
+#| label: probe
+
+# 查询属性与类型
+class(vec_double)
+typeof(vec_integer)
+
+# 查询字符串长度与因子水平
+nchar(vec_chr)
+levels(vec_fac2)
+
+# 查询对象长度 (注意三者的不同含义)
+length(vec_double)
+length(ls_monks)
+length(df_toy)
+
+# 查询数据框维度
+nrow(df_toy)
+ncol(df_toy)
+dim(df_toy)
+```
+
+---
+
+- `class()`：R 把对象"看作"什么 → 决定可用哪些函数
+- `typeof()`：对象在内存里的底层存储方式
+- 数据框的 `length()` 返回列数（因为本质是列表）
+- 查行数用 `nrow()`、列数用 `ncol()`、全维度用 `dim()`
+- 判断型工具：通常以 `is` 开头（`is.numeric()`、`is.character()`、`is.factor()`、`is.data.frame()`、`is.list()`），返回逻辑值表示对象是否属于该类型
+
+## 现学现练 {.unnumbered .smaller}
+
+**练习6**：探索 wvs7 数据集
+
+- 世界价值观调查（World Value Survey, WVS）：1981 年发起的跨国调查
+- WVS7 是该调查的第七波数据
+- `drhur` 包内置 WVS7 的 2% 抽样（1264 观测、24 变量），数据集名 `wvs7`
+
+请用所学知识检查它的基本结构：
+
+- **(a)** wvs7 对象本身是什么类（class）？
+- **(b)** wvs7 包含多少行和多少列？
+- **(c)** 提取 `marital` 列，查看其包含哪些分类水平。
+- **(d)** 用 `is.*` 系列函数验证：wvs7 是数据框？是列表？是矩阵？
+
+::: { .hint exercise="wvs7_explore" }
+
+- 用 `class()` 查类型
+- 用 `dim()`、`nrow()`、`ncol()` 查维度
+- 用 `$` 提取列
+- 用 `levels()` 查看分类水平
+- 用 `is.data.frame()`、`is.list()`、`is.matrix()` 验证
+
+:::
+
+```{webr}
+#| label: wvs7_explore
+#| exercise: wvs7_explore
+
+# 加载内置数据集 wvs7
+data("wvs7", package = "drhur")
+
+```
+
+
+::: { .solution exercise="wvs7_explore" }
+
+```r
+data("wvs7", package = "drhur")
+
+# a. 类型
+class(wvs7)
+# 结果含 "tbl_df" "tbl" "data.frame"
+
+# b. 维度
+dim(wvs7)        # 1264   24
+nrow(wvs7)
+ncol(wvs7)
+
+# c. marital 列
+head(wvs7$marital)
+levels(wvs7$marital)
+
+# d. 结构验证
+is.data.frame(wvs7)  # TRUE
+is.list(wvs7)        # TRUE（数据框本质是列表）
+is.matrix(wvs7)      # FALSE（除非被强制转换）
+```
+
+:::
+
+## 内置数据 {#sec-sub_input .smaller}
+
+- 实际工作中手动创建数据机会不多，多数情况是从外部导入
+- 三种数据输入方式：内置数据、直接读取、调用包读取
+- 内置数据（built-in data）：R 自带或软件包附带
+- 调取清单：`data()`
+- 调用单个数据集：`data(<数据名>)`
+- 调用包内数据集：`data(<数据名>, package = "<包名>")`
+
+```{webr}
+#| label: loadData_builtin
+
+# 加载 R 内置的 mtcars 数据
+data(mtcars)
+
+# 查看数据摘要
+summary(mtcars)
+```
+
+---
+
+- 调用其他包内的数据需指定 `package` 参数
+
+```r
+# 尝试直接找 corruption（未加载 regioncode 包则失败）
+data(corruption)
+
+# 明确告诉 R 去 regioncode 包里找
+data(corruption, package = "regioncode")
+
+summary(corruption)
+```
+
+---
+
+- R 自带的 `datasets` 包：无需安装/加载，直接调用
+- 例：`iris`、`mtcars`、`uspop` 等
+
+```{webr}
+#| label: load_iris
+
+# datasets 包默认自带
+data(iris)
+
+# 查看前 6 行确认加载成功
+head(iris)
+```
+
+## 直接读取数据
+
+- 直接读取支持的数据类型：
+    - `.RDS`：R 专有，单一对象
+    - `.RData`：R 专有，可保存多个对象
+    - `.txt`：带分隔符的表格
+    - `.csv`：逗号分隔值
+- 输入语法：`<名称> <- <读取函数>(<数据路径>)`
+- 读取函数常以 `read` 开头
+
+---
+
+```r
+# 读取 RDS 格式
+df_rds <- readRDS("aDataset.rds")
+
+# 读取 TXT 格式 (通用表格读取)
+df_txt <- read.table("D:/aDataset.txt")
+
+# 读取 CSV 格式
+df_csv <- read.csv("./aDataset.csv")
+
+# 加载 RData (不需要建立对象)
+load("aDataset.RData")
+```
+
+::: {.callout-warning title="文件名大小写"}
+
+- Windows / Mac：`.RData` 与 `.rdata` 大小写不敏感
+- Linux：严格区分大小写，二者是不同文件
+- 建议：统一使用小写 `.rds`、`.rdata`
+
+:::
+
+## 调用读取数据
+
+- 调用专门软件包读取其他格式
+- 常见包：
+    - `haven`：SPSS / Stata / SAS
+    - `readr`：CSV / TXT（速度更快）
+    - `readxl`：Excel
+    - `rjson`：JSON
+    - `XML`：XML / HTML
+
+---
+
+```r
+# --- 统计软件 ---
+library(haven)
+df_spss <- read_spss("<FileName>.sav")
+df_stata <- read_dta("<FileName>.dta")
+df_sas <- read_sas("<FileName>.sas7bdat")
+
+# --- 纯文本表格 ---
+library(readr)
+df_csv <- read_csv("<FileName>.csv")
+df_table <- read_table("<FileName>.txt")
+
+# --- Excel ---
+library(readxl)
+df_excel <- read_excel("<FileName>.xlsx")
+
+# --- JSON ---
+library(rjson)
+df_json <- fromJSON(file = "<FileName>.json")
+
+# --- XML / HTML ---
+library(XML)
+df_xml <- xmlTreeParse("<url>")
+df_html <- readHTMLTable("<url>", which = 3)
+```
+
+---
+
+- "瑞士军刀"：`rio` 包的 `import()` 函数
+- 自动识别格式，一个函数读所有
+- 缺点：相对慢一些（二传手）
+
+```r
+library(rio)
+df_anything <- import("<AnyTypeOfData>")
+```
+
+## 现学现练 {.unnumbered}
+
+**练习7**：加载内置数据 uspop
+
+请加载内置数据集 `uspop` 并显示其统计摘要。
+
+::: { .hint exercise="uspop" }
+
+- 用 `data()` 加载内置数据
+- 用 `summary()` 显示统计摘要
+
+:::
+
+```{webr}
+#| label: uspop
+#| exercise: uspop
+
+```
+
+
+::: { .solution exercise="uspop" }
+
+```r
+data(uspop)
+summary(uspop)
+
+# uspop 是美国从 1790 到 1970 年的人口时间序列
+# summary() 自动识别数值数据，输出：
+# - 极值：从 3.93 (1790) 到 203.20 (1970)
+# - 中心趋势：均值 69.77，中位数 50.16
+# - 平均值 > 中位数，分布右偏（符合人口指数增长规律）
+# 再次验证 OOP 多态性：summary() 面对数值数据时自动切换为描述统计模式
+```
+
+:::
+
+## 储存为 R 数据
+
+- 数据输出基础语法：`<函数名>(<储存对象>, <储存路径>, <其他条件>)`
+- 函数名常以 `save`、`write` 开头
+- R 专有格式：
+    - `.rds`：单一对象，用 `saveRDS()`
+    - `.RData`：多个对象，用 `save()`
+- 推荐 `.rds`：调取和整理更清晰
+- `.RData` 的内容只能 `load()` 之后才能看到
+
+---
+
+```r
+# 保存为 RDS 单一对象
+saveRDS(df_toy, file = "df_toy.rds")
+
+# 保存为 RData 工作空间（可同时保存多个对象）
+save(df_toy, ls_monks, file = "./data/test.rdata")
+```
+
+## 储存为 csv 文件
+
+- CSV：跨平台通用格式
+- 压缩效率不高，但几乎所有平台、所有程序都能读取
+- 用 `write.csv()` 保存
+
+```r
+# 将 df_toy 保存为 CSV 文件
+write.csv(df_toy, file = "toy.csv")
+```
+
+::: {.callout-warning title="CSV 与中文数据"}
+
+- 中文数据存储时要选择 UTF-8 编码
+- 否则可能出现乱码现象
+
+:::
+
+## 储存为其他格式
+
+- 用 `rio` 包的 `export()`
+- 自动识别后缀，将 R 对象存为几乎任何格式
+- 支持 STATA、SPSS、SAS、Excel、JSON、Matlab、HTML 等
+
+::: {.callout-tip title="数据存储效率"}
+
+- 中小规模数据：`.RData` 一般足够
+- 大体积数据：考虑 `qs`、`fst` 等特殊格式
+- 特殊格式兼容性较弱、存储稳定性有风险（换台电脑可能打不开）
+
+:::
+
+## 本章重点回顾
+
+- 基础概念
+    - OOP（类与对象）
+    - 函数与赋值
+    - 软件包（package）
+- 数据种类
+    - 向量（数值、逻辑、类别、字符、时间）
+    - 矩阵
+    - 数据框与列表（重点内容)
+
+---
+
+- 数据属性：查看数据类型、维度、概况
+- 数据输入
+    - 内置数据调用
+    - 读取外部数据
+    - 专用包读取（`haven`、`rio` 等）
+- 数据输出
+    - 储存为 R 数据
+    - 储存为其他数据类型
+
+---
+
+- 本章重点函数：
+    - 基础操作与包管理：`install.packages()`、`library()`、`help()` / `?`
+    - 数据创建与类型：`c()`、`data.frame()`、`list()`、`as.numeric()`、`as.character()`、`as.logical()`
+    - 数据属性：`class()`、`summary()`、`dim()`、`nrow()`、`ncol()`、`length()`、`head()`
+    - 数据输入与导出：`data()`、`read.csv()`、`readRDS()`、`saveRDS()`、`write.csv()`

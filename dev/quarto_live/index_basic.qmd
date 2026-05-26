@@ -1,0 +1,17 @@
+---
+title: "Learning R with Dr. Hu and His Friends"
+subtitle: 基础篇
+author: 胡悦（清华大学政治学系）
+format: html
+---
+
+欢迎来到胡老师的R语言编程工作坊·基础篇！
+
+- [基础数学概念](algebra_live.html)
+- [编程基础概念与数据输入输出](play_live.html)
+- [数据整理](munging_live.html)
+- [描述性统计](descriptive_live.html)
+- [数据可视化](visual_basic_live.html)
+- [判断、循环与批处理](loop_live.html)
+
+![](https://drhuyue.site:10002/sammo3182/figure/goodluck.gif){fig-align="center"}

@@ -24,18 +24,24 @@ knitr::opts_chunk$set(
 使用本软件的最佳方式是配合由清华大学政治学系副教授胡悦博士开设的 "Learning R with Dr. Hu"工作坊共同使用。
 软件中的模块实际上就是这个工作坊系列部分初期课程，也将被包含至胡博士即将出版的R语言教材。
 工作坊和即将出版的教材覆盖了有关R从基础到高级的技术（如空间分析、网络分析以及文本分析）的大量知识和技能。
-您可以在[作者的网站](https://sammo3182.github.io/software/drhur/)上或通过[直接联系他](mailto:yuehu@tsinghua.edu.cn)获取更多相关信息。
+您可以在[作者的网站](https://www.drhuyue.site/software/drhur/)上或通过[直接联系他](mailto:yuehu@tsinghua.edu.cn)获取更多相关信息。
 
 ## 使用
 
-此软件包是基于`learnr`的Shiny应用构建，让学习者能与教程和任务无缝交互。您可以方便地通过 `drhur()` 加载此软件包并接入教程。比如，您可以通过以下命令来启动可视化教程：
+本软件包的每个工作坊都是一个自包含的 [Quarto Live](https://r-wasm.github.io/quarto-live/) 文档，其中的代码单元通过 WebAssembly（`webR`）直接在浏览器中运行。学习者无需配置本地 R 环境，便可一边阅读讲解、一边运行练习。您可以方便地通过 `drhur()` 函数打开某个工作坊：该函数会渲染文档并在浏览器中打开它。比如，您可以通过以下命令来启动数据可视化工作坊：
 
 ```{r eval = FALSE}
 if (!require(drhur)) install.packages("drhur")
 library(drhur)
 
-drhur("visualize")
+# 以可滚动的 HTML 实时文档形式打开（默认）
+drhur("visual_basic")
+
+# 或将同一工作坊以 reveal.js 幻灯片形式打开
+drhur("visual_basic", style = "slide")
 ```
+
+渲染需要预先安装 [Quarto](https://quarto.org) 命令行工具；运行交互式代码单元则需要联网（`webR` 运行时及工作坊所需的 R 包会在浏览时于浏览器中下载）。
 
 ## 结论
 
@@ -51,5 +57,5 @@ drhur("visualize")
 
 清华大学政治学系，    
 Email: <yuehu@tsinghua.edu.cn>    
-网站: <https://sammo3182@tsinghua.edu.cn>
+网站: <https://www.drhuyue.site>
 

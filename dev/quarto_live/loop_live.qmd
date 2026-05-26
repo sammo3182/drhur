@@ -1,0 +1,998 @@
+---
+title: "判断、循环与批处理"
+subtitle: 基础篇
+author: 胡悦
+institute: Learning R with Dr. Hu and His Friends Workshop Series
+
+webr:
+  repos:
+    - https://sammo3182.r-universe.dev
+  packages:
+    - drhur
+    - drhutools
+    - dplyr
+    - tidyr
+    - purrr
+    - ggplot2
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# 判断、循环与批处理 {#sec-loop}
+
+::: {.callout-note title="本章重点"}
+
+1. 条件判断与赋值
+2. 显性与隐形循环
+
+*本章研究问题*：不同收入阶层的民众在平等观念上是否存在差异？
+
+:::
+
+---
+
+- 重复性任务（清洗 500 份问卷、分省计算、整理上百篇文献）手动做既耗时又易错
+- 让 R 替你干重复的 dirty work，需两项技能：
+    - **教 R 做选择**：条件判断（Conditional Statement）
+    - **教 R 做重复**：循环与批处理（Loop & Batch Processing）
+- 学习顺序：条件判断 → 循环 → 批处理
+
+::: {.callout-important title="循环 vs. 批处理"}
+
+- **循环**：控制结构，重复执行同段代码，每次处理一个对象，全程参与（如逐张写快递单）
+- **批处理**：执行模式，多任务打包交给计算机自动完成，无需逐一干预（如把包裹全交给快递公司）
+
+:::
+
+## 条件判断
+
+- 生活中无时不在"做选择"：下雨带不带伞、89 分算不算好成绩
+- 条件判断 = 区分情况、做出选择
+- 是循环的基础，决定循环何时开始、何时终止
+- 而条件判断的基础是逻辑判断
+
+## 逻辑判断
+
+- 逻辑判断：产生 TRUE/FALSE 的表达式，R 据此决定执行哪段代码
+- algebra 章已介绍，这里复习
+
+```{webr}
+#| label: logicalJudge
+
+# 加载数据
+data("wvs7", package = "drhur")
+
+1 + 1 != 2
+
+# 检查向量中的每个元素是否为缺失值 NA
+is.na(c(1, 2, NA, 3))
+
+# 检查 wvs7 数据集中的 female 变量是否为数值型
+is.numeric(wvs7$female)
+```
+
+- `1 + 1 != 2` → FALSE；`is.na()` 逐元素查缺失；`is.numeric()` 查类型
+
+## 单一条件判断
+
+- 只有一个条件 → 用 `if`，即"如果…就…否则…"
+- 单行命令可简写：`if (<逻辑判断>) <执行命令>`
+
+```r
+if (<逻辑判断>) {
+  <满足条件时执行的命令>
+} else {
+  <不满足条件时执行的命令>
+}
+```
+
+---
+
+- 研究中常先对收入分组再分析（减少测量误差、提升效度）
+- 同样客观收入，主观评分可能不同（测量噪音）；分组让临近档归一
+- 先按中位数二分"低/高收入"，对第一位受访者试做：
+
+```{webr}
+#| label: incomeBinary
+
+# 计算收入中位数，注意排除缺失值
+median_income <- median(wvs7$incomeLevel, na.rm = TRUE)
+
+# 对第一位受访者进行判断
+if (wvs7$incomeLevel[1] <= median_income) {
+  wvs7$income_binary[1] <- "低收入群体"
+} else {
+  wvs7$income_binary[1] <- "高收入群体"
+}
+
+# 查看赋值结果
+wvs7$income_binary[1]
+```
+
+---
+
+::: {.callout-important title="逐一判断是条件判断的重要特征"}
+
+- `if()` 的逻辑判断只接受**单个** TRUE/FALSE
+- 整个向量丢进去 → R 只用第一个元素，并报警告/错误
+- 解决：用循环（后文）或向量化函数 `ifelse()`/`case_when()`
+
+:::
+
+```{webr}
+#| label: ifBinaryError
+
+if (wvs7$incomeLevel <= median_income) {
+  wvs7$income_binary <- "低收入群体"
+} else {
+  wvs7$income_binary <- "高收入群体"
+}
+```
+
+## 多重条件判断
+
+- 二分太粗：中位数 = 5 时，1 和 5 同组但差异远大于 5 和 6
+- 解决：多分几组（高/中/低），用串联 `if - else if - else`
+
+```r
+if (<条件1>) {
+  <执行命令1>
+} else if (<条件2>) {
+  <执行命令2>
+} else if (<条件3>) {
+  <执行命令3>
+} else {
+  <都不满足时的命令>
+}
+```
+
+---
+
+- 分组：低（≤3）/ 中（>3 且 ≤7）/ 高（>7），对第一位受访者试做：
+
+```{webr}
+#| label: incomeTriple
+
+# 检查第一位受访者：
+if (wvs7$incomeLevel[1] <= 3) {
+  # 如果收入小于等于3，归为低收入
+  wvs7$incomeCat3[1] <- "低收入"
+} else if (wvs7$incomeLevel[1] <= 7) {
+  # 如果收入小于等于7，归为中等收入
+  wvs7$incomeCat3[1] <- "中等收入"
+} else {
+  # 如果以上都不满足，归为高收入
+  wvs7$incomeCat3[1] <- "高收入"
+}
+
+# 查看结果
+wvs7$incomeCat3[1]
+```
+
+## 条件判断的向量化操作
+
+- `if-else` 每次只判断一个值；研究中需对整个向量（如 1264 个观测）逐个判断
+- 向量化（Vectorization）：对向量每个元素做同样操作 → `ifelse()`
+
+```r
+ifelse(<条件>, <满足时的值>, <不满足时的值>)
+```
+
+```{webr}
+#| label: ifelseIncome
+
+# 使用 ifelse 对整个收入向量进行判断
+wvs7$income_high <- ifelse(wvs7$incomeLevel > median_income,
+                            "高收入群体",
+                            "低收入群体")
+
+# 检查分类结果，并显示可能存在的缺失值
+table(wvs7$income_high, useNA = "ifany")
+```
+
+---
+
+::: {.callout-warning title="条件判断中的 `NA`"}
+
+- 任何涉及 `NA` 的比较（`>`、`<`、`==`）都返回 `NA`，不是 TRUE/FALSE
+- `if()` 条件若为 `NA` 会报错；判断缺失要用 `is.na()`
+- `ifelse()` 会自动把条件为 `NA` 的元素结果设为 `NA`（推荐向量化）
+
+:::
+
+```{webr}
+#| label: naInConditions
+
+# 缺失值参与的逻辑比较，结果永远是 NA
+NA > 5
+NA <= 3
+NA == NA
+
+# 要判断是否为 NA，应使用 is.na()
+is.na(NA)
+```
+
+---
+
+- `if()` 条件若为 `NA` 会直接报错：
+
+```{webr}
+#| label: naInIf
+
+if (NA > 5) {
+  print("大于5")
+}
+```
+
+---
+
+- 多重条件可用嵌套 `ifelse()`，逻辑同重复 `else if()`，但层多了看着乱
+
+```{webr}
+#| label: ifelseNested
+
+# 嵌套 ifelse 实现三分类
+wvs7$incomeCat3_ifelse <- ifelse(
+  wvs7$incomeLevel <= 3,
+  "低收入",
+  ifelse(
+    wvs7$incomeLevel > 7,
+    "高收入",
+    ifelse(is.na(wvs7$incomeLevel), NA, "中等收入")
+  )
+)
+
+# 检查结果
+table(wvs7$incomeCat3_ifelse, useNA = "ifany")
+```
+
+---
+
+- `dplyr::case_when()` 更清晰：用 `~` 连接条件与赋值
+- 优势：对应关系一目了然；增删条件只需加减行，不用数括号
+
+```r
+case_when(
+  <条件1> ~ <值1>,
+  <条件2> ~ <值2>,
+  ...)
+```
+
+```{webr}
+#| label: caseWhenIncome
+
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",      # 低收入组
+  wvs7$incomeLevel <= 7 ~ "中等收入",    # 中等收入组
+  wvs7$incomeLevel > 7 ~ "高收入"        # 高收入组
+)
+
+table(wvs7$incomeCat3, useNA = "ifany")
+```
+
+---
+
+- 有了收入分组，就能初步比较各群体平等观念
+- 结合 `group_by()` 分组求均值：
+
+```{webr}
+#| label: incomeEqualityTable
+
+# 计算各收入组的平等观念均值
+wvs7 |>
+  group_by(incomeCat3) |>
+  summarise(
+    mean_equalIncentive = mean(equalIncentive, na.rm = TRUE)
+  )
+```
+
+- 各收入组平等观念存在差异，与前一章可视化趋势可相互印证
+
+## 现学现练 {.unnumbered}
+
+**练习1**：多重分组分析
+
+平等观念可能同时受收入、性别、教育等因素影响。请用 `group_by()` 多重分组完成两个任务，并尝试解释其社会学含义：
+
+- 任务 A：同时按 `incomeCat3` 和 `female` 分组，计算各组平等观念均值与样本量
+- 任务 B：先用条件判断生成"高等教育/非高等教育"二元变量（以 6 为界），再考察它与 `incomeCat3` 如何共同影响平等观念
+
+::: { .hint exercise="conditionalGroupExercise" }
+
+- `group_by(incomeCat3, female)` 可多重分组
+- `summarise()` 内用 `mean(..., na.rm = TRUE)` 和 `n()`
+- 二元变量：`ifelse(education > 6, "高等教育", "非高等教育")`
+- 分组前用 `drop_na()` 去掉分组变量缺失的样本
+
+:::
+
+```{webr}
+#| label: conditionalGroupExercise
+#| exercise: conditionalGroupExercise
+
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# 先生成收入三分组 incomeCat3（前置准备）
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+
+# 任务 A、B 在此完成
+
+```
+
+::: { .solution exercise="conditionalGroupExercise" }
+
+```r
+# 考察收入 + 性别的组合影响
+wvs7 |>
+  drop_na(incomeCat3, female) |>
+  group_by(incomeCat3, female) |>
+  summarise(
+    mean_eq = mean(equalIncentive, na.rm = TRUE),
+    n = n()
+  ) |>
+  arrange(incomeCat3, female)
+
+# 考察收入 + 教育水平的组合影响
+wvs7$edu_binary <- ifelse(wvs7$education > 6, "高等教育", "非高等教育")
+
+wvs7 |>
+  drop_na(incomeCat3, edu_binary) |>
+  group_by(incomeCat3, edu_binary) |>
+  summarise(
+    mean_eq = mean(equalIncentive, na.rm = TRUE),
+    n = n()
+  ) |>
+  arrange(incomeCat3, edu_binary)
+
+# 解析：
+# - 性别：同阶层中女性 mean_eq 略低于男性（更倾向结果平等）
+# - 教育：各阶层中受高等教育者更倾向机会平等；低收入+高教育者尤其明显
+#   （"高知低薪"群体对公平竞争机会的强烈渴望）
+```
+
+:::
+
+## 循环 {#sec-loop-basics}
+
+- 循环（Loop）核心：让 R 重复执行同段代码，直到满足停止条件
+- 例：对 45 个国家分别作图，手动重复 45 次既麻烦又易错
+- 主要两种：`for` 循环、`while` 循环
+
+## for循环：已知次数的重复
+
+- 用于"我知道要重复多少次"
+- 给 R 一个任务清单，按顺序逐个取出、执行、再取下一个
+
+```r
+for (<索引变量> in <序列>) {
+  <执行代码>
+}
+```
+
+- 索引变量（习惯用 `i`、`j`）每次取序列中的一个值；`{}` 内代码重复执行
+
+---
+
+- 演示："带着镣铐跳舞"——只用单值 `if()` 配 `for` 把收入分三组
+
+```{webr}
+#| label: forIncomeCat
+
+# 查看数据量
+length(wvs7$incomeLevel)
+
+# 用 for 循环逐个处理每个观测
+for (i in 1:nrow(wvs7)) {  # i 从1到1264，每次取一个值
+  if (is.na(wvs7$incomeLevel[i])) {
+    wvs7$incomeCat3_loop[i] <- NA
+  } else if (wvs7$incomeLevel[i] <= 3) {
+    wvs7$incomeCat3_loop[i] <- "低收入"
+  } else if (wvs7$incomeLevel[i] <= 7) {
+    wvs7$incomeCat3_loop[i] <- "中等收入"
+  } else {
+    wvs7$incomeCat3_loop[i] <- "高收入"
+  }
+}
+
+# 检查循环结果
+table(wvs7$incomeCat3_loop, useNA = "ifany")
+
+# 验证循环结果与之前的 case_when 结果是否完全一致
+identical(wvs7$incomeCat3_loop, wvs7$incomeCat3)
+```
+
+- `identical()` 证明循环结果与 `case_when()` 一致；但 `case_when()` 更简洁
+- 循环更适合无法向量化的任务（读文件、画图、保存结果）
+
+## while循环：未知次数的重复
+
+- 用于"不知要重复多少次，但知道何时该停"
+- 先判断条件，TRUE 就执行，再判断……直到条件变 FALSE
+
+```r
+while (<判定条件>) {
+  <执行代码>
+}
+```
+
+---
+
+- 演示：随机抽样，直到凑够 10 个高收入受访者
+
+```{webr}
+#| label: whileSample
+
+# 初始化一个空的向量，用来存储抽样结果
+set.seed(313)
+high_income_sample <- numeric()
+attempts <- 0
+
+# 只要样本数量不足 10 个，就继续抽
+while (length(high_income_sample) < 10) {
+  idx <- sample(1:nrow(wvs7), 1)
+  attempts <- attempts + 1
+
+# 检查该受访者是否为“高收入”群体且非缺失值
+  if (!is.na(wvs7$incomeCat3[idx]) && wvs7$incomeCat3[idx] == "高收入") {
+    high_income_sample <- c(high_income_sample, wvs7$equalIncentive[idx])
+  }
+}
+
+# 查看最终抽到的样本
+high_income_sample
+```
+
+---
+
+- 所有 `for` 循环都能改写成等效的 `while` 循环
+
+```{webr}
+#| label: whileIncomeCat
+
+# 初始化计数器 i
+i <- 1
+
+# 只要 i 小于等于总行数，就继续
+while (i <= nrow(wvs7)) {
+  if (is.na(wvs7$incomeLevel[i])) {
+    wvs7$incomeCat3_while[i] <- NA
+  } else if (wvs7$incomeLevel[i] <= 3) {
+    wvs7$incomeCat3_while[i] <- "低收入"
+  } else if (wvs7$incomeLevel[i] <= 7) {
+    wvs7$incomeCat3_while[i] <- "中等收入"
+  } else {
+    wvs7$incomeCat3_while[i] <- "高收入"
+  }
+
+# 手动更新计数器，否则会进入死循环！
+  i <- i + 1
+}
+
+# 验证结果
+table(wvs7$incomeCat3_while, useNA = "ifany")
+identical(wvs7$incomeCat3_while, wvs7$incomeCat3)
+```
+
+---
+
+:::{.callout-warning title="while循环“陷阱”"}
+
+- 最易犯错：忘记更新条件变量 → 无限循环！
+- 不小心进入无限循环：可按 `Esc` 中断
+- 可设"安全阀"预防；`&&` 确保单个逻辑值，左侧 FALSE 即短路返回
+
+:::
+
+```r
+maxIter <- 1000
+iter <- 0
+
+while (<判定条件> && iter < maxIter) {
+  <执行代码>
+  iter <- iter + 1
+}
+
+if (iter == maxIter) warning("达到最大迭代次数，循环被强制终止")
+```
+
+## repeat循环：先执行再判断
+
+- `repeat`：无条件重复执行，直到遇到 `break` 才停止
+- 与 `while` 区别：先执行一次代码，再判断要不要继续
+
+```r
+repeat {
+  <执行代码>
+  if (某个条件) break  # 满足条件就跳出
+}
+```
+
+---
+
+- 把上面的 `while` 抽样例子用 `repeat` 改写：
+
+```{webr}
+#| label: repeatSample
+
+set.seed(313)
+
+# 初始化容器
+high_income_sample2 <- numeric()
+attempts2 <- 0
+
+# 开始 repeat 循环
+repeat {
+  # 随机抽样
+  idx <- sample(1:nrow(wvs7), 1)
+  attempts2 <- attempts2 + 1
+
+  # 判断条件
+  if (!is.na(wvs7$incomeCat3[idx]) && wvs7$incomeCat3[idx] == "高收入") {
+    high_income_sample2 <- c(high_income_sample2, wvs7$equalIncentive[idx])
+  }
+
+  # 如果收集够了10个，就跳出循环 (break)
+  if (length(high_income_sample2) >= 10) break
+}
+
+high_income_sample2
+
+identical(high_income_sample2, high_income_sample)
+```
+
+## `break`和`next`：循环控制
+
+- `break`：终止整个循环
+- `next`：跳过当前轮次，进入下一轮
+- 两者在各类循环中都可用
+
+- `break` 例：连续 5 个缺失值就停止并提醒研究者检查数据
+
+```{webr}
+#| label: breakDemo
+
+missing_count <- 0
+wvs7$data_check <- NA
+
+for (i in 1:nrow(wvs7)) {
+  # 检查当前行：收入和平等观念是否同时缺失
+  if (is.na(wvs7$incomeLevel[i]) && is.na(wvs7$equalIncentive[i])) {
+    missing_count <- missing_count + 1
+
+    # 如果连续缺失达到 5 个，触发 break
+    if (missing_count >= 5) {
+      cat("警告：在第", i, "个观测处发现连续", missing_count,
+          "个缺失值。数据质量可能有问题，停止处理！\n")
+      break  # 立即终止整个循环
+    }
+  } else {
+    missing_count <- 0  # 重置计数器
+
+    # 标记数据完整的观测
+    wvs7$data_check[i] <- "完整"
+  }
+}
+
+wvs7$data_check |>
+  table(useNA = "ifany")
+```
+
+---
+
+- `next` 例：找前 10 个数据完整的高收入受访者（像筛选漏斗）
+
+```{webr}
+#| label: nextDemo
+
+# 成功找到的样本计数器
+count <- 0
+
+for (i in 1:nrow(wvs7)) {
+  # 关卡1：如果收入缺失，跳过本次循环 (next)
+  if (is.na(wvs7$incomeLevel[i])) {
+    next
+  }
+  # 关卡2：如果平等观念缺失，跳过
+  if (is.na(wvs7$equalIncentive[i])) {
+    next
+  }
+  # 关卡3：如果收入不是高收入（<=7），跳过
+  if (wvs7$incomeLevel[i] <= 7) {
+    next
+  }
+  # 通过所有关卡，计数加1并打印信息
+  count <- count + 1
+  cat("第", count, "个：收入水平 =", wvs7$incomeLevel[i],
+      ", 平等观念 =", wvs7$equalIncentive[i], "\n")
+
+  # 找够10个就停止
+  if (count >= 10) break
+}
+```
+
+## 批处理
+
+- 循环功能强大但写起来麻烦：初始化、索引、取值都得自己写，易出错
+- 嵌套循环让代码像迷宫，难读
+- R 提供批处理函数：原生 `*apply()` 系列、`purrr` 包
+- 只需告诉 R"对列表每个元素应用之"，它自动循环并返回整理好的结果
+- 重点介绍 `dplyr` 与 `purrr` 的常用方法
+
+## `dplyr`中的批处理
+
+- `across()`：批处理**列**，常与 `mutate()` 一起用
+
+```r
+mutate(<数据框>, across(<选择变量>, <执行函数或代码>))
+```
+
+- 例：变量标准化（z 分数）消除量纲差异
+- 标准化变量 = (原变量 − 原变量均值) / 原变量标准差
+
+---
+
+```{webr}
+#| label: acrossScale
+
+# 对所有数值型变量标准化
+wvs7_std <- mutate(wvs7, across(where(is.numeric),
+                \(x) (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE),
+                .names = "{.col}_scaled"))
+
+# 查看部分标准化结果
+select(wvs7_std, incomeLevel, incomeLevel_scaled, equalIncentive, equalIncentive_scaled, age, age_scaled) |>
+  head()
+```
+
+- `where(is.numeric)` 只对数值列操作；`.names = "{.col}_scaled"` 自动命名新变量
+
+---
+
+- `if_any()`/`if_all()`：基于多列**筛选行**，常与 `filter()` 搭配
+- `if_any`："或"逻辑，任一列满足即保留；`if_all`："与"逻辑，所有列满足才保留
+
+```r
+filter(<数据框>, if_any(<选择变量>, <条件函数>))
+filter(<数据框>, if_all(<选择变量>, <条件函数>))
+```
+
+```{webr}
+#| label: ifAnyAll
+
+# 找出收入或平等观念有极端值的受访者
+wvs7 |>
+  filter(if_any(c(incomeLevel, equalIncentive), \(x) x == 10)) |>
+  select(country, incomeLevel, equalIncentive) |>
+  head()
+
+# 找出收入和平等观念都是10的受访者
+wvs7 |>
+  filter(if_all(c(incomeLevel, equalIncentive), \(x) x == 10)) |>
+  select(country, incomeLevel, equalIncentive) |>
+  head()
+```
+
+## 使用`purrr`进行批处理
+
+- `dplyr` 函数只作用于数据框/列表；通用任务（读文件、拟合模型、画图）用 `purrr` 的 `map` 族
+- `map(<目标对象>, {<执行代码>})`：对每个元素应用代码，返回结果列表
+- "map"指"映射"——把每个元素都对应处理，生成新对象
+
+```r
+map(<目标对象>, {<执行代码>})
+```
+
+---
+
+- 有 `for` 基础学 `map` 很容易；先用 `for` 算各收入组平均平等观念
+
+```{webr}
+#| label: forBasic
+
+# 获取所有不重复的收入组名
+incomeGroups <- unique(wvs7$incomeCat3) |> na.omit()
+df_equalMean_for <- vector("list", length = length(incomeGroups))
+
+# 循环：逐个组别计算
+for (i in seq_along(incomeGroups)) {
+  group_data <-  filter(wvs7, incomeCat3 == incomeGroups[i])
+  df_equalMean_for[[i]] <- mean(group_data$equalIncentive, na.rm = TRUE)
+}
+
+# 给列表元素命名，方便查看
+names(df_equalMean_for) <- incomeGroups
+df_equalMean_for
+```
+
+---
+
+- 同样任务用 `map()` 再做：`split()` 切分 + `map()` 映射
+
+```{webr}
+#| label: mapBasic
+
+# 拆分：按收入组将数据切分成列表
+df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
+  # 映射：对列表中的每个子数据框(aGroup)计算均值
+  map(\(aGroup) mean(aGroup$equalIncentive, na.rm = TRUE))
+
+df_equalMean_map
+```
+
+- 对比：`for` 要建容器、用索引、手动命名；`map` 一行搞定
+
+---
+
+::: {.callout-tip title="输出类型"}
+
+- `map()` 默认返回列表（`list`）
+- 要其他类型用变体：`map_dbl()` / `map_chr()` / `map_lgl()` / `map_dfr()`
+- 简化已有列表可用 `list_c()`
+- `walk()`：类似 `map` 但返回 `NULL`，用于保存文件、画图、打印等副作用
+
+:::
+
+```{webr}
+#| label: mapList
+
+# 检查 map 返回的对象类型
+class(df_equalMean_map)
+```
+
+---
+
+```{webr}
+#| label: mapVec
+
+# 将列表转换为数值向量
+df_equalMean_map_vec <- df_equalMean_map |>
+  list_c()
+
+df_equalMean_map_vec
+class(df_equalMean_map_vec)
+```
+
+- `map` 进阶：同时遍历多个对象
+- `map2()` 遍历两个等长对象（"双轨并行"，像两条平行铁轨）
+
+```r
+map2(<对象1>, <对象2>, {<执行代码>})
+```
+
+---
+
+- 例：按收入组分别画散点 + 拟合线，每组配不同颜色
+
+```{webr}
+#| label: map2Demo
+
+# 定义三种颜色，分别对应三个收入组
+colors <- drhutools::gb_cols("gold", "black", "red")
+
+# 同时遍历数据列表和颜色列表
+split(wvs7, ~ incomeCat3) |>
+  map2(colors, \(data, col) {
+  # 使用当前的数据(data)和对应的颜色(col)绘图
+  ggplot(data, aes(x = incomeLevel, y = equalIncentive)) +
+    geom_point(color = col, alpha = 0.5) +
+    geom_smooth(method = "lm", color = col) +
+    labs(title = ,
+    x = paste0(unique(data$incomeCat3), "人群收入水平"),
+    y = "平等观念")
+})
+```
+
+- 注意：`title` 必须放 `labs()` 内；上面的简写会报警告、标题不显示
+
+---
+
+- 三个或更多对象用 `pmap()`（p = parallel 并行）
+
+```r
+pmap(<对象列表>, {<执行代码>})
+```
+
+```{webr}
+#| label: pmapDemo
+
+# 构建参数列表：包含数据、颜色和标题三个平行向量
+params <- list(
+  data = split(wvs7, ~ incomeCat3),
+  color = colors,
+  title = paste(na.omit(unique(wvs7$incomeCat3)), "人群的收入-平等观念关系")
+)
+
+# 使用 pmap 并行处理三个参数
+pmap(params, \(data, color, title) {
+  ggplot(data, aes(x = incomeLevel, y = equalIncentive)) +
+    geom_point(color = color, alpha = 0.5) +
+    geom_smooth(method = "lm", color = color) +
+    labs(title = title, x = "收入水平", y = "平等观念")
+})
+```
+
+## 批处理中的debug
+
+- 复杂批处理中，一条脏数据（缺损、类型错误）可能让整个流程中断
+- 循环有索引变量（`i`、`j`）可定位错误；批处理没有
+- `purrr` 的"副词"函数 `safely()`/`possibly()`：包裹动作生成更安全的新动作
+- `safely()`：返回 `result` + `error` 列表（出错不中断，事后查 error）
+- `possibly()`：出错直接返回预设默认值（如 NA），只关心结果时更便捷
+
+---
+
+- 先构造一个会报错的函数演示：
+
+```{webr}
+#| label: safelyError
+
+# 定义一个函数：如果有负数就报错，否则开根号
+calc_sqrt <- function(x) {
+  if (any(x <= 0)) {
+    stop("输入必须全为正数！")
+  }
+  sqrt(x)
+}
+
+# 构造数据：第二个元素 b 含有负数
+num_list <- list(a = c(1, 4, 9), b = c(-1, 2, 3), c = c(16, 25, 36))
+
+# 直接 map 会报错终止，拿不到任何结果
+map(num_list, calc_sqrt)
+```
+
+---
+
+- `safely()` 包裹后，`map` 不中断，每个元素都返回 result/error
+
+```{webr}
+#| label: safelyDemo
+
+# 使用 safely 包裹原函数
+safe_sqrt <- safely(calc_sqrt)
+
+# 再次运行 map，这次不会中断
+results <- map(num_list, safe_sqrt)
+
+results
+```
+
+---
+
+- `possibly()`：出错处填 NA，继续跑完
+
+```{webr}
+#| label: possiblyDemo
+
+# 使用 possibly：如果出错，返回 NA_real_
+possible_sqrt <- possibly(calc_sqrt, otherwise = NA_real_)
+
+map(num_list, possible_sqrt)
+```
+
+---
+
+:::: {style="font-size: 0.7em;"}
+
+::: {.callout-tip title="`apply`函数家族"}
+
+- R 自带批处理函数 `apply` 系列（apply / lapply / sapply / vapply / tapply / mapply）
+- 结构不如 `map` 规整，但无需额外加载包，教材与网络常见
+- 可先写 `map`，再让大语言模型改写成 `apply`
+
+:::
+
+| 函数 | 基本语法 | 功能 | 对应 purrr |
+| --- | --- | --- | --- |
+| `apply()` | `apply(<数据>, <行/列>, <代码>)` | 矩阵/数据框按行或列应用 | 列：`map()`；行：`pmap()` |
+| `lapply()` | `lapply(<数据>, <代码>)` | 逐元素应用，返回列表 | `map()` |
+| `sapply()` | `sapply(<数据>, <代码>)` | 同 lapply，自动简化结果 | `map()` + `list_simplify()` |
+| `vapply()` | `vapply(<数据>, <代码>, FUN.VALUE)` | 同 lapply，预先指定返回类型 | `map()` + 指定类型 |
+| `tapply()` | `tapply(<数据>, <分组>, <代码>)` | 按分组对向量应用 | `map()` + `split()` |
+| `mapply()` | `mapply(<代码>, ...)` | 多输入逐元素应用 | `map2()` / `pmap()` |
+
+::::
+
+## 现学现练 {.unnumbered}
+
+**练习2**：收入-平等关系的国家间差异（批处理）
+
+收入水平对平等观念的关系，是否存在国家（`country`）间差异？请用本章所学的批处理完成：
+
+- 用批处理函数**分国家**计算一到两个描述统计量并观察结果
+- 用批处理函数为各国生成收入-平等观念关系的散点或线性拟合图
+
+::: { .hint exercise="batchExercise" }
+
+- `split(wvs7, ~ country)` 把数据按国家切成列表
+- 算统计量用 `map_dfr()`（自动拼成数据框，`.id = "country"` 保留国名）
+- 画图用 `map()`（图形对象只能存在列表里）
+
+:::
+
+```{webr}
+#| label: batchExercise
+#| exercise: batchExercise
+
+library(dplyr)
+library(purrr)
+library(ggplot2)
+data("wvs7", package = "drhur")
+
+# 在此完成分国家的批处理
+
+```
+
+::: { .solution exercise="batchExercise" }
+
+```r
+# 步骤1：分国家计算收入水平和平等观念的平均值
+wvs7_split <- wvs7 |> split(~country)
+
+country_means <- map_dfr(wvs7_split, \(df) {
+  tibble(
+    mean_income = mean(df$incomeLevel, na.rm = TRUE),
+    mean_equality = mean(df$equalIncentive, na.rm = TRUE)
+  )
+}, .id = "country")
+
+country_means
+
+# 步骤2：计算两者的比值（收入/平等）
+country_means <- country_means |>
+  mutate(ratio = mean_income / mean_equality)
+
+country_means
+
+# 步骤3：为各国绘制收入与平等观念的散点图
+country_plots <- map(wvs7_split, \(df) {
+  country_name <- unique(df$country)
+
+  ggplot(df, aes(x = incomeLevel, y = equalIncentive)) +
+    geom_jitter(alpha = 0.3, width = 0.2, height = 0.2) +
+    geom_smooth(method = "lm", se = TRUE, color = "steelblue") +
+    labs(
+      title = paste(country_name, ": 收入水平与平等观念"),
+      x = "收入水平 (1-10)",
+      y = "平等观念 (1=结果平等, 10=机会平等)"
+    ) +
+    theme_minimal()
+})
+
+# 显示前四个国家图形
+country_plots[1:4]
+
+# 解析：
+# - split(~country) 按国家切分；map_dfr 把每国单行 tibble 纵向拼成汇总表
+# - .id = "country" 把列表名转成一列，防止分组信息丢失
+# - 画图回到 map（图形对象无法拼进数据框，须以列表形式存在）
+# - 看拟合线斜率：向上=高收入者更倾向机会平等，平/向下=关系微弱或相反
+```
+
+:::
+
+## 本章重点及回顾 {.smaller}
+
+- 本章学习了用条件判断对数据分类，用循环和批处理高效完成重复任务
+- 结果：低收入群体略倾向结果平等（≈5.85），高收入群体略倾向机会平等（≈6.22），与前两章可视化相互印证
+
+- 条件判断
+    - 单一判断：`if()`、`else`
+    - 多重判断：`else if()`
+    - 向量化判断：`ifelse()`、`case_when()`
+- 循环结构
+    - 循环语句：`for()`、`while()`、`repeat`
+    - 循环控制：`next`、`break`
+
+---
+
+- 批处理
+    - dplyr 列批处理：`across()`
+    - dplyr 行筛选批处理：`if_any()`、`if_all()`
+    - purrr 列表批处理：`map()`、`map2()`、`pmap()`
+    - 异常处理：`safely()`、`possibly()`

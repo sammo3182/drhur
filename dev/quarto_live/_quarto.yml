@@ -1,0 +1,51 @@
+project:
+  type: default
+
+bibliography: [sdrhur.bib, bdrhur.bib]
+#runtime: shiny_prerendered
+highlight-style: github
+number-sections: true
+toc: false
+tables: true # enable longtable and booktabs
+fontsize: 12pt
+indent: true
+geometry: margin=1in
+linestretch: 1.5 # double spacing using linestretch 1.5
+colorlinks: true
+citation_package: natbib
+link-citations: true
+prefer-html: true
+
+format:
+  live-revealjs:
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: theme/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
+    incremental: false
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    embed-resources: true # self-contained, openable from file://
+    # chalkboard: false # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+  live-html:
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: theme/goldenBlack.scss
+    embed-resources: true
+engine: knitr
+
+execute:
+  dpi: 300
+  error: true
+  warning: false
+  message: false
+  # 注：字体与绘图默认参数改由项目级 .Rprofile 配置
+
+editor_options: 
+  chunk_output_type: console
