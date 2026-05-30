@@ -4,6 +4,7 @@ Title: Learning R with Dr. Hu
 Version: 2.0.0
 Authors@R: c(
     person("Yue", "Hu", role = c("aut", "cre"), email = "yuehu@tsinghua.edu.cn"),
+    person("Qian", "Qiu", role = c("ctb", "trl"), email = "qianlaile96@gmail.com"),
     person("Xinyi", "Ye", role = c("ctb", "trl"), email = "yexinyi98@outlook.com"),
     person("Yufei", "Sun", role = c("ctb"), email = "sunyf20@mails.tsinghua.edu.cn")
     )
@@ -15,6 +16,7 @@ Description: Provides interactive workshops for learning R easily and happily.
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 Encoding: UTF-8
+URL: https://www.drhuyue.site/drhur/, https://github.com/sammo3182/drhur
 BugReports: https://github.com/sammo3182/drhur/issues
 LazyData: true
 SystemRequirements: Quarto command-line tool (https://quarto.org)

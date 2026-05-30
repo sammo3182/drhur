@@ -4,110 +4,105 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Learning R with Dr. Hu • drhur</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Learning R with Dr. Hu">
-<meta property="og:description" content="Tutarials of R learning easily and happily.">
-<meta property="og:image" content="/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Learning R with Dr. Hu">
+<meta name="description" content='Provides interactive workshops for learning R easily and happily. Each workshop is a self-contained Quarto Live document whose code cells run in the browser via WebAssembly, so learners can read the instructions and run the exercises side by side without a local R setup. The materials accompany the "Learning R with Dr. Hu" workshop series.'>
+<meta property="og:description" content='Provides interactive workshops for learning R easily and happily. Each workshop is a self-contained Quarto Live document whose code cells run in the browser via WebAssembly, so learners can read the instructions and run the exercises side by side without a local R setup. The materials accompany the "Learning R with Dr. Hu" workshop series.'>
+<meta property="og:image" content="https://www.drhuyue.site/drhur/logo.png">
 </head>
-<body data-spy="scroll" data-target="#toc">
-    
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">drhur</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
-      </span>
-    </div>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/drhur-vignette.html">drhur: Learn R with Dr. Hu Easily and Happily</a>
-    </li>
-    <li>
-      <a href="articles/drhur-vignette_cn.html">drhur: 与胡博士一起学R</a>
-    </li>
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
+    <a class="navbar-brand me-2" href="index.html">drhur</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/drhur-vignette.html">drhur: Learn R with Dr. Hu Easily and Happily</a></li>
+    <li><a class="dropdown-item" href="articles/drhur-vignette_cn.html">drhur: 与胡博士一起学R</a></li>
   </ul>
 </li>
-<li>
-  <a href="news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/sammo3182/drhur/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/sammo3182/drhur/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+
   </div>
-<!--/.container -->
+</nav><div class="container template-home">
+<div class="row">
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="drhur-">drhur <img src="https://user-images.githubusercontent.com/58319029/109610431-b5fc7080-7b67-11eb-9bfb-988bd1759c50.png" alt="drhur logo" width="116.9" height="135" align="right"><a class="anchor" aria-label="anchor" href="#drhur-"></a>
+</h1>
 </div>
-<!--/.navbar -->
-
-      
-
-      </header><div class="row">
-  <div class="contents col-md-9">
-
-<p>pkgdown <img src="https://user-images.githubusercontent.com/58319029/109610431-b5fc7080-7b67-11eb-9bfb-988bd1759c50.png" width="116.9" height="135" align="right"></p>
 <hr>
-<div class="section level1">
-<div class="page-header"><h1 id="drhur">drhur<a class="anchor" aria-label="anchor" href="#drhur"></a>
-</h1></div>
-<p><code>drhur</code> is pedagogical software make the R learners’ life a little bit easier and more happily and a supplementary courseware for Dr. Yue Hu’s R program lectures. The tutorials included are crystallized during Dr. Hu’s online and offline R workshop.</p>
-<p>To install:</p>
-<ul>
-<li>the latest release version: <code>install.packages("drhur")</code>.</li>
-<li>the latest version: <code>remotes::install_github("sammo3182/drhur", dependencies = TRUE, build_vignettes = TRUE)</code>.</li>
-</ul>
-<p>More details are available at here:</p>
-<p><a href="https://cran.r-project.org/web/packages/dotwhisker/vignettes/drhur-vignette.html" class="external-link uri">https://cran.r-project.org/web/packages/dotwhisker/vignettes/drhur-vignette.html</a></p>
-<p>Please note that this project is released with a <a href="https://github.com/sammo3182/drhur/blob/master//CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
+<p><code>drhur</code> is pedagogical software that makes R learners’ lives a little easier and happier, and a supplementary courseware for Dr. Yue Hu’s R lectures. The workshops were crystallized during Dr. Hu’s online and offline R workshops.</p>
+<p>As of version 2.0.0, each workshop is a self-contained <a href="https://r-wasm.github.io/quarto-live/" class="external-link">Quarto Live</a> document: the code cells run directly in the browser via WebAssembly (<code>webR</code>), so learners read the instructions and run the exercises side by side <strong>without setting up a local R session</strong>.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Latest release from CRAN</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"drhur"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Development version</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"sammo3182/drhur"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or the WebAssembly-ready build from R-universe</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"drhur"</span>, repos <span class="op">=</span> <span class="st">"https://sammo3182.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
+<p>Opening a workshop requires the <a href="https://quarto.org" class="external-link">Quarto</a> command-line tool to be installed.</p>
 </div>
-
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="links">
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.drhuyue.site/drhur/">drhur</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Open a workshop as a scrollable HTML live document (the default)</span></span>
+<span><span class="fu"><a href="reference/drhur.html">drhur</a></span><span class="op">(</span><span class="st">"algebra"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ...or as a reveal.js slide deck</span></span>
+<span><span class="fu"><a href="reference/drhur.html">drhur</a></span><span class="op">(</span><span class="st">"algebra"</span>, style <span class="op">=</span> <span class="st">"slide"</span><span class="op">)</span></span></code></pre></div>
+<p>The function renders the workshop and serves it on a local web server, then opens it in your browser. (Quarto Live cells rely on browser features that are disabled for files opened directly from disk, so the document is served over <code>http://localhost</code> rather than opened as a file.)</p>
+<p>Available workshops (<em>Basics</em> series): <code>algebra</code>, <code>play</code>, <code>munging</code>, <code>descriptive</code>, <code>visual_basic</code>, and <code>loop</code>. Use <code>lang = "en"</code> for the English editions and <code>lang = "cn"</code> (the default) for the Chinese ones.</p>
+</div>
+<div class="section level2">
+<h2 id="more-information">More information<a class="anchor" aria-label="anchor" href="#more-information"></a>
+</h2>
+<p>More details are available on the <a href="https://www.drhuyue.site/software/drhur/" class="external-link">package website</a> and in the package vignette (<code><a href="articles/drhur-vignette.html">vignette("drhur-vignette")</a></code>).</p>
+<p>Please note that this project is released with a <a href="https://github.com/sammo3182/drhur/blob/master/CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
+</div>
+</div>
+  </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=drhur" class="external-link">View on CRAN</a></li>
@@ -136,34 +131,31 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Yue Hu <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Yue Hu <br><small class="roles"> Author, maintainer </small>   </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
 
 
-  </div>
+  </aside>
 </div>
 
 
-      <footer><div class="copyright">
-  <p></p>
-<p>Developed by Yue Hu.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p>Developed by Yue Hu.</p>
 </div>
 
-<div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<div class="pkgdown-footer-right">
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
-  
 
 
-  
+
 
   </body>
 </html>

@@ -54,6 +54,9 @@ The workshops available in the current version (\emph{Basics}
 \item \code{loop}: Conditionals, loops, and batch processing.
 }
 
+Every workshop ships in two language editions, selected with \code{lang}:
+simplified Chinese (\code{"cn"}, the default) and English (\code{"en"}).
+
 Rendering requires the \href{https://quarto.org}{Quarto} command-line tool to
 be installed. Running the interactive code cells in the rendered document
 additionally requires an internet connection, because the \code{webR} runtime
@@ -70,8 +73,11 @@ remains available for the rest of the session; stop it with
 }
 \examples{
 \dontrun{
-# Open the algebra workshop as an HTML live document (Chinese)
+# Open the algebra workshop as an HTML live document (Chinese, the default)
 drhur("algebra")
+
+# Open the same workshop in English
+drhur("algebra", lang = "en")
 
 # Open the data-munging workshop as a slide deck
 drhur("munging", style = "slide")

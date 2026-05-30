@@ -41,6 +41,13 @@ drhur("visual_basic")
 drhur("visual_basic", style = "slide")
 ```
 
+《基础》系列目前包含六个工作坊：`algebra`、`play`、`munging`、`descriptive`、`visual_basic` 和 `loop`。每个工作坊都提供两种语言版本，通过 `lang` 参数选择——简体中文（`"cn"`，默认）和英文（`"en"`）：
+
+```{r eval = FALSE}
+# 以英文版打开可视化工作坊
+drhur("visual_basic", lang = "en")
+```
+
 渲染需要预先安装 [Quarto](https://quarto.org) 命令行工具；运行交互式代码单元则需要联网（`webR` 运行时及工作坊所需的 R 包会在浏览时于浏览器中下载）。
 
 ## 结论

@@ -1,0 +1,644 @@
+---
+title: "Descriptive Statistics"
+subtitle: "Basics"
+author: "Yue Hu"
+institute: "Learning R with Dr. Hu and His Friends Workshop Series"
+
+webr:
+  packages:
+    - drhur
+    - dplyr
+    - tidyr
+    - ggplot2
+    - patchwork
+    - modelsummary
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# Descriptive Statistics {#sec-descriptive .smaller}
+
+::: {.callout-note title="Chapter Highlights"}
+
+1. The role of moments in describing a distribution
+2. Producing publication-quality descriptive tables with `dplyr` and `modelsummary`
+3. Histograms, density plots, box plots, and violin plots — principles and applications
+
+*Research question*: How are people's views on equality distributed — do they favor equality of opportunity or equality of outcome?
+
+:::
+
+## Computing Descriptive Statistics
+
+- The core of data analysis: finding patterns
+- Descriptive statistics is the starting point of pattern discovery
+- Done well, it sets up later analyses and creates a strong "first impression" for readers
+- Core variable of this chapter: `equalIncentive` (view on equality)
+- 1 = strongly favors equality of outcome; 10 = strongly favors equality of opportunity
+- Intermediate values reflect graded leanings between the two
+
+---
+
+- Most direct approach: count the people at each value
+- Two common methods:
+    - Base R `table()`: computes frequencies, returned as a vector
+    - `dplyr::count()`: returns a tidy table, supports joint counting on multiple variables
+
+```{webr}
+#| label: count
+
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# Base R function: table
+table(wvs7$equalIncentive)
+
+# dplyr count
+wvs7 |> count(equalIncentive)
+
+# Joint counting: equality view by country and gender
+wvs7 |> count(country, female, equalIncentive) |> head(10)
+```
+
+---
+
+
+- `table()` returns a vector with frequencies at each value
+- `count()` returns a `tibble` with two columns: `equalIncentive` and `n`
+- Joint counts: the first row reads as "a male respondent from Andorra chose equalIncentive = 2"
+
+---
+
+- Counting is intuitive but not enough to characterize a variable
+- Statisticians use **moments** to describe variables
+- Four moments map to four intuitive concepts:
+    - First moment: mean
+    - Second central moment: variance (related: standard deviation = √variance)
+    - Third standardized central moment: skewness
+    - Fourth standardized central moment: kurtosis
+
+---
+
+- Draw a bar plot of frequencies and connect the tops into a smooth curve → density plot
+- The four moments describe four features of this "mountain":
+    - Mean = peak position
+    - Variance = how wide or narrow it is
+    - Skewness = steepness of the slope
+    - Kurtosis = sharpness of the peak
+- Knowing these features sketches the shape of the distribution
+
+```{webr}
+#| label: idealDistribution
+
+library(ggplot2)
+
+# Idealized bell-shaped distribution (based on the normal)
+ggplot(data.frame(x = c(1, 10)), aes(x)) +
+  stat_function(
+    fun = dnorm,
+    args = list(mean = 5, sd = 1),
+    color = "darkblue",
+    linewidth = 1.2
+  ) +
+  scale_x_continuous(breaks = 1:10) +
+  labs(x = "Equality view", y = "Density", title = "Idealized distribution")
+```
+
+---
+
+::: {.callout-warning title="The paradox of moments"}
+
+- Real-world social data rarely follow a perfect bell curve
+- The actual distribution of equality views looks more like a hillside
+- The mean often sits halfway up rather than at the peak
+- Moments lose some descriptive power on skewed data
+- Safer practice: visualize the raw data (covered below)
+
+:::
+
+```{webr}
+#| label: realDistribution
+
+library(ggplot2)
+library(dplyr)
+
+# Actual distribution of equality views
+ggplot(wvs7, aes(x = equalIncentive)) +
+  geom_density(adjust = 1.5) +
+  geom_vline(
+    xintercept = mean(wvs7$equalIncentive, na.rm = TRUE),
+    linetype = "dashed"
+  ) +
+  scale_x_continuous(breaks = seq(1, 10, by = 1)) +
+  labs(x = "Equality view", y = "Density", title = "Actual distribution (WVS7)")
+```
+
+---
+
+- Functions for individual moments:
+    - `mean()`: mean
+    - `var()`: variance
+    - `sd()`: standard deviation
+- `summary()` returns six statistics at once: min, Q1, median, mean, Q3, max
+
+```{webr}
+#| label: moments_calc
+
+# Mean
+mean(wvs7$equalIncentive, na.rm = TRUE)
+
+# Variance
+var(wvs7$equalIncentive, na.rm = TRUE)
+
+# Standard deviation
+sd(wvs7$equalIncentive, na.rm = TRUE)
+
+# Six-number summary
+summary(wvs7$equalIncentive)
+```
+
+---
+
+::: {.callout-important title="Statistics and missing values"}
+
+- When computing a moment alone, we typically add `na.rm = TRUE`
+- By default R does not ignore any values — including missing ones
+- A missing value means "unknown", not zero, not "absent"
+- A direct computation on a vector with `NA` returns `NA`
+- `na.rm = TRUE` explicitly tells R "remove missing values before computing"
+
+:::
+
+```{webr}
+#| label: mean_na
+
+# Wrong: direct mean on a vector containing NA
+mean(wvs7$equalIncentive)
+
+# Right: remove NAs first
+mean(wvs7$equalIncentive, na.rm = TRUE)
+```
+
+---
+
+
+- `dplyr::summarise()` produces multiple statistics in one call
+- `group_by()` lets the computation run separately within each group
+- Together: the core combo for group-level analysis
+
+---
+
+- Example: examine each country's overall education level and age dispersion
+- Education level estimated by the sample mean
+- Age dispersion estimated by the standard deviation
+
+```{webr}
+#| label: summarise_by_country
+
+# Group by country, then compute multiple statistics per group
+group_by(wvs7, country) |>
+  summarise(
+    equal_mean = mean(equalIncentive, na.rm = TRUE),
+    age_mean = mean(age, na.rm = TRUE),
+    edu_sd = sd(education, na.rm = TRUE)
+  ) |>
+  ungroup() |>
+  head()
+```
+
+---
+
+- `group_by()` attaches grouping metadata to the data
+- `summarise()` runs the computation within each group, consuming one layer of grouping
+- `ungroup()` explicitly clears any remaining grouping markers, restoring a flat table
+- Outcome: the unit of analysis is lifted from "person" to "country", enabling macro comparisons
+
+## Section Exercise {.unnumbered}
+
+**Question 1**: Equality views by income level
+
+**Do groups at different income levels (`incomeLevel`) hold different distributions of views on equality (`equalIncentive`)?**
+
+Use what you have learned above to answer this question.
+
+::: { .hint exercise="income_equality" }
+
+- Mirror the "group by country" pattern
+- Switch the grouping variable to `incomeLevel`
+- Use `filter()` to drop the missing values on `incomeLevel`
+- Use `summarise()` to compute each group's sample size, mean, and standard deviation
+
+:::
+
+```{webr}
+#| label: income_equality
+#| exercise: income_equality
+
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# Build your pipeline here
+
+```
+
+::: { .solution exercise="income_equality" }
+
+```r
+library(dplyr)
+data("wvs7", package = "drhur")
+
+wvs7 |>
+  filter(!is.na(incomeLevel)) |>
+  group_by(incomeLevel) |>
+  summarise(
+    n = n(),
+    equal_mean = mean(equalIncentive, na.rm = TRUE),
+    equal_sd = sd(equalIncentive, na.rm = TRUE)
+  ) |>
+  ungroup()
+
+# Walk-through:
+# 1. filter drops observations missing on incomeLevel
+# 2. group_by partitions the data by income bracket
+# 3. summarise computes per-group sample size, mean, and SD on equality view
+# 4. ungroup restores a flat table
+# 5. Inspect equal_mean: if higher-income groups score higher, they lean more
+#    toward "equality of opportunity"
+```
+
+:::
+
+## Descriptive Tables
+
+- Traditionally, descriptive statistics are presented as tables
+- Tables struggle to communicate non-bell-shaped distributions
+- Scholars increasingly favor histograms, density plots, and violin plots
+- Tables remain the most basic display
+- An experienced researcher can read data quality from a descriptive table
+- That requires rich, comprehensive content
+- Recommended tool: `modelsummary` (by Vincent Arel-Bundock)
+
+---
+
+- `datasummary_skim()`: one line of code produces a summary table with embedded histograms
+- Includes traditional statistics (mean, median, SD)
+- Adds tiny inline histograms for an at-a-glance sense of distribution
+
+```{webr}
+#| label: datasummary_skim
+
+library(modelsummary)
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# One line for a descriptive table
+select(wvs7, age, equalIncentive, corruption_state) |>
+  datasummary_skim()
+```
+
+---
+
+- Tables can be split by variable type:
+
+```{webr}
+#| label: datasummary_by_type
+
+library(modelsummary)
+
+# Numeric variables only
+datasummary_skim(wvs7, type = "numeric")
+
+# Categorical variables only
+datasummary_skim(wvs7, type = "categorical")
+```
+
+---
+
+- `datasummary()` allows full customization
+- Formula syntax: `<variable (rows)> ~ <statistic (columns)>`
+
+```{webr}
+#| label: datasummary_custom
+
+library(modelsummary)
+
+# Custom: choose variables and statistics
+datasummary(age + equalIncentive ~ Mean + SD, data = wvs7)
+```
+
+## Section Exercise {.unnumbered}
+
+**Question 2**: A custom descriptive table
+
+Use `datasummary()` to build a descriptive table for `wvs7` that:
+
+1. Covers three variables: `age`, `education`, `equalIncentive`
+2. Uses the formula syntax of `datasummary` to control content
+3. Shows exactly four statistics: `N` (count of non-missing observations), `Mean`, `Median`, `SD`
+
+::: { .hint exercise="datasummary_custom_ex" }
+
+- Formula syntax: `<var1> + <var2> + ... ~ <stat1> + <stat2> + ...`
+- Three variables on the left of `~`
+- Four statistics on the right of `~`
+- Pass `data = wvs7` as an argument
+
+:::
+
+```{webr}
+#| label: datasummary_custom_ex
+#| exercise: datasummary_custom_ex
+
+library(modelsummary)
+data("wvs7", package = "drhur")
+
+# Build the table here
+
+```
+
+::: { .solution exercise="datasummary_custom_ex" }
+
+```r
+library(modelsummary)
+data("wvs7", package = "drhur")
+
+# Formula syntax: variables (rows) ~ statistics (columns)
+datasummary(age + education + equalIncentive ~ N + Mean + Median + SD, data = wvs7)
+
+# Walk-through:
+# - Compare N across the three variables to see whether equalIncentive has
+#   more missing values than age or education
+# - If age's Mean is close to its Median → symmetric distribution
+# - If Mean is clearly greater than Median → right-skewed distribution
+```
+
+:::
+
+## Common Statistical Graphics
+
+- Histogram: the most common one-dimensional distribution display
+- Splits data into bins; bar height represents frequency
+- Best suited for continuous variables
+
+```{webr}
+#| label: histogram
+
+library(ggplot2)
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# Age histogram (continuous variable)
+ggplot(wvs7, aes(x = age)) +
+  geom_histogram(alpha = 0.6) +
+  labs(x = "Age", y = "Frequency")
+```
+
+---
+
+- Discrete variables fit a bar chart (`geom_bar`) better
+
+```{webr}
+#| label: barplot
+
+library(ggplot2)
+
+# Bar chart of equality view (ordinal variable)
+ggplot(wvs7, aes(x = factor(equalIncentive))) +
+  geom_bar(alpha = 0.6) +
+  labs(x = "Equality view", y = "Frequency")
+```
+
+---
+
+- Density plot: the smoothed cousin of the histogram
+- Built via kernel density estimation: place a small "bump" kernel curve at each observation, sum, then average
+- Strength: clearly displays distribution shape, especially when identifying multimodal distributions
+
+---
+
+- Three data points (0, 1, 2) illustrate the transition from histogram to density plot:
+    - **Left**: gray bars are the raw histogram; each data point gets a kernel curve ("bump") centered on it
+    - **Middle**: the three independent curves (dashed) are summed at each x position into a solid "total height" curve
+    - **Right**: divide that "total height" by the observation count (here, 3) — the shape is identical, the y-axis values shrink
+
+```{webr}
+#| label: hist2density
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(patchwork)
+
+# Demo data points and plot parameters
+data_points <- c(0, 1, 2)
+bw          <- 0.4
+x_grid      <- seq(-1.5, 3.5, length.out = 400)
+
+# Base data frame
+df_data <- tibble(x = data_points)
+
+# Per-point kernel curves (the bumps)
+df_kernels <- expand_grid(x = x_grid, point = data_points) |>
+  mutate(kernel = dnorm(x, mean = point, sd = bw))
+
+# Sum of all kernel curves
+df_sum_all <- df_kernels |>
+  group_by(x) |>
+  summarise(sum_all = sum(kernel), .groups = "drop")
+
+# Final density estimate (averaged sum)
+df_kde <- df_kernels |>
+  group_by(x) |>
+  summarise(kde = mean(kernel), .groups = "drop")
+
+# Plot 1: histogram + individual kernels
+p_histKernel <- ggplot() +
+  geom_histogram(data = df_data, aes(x = x),
+    binwidth = 0.5, boundary = -0.25,
+    color = "black", fill = "grey80") +
+  geom_line(data = df_kernels, aes(x = x, y = kernel, group = factor(point))) +
+  labs(title = "Histogram + kernels", x = "x", y = "kernel / frequency")
+
+# Plot 2: kernels + summed curve
+p_kernel <- ggplot() +
+  geom_line(data = df_kernels, aes(x = x, y = kernel, group = factor(point)),
+    linetype = "dashed") +
+  geom_line(data = df_sum_all, aes(x = x, y = sum_all), linewidth = 1) +
+  labs(title = "Three kernels summed", x = "x", y = "kernel")
+
+# Plot 3: final density plot
+p_density <- ggplot(df_kde, aes(x = x, y = kde)) +
+  geom_line(linewidth = 1) +
+  labs(title = "Averaged into density", x = "x", y = "kernel density")
+
+# Combine the three
+(p_histKernel + p_kernel + p_density) &
+  theme(plot.title = element_text(size = 8))
+```
+
+---
+
+- Apply this principle to real data: overlay histogram and density curve on the age variable
+- Age distribution is roughly unimodal but slightly right-skewed (tail extends to the right)
+
+```{webr}
+#| label: density_plot
+
+library(ggplot2)
+
+# Age distribution: histogram + density curve
+ggplot(wvs7, aes(x = age)) +
+  geom_histogram(aes(y = after_stat(density)), alpha = 0.6) +
+  geom_density(alpha = 0.5, linewidth = 1) +
+  labs(x = "Age", y = "Density")
+```
+
+---
+
+::: {.callout-warning title="Density plots are for continuous variables"}
+
+- Density plots assume the variable takes values on a continuous axis
+- For ordinal or categorical variables, neighboring categories lack a continuous interpolation space
+- Kernel density estimation will fabricate trends in the "empty" regions
+- Strictly speaking, classic histograms also target continuous variables
+- "Histograms" for discrete data are in essence bar charts
+
+:::
+
+---
+
+- Box plot (a.k.a. box-and-whisker plot): based directly on descriptive statistics
+- Box: from Q1 to Q3
+- Middle line: median
+- Whiskers: extend toward both sides up to ±1.5 IQR
+- Points beyond the whiskers: potential outliers
+
+```{webr}
+#| label: boxplot
+
+library(ggplot2)
+
+# Box plot of age distribution
+ggplot(wvs7, aes(y = age)) +
+  geom_boxplot(alpha = 0.6) +
+  labs(y = "Age")
+```
+
+---
+
+
+- Readings from the plot:
+    - Central tendency: median around 40
+    - Spread: IQR roughly 28-53
+    - Skew: upper whisker much longer than lower → right-skewed
+    - Outliers: none (everything is within the whiskers)
+
+---
+
+- Limitation of box plots: based entirely on statistics, can be seriously misleading
+- Three drastically different distributions can produce identical box plots
+- Their statistics happen to align even though the underlying distributions differ entirely
+
+```{webr}
+#| label: boxplot_mislead
+
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+set.seed(313)
+n <- 1000
+
+# Three different distributions
+raw_data <- tibble(
+  dist = rep(c("Normal", "Bimodal", "Right-skewed"), each = n),
+  value = c(
+    rnorm(n, mean = 0, sd = 1),
+    c(rnorm(n / 2, mean = -2, sd = 0.4),
+      rnorm(n / 2, mean =  2, sd = 0.4)),
+    rexp(n, rate = 1)
+  )
+)
+
+# Raw data: jittered scatter
+p_raw <- ggplot(raw_data, aes(x = dist, y = value)) +
+  geom_jitter(width = 0.15, alpha = 0.25, size = 0.5) +
+  labs(x = NULL, y = "Value", title = "Raw data")
+
+# Violin plot
+p_violin <- ggplot(raw_data, aes(x = dist, y = value)) +
+  geom_violin(alpha = 0.4, fill = alpha("black", 0.4), colour = NA, trim = FALSE) +
+  labs(x = NULL, y = "Value", title = "Violin plot")
+
+# Side-by-side
+p_raw + p_violin + plot_layout(axes = "collect")
+```
+
+---
+
+- Violin plot: a better alternative to the box plot
+- Vertical: overall shape of the distribution
+- Horizontal: kernel density estimate — wider means more dense
+- Vs. box plot: fully reveals the shape (long tails, skew, multimodality, outlier clusters)
+- Vs. density plot: compact on the vertical axis, easier when comparing multiple groups
+- Example: compare age distributions across equality-view groups
+- Use `ntile()` to collapse 10 levels into 3 groups (Outcome-equality first / Both / Opportunity-equality first)
+
+```{webr}
+#| label: violin_age_equality
+
+library(ggplot2)
+library(dplyr)
+
+# Build the grouping
+df_violin <- select(wvs7, equalIncentive, age) |>
+  filter(!is.na(equalIncentive), !is.na(age)) |>
+  mutate(
+    eq_group = ntile(equalIncentive, 3) |>
+      factor(
+        levels = c(1, 2, 3),
+        labels = c("Outcome-equality first", "Both matter", "Opportunity-equality first")
+      )
+  )
+
+# Violin plot: compare three groups by age
+ggplot(df_violin, aes(x = eq_group, y = age)) +
+  geom_violin(trim = FALSE, fill = alpha("black", 0.6)) +
+  labs(x = "Equality view", y = "Age")
+```
+
+---
+
+- Key observations:
+    - The three groups share a similar overall shape (concentrated between 25 and 50)
+    - "Outcome-equality first" shows bumps near ages 25, 37.5, and 50
+    - "Opportunity-equality first" is more even, with a longer right tail (older respondents)
+- These nuances are invisible to a box plot
+
+
+- Naming pattern of plot functions: prefixed with `geom_`
+- `geom` = abbreviation of "geometry"
+- The suffix names the plot type: `geom_histogram`, `geom_density`, `geom_boxplot`, `geom_violin`
+- Clean and intuitive — covered in detail in the next chapter on ggplot2
+
+## Chapter Recap
+
+- Moments
+    - First moment: mean
+    - Second moment: variance / standard deviation
+    - Third moment: skewness
+    - Fourth moment: kurtosis
+- Computing descriptive statistics
+    - Mean: `mean()`
+    - Standard deviation / variance: `sd()` / `var()`
+    - Frequencies: `table()` / `count()`
+    - Group aggregation: `group_by()` + `summarise()`
+
+---
+
+- Visualizing descriptive statistics
+    - Descriptive tables: `datasummary_skim()`, `datasummary()`
+    - Histogram: `geom_histogram()`
+    - Density plot: `geom_density()`
+    - Box plot: `geom_boxplot()`
+    - Violin plot: `geom_violin()` (key)

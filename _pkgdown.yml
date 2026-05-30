@@ -1,0 +1,11 @@
+url: https://www.drhuyue.site/drhur
+
+template:
+  bootstrap: 5
+
+articles:
+  - title: Get started
+    navbar: ~
+    contents:
+      - drhur-vignette
+      - drhur-vignette_cn

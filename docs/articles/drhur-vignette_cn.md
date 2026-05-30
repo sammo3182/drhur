@@ -1,0 +1,67 @@
+# drhur: 与胡博士一起学R
+
+## 概述
+
+对很多朋友来说，学习编程语言（比如R）都将会是（伴随满足感的）挑战。
+`drhur` 正是一款旨在使这一学习过程更加轻松愉快而研发的教学软件。
+目前版本的软件内含有关于使用R进行基本数据科学技能的教程，如基础R运算、数据的导入/导出、清洗和可视化。
+此软件的目标是为学习者提供一个交互式平台，让他们能够轻松且高效地融入到 R
+的世界。
+
+使用本软件的最佳方式是配合由清华大学政治学系副教授胡悦博士开设的
+“Learning R with Dr. Hu”工作坊共同使用。
+软件中的模块实际上就是这个工作坊系列部分初期课程，也将被包含至胡博士即将出版的R语言教材。
+工作坊和即将出版的教材覆盖了有关R从基础到高级的技术（如空间分析、网络分析以及文本分析）的大量知识和技能。
+您可以在[作者的网站](https://www.drhuyue.site/software/drhur/)上或通过[直接联系他](mailto:yuehu@tsinghua.edu.cn)获取更多相关信息。
+
+## 使用
+
+本软件包的每个工作坊都是一个自包含的 [Quarto
+Live](https://r-wasm.github.io/quarto-live/) 文档，其中的代码单元通过
+WebAssembly（`webR`）直接在浏览器中运行。学习者无需配置本地 R
+环境，便可一边阅读讲解、一边运行练习。您可以方便地通过
+[`drhur()`](https://www.drhuyue.site/drhur/reference/drhur.md)
+函数打开某个工作坊：该函数会渲染文档并在浏览器中打开它。比如，您可以通过以下命令来启动数据可视化工作坊：
+
+``` r
+
+if (!require(drhur)) install.packages("drhur")
+library(drhur)
+
+# 以可滚动的 HTML 实时文档形式打开（默认）
+drhur("visual_basic")
+
+# 或将同一工作坊以 reveal.js 幻灯片形式打开
+drhur("visual_basic", style = "slide")
+```
+
+《基础》系列目前包含六个工作坊：`algebra`、`play`、`munging`、`descriptive`、`visual_basic`
+和 `loop`。每个工作坊都提供两种语言版本，通过 `lang`
+参数选择——简体中文（`"cn"`，默认）和英文（`"en"`）：
+
+``` r
+
+# 以英文版打开可视化工作坊
+drhur("visual_basic", lang = "en")
+```
+
+渲染需要预先安装 [Quarto](https://quarto.org)
+命令行工具；运行交互式代码单元则需要联网（`webR` 运行时及工作坊所需的 R
+包会在浏览时于浏览器中下载）。
+
+## 结论
+
+`drhur` 的目标是帮助学习者掌握该编程语言的常用应用技巧。
+我们鼓励用户查阅帮助文件以获取更多详细信息。
+
+另外，此软件仍在开发中。
+如果您有任何问题、发现任何错误或者有任何评论，可以在[软件的 GitHub
+页面](https://github.com/sammo3182/drhur/issues)上提出问题。
+
+## 联系方式
+
+胡悦
+
+清华大学政治学系，  
+Email: <yuehu@tsinghua.edu.cn>  
+网站: <https://www.drhuyue.site>

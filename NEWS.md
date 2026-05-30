@@ -6,7 +6,7 @@
 - `drhur()` now renders the chosen workshop and serves it on a local web server before opening it in the browser. New arguments:
   - `style`: `"document"` (default, a scrollable `live-html` document) or `"slide"` (a `live-revealjs` deck).
   - `lang`: `"cn"` (default) or `"en"`.
-- Refreshed the *Basics* workshops: `algebra`, `play`, `munging`, `descriptive`, `visual_basic`, and `loop`.
+- Refreshed the *Basics* workshops: `algebra`, `play`, `munging`, `descriptive`, `visual_basic`, and `loop`. Each is now bundled in both simplified Chinese (`lang = "cn"`) and English (`lang = "en"`) editions.
 
 ## Under the hood
 

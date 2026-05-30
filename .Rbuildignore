@@ -11,3 +11,7 @@ data-raw/
 ^docs$
 ^\.luarc\.json$
 \.quarto$
+^cran-comments\.md$
+^.*\.tar\.gz$
+^.*\.Rcheck$
+^\.github$

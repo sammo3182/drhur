@@ -1,0 +1,524 @@
+---
+title: "Basic Mathematical Concepts"
+subtitle: "Basics"
+author: "Yue Hu"
+institute: "Learning R with Dr. Hu and His Friends Workshop Series"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# Basic Mathematical Concepts {#sec-algebra .smaller}
+
+::: {.callout-note title="Chapter Highlights"}
+
+1. Basic algebra
+2. Vectors
+3. Matrices and solving equations
+
+*Research question*: What is the underlying logic of data analysis in R?
+
+:::
+
+## Basic Operations
+
+- R's arithmetic operators match math: `+`, `-`, `*`, `/`
+- Type an expression directly in the Console to compute
+
+```{webr}
+#| label: algebraBasics
+
+# Four basic operations (add, subtract, multiply, divide)
+1 + 2
+3 - 4
+5 * 6
+7 / 8
+
+# Compound expression
+(2 + 4) / (5 - 3)
+```
+
+---
+
+::: {.callout-tip title="Whitespace usage"}
+
+- Whitespace does not affect computation but improves readability
+- The Tidyverse style guide recommends consistent spaces and blank lines
+- Packages such as `styler` and `air` can unify formatting
+
+:::
+
+```{webr}
+#| label: woSpace
+
+# The line below has irregular spacing — looks messy but R still runs it correctly
+(2+4) / (  5-  3            )
+```
+
+---
+
+- Power `^`, modulo `%%`, logarithm `log()` / `log10()`, exponential `exp()`
+- Common shortcuts: `sqrt()` (square root), `abs()` (absolute value)
+
+```{webr}
+#| label: moreAlgebra
+
+10^2
+5 %% 3
+log(11)
+log10(100)
+exp(12)
+
+# Two ways to take a square root
+9^(1/2)
+sqrt(9)
+
+# Absolute value
+abs(-9)
+```
+
+---
+
+- Trigonometric functions: `sin()`, `cos()`, `tan()`, `acos()`, `asin()`, `atan()`
+- `pi` is R's pre-stored constant for π
+- Other pre-stored constants: `letters`, `LETTERS`, `month.name`, `month.abb`
+
+```{webr}
+#| label: trigFunctions
+
+sin(pi)
+cos(pi)
+tan(pi / 2)
+acos(1)
+asin(1)
+atan(0.5)
+
+```
+
+---
+
+::: {.callout-important title="Scientific notation"}
+
+- `e` connects the coefficient and the exponent, indicating a power of 10
+- Example: 200 = 2e2; 0.002 = 2e-3
+
+:::
+
+---
+
+- Boolean algebra: `TRUE` / `FALSE` (or `T` / `F` for short)
+- Logical operators: `&` (and), `|` (or), `!` (not)
+- The empty object: `NULL`
+- Comparison operators: `==`, `!=`, `>`, `<`, `>=`, `<=`
+
+```{webr}
+#| label: boolean
+
+# Equalities
+1 == 2
+1 == TRUE # TRUE / FALSE are 1 and 0 with a logical attribute
+0 != F
+
+# Inequalities
+1 != 2
+1 > 2
+1 < 2
+1 >= 2
+1 <= 2
+
+# Boolean operations
+
+3 > 2 & 2 > 1
+12 & 2 > 2
+-3 | 2 > 2
+```
+
+---
+
+- Boolean precedence comes last: comparisons first, then logical connectives
+- A bare value in a Boolean expression triggers a self-equality check
+
+::: {.callout-tip title="Using the equal sign"}
+
+- `==` expresses equality; `=` is reserved for assignment
+- Beginners often misuse `=` for `==` — practice fixes it
+
+:::
+
+## Vectors
+
+- Vector: a sequence of values with a direction
+- Three ways to create: `c()`, `:` (consecutive integers), `seq()`
+
+```{webr}
+#| label: sequence
+
+# Method 1: enter values one by one with c() (the most basic way)
+a <- c(11, 12, 13, 14, 15)
+# Method 2: the colon : operator (consecutive integers only)
+a1 <- 11:15
+# Method 3: seq() for more flexible sequences
+a2 <- seq(from = 11, to = 15, by = 1)
+a3 <- seq(11, 15)
+
+# Verify all three are identical
+a == a1
+a == a2
+a == a3
+```
+
+---
+
+- Vector indexing: `[]` extracts a subset
+- `a[2]` picks the 2nd element; `a[c(3,4)]` picks multiple elements
+
+```{webr}
+#| label: vector
+
+# Create a demo vector
+a <- c(11, 12, 13, 14, 15)
+
+# Single element (by position index)
+a[2]
+a[5]
+
+# Multiple elements (position vector inside [])
+a[c(3,4)]
+```
+
+---
+
+::: {.callout-important title="The assignment operator `<-`"}
+
+- `<-` is R's most common assignment operator; the arrow means "store into"
+- Shortcut: `Alt + -` on Windows / Linux, `Option + -` on Mac
+- R is virtually the only popular language using `<-`, a legacy of the APL keyboard layout
+
+:::
+
+---
+
+- Vector addition / subtraction: element-wise on corresponding positions
+- Scalar with vector: the scalar applies to every element
+
+```{webr}
+#| label: vectorAdd
+
+a <- c(11, 12, 13, 14, 15)
+
+# Vector with scalar
+b <- a + 4
+c <- a - 0.5
+
+# Vector with vector
+a + b
+a - c
+```
+
+---
+
+- Element-wise (Hadamard) product: `*`, multiply corresponding positions
+- Inner (dot) product: `%*%`, returns a scalar
+- Outer (tensor) product: `%o%` or `outer()`, returns a matrix
+
+```{webr}
+#| label: vecTimes
+
+# Element-wise product
+# Multiply corresponding positions: (a1*b1, a2*b2, ...)
+a * b
+
+# Inner product (dot product)
+# Returns a scalar: sum(a*b)
+a %*% b
+
+# Outer product (tensor product)
+# Returns a matrix: A[i,j] = a[i] * b[j]
+a %o% b
+
+```
+
+---
+
+::: {.callout-tip title="Vector \"non-standard\" operations"}
+
+- In R, `a / b` is element-wise division; mathematically vectors have no division
+- Recycling rule: the shorter vector is repeated to match the longer one
+
+:::
+
+```{webr}
+#| label: vectorDiv
+
+# Element-wise division
+# Divide corresponding positions: (a1/b1, a2/b2, ...)
+a / b
+
+# Verify reversibility of the operation
+# Create a new vector d that is 313 times a
+d <- a * 313
+
+# Then divide d by a — every result should be 313
+d / a
+
+```
+
+---
+
+```{webr}
+#| label: recycle
+
+# Define a short vector (length 2)
+e <- c(1, 2)
+
+a * e
+```
+
+- `c()` can also create character vectors — wrap each element in double quotes
+
+```{webr}
+#| label: character
+
+# Character vector — each element must be in double quotes
+aSentence<-c("I","am","from","People's Republic of China", ".")
+
+aSentence
+
+```
+
+## Section Exercises {.unnumbered}
+
+**Question 1**: The recycling rule
+
+Given the assignments of `a` and `e`, explain and compute the result of the following expressions.
+
+::: { .hint exercise="recycle_rule" }
+
+- `a` has length 5, `e` has length 2
+- R recycles `e` to `c(1, 2, 1, 2, 1)`
+- Then performs the operation element-wise
+
+:::
+
+```{webr}
+#| label: recycle_rule
+#| exercise: recycle_rule
+
+a <- 11:15
+e <- c(1, 2)
+
+a - e
+a / e
+
+```
+
+::: { .solution exercise="recycle_rule" }
+
+```r
+a <- 11:15
+e <- c(1, 2)
+
+# e is recycled to c(1, 2, 1, 2, 1)
+# a - e: c(10, 10, 12, 12, 14)
+a - e
+
+# a / e: c(11, 6, 13, 7, 15)
+a / e
+```
+
+:::
+
+---
+
+**Question 2**: Derive the Sexagenary Cycle (Ganzhi)
+
+Use vector operations to derive the 60-pair sexagenary cycle. Rule: Yang stems pair only with Yang branches; Yin stems pair only with Yin branches.
+
+::: { .hint exercise="ganzhi" }
+
+- Use `seq()` and `%%` to separate odd / even positions (Yang / Yin)
+- Use `outer()` to generate all pairwise combinations
+- Use `paste0()` to concatenate stems and branches into text
+
+:::
+
+```{webr}
+#| label: ganzhi
+#| exercise: ganzhi
+
+tiangan <- c("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸")
+dizhi <- c("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
+
+
+```
+
+::: { .solution exercise="ganzhi" }
+
+```r
+tiangan <- c("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸")
+dizhi <- c("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
+
+# Extract Yang stems (odd positions) and Yin stems (even positions)
+tg_yang <- tiangan[seq(tiangan) %% 2 == 1]
+tg_yin <- tiangan[seq(tiangan) %% 2 == 0]
+
+# Extract Yang branches (odd positions) and Yin branches (even positions)
+dz_yang <- dizhi[seq(dizhi) %% 2 == 1]
+dz_yin <- dizhi[seq(dizhi) %% 2 == 0]
+
+# Yang stems pair with Yang branches
+outer(tg_yang, dz_yang, FUN = paste0)
+# Yin stems pair with Yin branches
+outer(tg_yin, dz_yin, FUN = paste0)
+```
+
+:::
+
+## Matrices
+
+- Matrix: two-dimensional, composed of multiple vectors
+- `matrix()` creates one, filling column by column (column-major order)
+- Specify `nrow` or `ncol` (only one is needed)
+
+```{webr}
+#| label: matrix
+
+# A 2-row matrix; data fill column by column
+matrix(c(1, 2, 3, 4), nrow = 2)
+```
+
+---
+
+- Matrices also follow the recycling rule
+
+```{webr}
+#| label: matrixRecycle
+
+# A 2-row matrix
+matrix(1:3, nrow = 2)
+
+```
+
+---
+
+- Matrix indexing: `A[row, column]`
+- A blank row or column index means "all rows" or "all columns"
+
+```{webr}
+#| label: matrixCell
+
+# Setup: build matrix A
+A <- matrix(1:3, nrow = 2)
+
+# Single cell: row 1, column 2
+A[1, 2]
+
+# Entire row 1
+A[1, ]
+# Entire column 2
+A[, 2]
+```
+
+---
+
+- Transposition: `t()`, swaps rows and columns
+- Two transpositions restore the original
+
+```{webr}
+#| label: matrixTrans
+
+# Original matrix
+A
+# One transposition
+t(A)
+# Two transpositions (back to original)
+t(t(A))
+```
+
+---
+
+::: {.callout-important title="The logic of nested function calls"}
+
+- "Inside-out" evaluation: the innermost call runs first, its result feeds the outer call
+- Analogous to mathematical function composition $g(f(x))$
+
+:::
+
+---
+
+- Matrix addition / subtraction: same dimensions, element-wise
+- Matrix multiplication: element-wise `*`, inner `%*%` (cols of first = rows of second), outer `%o%`, cross-product `crossprod()`
+
+```{webr}
+#| label: matrixTimes
+
+# Setup: create matrices of different dimensions
+B <- matrix(1:6, nrow = 2)
+C <- matrix(6:1, nrow = 2)
+D <- matrix(6:1, nrow = 3)
+
+# Inspect the matrices
+B
+C
+D
+
+# Basic operations (require matching dimensions)
+B + C
+B - C
+
+# A tour of multiplications: element-wise, inner, outer, cross-product
+B * C
+B %*% D
+B %o% C
+crossprod(B, C)
+
+```
+
+---
+
+- `solve()` solves a linear system
+- The matrix form of a linear system closely mirrors the matrix form of a regression
+
+```{webr}
+#| label: solve
+
+# Coefficient matrix B (3x3) for the system
+# Coefficients of a, b, c on the left-hand side
+B <- matrix(c(1, 3, 2, 1, 2, 2, 1, 4, -6), nrow = 3)
+B
+
+# Right-hand side vector y
+# Results on the right-hand side: 6, 9, 4
+y <- c(6, 9, 4)
+
+# Solve the linear system
+# Find vector x such that B %*% x = y (i.e., the values of a, b, c)
+x <- solve(B, y)
+x
+
+```
+
+## Chapter Highlights and Recap
+
+::: {.callout-note title="A friendly reminder"}
+
+This chapter and the chapters that follow will cover quite a few concepts.
+Some of them do not need to be mastered all at once — a general impression is enough, and many will deepen through later chapters as you see them applied in context. Other items, however, form the key foundation of the current stage; missing them now will directly hinder later understanding.
+Each chapter therefore ends with a key-point recap that flags exactly what you must hold onto at this moment.
+
+:::
+
+---
+
+- Assignment: `<-`
+- Boolean logic
+    - Comparison operators: `==` (equal), `!=` (not equal), `>`, `<`
+    - Logical operators: `&` (and), `|` (or), `!` (not)
+- Vectors and indexing
+    - Build a vector: `c()`
+    - Generate a sequence: `seq()`
+    - Vector indexing: `[]`
+- Matrices
+    - Create: `matrix()`
+    - Inspect dimensions: `nrow()`, `ncol()`
+    - Transpose: `t()`
+    - Solve / invert: `solve()`

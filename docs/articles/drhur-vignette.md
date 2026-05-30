@@ -1,0 +1,84 @@
+# drhur: Learn R with Dr. Hu Easily and Happily
+
+## Overview
+
+Learning a programming language such as R can be (rewardingly)
+challenging. `drhur` is a pedagogical software to make the learning
+process easier and more enjoyable. The package includes tutorials on
+basic data science skills with R, such as basic R syntax, data
+import/export, munging, and visualization. The goal of this package is
+to provide an interactive platform for learners to easily and
+efficiently enter the R world.
+
+The ideal way to acquire these skills is through the “Learning R with
+Dr. Hu” workshop, conducted by Associate Professor Yue Hu from the
+Department of Political Science at Tsinghua University. The modules
+included in this package correspond to the content of the initial
+chapters of this workshop series and Dr. Hu’s forthcoming textbook on
+the R programming language. The workshop series and the book aim to
+cover knowledge and skills about R, ranging from basic to advanced
+techniques, such as spatial analysis, network analysis, and text
+analysis. You can find more relevant information on the [author’s
+website](https://www.drhuyue.site/software/drhur/) or by [contacting
+him](mailto:yuehu@tsinghua.edu.cn) directly.
+
+## Usage
+
+Each workshop is a self-contained [Quarto
+Live](https://r-wasm.github.io/quarto-live/) document whose code cells
+run directly in the browser via WebAssembly (`webR`), so learners can
+read the instructions and run the exercises side by side without setting
+up a local R session. One can conveniently load the package and open a
+workshop through the
+[`drhur()`](https://www.drhuyue.site/drhur/reference/drhur.md) function,
+which renders the document and opens it in the browser. For example, the
+data-visualization workshop can be initiated with the following
+commands:
+
+``` r
+
+if (!require(drhur)) install.packages("drhur")
+library(drhur)
+
+# Open as a scrollable HTML live document (the default)
+drhur("visual_basic")
+
+# Or open the same workshop as a reveal.js slide deck
+drhur("visual_basic", style = "slide")
+```
+
+The *Basics* series currently includes six workshops: `algebra`, `play`,
+`munging`, `descriptive`, `visual_basic`, and `loop`. Each is available
+in two language editions, selected with the `lang` argument—simplified
+Chinese (`"cn"`, the default) and English (`"en"`):
+
+``` r
+
+# Open the visualization workshop in English
+drhur("visual_basic", lang = "en")
+```
+
+Rendering requires the [Quarto](https://quarto.org) command-line tool to
+be installed, and running the interactive code cells requires an
+internet connection (the `webR` runtime and the workshop’s R packages
+are downloaded in the browser at view time).
+
+## Conclusion
+
+`drhur` aims to help R learners to get in touch with the most common
+applied skills of the programming language. We encourage users to
+consult the help files for more details.
+
+The development of the package is ongoing. Please contact us with any
+questions, bug reports, and comments. Free to open [an issue on the
+software’s GitHub page](https://github.com/sammo3182/drhur/issues) if
+you have any question or a feature request.
+
+## Affiliation
+
+Yue Hu
+
+Political Science,  
+Tsinghua Univeristy  
+Email: <yuehu@tsinghua.edu.cn>  
+Website: <https://www.drhuyue.site>

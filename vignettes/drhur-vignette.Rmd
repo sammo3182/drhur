@@ -43,6 +43,13 @@ drhur("visual_basic")
 drhur("visual_basic", style = "slide")
 ```
 
+The *Basics* series currently includes six workshops: `algebra`, `play`, `munging`, `descriptive`, `visual_basic`, and `loop`. Each is available in two language editions, selected with the `lang` argument---simplified Chinese (`"cn"`, the default) and English (`"en"`):
+
+```{r eval = FALSE}
+# Open the visualization workshop in English
+drhur("visual_basic", lang = "en")
+```
+
 Rendering requires the [Quarto](https://quarto.org) command-line tool to be installed, and running the interactive code cells requires an internet connection (the `webR` runtime and the workshop's R packages are downloaded in the browser at view time).
 
 

@@ -8,3 +8,7 @@ data-raw/
 /Meta/
 
 /.luarc.json
+
+# R build / check artifacts
+*.tar.gz
+*.Rcheck/
