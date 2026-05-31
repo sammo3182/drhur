@@ -293,8 +293,8 @@ library(dplyr)
 data("wvs7", package = "drhur")
 
 # 一行代码生成描述统计表
-select(wvs7, age, equalIncentive, corruption_state) |>
-  datasummary_skim()
+select(wvs7, age, equalIncentive) |>
+  datasummary_skim(type = "numeric", output = "data.frame")
 ```
 
 ---
@@ -305,12 +305,27 @@ select(wvs7, age, equalIncentive, corruption_state) |>
 #| label: datasummary_by_type
 
 library(modelsummary)
+library(dplyr)
+library(tidyr)
 
 # 仅数值型变量
-datasummary_skim(wvs7, type = "numeric")
+datasummary_skim(wvs7, type = "numeric", output = "data.frame")
 
 # 仅分类变量
-datasummary_skim(wvs7, type = "categorical")
+wvs7 |>
+  select(country, female, religious, marital, corruption_state) |>
+  pivot_longer(
+    cols = everything(),
+    names_to = "variable",
+    values_to = "value",
+    values_transform = list(value = as.character)
+  ) |>
+  filter(!is.na(value)) |>
+  count(variable, value, name = "N") |>
+  group_by(variable) |>
+  mutate(percent = round(100 * N / sum(N), 1)) |>
+  ungroup() |>
+  head(20)
 ```
 
 ---
@@ -324,7 +339,7 @@ datasummary_skim(wvs7, type = "categorical")
 library(modelsummary)
 
 # 自定义：指定变量与统计量
-datasummary(age + equalIncentive ~ Mean + SD, data = wvs7)
+datasummary(age + equalIncentive ~ Mean + SD, data = wvs7, output = "data.frame")
 ```
 
 ## 现学现练 {.unnumbered}
@@ -364,7 +379,11 @@ library(modelsummary)
 data("wvs7", package = "drhur")
 
 # 公式语法：变量(行) ~ 统计量(列)
-datasummary(age + education + equalIncentive ~ N + Mean + Median + SD, data = wvs7)
+datasummary(
+  age + education + equalIncentive ~ N + Mean + Median + SD,
+  data = wvs7,
+  output = "data.frame"
+)
 
 # 解析：
 # - 对比三变量的 N，可看 equalIncentive 是否比 age、education 缺失更多

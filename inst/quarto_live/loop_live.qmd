@@ -98,6 +98,9 @@ if (<逻辑判断>) {
 # 计算收入中位数，注意排除缺失值
 median_income <- median(wvs7$incomeLevel, na.rm = TRUE)
 
+# 先创建这一列，再填入单个位置
+wvs7$income_binary <- NA_character_
+
 # 对第一位受访者进行判断
 if (wvs7$incomeLevel[1] <= median_income) {
   wvs7$income_binary[1] <- "低收入群体"
@@ -121,6 +124,7 @@ wvs7$income_binary[1]
 
 ```{webr}
 #| label: ifBinaryError
+#| error: true
 
 if (wvs7$incomeLevel <= median_income) {
   wvs7$income_binary <- "低收入群体"
@@ -152,6 +156,9 @@ if (<条件1>) {
 
 ```{webr}
 #| label: incomeTriple
+
+# 先创建这一列，再填入单个位置
+wvs7$incomeCat3 <- NA_character_
 
 # 检查第一位受访者：
 if (wvs7$incomeLevel[1] <= 3) {
@@ -218,6 +225,7 @@ is.na(NA)
 
 ```{webr}
 #| label: naInIf
+#| error: true
 
 if (NA > 5) {
   print("大于5")
@@ -386,6 +394,14 @@ for (<索引变量> in <序列>) {
 # 查看数据量
 length(wvs7$incomeLevel)
 
+# 准备参照分组和循环输出列
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+wvs7$incomeCat3_loop <- NA_character_
+
 # 用 for 循环逐个处理每个观测
 for (i in 1:nrow(wvs7)) {  # i 从1到1264，每次取一个值
   if (is.na(wvs7$incomeLevel[i])) {
@@ -432,6 +448,13 @@ set.seed(313)
 high_income_sample <- numeric()
 attempts <- 0
 
+# 准备下面会用到的收入分组
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+
 # 只要样本数量不足 10 个，就继续抽
 while (length(high_income_sample) < 10) {
   idx <- sample(1:nrow(wvs7), 1)
@@ -456,6 +479,14 @@ high_income_sample
 
 # 初始化计数器 i
 i <- 1
+
+# 准备参照分组和 while 循环输出列
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+wvs7$incomeCat3_while <- NA_character_
 
 # 只要 i 小于等于总行数，就继续
 while (i <= nrow(wvs7)) {
@@ -525,6 +556,13 @@ set.seed(313)
 high_income_sample2 <- numeric()
 attempts2 <- 0
 
+# 准备下面会用到的收入分组
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+
 # 开始 repeat 循环
 repeat {
   # 随机抽样
@@ -542,7 +580,10 @@ repeat {
 
 high_income_sample2
 
-identical(high_income_sample2, high_income_sample)
+# 如果前面的 while 循环已经运行过，就和它的结果比较
+if (exists("high_income_sample")) {
+  identical(high_income_sample2, high_income_sample)
+}
 ```
 
 ## `break`和`next`：循环控制
@@ -695,6 +736,12 @@ map(<目标对象>, {<执行代码>})
 #| label: forBasic
 
 # 获取所有不重复的收入组名
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+
 incomeGroups <- unique(wvs7$incomeCat3) |> na.omit()
 df_equalMean_for <- vector("list", length = length(incomeGroups))
 
@@ -717,6 +764,12 @@ df_equalMean_for
 #| label: mapBasic
 
 # 拆分：按收入组将数据切分成列表
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+
 df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
   # 映射：对列表中的每个子数据框(aGroup)计算均值
   map(\(aGroup) mean(aGroup$equalIncentive, na.rm = TRUE))
@@ -741,6 +794,17 @@ df_equalMean_map
 #| label: mapList
 
 # 检查 map 返回的对象类型
+if (!exists("df_equalMean_map")) {
+  wvs7$incomeCat3 <- case_when(
+    wvs7$incomeLevel <= 3 ~ "低收入",
+    wvs7$incomeLevel <= 7 ~ "中等收入",
+    wvs7$incomeLevel > 7 ~ "高收入"
+  )
+
+  df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
+    map(\(aGroup) mean(aGroup$equalIncentive, na.rm = TRUE))
+}
+
 class(df_equalMean_map)
 ```
 
@@ -750,6 +814,17 @@ class(df_equalMean_map)
 #| label: mapVec
 
 # 将列表转换为数值向量
+if (!exists("df_equalMean_map")) {
+  wvs7$incomeCat3 <- case_when(
+    wvs7$incomeLevel <= 3 ~ "低收入",
+    wvs7$incomeLevel <= 7 ~ "中等收入",
+    wvs7$incomeLevel > 7 ~ "高收入"
+  )
+
+  df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
+    map(\(aGroup) mean(aGroup$equalIncentive, na.rm = TRUE))
+}
+
 df_equalMean_map_vec <- df_equalMean_map |>
   list_c()
 
@@ -772,7 +847,14 @@ map2(<对象1>, <对象2>, {<执行代码>})
 #| label: map2Demo
 
 # 定义三种颜色，分别对应三个收入组
-colors <- drhutools::gb_cols("gold", "black", "red")
+colors <- c("gold", "black", "red")
+
+# 准备下面会用到的收入分组
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
 
 # 同时遍历数据列表和颜色列表
 split(wvs7, ~ incomeCat3) |>
@@ -780,14 +862,16 @@ split(wvs7, ~ incomeCat3) |>
   # 使用当前的数据(data)和对应的颜色(col)绘图
   ggplot(data, aes(x = incomeLevel, y = equalIncentive)) +
     geom_point(color = col, alpha = 0.5) +
-    geom_smooth(method = "lm", color = col) +
-    labs(title = ,
-    x = paste0(unique(data$incomeCat3), "人群收入水平"),
-    y = "平等观念")
+    geom_smooth(method = "lm", formula = y ~ x, color = col) +
+    labs(
+      title = paste0(unique(data$incomeCat3), "人群"),
+      x = paste0(unique(data$incomeCat3), "人群收入水平"),
+      y = "平等观念"
+    )
 })
 ```
 
-- 注意：`title` 必须放 `labs()` 内；上面的简写会报警告、标题不显示
+- 标题和坐标轴标签都放在 `labs()` 内统一设置。
 
 ---
 
@@ -801,6 +885,14 @@ pmap(<对象列表>, {<执行代码>})
 #| label: pmapDemo
 
 # 构建参数列表：包含数据、颜色和标题三个平行向量
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "低收入",
+  wvs7$incomeLevel <= 7 ~ "中等收入",
+  wvs7$incomeLevel > 7 ~ "高收入"
+)
+
+colors <- c("gold", "black", "red")
+
 params <- list(
   data = split(wvs7, ~ incomeCat3),
   color = colors,
@@ -811,7 +903,7 @@ params <- list(
 pmap(params, \(data, color, title) {
   ggplot(data, aes(x = incomeLevel, y = equalIncentive)) +
     geom_point(color = color, alpha = 0.5) +
-    geom_smooth(method = "lm", color = color) +
+    geom_smooth(method = "lm", formula = y ~ x, color = color) +
     labs(title = title, x = "收入水平", y = "平等观念")
 })
 ```
@@ -842,8 +934,9 @@ calc_sqrt <- function(x) {
 # 构造数据：第二个元素 b 含有负数
 num_list <- list(a = c(1, 4, 9), b = c(-1, 2, 3), c = c(16, 25, 36))
 
-# 直接 map 会报错终止，拿不到任何结果
-map(num_list, calc_sqrt)
+# 直接 map 会在 b 处中断。这里用 possibly() 展示问题，
+# 同时避免中断教程。
+map(num_list, possibly(calc_sqrt, otherwise = NA_real_))
 ```
 
 ---

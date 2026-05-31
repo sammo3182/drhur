@@ -96,6 +96,9 @@ if (<logical condition>) {
 # Compute the median income; remember to exclude missing values
 median_income <- median(wvs7$incomeLevel, na.rm = TRUE)
 
+# Create the column before filling one cell
+wvs7$income_binary <- NA_character_
+
 # Judge for the first respondent
 if (wvs7$incomeLevel[1] <= median_income) {
   wvs7$income_binary[1] <- "Low income"
@@ -119,6 +122,7 @@ wvs7$income_binary[1]
 
 ```{webr}
 #| label: ifBinaryError
+#| error: true
 
 if (wvs7$incomeLevel <= median_income) {
   wvs7$income_binary <- "Low income"
@@ -150,6 +154,9 @@ if (<condition 1>) {
 
 ```{webr}
 #| label: incomeTriple
+
+# Create the column before filling one cell
+wvs7$incomeCat3 <- NA_character_
 
 # Check the first respondent:
 if (wvs7$incomeLevel[1] <= 3) {
@@ -216,6 +223,7 @@ is.na(NA)
 
 ```{webr}
 #| label: naInIf
+#| error: true
 
 if (NA > 5) {
   print("Greater than 5")
@@ -387,6 +395,14 @@ for (<index variable> in <sequence>) {
 # Check the data size
 length(wvs7$incomeLevel)
 
+# Prepare the reference grouping and the loop output column
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
+wvs7$incomeCat3_loop <- NA_character_
+
 # Use a for loop to process each observation
 for (i in 1:nrow(wvs7)) {  # i goes from 1 to 1264, one value at a time
   if (is.na(wvs7$incomeLevel[i])) {
@@ -433,6 +449,13 @@ set.seed(313)
 high_income_sample <- numeric()
 attempts <- 0
 
+# Prepare the income grouping used below
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
+
 # Keep sampling as long as we have fewer than 10
 while (length(high_income_sample) < 10) {
   idx <- sample(1:nrow(wvs7), 1)
@@ -457,6 +480,14 @@ high_income_sample
 
 # Initialize the counter i
 i <- 1
+
+# Prepare the reference grouping and the while-loop output column
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
+wvs7$incomeCat3_while <- NA_character_
 
 # Continue as long as i is no greater than the total number of rows
 while (i <= nrow(wvs7)) {
@@ -526,6 +557,13 @@ set.seed(313)
 high_income_sample2 <- numeric()
 attempts2 <- 0
 
+# Prepare the income grouping used below
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
+
 # Start the repeat loop
 repeat {
   # Random sampling
@@ -543,7 +581,10 @@ repeat {
 
 high_income_sample2
 
-identical(high_income_sample2, high_income_sample)
+# Compare with the earlier while-loop result, if it has been run.
+if (exists("high_income_sample")) {
+  identical(high_income_sample2, high_income_sample)
+}
 ```
 
 ## `break` and `next`: loop control
@@ -696,6 +737,12 @@ map(<target>, {<code>})
 #| label: forBasic
 
 # Get all distinct income-group names
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
+
 incomeGroups <- unique(wvs7$incomeCat3) |> na.omit()
 df_equalMean_for <- vector("list", length = length(incomeGroups))
 
@@ -718,6 +765,12 @@ df_equalMean_for
 #| label: mapBasic
 
 # Split: partition the data by income group into a list
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
+
 df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
   # Map: compute the mean for each sub data frame (aGroup) in the list
   map(\(aGroup) mean(aGroup$equalIncentive, na.rm = TRUE))
@@ -742,6 +795,17 @@ df_equalMean_map
 #| label: mapList
 
 # Check the class of the object returned by map
+if (!exists("df_equalMean_map")) {
+  wvs7$incomeCat3 <- case_when(
+    wvs7$incomeLevel <= 3 ~ "Low income",
+    wvs7$incomeLevel <= 7 ~ "Medium income",
+    wvs7$incomeLevel > 7 ~ "High income"
+  )
+
+  df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
+    map(\(aGroup) mean(aGroup$equalIncentive, na.rm = TRUE))
+}
+
 class(df_equalMean_map)
 ```
 
@@ -751,6 +815,17 @@ class(df_equalMean_map)
 #| label: mapVec
 
 # Convert the list into a numeric vector
+if (!exists("df_equalMean_map")) {
+  wvs7$incomeCat3 <- case_when(
+    wvs7$incomeLevel <= 3 ~ "Low income",
+    wvs7$incomeLevel <= 7 ~ "Medium income",
+    wvs7$incomeLevel > 7 ~ "High income"
+  )
+
+  df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
+    map(\(aGroup) mean(aGroup$equalIncentive, na.rm = TRUE))
+}
+
 df_equalMean_map_vec <- df_equalMean_map |>
   list_c()
 
@@ -773,7 +848,14 @@ map2(<object 1>, <object 2>, {<code>})
 #| label: map2Demo
 
 # Define three colors, one for each income group
-colors <- drhutools::gb_cols("gold", "black", "red")
+colors <- c("gold", "black", "red")
+
+# Prepare the income grouping used below
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
 
 # Iterate over the data list and the color list together
 split(wvs7, ~ incomeCat3) |>
@@ -781,14 +863,16 @@ split(wvs7, ~ incomeCat3) |>
   # Use the current data (data) and the corresponding color (col) to plot
   ggplot(data, aes(x = incomeLevel, y = equalIncentive)) +
     geom_point(color = col, alpha = 0.5) +
-    geom_smooth(method = "lm", color = col) +
-    labs(title = ,
-    x = paste0(unique(data$incomeCat3), " group income level"),
-    y = "Equality attitude")
+    geom_smooth(method = "lm", formula = y ~ x, color = col) +
+    labs(
+      title = paste0(unique(data$incomeCat3), " group"),
+      x = paste0(unique(data$incomeCat3), " group income level"),
+      y = "Equality attitude"
+    )
 })
 ```
 
-- Note: `title` must be placed inside `labs()`; the shortcut above triggers a warning and the title is not displayed
+- The title is supplied inside `labs()`, together with the axis labels.
 
 ---
 
@@ -802,6 +886,14 @@ pmap(<list of objects>, {<code>})
 #| label: pmapDemo
 
 # Build a parameter list: data, colors, and titles as three parallel vectors
+wvs7$incomeCat3 <- case_when(
+  wvs7$incomeLevel <= 3 ~ "Low income",
+  wvs7$incomeLevel <= 7 ~ "Medium income",
+  wvs7$incomeLevel > 7 ~ "High income"
+)
+
+colors <- c("gold", "black", "red")
+
 params <- list(
   data = split(wvs7, ~ incomeCat3),
   color = colors,
@@ -812,7 +904,7 @@ params <- list(
 pmap(params, \(data, color, title) {
   ggplot(data, aes(x = incomeLevel, y = equalIncentive)) +
     geom_point(color = color, alpha = 0.5) +
-    geom_smooth(method = "lm", color = color) +
+    geom_smooth(method = "lm", formula = y ~ x, color = color) +
     labs(title = title, x = "Income level", y = "Equality attitude")
 })
 ```
@@ -843,8 +935,9 @@ calc_sqrt <- function(x) {
 # Construct data: the second element b contains negative numbers
 num_list <- list(a = c(1, 4, 9), b = c(-1, 2, 3), c = c(16, 25, 36))
 
-# Calling map directly raises an error and aborts, returning nothing
-map(num_list, calc_sqrt)
+# Direct map() would stop at b. Use possibly() to show the problem without
+# interrupting the tutorial.
+map(num_list, possibly(calc_sqrt, otherwise = NA_real_))
 ```
 
 ---

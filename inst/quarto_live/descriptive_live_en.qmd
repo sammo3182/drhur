@@ -292,8 +292,8 @@ library(dplyr)
 data("wvs7", package = "drhur")
 
 # One line for a descriptive table
-select(wvs7, age, equalIncentive, corruption_state) |>
-  datasummary_skim()
+select(wvs7, age, equalIncentive) |>
+  datasummary_skim(type = "numeric", output = "data.frame")
 ```
 
 ---
@@ -304,12 +304,27 @@ select(wvs7, age, equalIncentive, corruption_state) |>
 #| label: datasummary_by_type
 
 library(modelsummary)
+library(dplyr)
+library(tidyr)
 
 # Numeric variables only
-datasummary_skim(wvs7, type = "numeric")
+datasummary_skim(wvs7, type = "numeric", output = "data.frame")
 
 # Categorical variables only
-datasummary_skim(wvs7, type = "categorical")
+wvs7 |>
+  select(country, female, religious, marital, corruption_state) |>
+  pivot_longer(
+    cols = everything(),
+    names_to = "variable",
+    values_to = "value",
+    values_transform = list(value = as.character)
+  ) |>
+  filter(!is.na(value)) |>
+  count(variable, value, name = "N") |>
+  group_by(variable) |>
+  mutate(percent = round(100 * N / sum(N), 1)) |>
+  ungroup() |>
+  head(20)
 ```
 
 ---
@@ -323,7 +338,7 @@ datasummary_skim(wvs7, type = "categorical")
 library(modelsummary)
 
 # Custom: choose variables and statistics
-datasummary(age + equalIncentive ~ Mean + SD, data = wvs7)
+datasummary(age + equalIncentive ~ Mean + SD, data = wvs7, output = "data.frame")
 ```
 
 ## Section Exercise {.unnumbered}
@@ -363,7 +378,11 @@ library(modelsummary)
 data("wvs7", package = "drhur")
 
 # Formula syntax: variables (rows) ~ statistics (columns)
-datasummary(age + education + equalIncentive ~ N + Mean + Median + SD, data = wvs7)
+datasummary(
+  age + education + equalIncentive ~ N + Mean + Median + SD,
+  data = wvs7,
+  output = "data.frame"
+)
 
 # Walk-through:
 # - Compare N across the three variables to see whether equalIncentive has
