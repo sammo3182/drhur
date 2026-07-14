@@ -472,6 +472,8 @@ identical(wvs7$incomeCat3_loop, wvs7$incomeCat3)
 
 :::
 
+---
+
 - `identical()` 证明循环结果与 `case_when()` 一致；但 `case_when()` 更简洁
 - 循环更适合无法向量化的任务（读文件、画图、保存结果）
 
@@ -968,6 +970,8 @@ split(wvs7, ~ incomeCat3) |>
 ```
 
 :::
+
+---
 
 - 标题和坐标轴标签都放在 `labs()` 内统一设置。
 

@@ -28,7 +28,7 @@ webr:
 :::
 
 
-## Object-Oriented Programming
+## Object-Oriented Programming {.smaller}
 
 - Object-Oriented Programming (OOP): organizes and encapsulates data through classes and objects
 - C++, Java, Python, and R all adopt the OOP architecture

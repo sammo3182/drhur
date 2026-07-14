@@ -585,7 +585,7 @@ x
 
 :::
 
-## 小结
+## 小结 {.smaller}
 
 ::: {.callout-note title="小提示" .fragment}
 

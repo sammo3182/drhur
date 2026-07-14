@@ -113,6 +113,8 @@ abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
 
 :::
 
+---
+
 - The gold line rises from left to right (positive slope) → higher income leans toward equality of opportunity
 - But the line is shallow: income affects egalitarian views, yet not dramatically
 
@@ -167,6 +169,8 @@ smoothScatter(
     - Paint: draw as usual
     - Collect paper: `dev.off()` closes the device and saves
 - R supports many formats: `.jpg`, `.png`, `.pdf`, `.bmp`, etc.
+
+---
 
 ```r
 # Lay paper: open a PNG device, specify the filename
@@ -229,10 +233,12 @@ par(mfrow = c(1, 1))
 
 :::
 
+---
+
 - Women overall lean more toward equality of outcome (lower intercept), but the income–egalitarianism trend is consistent across genders
 - Base graphics lacks a unified high-level grammar; fine-tuning is laborious → good for quick exploration, not final presentation
 
-## Trellis Graphics {.smaller}
+## Trellis Graphics
 
 - Trellis Graph: split into small panels by a variable, with unified axes for comparison
 - Proposed by statistician William Cleveland and colleagues in the 1980s–1990s
@@ -241,7 +247,7 @@ par(mfrow = c(1, 1))
 ::: {.fragment}
 
 ```{webr}
-#| label: trellisPlot
+#| label: trellisSetup
 
 # Load the lattice package
 library(lattice)
@@ -252,8 +258,20 @@ wvs7$female_label <- factor(
   levels = c(FALSE, TRUE),
   labels = c("Male", "Female")
 )
+```
 
-# Draw with xyplot
+:::
+
+---
+
+- Draw with `xyplot(y ~ x | conditioning variable)`; a custom `panel` adds points plus a fitted line
+
+::: {.fragment}
+
+```{webr}
+#| label: trellisPlot
+
+# Draw with xyplot (run the setup cell on the previous slide first)
 xyplot(
   # Formula: y ~ x | conditioning variable
   jitter(equalIncentive, 0.5) ~ jitter(incomeLevel, 0.5) | female_label,
@@ -295,6 +313,8 @@ cloud(jitter(equalIncentive, 0.5) ~ jitter(incomeLevel, 0.5) * jitter(education,
 
 - `lattice` returns a graphics object: store the object first, then `print()` to output
 - Three steps: open device with `png()` → `print(p)` → close device with `dev.off()`
+
+---
 
 ```r
 # Save the scatter plot as an object
@@ -406,6 +426,8 @@ xyplot(
 - Not just static glyphs, but also statistical renderings (`geom_smooth` for smoothing, `geom_histogram` for histograms)
 - Each `geom_*()` produces what we will call a "layer"
 
+---
+
 ```r
 # ggplot2 universal template
 ggplot(data = <data>) +
@@ -425,6 +447,8 @@ ggplot(data = <data>) +
   # Other components
   <scales, coordinates, themes>...
 ```
+
+---
 
 - Two notes on the template:
     - `data` can also be set inside `geom_*()` alone — useful when a layer uses a different subset/aggregation
@@ -522,15 +546,19 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
 
 :::
 
+---
+
 - Trend consistent: income ↑ → slight lean toward equality of opportunity (true for both genders)
 - Slight gender difference: women's fit line has a lower intercept → at the same income, women demand more equality of outcome
 
-## Extension and Enrichment {.smaller}
+## Extension and Enrichment 
 
 - Draw two more plots in different forms to feel the unified logic of the "universal template"
 - First: a bar chart with confidence intervals, focused on **comparison**
 - Comparing means is not enough; overlay error intervals to show "uncertainty"
 - First aggregate: compute median and 95% confidence interval per income × gender group
+
+---
 
 ::: {.fragment}
 
@@ -562,6 +590,8 @@ wvs7_agg <- select(wvs7, equalIncentive, incomeLevel, female_label) |>
 
 - `geom_bar(stat = "identity")` draws bars using the y values directly; `position_dodge()` places bars side by side
 - `geom_errorbar()` draws error whiskers; position must match the bars
+
+---
 
 ::: {.fragment}
 
@@ -636,6 +666,8 @@ ggplot(data = wvs7_heat, mapping = aes(
 ```
 
 :::
+
+---
 
 - Darker shades cluster top-right: highly educated + high-income individuals favor equality of opportunity most
 - Consistent with the intuition that "the privileged prefer equality of opportunity"
@@ -729,6 +761,8 @@ ggplot(data = wvs7_narm,
 - Example: this book's `drhutools::cdplot()` draws conditional density plots
 
 :::
+
+---
 
 ::: {.fragment}
 

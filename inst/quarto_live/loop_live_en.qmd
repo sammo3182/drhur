@@ -75,6 +75,8 @@ is.numeric(wvs7$female)
 
 :::
 
+---
+
 - `1 + 1 != 2` → FALSE; `is.na()` checks missingness element-wise; `is.numeric()` checks type
 
 ## Single-condition Judgment
@@ -472,6 +474,8 @@ identical(wvs7$incomeCat3_loop, wvs7$incomeCat3)
 ```
 
 :::
+
+---
 
 - `identical()` confirms the loop matches `case_when()`; but `case_when()` is more concise
 - Loops are better suited to non-vectorizable tasks (reading files, plotting, saving results)
@@ -969,6 +973,8 @@ split(wvs7, ~ incomeCat3) |>
 ```
 
 :::
+
+---
 
 - The title is supplied inside `labs()`, together with the axis labels.
 
