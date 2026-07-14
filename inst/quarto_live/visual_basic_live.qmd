@@ -1,8 +1,8 @@
 ---
 title: "数据可视化"
-subtitle: 基础篇
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: 胡悦
-institute: Learning R with Dr. Hu and His Friends Workshop Series
+institute: "清华大学政治学系"
 
 webr:
   repos:
@@ -20,17 +20,19 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# 数据可视化 {#sec-visualize}
+## 提要
 
-::: {.callout-note title="本章重点"}
 
 1. 基础作图
 2. 棚架图形
 3. 图形语法
 
-*本章研究问题*：收入水平与平等观念之间存在怎样的关系？
+::: {.fragment}
+
+*研究问题*：收入水平与平等观念之间存在怎样的关系？
 
 :::
+
 
 ---
 
@@ -46,6 +48,8 @@ webr:
 - 逻辑：逐步绘图，像画师一笔一笔画——函数顺序 = 图形叠加顺序
 - 散点图函数：`plot(<x轴变量>, <y轴变量>)`
 
+::: {.fragment}
+
 ```{webr}
 #| label: basicPlot
 
@@ -60,10 +64,14 @@ wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("男性", 
 plot(wvs7$incomeLevel, wvs7$equalIncentive)
 ```
 
+:::
+
 ---
 
 - 两个变量都是整数，散点大量重叠，信息表达不完整
 - 解决：抖动 `jitter()` 给数据点加微小随机噪音，把重叠点"抖开"
+
+::: {.fragment}
 
 ```{webr}
 #| label: jitterPlot
@@ -80,10 +88,14 @@ plot(
 )
 ```
 
+:::
+
 ---
 
 - 加拟合线判断趋势：斜率为正（左低右高）= 正相关
 - `lm()` 拟合线性模型，`abline()` 把模型画成直线
+
+::: {.fragment}
 
 ```{webr}
 #| label: lmPlot
@@ -101,12 +113,14 @@ plot(
 abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
 ```
 
+:::
+
 - 金线左低右高（斜率为正）→ 收入越高越倾向机会平等
 - 但线很平缓：收入对平等观念有影响，却远没那么剧烈
 
 ---
 
-::: {.callout-important title="理论与实际"}
+::: {.callout-important title="理论与实际" .fragment}
 
 - 教程示例的可视化常清晰可辨；但社科/人文中连续型数据并不常见
 - 离散数据用连续型方法作图，常出现初始 plot 那样的杂乱
@@ -116,6 +130,8 @@ abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
 
 - 反例：连续变量之间的清晰关系（汽车马力 vs 里程，明显负相关）
 
+::: {.fragment}
+
 ```{webr}
 #| label: cleanExample
 
@@ -123,10 +139,14 @@ abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
 plot(mtcars$hp, mtcars$mpg, xlab = "马力", ylab = "里程/加仑")
 ```
 
+:::
+
 ---
 
 - 离散数据趋近连续的另一招：核密度平滑（上一章提过核密度）
 - `smoothScatter()`：按密度着色，点多处颜色深、点少处浅
+
+::: {.fragment}
 
 ```{webr}
 #| label: smoothScatterPlot
@@ -139,6 +159,8 @@ smoothScatter(
   ylab = "平等观念（结果平等 -> 机会平等）"
 )
 ```
+
+:::
 
 ---
 
@@ -170,6 +192,8 @@ dev.off()
 
 - 多子图对比：`par(mfrow = c(1, 2))` 把画板切成 1 行 2 列
 - 分别绘制男性、女性的散点 + 拟合线，再放在一起比较
+
+::: {.fragment}
 
 ```{webr}
 #| label: sexPlot
@@ -205,6 +229,8 @@ abline(lm(equalIncentive ~ incomeLevel, data = df_female), col = "gold")
 par(mfrow = c(1, 1))
 ```
 
+:::
+
 - 女性整体更倾向结果平等（截距更低），但收入-平等关系趋势两性一致
 - 基础作图缺统一高层语法，精修费力 → 适合快速探索，非最终展示
 
@@ -213,6 +239,8 @@ par(mfrow = c(1, 1))
 - 棚架图（Trellis Graph）：按某变量切分多个小图，统一坐标比例便于比较
 - 由统计学家 William Cleveland 等于 1980–1990 年代提出
 - `lattice` 包在 R 中实现：`xyplot(y ~ x | 条件变量)`
+
+::: {.fragment}
 
 ```{webr}
 #| label: trellisPlot
@@ -244,10 +272,14 @@ xyplot(
 )
 ```
 
+:::
+
 ---
 
 - 效果同基础作图，但代码更简洁、规整
 - `lattice` 还能画三维图：`cloud(z ~ x * y)`
+
+::: {.fragment}
 
 ```{webr}
 #| label: lattice3D
@@ -255,6 +287,8 @@ xyplot(
 # 使用 cloud 函数绘制三维云图
 cloud(jitter(equalIncentive, 0.5) ~ jitter(incomeLevel, 0.5) * jitter(education, 0.5), data = wvs7)
 ```
+
+:::
 
 - `cloud()` 语法 `z ~ x * y`：z 为高度（因变量），x*y 构成底面
 - 可观察"平等观念"在收入×教育平面上如何起伏
@@ -283,7 +317,7 @@ print(p)
 dev.off()
 ```
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习1**：分面散点图（lattice）
 
@@ -296,6 +330,8 @@ dev.off()
 - `panel = function(x, y, ...)` 内调用 `panel.xyplot()` + `panel.lmline(col = "red")`
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: latticeExercise
@@ -310,6 +346,8 @@ wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("男性", 
 # 在此用 xyplot() 完成作图
 
 ```
+
+:::
 
 ::: { .solution exercise="latticeExercise" }
 
@@ -398,6 +436,8 @@ ggplot(data = <数据>) +
 
 - 第一步：初始化画布，绑定数据和全局映射
 
+::: {.fragment}
+
 ```{webr}
 #| label: ggplotInit
 
@@ -407,10 +447,14 @@ library(ggplot2)
 ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive))
 ```
 
+:::
+
 ---
 
 - 第二步：叠加抖动散点 `geom_jitter()`
 - `width`/`height` 控制 x/y 抖动幅度，`alpha` 设透明度缓解遮挡
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotStep2
@@ -420,10 +464,14 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   geom_jitter(width = 0.3, height = 0.3, alpha = 0.7)
 ```
 
+:::
+
 ---
 
 - 第三步：加线性回归拟合线
 - `method = "lm"` 指线性模型，`se = FALSE` 关掉置信带
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotStep3
@@ -434,9 +482,13 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   geom_smooth(method = "lm", se = FALSE, color = "gold", linewidth = 1)
 ```
 
+:::
+
 ---
 
 - 第四步：补齐轴标签 `labs()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotStep4
@@ -448,9 +500,13 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   labs(x = "收入水平", y = "平等观念（结果 -> 机会）")
 ```
 
+:::
+
 ---
 
 - 分面只需 `facet_wrap(~ female_label, ncol = 2)`：按性别分组、排成 2 列
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotFacet
@@ -466,6 +522,8 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   labs(x = "收入水平", y = "平等观念（结果 -> 机会）")
 ```
 
+:::
+
 - 趋势一致：收入↑ → 略偏机会平等（两性皆然）
 - 性别微差：女性拟合线截距略低 → 同等收入下更诉求结果平等
 
@@ -475,6 +533,8 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
 - 第一个：带置信区间的柱状图，主旨是**比较**
 - 比较均值还不够，须叠加误差区间展示"不确定性"
 - 先聚合：算各 收入×性别 组的中位数与 95% 置信区间
+
+::: {.fragment}
 
 ```{webr}
 #| label: dataBar
@@ -498,10 +558,14 @@ wvs7_agg <- select(wvs7, equalIncentive, incomeLevel, female_label) |>
             ub_ed = median_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)
 ```
 
+:::
+
 ---
 
 - `geom_bar(stat = "identity")` 画柱（直接用 y 值），`position_dodge()` 让柱子并排
 - `geom_errorbar()` 画误差须线，位置参数需与柱子一致
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotBar
@@ -527,11 +591,15 @@ ggplot(wvs7_agg, aes(x = incomeLevel, y = median_ed, fill = female_label)) +
   scale_fill_gb(name = "性别", reverse = TRUE)
 ```
 
+:::
+
 ---
 
 - 第二个：热力图——x/y 表两个变量，再用颜色深浅表第三个变量
 - 第三个变量是连续型时尤其适合（如教育水平 `education`）
 - 先聚合每个 教育×收入 组合的平等观念中位数
+
+::: {.fragment}
 
 ```{webr}
 #| label: dataHeat
@@ -544,9 +612,13 @@ wvs7 |>
   ungroup() -> wvs7_heat
 ```
 
+:::
+
 ---
 
 - `geom_tile()` 绘制色块，`scale_fill_gb()` 设连续填充色标度
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotHeat
@@ -565,10 +637,12 @@ ggplot(data = wvs7_heat, mapping = aes(
   scale_fill_gb(name = "平等观念", discrete = FALSE)
 ```
 
+:::
+
 - 深色集中在右上：高学历 + 高收入者最偏好机会平等
 - 与"既得利益者更偏好机会平等"的直觉一致
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习2**：边缘密度散点图（ggside）
 
@@ -582,6 +656,8 @@ ggplot(data = wvs7_heat, mapping = aes(
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: ggsideExercise
 #| exercise: ggsideExercise
@@ -593,6 +669,8 @@ data("wvs7", package = "drhur")
 # 在此完成 ggside 作图
 
 ```
+
+:::
 
 ::: { .solution exercise="ggsideExercise" }
 
@@ -638,13 +716,13 @@ ggplot(data = wvs7_narm,
 
 :::
 
----
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 - 掌握 `ggplot2` 的核心：理解语法主线与设计理念
 - 复杂图形仍遵循万能公式：声明数据 + 映射 → 叠加 `geom_*`、`labs()`、`scale_*`、`theme()`
 - 越"酷炫"往往代码越长，但基本结构始终如一
 
-::: {.callout-tip title="`ggplot2`的扩展"}
+::: {.callout-tip title="`ggplot2`的扩展" .fragment}
 
 - `ggplot2` 拥有庞大的扩展生态：
     - `ggrepel`：解决散点图文字标签重叠
@@ -653,6 +731,8 @@ ggplot(data = wvs7_narm,
 - 示例：本书 `drhutools::cdplot()` 画条件密度图
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: extCdplot
@@ -667,6 +747,8 @@ wvs7 |>
   na.omit() |>
   drhutools::cdplot()
 ```
+
+:::
 
 - 一行命令就能生成专业的条件密度图——这正是 `ggplot2` 生态的魅力
 
@@ -699,7 +781,11 @@ ggsave("plot_heat.png")
 - 可视化关键不在炫技，而在如何把数据信息准确递送给读者
 - 一条原则：能第一时间把信息点送到读者眼中的，就是好的可视化
 
-## 本章重点及回顾 {.smaller}
+## 小结 {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - 散点图：收入水平与平等观念存在微弱正相关
 - 分面图显示：趋势在男女群体一致，但女性同等收入下更偏好结果平等
@@ -713,7 +799,9 @@ ggsave("plot_heat.png")
     - 条件散点图：`xyplot()`
     - 三维散点图：`cloud()`
 
----
+:::
+
+::: {.column width="50%"}
 
 - ggplot2 可视化
     - 散点图层：`geom_point()` / `geom_jitter()`
@@ -724,3 +812,7 @@ ggsave("plot_heat.png")
     - 设置主题：`theme_*`
     - 调整标度：`scale_*`
     - 保存图形：`ggsave()`
+
+:::
+
+::::

@@ -11,6 +11,10 @@ data-raw/
 ^docs$
 ^\.luarc\.json$
 \.quarto$
+^inst/quarto_live/.*\.html$
+^inst/quarto_live/.*_files$
+^inst/quarto_live/.*\.knit\.md$
+^inst/quarto_live/_preview\.R$
 ^cran-comments\.md$
 ^.*\.tar\.gz$
 ^.*\.Rcheck$

@@ -1,8 +1,8 @@
 ---
 title: "Descriptive Statistics"
-subtitle: "Basics"
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: "Yue Hu"
-institute: "Learning R with Dr. Hu and His Friends Workshop Series"
+institute: "Department of Political Science, THU"
 
 webr:
   packages:
@@ -16,17 +16,19 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# Descriptive Statistics {#sec-descriptive .smaller}
+## Outline
 
-::: {.callout-note title="Chapter Highlights"}
 
 1. The role of moments in describing a distribution
 2. Producing publication-quality descriptive tables with `dplyr` and `modelsummary`
 3. Histograms, density plots, box plots, and violin plots — principles and applications
 
+::: {.fragment}
+
 *Research question*: How are people's views on equality distributed — do they favor equality of opportunity or equality of outcome?
 
 :::
+
 
 ## Computing Descriptive Statistics
 
@@ -44,6 +46,8 @@ webr:
     - Base R `table()`: computes frequencies, returned as a vector
     - `dplyr::count()`: returns a tidy table, supports joint counting on multiple variables
 
+::: {.fragment}
+
 ```{webr}
 #| label: count
 
@@ -59,6 +63,8 @@ wvs7 |> count(equalIncentive)
 # Joint counting: equality view by country and gender
 wvs7 |> count(country, female, equalIncentive) |> head(10)
 ```
+
+:::
 
 ---
 
@@ -87,6 +93,8 @@ wvs7 |> count(country, female, equalIncentive) |> head(10)
     - Kurtosis = sharpness of the peak
 - Knowing these features sketches the shape of the distribution
 
+::: {.fragment}
+
 ```{webr}
 #| label: idealDistribution
 
@@ -104,9 +112,11 @@ ggplot(data.frame(x = c(1, 10)), aes(x)) +
   labs(x = "Equality view", y = "Density", title = "Idealized distribution")
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="The paradox of moments"}
+::: {.callout-warning title="The paradox of moments" .fragment}
 
 - Real-world social data rarely follow a perfect bell curve
 - The actual distribution of equality views looks more like a hillside
@@ -115,6 +125,8 @@ ggplot(data.frame(x = c(1, 10)), aes(x)) +
 - Safer practice: visualize the raw data (covered below)
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: realDistribution
@@ -133,6 +145,8 @@ ggplot(wvs7, aes(x = equalIncentive)) +
   labs(x = "Equality view", y = "Density", title = "Actual distribution (WVS7)")
 ```
 
+:::
+
 ---
 
 - Functions for individual moments:
@@ -140,6 +154,8 @@ ggplot(wvs7, aes(x = equalIncentive)) +
     - `var()`: variance
     - `sd()`: standard deviation
 - `summary()` returns six statistics at once: min, Q1, median, mean, Q3, max
+
+::: {.fragment}
 
 ```{webr}
 #| label: moments_calc
@@ -157,9 +173,11 @@ sd(wvs7$equalIncentive, na.rm = TRUE)
 summary(wvs7$equalIncentive)
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="Statistics and missing values"}
+::: {.callout-important title="Statistics and missing values" .fragment}
 
 - When computing a moment alone, we typically add `na.rm = TRUE`
 - By default R does not ignore any values — including missing ones
@@ -168,6 +186,8 @@ summary(wvs7$equalIncentive)
 - `na.rm = TRUE` explicitly tells R "remove missing values before computing"
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: mean_na
@@ -178,6 +198,8 @@ mean(wvs7$equalIncentive)
 # Right: remove NAs first
 mean(wvs7$equalIncentive, na.rm = TRUE)
 ```
+
+:::
 
 ---
 
@@ -191,6 +213,8 @@ mean(wvs7$equalIncentive, na.rm = TRUE)
 - Example: examine each country's overall education level and age dispersion
 - Education level estimated by the sample mean
 - Age dispersion estimated by the standard deviation
+
+::: {.fragment}
 
 ```{webr}
 #| label: summarise_by_country
@@ -206,6 +230,8 @@ group_by(wvs7, country) |>
   head()
 ```
 
+:::
+
 ---
 
 - `group_by()` attaches grouping metadata to the data
@@ -213,7 +239,7 @@ group_by(wvs7, country) |>
 - `ungroup()` explicitly clears any remaining grouping markers, restoring a flat table
 - Outcome: the unit of analysis is lifted from "person" to "country", enabling macro comparisons
 
-## Section Exercise {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 1**: Equality views by income level
 
@@ -230,6 +256,8 @@ Use what you have learned above to answer this question.
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: income_equality
 #| exercise: income_equality
@@ -240,6 +268,8 @@ data("wvs7", package = "drhur")
 # Build your pipeline here
 
 ```
+
+:::
 
 ::: { .solution exercise="income_equality" }
 
@@ -284,6 +314,8 @@ wvs7 |>
 - Includes traditional statistics (mean, median, SD)
 - Adds tiny inline histograms for an at-a-glance sense of distribution
 
+::: {.fragment}
+
 ```{webr}
 #| label: datasummary_skim
 
@@ -296,9 +328,13 @@ select(wvs7, age, equalIncentive) |>
   datasummary_skim(type = "numeric", output = "data.frame")
 ```
 
+:::
+
 ---
 
 - Tables can be split by variable type:
+
+::: {.fragment}
 
 ```{webr}
 #| label: datasummary_by_type
@@ -327,10 +363,14 @@ wvs7 |>
   head(20)
 ```
 
+:::
+
 ---
 
 - `datasummary()` allows full customization
 - Formula syntax: `<variable (rows)> ~ <statistic (columns)>`
+
+::: {.fragment}
 
 ```{webr}
 #| label: datasummary_custom
@@ -341,7 +381,9 @@ library(modelsummary)
 datasummary(age + equalIncentive ~ Mean + SD, data = wvs7, output = "data.frame")
 ```
 
-## Section Exercise {.unnumbered}
+:::
+
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 2**: A custom descriptive table
 
@@ -360,6 +402,8 @@ Use `datasummary()` to build a descriptive table for `wvs7` that:
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: datasummary_custom_ex
 #| exercise: datasummary_custom_ex
@@ -370,6 +414,8 @@ data("wvs7", package = "drhur")
 # Build the table here
 
 ```
+
+:::
 
 ::: { .solution exercise="datasummary_custom_ex" }
 
@@ -399,6 +445,8 @@ datasummary(
 - Splits data into bins; bar height represents frequency
 - Best suited for continuous variables
 
+::: {.fragment}
+
 ```{webr}
 #| label: histogram
 
@@ -412,9 +460,13 @@ ggplot(wvs7, aes(x = age)) +
   labs(x = "Age", y = "Frequency")
 ```
 
+:::
+
 ---
 
 - Discrete variables fit a bar chart (`geom_bar`) better
+
+::: {.fragment}
 
 ```{webr}
 #| label: barplot
@@ -426,6 +478,8 @@ ggplot(wvs7, aes(x = factor(equalIncentive))) +
   geom_bar(alpha = 0.6) +
   labs(x = "Equality view", y = "Frequency")
 ```
+
+:::
 
 ---
 
@@ -439,6 +493,8 @@ ggplot(wvs7, aes(x = factor(equalIncentive))) +
     - **Left**: gray bars are the raw histogram; each data point gets a kernel curve ("bump") centered on it
     - **Middle**: the three independent curves (dashed) are summed at each x position into a solid "total height" curve
     - **Right**: divide that "total height" by the observation count (here, 3) — the shape is identical, the y-axis values shrink
+
+::: {.fragment}
 
 ```{webr}
 #| label: hist2density
@@ -495,10 +551,14 @@ p_density <- ggplot(df_kde, aes(x = x, y = kde)) +
   theme(plot.title = element_text(size = 8))
 ```
 
+:::
+
 ---
 
 - Apply this principle to real data: overlay histogram and density curve on the age variable
 - Age distribution is roughly unimodal but slightly right-skewed (tail extends to the right)
+
+::: {.fragment}
 
 ```{webr}
 #| label: density_plot
@@ -512,9 +572,11 @@ ggplot(wvs7, aes(x = age)) +
   labs(x = "Age", y = "Density")
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="Density plots are for continuous variables"}
+::: {.callout-warning title="Density plots are for continuous variables" .fragment}
 
 - Density plots assume the variable takes values on a continuous axis
 - For ordinal or categorical variables, neighboring categories lack a continuous interpolation space
@@ -532,6 +594,8 @@ ggplot(wvs7, aes(x = age)) +
 - Whiskers: extend toward both sides up to ±1.5 IQR
 - Points beyond the whiskers: potential outliers
 
+::: {.fragment}
+
 ```{webr}
 #| label: boxplot
 
@@ -542,6 +606,8 @@ ggplot(wvs7, aes(y = age)) +
   geom_boxplot(alpha = 0.6) +
   labs(y = "Age")
 ```
+
+:::
 
 ---
 
@@ -557,6 +623,8 @@ ggplot(wvs7, aes(y = age)) +
 - Limitation of box plots: based entirely on statistics, can be seriously misleading
 - Three drastically different distributions can produce identical box plots
 - Their statistics happen to align even though the underlying distributions differ entirely
+
+::: {.fragment}
 
 ```{webr}
 #| label: boxplot_mislead
@@ -593,6 +661,8 @@ p_violin <- ggplot(raw_data, aes(x = dist, y = value)) +
 p_raw + p_violin + plot_layout(axes = "collect")
 ```
 
+:::
+
 ---
 
 - Violin plot: a better alternative to the box plot
@@ -602,6 +672,8 @@ p_raw + p_violin + plot_layout(axes = "collect")
 - Vs. density plot: compact on the vertical axis, easier when comparing multiple groups
 - Example: compare age distributions across equality-view groups
 - Use `ntile()` to collapse 10 levels into 3 groups (Outcome-equality first / Both / Opportunity-equality first)
+
+::: {.fragment}
 
 ```{webr}
 #| label: violin_age_equality
@@ -626,6 +698,8 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
   labs(x = "Equality view", y = "Age")
 ```
 
+:::
+
 ---
 
 - Key observations:
@@ -640,7 +714,11 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
 - The suffix names the plot type: `geom_histogram`, `geom_density`, `geom_boxplot`, `geom_violin`
 - Clean and intuitive — covered in detail in the next chapter on ggplot2
 
-## Chapter Recap
+## Recap {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - Moments
     - First moment: mean
@@ -653,7 +731,9 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
     - Frequencies: `table()` / `count()`
     - Group aggregation: `group_by()` + `summarise()`
 
----
+:::
+
+::: {.column width="50%"}
 
 - Visualizing descriptive statistics
     - Descriptive tables: `datasummary_skim()`, `datasummary()`
@@ -661,3 +741,7 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
     - Density plot: `geom_density()`
     - Box plot: `geom_boxplot()`
     - Violin plot: `geom_violin()` (key)
+
+:::
+
+::::

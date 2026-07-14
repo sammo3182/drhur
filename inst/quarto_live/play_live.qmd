@@ -1,8 +1,8 @@
 ---
 title: "编程基础概念与数据输入输出"
-subtitle: 基础篇
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: 胡悦
-institute: Learning R with Dr. Hu and His Friends Workshop Series
+institute: "清华大学政治学系"
 
 webr:
   repos:
@@ -14,9 +14,8 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# 编程基础概念与数据输入输出 {#sec-play}
+## 提要
 
-::: {.callout-note title="本章重点"}
 
 1. 基础概念
 2. 基础语法
@@ -24,9 +23,12 @@ webr:
 4. 数据属性
 5. 数据输出
 
-*本章研究问题*：R 语言是如何帮助研究者实现数据存储、数据输入以及数据导出等操作？
+::: {.fragment}
+
+*研究问题*：R 语言是如何帮助研究者实现数据存储、数据输入以及数据导出等操作？
 
 :::
+
 
 ## 面向对象编程 {#sec-sub_oop .smaller}
 
@@ -47,6 +49,8 @@ webr:
 - R 中函数 = 数学映射 = 一组可执行动作
 - 已见：`c()`、`matrix()`、`mean()`
 
+::: {.fragment}
+
 ```{webr}
 #| label: function
 
@@ -58,6 +62,8 @@ y <- mean(x)
 
 y
 ```
+
+:::
 
 ---
 
@@ -73,6 +79,8 @@ y
 - 自定义函数：`function(<数据们>){<动作们>}`
 - 示例：定义 BMI 计算函数（BMI = 体重 / 身高²）
 
+::: {.fragment}
+
 ```{webr}
 #| label: bmi
 
@@ -86,7 +94,9 @@ calculateBMI <- function(weight, height) {
 calculateBMI(80, 1.69)
 ```
 
-::: {.callout-tip title="自动\"打印\""}
+:::
+
+::: {.callout-tip title="自动\"打印\"" .fragment}
 
 - 直接敲函数名会触发 auto-print：结果显示在控制台
 - 优点：即刻看到结果
@@ -101,7 +111,7 @@ calculateBMI(80, 1.69)
     - 仅限字母、数字、`.` 和 `_`
     - 区分大小写
 
-::: {.callout-tip title="命名规则的由来"}
+::: {.callout-tip title="命名规则的由来" .fragment}
 
 - 字母开头：让计算机区分"名字"与"数字"
 - 不含特殊字符：避免与编程符号冲突
@@ -154,7 +164,7 @@ drhur("play")
     - `help.search("关键词")`：搜索
     - `help.start()`：打开总文档（不常用）
 
-::: {.callout-tip title="安装 R 包的预期时间"}
+::: {.callout-tip title="安装 R 包的预期时间" .fragment}
 
 - 一般几秒到十几秒
 - 第一次安装会连带装依赖包，耗时更长
@@ -162,7 +172,7 @@ drhur("play")
 
 :::
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习1**：一次安装多个 R 包
 
@@ -176,6 +186,8 @@ drhur("play")
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: install_multi
 #| exercise: install_multi
@@ -184,6 +196,8 @@ drhur("play")
 ?install.packages
 
 ```
+
+:::
 
 
 ::: { .solution exercise="install_multi" }
@@ -212,6 +226,8 @@ install.packages(c("regioncode", "dotwhisker", "drhur"))
 - 用 `inherits(对象, "类名")` 检验
 - 例：`ordered()` 创建的定序变量继承自 `factor`
 
+::: {.fragment}
+
 ```{webr}
 #| label: inherit
 
@@ -226,13 +242,15 @@ inherits(x, "factor")
 inherits(y, "factor")
 ```
 
+:::
+
 ---
 
 - 封装性：把一系列命令打包成一个命令组合
 - 调用打包后的命令，R 会按流程跑完所有既定步骤
 - `function()` 就是常用的封装命令
 
-::: {.callout-warning title="封装的可覆写性"}
+::: {.callout-warning title="封装的可覆写性" .fragment}
 
 - R 中函数也是对象，"万物皆可函数"
 - 已定义的函数可被覆写，包括内置函数
@@ -245,6 +263,8 @@ inherits(y, "factor")
 
 - 多态性：同一函数对不同对象有不同处理
 - 典型例子：`summary()`——因材施教
+
+::: {.fragment}
 
 ```{webr}
 #| label: polymorphism
@@ -260,10 +280,14 @@ summary(x)
 summary(y)
 ```
 
+:::
+
 ---
 
 - 安全性：命令作用前先判断对象类的兼容性
 - 不兼容则停止运行并报错，后续命令不再执行
+
+::: {.fragment}
 
 ```{webr}
 #| label: safety
@@ -276,9 +300,11 @@ summary(y)
 1 + 1
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="命令、方法、函数"}
+::: {.callout-important title="命令、方法、函数" .fragment}
 
 - *命令*（Command）：任意一行可执行代码（如 `1 + 1`、`y <- sqrt(x)`）
 - *函数*（Function）：一套固定操作，接收输入并返回结果
@@ -290,7 +316,7 @@ summary(y)
 - 数据处理采用"对象+命令"方式
 - 优点：每步可回溯、安全性高、便于协作
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习2**：解读 plot 的多态性
 
@@ -304,6 +330,8 @@ summary(y)
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: plot_polymorphism
 #| exercise: plot_polymorphism
@@ -313,6 +341,8 @@ plot(mtcars$mpg)
 plot(mtcars$mpg, mtcars$wt)
 
 ```
+
+:::
 
 
 ::: { .solution exercise="plot_polymorphism" }
@@ -341,6 +371,8 @@ plot(mtcars$mpg, mtcars$wt)
 - 同效命令：`assign()`、`->`、`<<-`、`=`
 - 基础语法：`<名称> <- <对象>`
 
+::: {.fragment}
+
 ```{webr}
 #| label: object
 
@@ -351,9 +383,13 @@ aValidObject <- 1:5
 aValidObject
 ```
 
+:::
+
 ---
 
 - `<-` 与 `->` 方向相反，箭头所指的一方就是被赋值的名称
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrow
@@ -365,11 +401,15 @@ a <- 12
 25 -> b
 ```
 
+:::
+
 ---
 
 - `=` 也可赋值，与 `<-` 略有不同：
     - 顶层环境：二者作用域相同
     - 函数调用括号内：`=` 多用于参数命名，`<-` 多用于创建/修改对象
+
+::: {.fragment}
 
 ```{webr}
 #| label: diffAssign
@@ -382,11 +422,15 @@ median(y <- 1:10); y
 median(x = 1:10); x
 ```
 
+:::
+
 ---
 
 - `<<-` 用来援引/修改父级（全局）变量
 - 在多重环境嵌套时使用，区分作用域
 - 示例：校园公告栏（全局）vs 个人提醒（局部）
+
+::: {.fragment}
 
 ```{webr}
 #| label: globalAssign
@@ -418,6 +462,8 @@ update_campus_bulletin()
 message("公告：", campus_bulletin)
 ```
 
+:::
+
 ---
 
 - 对象命名规则：
@@ -427,7 +473,7 @@ message("公告：", campus_bulletin)
     - 区分大小写：`X != x`
     - 谨防覆写内置命令（如 `list`、`mean`）
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习3**：命名规则
 
@@ -441,6 +487,8 @@ message("公告：", campus_bulletin)
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: naming
 #| exercise: naming
@@ -450,6 +498,8 @@ message("公告：", campus_bulletin)
 var_name5 <- 1:5
 
 ```
+
+:::
 
 
 ::: { .solution exercise="naming" }
@@ -479,6 +529,8 @@ var_name5
 - 子类型：双精度（double，含小数）、整数型（integer）
 - `NA`（not available）：缺失值，是 R 同质向量的"例外"
 
+::: {.fragment}
+
 ```{webr}
 #| label: numeric
 
@@ -495,11 +547,15 @@ vec_1_100 <- c(1:100)
 vec_miss <- c(1, NA, 3, NA, 24)
 ```
 
+:::
+
 ---
 
 - 逻辑向量（logic vector）：二元变量 `TRUE/FALSE`（可简写 `T/F`）
 - 应用极广：很多"编程"本质就是"判断真假"
 - `as.logical()` 强制转换为逻辑型
+
+::: {.fragment}
 
 ```{webr}
 #| label: logic
@@ -514,12 +570,16 @@ vec_logic <- as.logical(vec_num)
 vec_logic
 ```
 
+:::
+
 ---
 
 - 类别向量（factor vector）：记录分类信息
 - `factor()` 创建，水平（level）记录类别，标签（label）给水平起名
 - 子类：定序向量（ordinal vector），`ordered()` 创建，水平含顺序
 - 进阶工具：`forcats` 包专门处理分类/定序变量（改水平顺序、添加类别、调整参照组）
+
+::: {.fragment}
 
 ```{webr}
 #| label: factor
@@ -542,12 +602,16 @@ vec_fac2
 vec_ord
 ```
 
+:::
+
 ---
 
 - 字符向量（character vector）：记录字符形式的值
 - R 不"读懂"字符含义，对中、英、俄等都一视同仁
 - 创建时每个字符值外需加引号
 - 预存字符常量：`letters`、`LETTERS`、`month.abb`、`month.name`
+
+::: {.fragment}
 
 ```{webr}
 #| label: character
@@ -558,12 +622,16 @@ vec_chr <- c("牛", "♥️", "R is hard，but I can nail it.")
 vec_chr
 ```
 
+:::
+
 ---
 
 - 时间向量：R 提供 `POSIXct` 与 `POSIXlt` 两种
 - `POSIXct`：以秒数（自 1970-01-01 起）存储
 - `POSIXlt`：以列表形式存储时间各部分
 - 当前时间：`Sys.time()`、`Sys.Date()`、`Sys.timezone()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: time
@@ -583,14 +651,18 @@ Sys.time()
 Sys.Date()
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="`lubridate` 包"}
+::: {.callout-tip title="`lubridate` 包" .fragment}
 
 - 专门处理时间变量
 - 灵活记录年月日排列、时区转换等
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: lubridate
@@ -607,7 +679,9 @@ dmy("16/10/2022")
 ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
 ```
 
-## 现学现练 {.unnumbered}
+:::
+
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习4**：两种方式生成字母序列
 
@@ -621,6 +695,8 @@ ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: letters_compare
 #| exercise: letters_compare
@@ -630,6 +706,8 @@ vec_letters_raw <- c("a", "b", "c", "d", "e")
 vec_letters_quick <- letters[1:5]
 
 ```
+
+:::
 
 
 ::: { .solution exercise="letters_compare" }
@@ -648,7 +726,7 @@ identical(vec_letters_raw, vec_letters_quick)
 
 :::
 
----
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习5**：解析混乱时间字符串
 
@@ -664,6 +742,8 @@ identical(vec_letters_raw, vec_letters_quick)
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: date_parse
 #| exercise: date_parse
@@ -672,6 +752,8 @@ library(lubridate)
 raw_dates <- c("20190101", "01012019", "021901")
 
 ```
+
+:::
 
 
 ::: { .solution exercise="date_parse" }
@@ -696,6 +778,8 @@ parsed_dates
     - 坐标法：`df[行, 列]`
     - 名称法：`df$列名`（最常用）
 
+::: {.fragment}
+
 ```{webr}
 #| label: dataframe
 
@@ -716,11 +800,15 @@ df_toy[3, 3]
 df_toy$name
 ```
 
+:::
+
 ---
 
 - 列表（list）：异质容器，存放一串向量
 - 各向量的大小、长度、顺序无限制
 - 数据框 = 列等长、各列一一对应的特殊列表
+
+::: {.fragment}
 
 ```{webr}
 #| label: list
@@ -739,14 +827,18 @@ ls_monks
 ls_monks$name
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="多维数据的阵列 (array)"}
+::: {.callout-tip title="多维数据的阵列 (array)" .fragment}
 
 - 用 `array()` 创建，多个维度各保存一个向量
 - 社科人文领域使用机会不多
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: array
@@ -757,6 +849,8 @@ an_array <- array(c(5, 9, 3, 10, 11, 12, 13, 14, 15), dim = c(3, 3, 2))
 an_array
 ```
 
+:::
+
 ## 数据属性
 
 - 探针型工具：查询对象属性
@@ -766,6 +860,8 @@ an_array
     - `length()`：长度（向量看元素、列表看组件、数据框看列数）
     - `nrow()` / `ncol()` / `dim()`：维度
     - `summary()`：统计信息
+
+::: {.fragment}
 
 ```{webr}
 #| label: probe
@@ -789,6 +885,8 @@ ncol(df_toy)
 dim(df_toy)
 ```
 
+:::
+
 ---
 
 - `class()`：R 把对象"看作"什么 → 决定可用哪些函数
@@ -797,7 +895,7 @@ dim(df_toy)
 - 查行数用 `nrow()`、列数用 `ncol()`、全维度用 `dim()`
 - 判断型工具：通常以 `is` 开头（`is.numeric()`、`is.character()`、`is.factor()`、`is.data.frame()`、`is.list()`），返回逻辑值表示对象是否属于该类型
 
-## 现学现练 {.unnumbered .smaller}
+## 现学现练 {.unnumbered .smaller background-color="#43464B"}
 
 **练习6**：探索 wvs7 数据集
 
@@ -822,6 +920,8 @@ dim(df_toy)
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: wvs7_explore
 #| exercise: wvs7_explore
@@ -830,6 +930,8 @@ dim(df_toy)
 data("wvs7", package = "drhur")
 
 ```
+
+:::
 
 
 ::: { .solution exercise="wvs7_explore" }
@@ -867,6 +969,8 @@ is.matrix(wvs7)      # FALSE（除非被强制转换）
 - 调用单个数据集：`data(<数据名>)`
 - 调用包内数据集：`data(<数据名>, package = "<包名>")`
 
+::: {.fragment}
+
 ```{webr}
 #| label: loadData_builtin
 
@@ -876,6 +980,8 @@ data(mtcars)
 # 查看数据摘要
 summary(mtcars)
 ```
+
+:::
 
 ---
 
@@ -896,6 +1002,8 @@ summary(corruption)
 - R 自带的 `datasets` 包：无需安装/加载，直接调用
 - 例：`iris`、`mtcars`、`uspop` 等
 
+::: {.fragment}
+
 ```{webr}
 #| label: load_iris
 
@@ -905,6 +1013,8 @@ data(iris)
 # 查看前 6 行确认加载成功
 head(iris)
 ```
+
+:::
 
 ## 直接读取数据
 
@@ -932,7 +1042,7 @@ df_csv <- read.csv("./aDataset.csv")
 load("aDataset.RData")
 ```
 
-::: {.callout-warning title="文件名大小写"}
+::: {.callout-warning title="文件名大小写" .fragment}
 
 - Windows / Mac：`.RData` 与 `.rdata` 大小写不敏感
 - Linux：严格区分大小写，二者是不同文件
@@ -989,7 +1099,7 @@ library(rio)
 df_anything <- import("<AnyTypeOfData>")
 ```
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习7**：加载内置数据 uspop
 
@@ -1002,11 +1112,15 @@ df_anything <- import("<AnyTypeOfData>")
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: uspop
 #| exercise: uspop
 
 ```
+
+:::
 
 
 ::: { .solution exercise="uspop" }
@@ -1056,7 +1170,7 @@ save(df_toy, ls_monks, file = "./data/test.rdata")
 write.csv(df_toy, file = "toy.csv")
 ```
 
-::: {.callout-warning title="CSV 与中文数据"}
+::: {.callout-warning title="CSV 与中文数据" .fragment}
 
 - 中文数据存储时要选择 UTF-8 编码
 - 否则可能出现乱码现象
@@ -1069,7 +1183,7 @@ write.csv(df_toy, file = "toy.csv")
 - 自动识别后缀，将 R 对象存为几乎任何格式
 - 支持 STATA、SPSS、SAS、Excel、JSON、Matlab、HTML 等
 
-::: {.callout-tip title="数据存储效率"}
+::: {.callout-tip title="数据存储效率" .fragment}
 
 - 中小规模数据：`.RData` 一般足够
 - 大体积数据：考虑 `qs`、`fst` 等特殊格式
@@ -1077,7 +1191,11 @@ write.csv(df_toy, file = "toy.csv")
 
 :::
 
-## 本章重点回顾
+## 小结 {.smaller}
+
+:::: {.columns}
+
+::: {.column width="33%"}
 
 - 基础概念
     - OOP（类与对象）
@@ -1088,7 +1206,9 @@ write.csv(df_toy, file = "toy.csv")
     - 矩阵
     - 数据框与列表（重点内容)
 
----
+:::
+
+::: {.column width="33%"}
 
 - 数据属性：查看数据类型、维度、概况
 - 数据输入
@@ -1099,10 +1219,16 @@ write.csv(df_toy, file = "toy.csv")
     - 储存为 R 数据
     - 储存为其他数据类型
 
----
+:::
+
+::: {.column width="33%"}
 
 - 本章重点函数：
     - 基础操作与包管理：`install.packages()`、`library()`、`help()` / `?`
     - 数据创建与类型：`c()`、`data.frame()`、`list()`、`as.numeric()`、`as.character()`、`as.logical()`
     - 数据属性：`class()`、`summary()`、`dim()`、`nrow()`、`ncol()`、`length()`、`head()`
     - 数据输入与导出：`data()`、`read.csv()`、`readRDS()`、`saveRDS()`、`write.csv()`
+
+:::
+
+::::

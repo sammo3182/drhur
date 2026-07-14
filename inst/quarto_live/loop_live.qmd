@@ -1,8 +1,8 @@
 ---
 title: "判断、循环与批处理"
-subtitle: 基础篇
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: 胡悦
-institute: Learning R with Dr. Hu and His Friends Workshop Series
+institute: "清华大学政治学系"
 
 webr:
   repos:
@@ -18,16 +18,18 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# 判断、循环与批处理 {#sec-loop}
+## 提要
 
-::: {.callout-note title="本章重点"}
 
 1. 条件判断与赋值
 2. 显性与隐形循环
 
-*本章研究问题*：不同收入阶层的民众在平等观念上是否存在差异？
+::: {.fragment}
+
+*研究问题*：不同收入阶层的民众在平等观念上是否存在差异？
 
 :::
+
 
 ---
 
@@ -37,7 +39,7 @@ webr:
     - **教 R 做重复**：循环与批处理（Loop & Batch Processing）
 - 学习顺序：条件判断 → 循环 → 批处理
 
-::: {.callout-important title="循环 vs. 批处理"}
+::: {.callout-important title="循环 vs. 批处理" .fragment}
 
 - **循环**：控制结构，重复执行同段代码，每次处理一个对象，全程参与（如逐张写快递单）
 - **批处理**：执行模式，多任务打包交给计算机自动完成，无需逐一干预（如把包裹全交给快递公司）
@@ -56,6 +58,8 @@ webr:
 - 逻辑判断：产生 TRUE/FALSE 的表达式，R 据此决定执行哪段代码
 - algebra 章已介绍，这里复习
 
+::: {.fragment}
+
 ```{webr}
 #| label: logicalJudge
 
@@ -70,6 +74,8 @@ is.na(c(1, 2, NA, 3))
 # 检查 wvs7 数据集中的 female 变量是否为数值型
 is.numeric(wvs7$female)
 ```
+
+:::
 
 - `1 + 1 != 2` → FALSE；`is.na()` 逐元素查缺失；`is.numeric()` 查类型
 
@@ -92,6 +98,8 @@ if (<逻辑判断>) {
 - 同样客观收入，主观评分可能不同（测量噪音）；分组让临近档归一
 - 先按中位数二分"低/高收入"，对第一位受访者试做：
 
+::: {.fragment}
+
 ```{webr}
 #| label: incomeBinary
 
@@ -112,15 +120,19 @@ if (wvs7$incomeLevel[1] <= median_income) {
 wvs7$income_binary[1]
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="逐一判断是条件判断的重要特征"}
+::: {.callout-important title="逐一判断是条件判断的重要特征" .fragment}
 
 - `if()` 的逻辑判断只接受**单个** TRUE/FALSE
 - 整个向量丢进去 → R 只用第一个元素，并报警告/错误
 - 解决：用循环（后文）或向量化函数 `ifelse()`/`case_when()`
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifBinaryError
@@ -132,6 +144,8 @@ if (wvs7$incomeLevel <= median_income) {
   wvs7$income_binary <- "高收入群体"
 }
 ```
+
+:::
 
 ## 多重条件判断
 
@@ -153,6 +167,8 @@ if (<条件1>) {
 ---
 
 - 分组：低（≤3）/ 中（>3 且 ≤7）/ 高（>7），对第一位受访者试做：
+
+::: {.fragment}
 
 ```{webr}
 #| label: incomeTriple
@@ -176,6 +192,8 @@ if (wvs7$incomeLevel[1] <= 3) {
 wvs7$incomeCat3[1]
 ```
 
+:::
+
 ## 条件判断的向量化操作
 
 - `if-else` 每次只判断一个值；研究中需对整个向量（如 1264 个观测）逐个判断
@@ -184,6 +202,8 @@ wvs7$incomeCat3[1]
 ```r
 ifelse(<条件>, <满足时的值>, <不满足时的值>)
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifelseIncome
@@ -197,15 +217,19 @@ wvs7$income_high <- ifelse(wvs7$incomeLevel > median_income,
 table(wvs7$income_high, useNA = "ifany")
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="条件判断中的 `NA`"}
+::: {.callout-warning title="条件判断中的 `NA`" .fragment}
 
 - 任何涉及 `NA` 的比较（`>`、`<`、`==`）都返回 `NA`，不是 TRUE/FALSE
 - `if()` 条件若为 `NA` 会报错；判断缺失要用 `is.na()`
 - `ifelse()` 会自动把条件为 `NA` 的元素结果设为 `NA`（推荐向量化）
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: naInConditions
@@ -219,9 +243,13 @@ NA == NA
 is.na(NA)
 ```
 
+:::
+
 ---
 
 - `if()` 条件若为 `NA` 会直接报错：
+
+::: {.fragment}
 
 ```{webr}
 #| label: naInIf
@@ -232,9 +260,13 @@ if (NA > 5) {
 }
 ```
 
+:::
+
 ---
 
 - 多重条件可用嵌套 `ifelse()`，逻辑同重复 `else if()`，但层多了看着乱
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifelseNested
@@ -254,6 +286,8 @@ wvs7$incomeCat3_ifelse <- ifelse(
 table(wvs7$incomeCat3_ifelse, useNA = "ifany")
 ```
 
+:::
+
 ---
 
 - `dplyr::case_when()` 更清晰：用 `~` 连接条件与赋值
@@ -265,6 +299,8 @@ case_when(
   <条件2> ~ <值2>,
   ...)
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: caseWhenIncome
@@ -278,10 +314,14 @@ wvs7$incomeCat3 <- case_when(
 table(wvs7$incomeCat3, useNA = "ifany")
 ```
 
+:::
+
 ---
 
 - 有了收入分组，就能初步比较各群体平等观念
 - 结合 `group_by()` 分组求均值：
+
+::: {.fragment}
 
 ```{webr}
 #| label: incomeEqualityTable
@@ -294,9 +334,11 @@ wvs7 |>
   )
 ```
 
+:::
+
 - 各收入组平等观念存在差异，与前一章可视化趋势可相互印证
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习1**：多重分组分析
 
@@ -313,6 +355,8 @@ wvs7 |>
 - 分组前用 `drop_na()` 去掉分组变量缺失的样本
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: conditionalGroupExercise
@@ -331,6 +375,8 @@ wvs7$incomeCat3 <- case_when(
 # 任务 A、B 在此完成
 
 ```
+
+:::
 
 ::: { .solution exercise="conditionalGroupExercise" }
 
@@ -388,6 +434,8 @@ for (<索引变量> in <序列>) {
 
 - 演示："带着镣铐跳舞"——只用单值 `if()` 配 `for` 把收入分三组
 
+::: {.fragment}
+
 ```{webr}
 #| label: forIncomeCat
 
@@ -422,6 +470,8 @@ table(wvs7$incomeCat3_loop, useNA = "ifany")
 identical(wvs7$incomeCat3_loop, wvs7$incomeCat3)
 ```
 
+:::
+
 - `identical()` 证明循环结果与 `case_when()` 一致；但 `case_when()` 更简洁
 - 循环更适合无法向量化的任务（读文件、画图、保存结果）
 
@@ -439,6 +489,8 @@ while (<判定条件>) {
 ---
 
 - 演示：随机抽样，直到凑够 10 个高收入受访者
+
+::: {.fragment}
 
 ```{webr}
 #| label: whileSample
@@ -470,9 +522,13 @@ while (length(high_income_sample) < 10) {
 high_income_sample
 ```
 
+:::
+
 ---
 
 - 所有 `for` 循环都能改写成等效的 `while` 循环
+
+::: {.fragment}
 
 ```{webr}
 #| label: whileIncomeCat
@@ -508,6 +564,8 @@ while (i <= nrow(wvs7)) {
 table(wvs7$incomeCat3_while, useNA = "ifany")
 identical(wvs7$incomeCat3_while, wvs7$incomeCat3)
 ```
+
+:::
 
 ---
 
@@ -546,6 +604,8 @@ repeat {
 ---
 
 - 把上面的 `while` 抽样例子用 `repeat` 改写：
+
+::: {.fragment}
 
 ```{webr}
 #| label: repeatSample
@@ -586,6 +646,8 @@ if (exists("high_income_sample")) {
 }
 ```
 
+:::
+
 ## `break`和`next`：循环控制
 
 - `break`：终止整个循环
@@ -593,6 +655,8 @@ if (exists("high_income_sample")) {
 - 两者在各类循环中都可用
 
 - `break` 例：连续 5 个缺失值就停止并提醒研究者检查数据
+
+::: {.fragment}
 
 ```{webr}
 #| label: breakDemo
@@ -623,9 +687,13 @@ wvs7$data_check |>
   table(useNA = "ifany")
 ```
 
+:::
+
 ---
 
 - `next` 例：找前 10 个数据完整的高收入受访者（像筛选漏斗）
+
+::: {.fragment}
 
 ```{webr}
 #| label: nextDemo
@@ -656,6 +724,8 @@ for (i in 1:nrow(wvs7)) {
 }
 ```
 
+:::
+
 ## 批处理
 
 - 循环功能强大但写起来麻烦：初始化、索引、取值都得自己写，易出错
@@ -677,6 +747,8 @@ mutate(<数据框>, across(<选择变量>, <执行函数或代码>))
 
 ---
 
+::: {.fragment}
+
 ```{webr}
 #| label: acrossScale
 
@@ -690,6 +762,8 @@ select(wvs7_std, incomeLevel, incomeLevel_scaled, equalIncentive, equalIncentive
   head()
 ```
 
+:::
+
 - `where(is.numeric)` 只对数值列操作；`.names = "{.col}_scaled"` 自动命名新变量
 
 ---
@@ -701,6 +775,8 @@ select(wvs7_std, incomeLevel, incomeLevel_scaled, equalIncentive, equalIncentive
 filter(<数据框>, if_any(<选择变量>, <条件函数>))
 filter(<数据框>, if_all(<选择变量>, <条件函数>))
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifAnyAll
@@ -718,6 +794,8 @@ wvs7 |>
   head()
 ```
 
+:::
+
 ## 使用`purrr`进行批处理
 
 - `dplyr` 函数只作用于数据框/列表；通用任务（读文件、拟合模型、画图）用 `purrr` 的 `map` 族
@@ -731,6 +809,8 @@ map(<目标对象>, {<执行代码>})
 ---
 
 - 有 `for` 基础学 `map` 很容易；先用 `for` 算各收入组平均平等观念
+
+::: {.fragment}
 
 ```{webr}
 #| label: forBasic
@@ -756,9 +836,13 @@ names(df_equalMean_for) <- incomeGroups
 df_equalMean_for
 ```
 
+:::
+
 ---
 
 - 同样任务用 `map()` 再做：`split()` 切分 + `map()` 映射
+
+::: {.fragment}
 
 ```{webr}
 #| label: mapBasic
@@ -777,11 +861,13 @@ df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
 df_equalMean_map
 ```
 
+:::
+
 - 对比：`for` 要建容器、用索引、手动命名；`map` 一行搞定
 
 ---
 
-::: {.callout-tip title="输出类型"}
+::: {.callout-tip title="输出类型" .fragment}
 
 - `map()` 默认返回列表（`list`）
 - 要其他类型用变体：`map_dbl()` / `map_chr()` / `map_lgl()` / `map_dfr()`
@@ -789,6 +875,8 @@ df_equalMean_map
 - `walk()`：类似 `map` 但返回 `NULL`，用于保存文件、画图、打印等副作用
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: mapList
@@ -808,7 +896,11 @@ if (!exists("df_equalMean_map")) {
 class(df_equalMean_map)
 ```
 
+:::
+
 ---
+
+::: {.fragment}
 
 ```{webr}
 #| label: mapVec
@@ -832,6 +924,8 @@ df_equalMean_map_vec
 class(df_equalMean_map_vec)
 ```
 
+:::
+
 - `map` 进阶：同时遍历多个对象
 - `map2()` 遍历两个等长对象（"双轨并行"，像两条平行铁轨）
 
@@ -842,6 +936,8 @@ map2(<对象1>, <对象2>, {<执行代码>})
 ---
 
 - 例：按收入组分别画散点 + 拟合线，每组配不同颜色
+
+::: {.fragment}
 
 ```{webr}
 #| label: map2Demo
@@ -871,6 +967,8 @@ split(wvs7, ~ incomeCat3) |>
 })
 ```
 
+:::
+
 - 标题和坐标轴标签都放在 `labs()` 内统一设置。
 
 ---
@@ -880,6 +978,8 @@ split(wvs7, ~ incomeCat3) |>
 ```r
 pmap(<对象列表>, {<执行代码>})
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: pmapDemo
@@ -908,6 +1008,8 @@ pmap(params, \(data, color, title) {
 })
 ```
 
+:::
+
 ## 批处理中的debug
 
 - 复杂批处理中，一条脏数据（缺损、类型错误）可能让整个流程中断
@@ -919,6 +1021,8 @@ pmap(params, \(data, color, title) {
 ---
 
 - 先构造一个会报错的函数演示：
+
+::: {.fragment}
 
 ```{webr}
 #| label: safelyError
@@ -939,9 +1043,13 @@ num_list <- list(a = c(1, 4, 9), b = c(-1, 2, 3), c = c(16, 25, 36))
 map(num_list, possibly(calc_sqrt, otherwise = NA_real_))
 ```
 
+:::
+
 ---
 
 - `safely()` 包裹后，`map` 不中断，每个元素都返回 result/error
+
+::: {.fragment}
 
 ```{webr}
 #| label: safelyDemo
@@ -955,9 +1063,13 @@ results <- map(num_list, safe_sqrt)
 results
 ```
 
+:::
+
 ---
 
 - `possibly()`：出错处填 NA，继续跑完
+
+::: {.fragment}
 
 ```{webr}
 #| label: possiblyDemo
@@ -968,11 +1080,13 @@ possible_sqrt <- possibly(calc_sqrt, otherwise = NA_real_)
 map(num_list, possible_sqrt)
 ```
 
+:::
+
 ---
 
 :::: {style="font-size: 0.7em;"}
 
-::: {.callout-tip title="`apply`函数家族"}
+::: {.callout-tip title="`apply`函数家族" .fragment}
 
 - R 自带批处理函数 `apply` 系列（apply / lapply / sapply / vapply / tapply / mapply）
 - 结构不如 `map` 规整，但无需额外加载包，教材与网络常见
@@ -991,7 +1105,7 @@ map(num_list, possible_sqrt)
 
 ::::
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习2**：收入-平等关系的国家间差异（批处理）
 
@@ -1008,6 +1122,8 @@ map(num_list, possible_sqrt)
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: batchExercise
 #| exercise: batchExercise
@@ -1020,6 +1136,8 @@ data("wvs7", package = "drhur")
 # 在此完成分国家的批处理
 
 ```
+
+:::
 
 ::: { .solution exercise="batchExercise" }
 
@@ -1069,7 +1187,11 @@ country_plots[1:4]
 
 :::
 
-## 本章重点及回顾 {.smaller}
+## 小结 {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - 本章学习了用条件判断对数据分类，用循环和批处理高效完成重复任务
 - 结果：低收入群体略倾向结果平等（≈5.85），高收入群体略倾向机会平等（≈6.22），与前两章可视化相互印证
@@ -1082,10 +1204,16 @@ country_plots[1:4]
     - 循环语句：`for()`、`while()`、`repeat`
     - 循环控制：`next`、`break`
 
----
+:::
+
+::: {.column width="50%"}
 
 - 批处理
     - dplyr 列批处理：`across()`
     - dplyr 行筛选批处理：`if_any()`、`if_all()`
     - purrr 列表批处理：`map()`、`map2()`、`pmap()`
     - 异常处理：`safely()`、`possibly()`
+
+:::
+
+::::

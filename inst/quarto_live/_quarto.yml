@@ -23,7 +23,7 @@ format:
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     filters: [appExclusion.lua] # not count appendices into page number
-    incremental: false
+    incremental: true
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
     embed-resources: true # self-contained, openable from file://

@@ -1,8 +1,8 @@
 ---
 title: "数据整理"
-subtitle: 基础篇
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: 胡悦
-institute: Learning R with Dr. Hu and His Friends Workshop Series
+institute: "清华大学政治学系"
 
 webr:
   repos:
@@ -15,9 +15,8 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# 数据整理 {#sec-munging}
+## 提要
 
-::: {.callout-note title="本章重点"}
 
 1. 单数据整理
     - 探索
@@ -28,15 +27,20 @@ webr:
     - 直接合并
     - 索引合并
 
-*本章研究问题*：基于"民众平等观念影响因素探究"，示例数据 `wvs7` 包含哪些有用信息？
+::: {.fragment}
+
+*研究问题*：基于"民众平等观念影响因素探究"，示例数据 `wvs7` 包含哪些有用信息？
 
 :::
+
 
 ## 数据探索
 
 - 数据探索：对陌生数据的构成、结构、形式、内容做初步了解
 - 是"数据输入"的后续步骤，也是数据分析的第一步
 - 最简单的方法是"看看数据"——直接调用对象名
+
+::: {.fragment}
 
 ```{webr}
 #| label: glimpse
@@ -48,9 +52,11 @@ data("wvs7", package = "drhur")
 wvs7
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="`tibble` 数据框"}
+::: {.callout-tip title="`tibble` 数据框" .fragment}
 
 - `wvs7` 以 `tibble` 格式存储——普通数据框的升级版
 - 包含行、列、单元等维度
@@ -68,6 +74,8 @@ wvs7
 - 数据结构 = 数据的体量与构成特征：观测数、变量数、变量名
 - 探查函数多以英文缩写命名
 - 例：`str` 即 "structure"，列出每个变量的类型、行数、列数
+
+::: {.fragment}
 
 ```{webr}
 #| label: systemView
@@ -87,6 +95,8 @@ head(names(wvs7))
 glimpse(wvs7)
 ```
 
+:::
+
 ---
 
 - 数据返回信息：1264 行 × 24 列
@@ -98,6 +108,8 @@ glimpse(wvs7)
     - 矩阵式方括号：`<数据框>[, "变量名"]`
     - `$` 符号：`<数据框>$<变量名>`（最常用）
 
+::: {.fragment}
+
 ```{webr}
 #| label: variable_extract
 
@@ -108,9 +120,13 @@ head(wvs7[, "country"])
 unique(wvs7$country) |> head(10)
 ```
 
+:::
+
 ---
 
 - 数值型变量：可用 `mean()`、`median()`、`max()`、`var()`、`summary()` 等
+
+::: {.fragment}
 
 ```{webr}
 #| label: varCal_numeric
@@ -122,9 +138,13 @@ mean(wvs7$age, na.rm = TRUE)
 summary(wvs7$incomeLevel)
 ```
 
+:::
+
 ---
 
 - 定序、定类变量：用 `unique()` 看取值范围、`table()` 看频数分布
+
+::: {.fragment}
 
 ```{webr}
 #| label: varCal_categorical
@@ -138,6 +158,8 @@ table(wvs7$female)
 # 婚姻状况的分类统计
 table(wvs7$marital)
 ```
+
+:::
 
 - `table()` 对不同类型变量返回不同信息——又一次 OOP 多态性的体现
 
@@ -201,7 +223,7 @@ eatDumpling_pipe <- mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) |>
 - 把 `|>` 脑补为"然后"或英文 "and then"，函数表达就接近自然语言
 
 
-::: {.callout-note title="通道符快捷键"}
+::: {.callout-note title="通道符快捷键" .fragment}
 
 - Windows / Linux：`Ctrl + Shift + M`
 - Mac：`Cmd + Shift + M`
@@ -217,6 +239,8 @@ eatDumpling_pipe <- mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) |>
 - 对列：用 `select()`
 - 语法：`select(<数据框>, <变量1>, <变量2>, ...)`
 
+::: {.fragment}
+
 ```{webr}
 #| label: select
 
@@ -226,12 +250,16 @@ library(dplyr)
 select(wvs7, equalIncentive, incomeLevel, confidence_gov, education, country)
 ```
 
+:::
+
 ---
 
 - 根据变量名特征批量选择：
     - `starts_with()`：以某字符串开头
     - `ends_with()`：以某字符串结尾
     - `matches()`：用正则表达式匹配任意位置
+
+::: {.fragment}
 
 ```{webr}
 #| label: select_startwith
@@ -240,7 +268,9 @@ select(wvs7, equalIncentive, incomeLevel, confidence_gov, education, country)
 select(wvs7, starts_with("corruption"))
 ```
 
-::: {.callout-tip title="类似的群组命令"}
+:::
+
+::: {.callout-tip title="类似的群组命令" .fragment}
 
 - `starts_with`：以指定字符开头
 - `ends_with`：以指定字符结尾
@@ -256,6 +286,8 @@ select(wvs7, starts_with("corruption"))
 - `select(wvs7, -(varA:varB))` 排除一段连续变量
 - 可与 `starts_with` 等组合使用
 
+::: {.fragment}
+
 ```{webr}
 #| label: deselect
 
@@ -263,11 +295,15 @@ select(wvs7, starts_with("corruption"))
 select(wvs7, starts_with("corruption"), -corruption_state)
 ```
 
+:::
+
 ---
 
 - `rename()` 用来改变变量名
 - 语法：`rename(<数据框>, <新名称> = <旧名称>)`
 - 可同时修改多个变量
+
+::: {.fragment}
 
 ```{webr}
 #| label: rename
@@ -275,6 +311,8 @@ select(wvs7, starts_with("corruption"), -corruption_state)
 # 将变量名 'country' 修改为 'nationality'
 rename(wvs7, nationality = country)
 ```
+
+:::
 
 ---
 
@@ -289,6 +327,8 @@ rename(wvs7, nationality = country)
 - 语法：`filter(<数据框>, <条件1>, <条件2>, ...)`
 - 多条件间用逗号分隔，相当于"并且"
 
+::: {.fragment}
+
 ```{webr}
 #| label: filter
 
@@ -301,10 +341,14 @@ select(wvs7, equalIncentive, country) |>
   filter(country %in% c("South Korea", "Japan"))
 ```
 
+:::
+
 ---
 
 - `filter()` 支持任意逻辑判断与不等式
 - 复合条件示例：日本籍 + 年龄 > 50
+
+::: {.fragment}
 
 ```{webr}
 #| label: filter_compound
@@ -314,7 +358,9 @@ select(wvs7, equalIncentive, country, age) |>
   filter(country == "Japan", age > 50)
 ```
 
-::: {.callout-note title="为什么 rename 没有生效"}
+:::
+
+::: {.callout-note title="为什么 rename 没有生效" .fragment}
 
 - `rename()` 不会自动覆盖环境中的原数据
 - 想让改动永久，必须 `<-` 赋值回去
@@ -328,6 +374,8 @@ select(wvs7, equalIncentive, country, age) |>
 - 语法：`arrange(<数据框>, <变量1>, <变量2>, ...)`
 - 默认升序（从小到大）
 
+::: {.fragment}
+
 ```{webr}
 #| label: arrange
 
@@ -337,11 +385,15 @@ select(wvs7, equalIncentive, incomeLevel, country) |>
   arrange(incomeLevel)
 ```
 
+:::
+
 ---
 
 - 降序两种方式：
     - 用辅助函数 `desc()` 包裹变量
     - 数值变量前加 `-`（仅数值型可用）
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrange_desc
@@ -357,10 +409,14 @@ select(wvs7, equalIncentive, incomeLevel, country) |>
   arrange(-incomeLevel)
 ```
 
+:::
+
 ---
 
 - `arrange()` 也支持多条件
 - 顺序决定优先级：先按第一个变量排，相同值再按第二个
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrange_compound
@@ -370,15 +426,19 @@ select(wvs7, equalIncentive, incomeLevel, age) |>
   arrange(incomeLevel, age)
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="条件的顺序"}
+::: {.callout-warning title="条件的顺序" .fragment}
 
 - `select` 和 `filter` 中条件顺序不重要
 - `arrange` 中**条件顺序决定排序优先级**
 - 调换顺序结果完全不同
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrange_order
@@ -388,11 +448,15 @@ select(wvs7, equalIncentive, incomeLevel, age) |>
   arrange(age, incomeLevel)
 ```
 
+:::
+
 ## 数据加工
 
 - 对变量编码方式进行加工
 - 例：把 10 级收入压缩成"穷/富"二元变量
 - 用 `mutate()`，语法：`mutate(<数据框>, <新变量> = <表达式>)`
+
+::: {.fragment}
 
 ```{webr}
 #| label: mutate
@@ -402,10 +466,14 @@ select(wvs7, equalIncentive, incomeLevel) |>
   mutate(poor = incomeLevel <= 3)
 ```
 
+:::
+
 ---
 
 - `mutate()` 可一次加工多个变量，用 `,` 分隔
 - 可基于同一原始变量生成多个新变量
+
+::: {.fragment}
 
 ```{webr}
 #| label: mutate_multiple
@@ -418,14 +486,18 @@ select(wvs7, equalIncentive, incomeLevel) |>
   )
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="重名变量需谨慎"}
+::: {.callout-warning title="重名变量需谨慎" .fragment}
 
 - `mutate` 允许同名变量——后定义的覆盖先定义的
 - 同一管道里给同名变量赋两个不同表达式，前者会被丢弃
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: mutate_overwrite
@@ -438,6 +510,8 @@ select(wvs7, country, incomeLevel) |>
   )
 ```
 
+:::
+
 ## 直接合并 {.smaller}
 
 - 数据合并：将多个数据框合并为一个新数据框
@@ -447,6 +521,8 @@ select(wvs7, country, incomeLevel) |>
 - 两种：
     - 行合并：要求列数相等，用 `bind_rows()`
     - 列合并：要求行数相等，用 `bind_cols()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: bindRow
@@ -463,15 +539,19 @@ wvs7_ja3 <- filter(wvs7, country == "Japan") |>
 bind_rows(wvs7_sk3, wvs7_ja3)
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="不等列合并"}
+::: {.callout-warning title="不等列合并" .fragment}
 
 - 列数不等时 `bind_rows` 也能执行
 - 缺失部分自动用 `NA` 填充
 - 这种特性在数据来源结构不一致时很有用
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: bindRow_unequal
@@ -490,10 +570,14 @@ wvs7_ja3_confidence <- select(wvs7, country, confidence_gov) |>
 bind_rows(wvs7_sk3_income, wvs7_ja3_confidence)
 ```
 
+:::
+
 ---
 
 - 列合并：用 `bind_cols`
 - 注意函数名是复数（"s" 别忘加）
+
+::: {.fragment}
 
 ```{webr}
 #| label: bindCols
@@ -508,6 +592,8 @@ wvs7_country <- select(wvs7, country)
 bind_cols(wvs7_confidence, wvs7_country)
 ```
 
+:::
+
 ## 索引合并
 
 - 基于索引变量值匹配合并
@@ -515,7 +601,7 @@ bind_cols(wvs7_confidence, wvs7_country)
 - 可实现一对一或一对多
 
 
-::: {.callout-important title="结构一致"}
+::: {.callout-important title="结构一致" .fragment}
 
 - 结构一致 = 索引变量的编码规则一致
 - 不要求索引变量包含所有可能的值
@@ -529,6 +615,8 @@ bind_cols(wvs7_confidence, wvs7_country)
     - `wvs7_eq`：个体层级，日本+韩国
     - `country_info`：国家层级，日本+泰国
 - 两数据中都有国别变量（但名字不同）作为索引
+
+::: {.fragment}
 
 ```{webr}
 #| label: join_data
@@ -549,6 +637,8 @@ wvs7_eq
 country_info
 ```
 
+:::
+
 ---
 
 ::: {style="font-size: 0.7em;"}
@@ -561,6 +651,8 @@ country_info
 - 基础语法：`<连接类型>_join(<数据1>, <数据2>, by = join_by(<索引变量>))`
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: join
@@ -578,7 +670,9 @@ wvs7_ij$country |> unique()
 wvs7_fj$country |> unique()
 ```
 
-## 现学现练 {.unnumbered}
+:::
+
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习1**：综合数据梳理
 
@@ -602,6 +696,8 @@ wvs7_fj$country |> unique()
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: dplyr_pipeline
 #| exercise: dplyr_pipeline
@@ -612,6 +708,8 @@ data("wvs7", package = "drhur")
 # 在此完成 dplyr 管道
 
 ```
+
+:::
 
 ::: { .solution exercise="dplyr_pipeline" }
 
@@ -639,7 +737,11 @@ wvs7 |>
 
 :::
 
-## 本章重点及回顾 {.smaller}
+## 小结 {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - 数据探索
     - 行列数：`nrow()` / `ncol()`
@@ -655,7 +757,9 @@ wvs7 |>
     - 排序：`arrange()`
     - 新增/修改：`mutate()`
 
----
+:::
+
+::: {.column width="50%"}
 
 - 数据合并
     - 行合并：`bind_rows()`
@@ -664,3 +768,7 @@ wvs7 |>
     - 右连接：`right_join()`
     - 内连接：`inner_join()`
     - 全连接：`full_join()`
+
+:::
+
+::::

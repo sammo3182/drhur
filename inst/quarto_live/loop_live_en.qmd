@@ -1,8 +1,8 @@
 ---
 title: "Conditionals, Loops, and Batch Processing"
-subtitle: "Basics"
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: "Yue Hu"
-institute: "Learning R with Dr. Hu and His Friends Workshop Series"
+institute: "Department of Political Science, THU"
 
 webr:
   packages:
@@ -16,16 +16,18 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# Conditionals, Loops, and Batch Processing {#sec-loop .smaller}
+## Outline
 
-::: {.callout-note title="Chapter Highlights"}
 
 1. Conditional judgment and assignment
 2. Explicit and implicit loops
 
+::: {.fragment}
+
 *Research question*: Do people from different income strata differ in their views on equality?
 
 :::
+
 
 ---
 
@@ -35,7 +37,7 @@ webr:
     - **Teach R to repeat**: loops and batch processing
 - Learning order: conditionals → loops → batch processing
 
-::: {.callout-important title="Loops vs. Batch Processing"}
+::: {.callout-important title="Loops vs. Batch Processing" .fragment}
 
 - **Loop**: a control structure that repeatedly executes the same block of code, handling one object at a time with full involvement throughout (like filling out delivery slips one by one)
 - **Batch processing**: an execution mode that packages many tasks for the computer to complete automatically, without per-item intervention (like handing all the parcels to the courier company)
@@ -54,6 +56,8 @@ webr:
 - Logical judgment: expressions that produce TRUE/FALSE, on which R decides which block to execute
 - Introduced in the algebra chapter; reviewed here
 
+::: {.fragment}
+
 ```{webr}
 #| label: logicalJudge
 
@@ -68,6 +72,8 @@ is.na(c(1, 2, NA, 3))
 # Check whether the `female` variable in the wvs7 dataset is numeric
 is.numeric(wvs7$female)
 ```
+
+:::
 
 - `1 + 1 != 2` → FALSE; `is.na()` checks missingness element-wise; `is.numeric()` checks type
 
@@ -90,6 +96,8 @@ if (<logical condition>) {
 - Same objective income can receive different subjective ratings (measurement noise); grouping merges adjacent brackets
 - First, dichotomize into "low/high income" by the median; try it on the first respondent:
 
+::: {.fragment}
+
 ```{webr}
 #| label: incomeBinary
 
@@ -110,15 +118,19 @@ if (wvs7$incomeLevel[1] <= median_income) {
 wvs7$income_binary[1]
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="One-at-a-time judgment is a key feature of conditional statements"}
+::: {.callout-important title="One-at-a-time judgment is a key feature of conditional statements" .fragment}
 
 - The logical condition of `if()` accepts only a **single** TRUE/FALSE
 - Feed in a whole vector → R uses only the first element and issues a warning/error
 - Fix: use a loop (later) or vectorized functions `ifelse()`/`case_when()`
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifBinaryError
@@ -130,6 +142,8 @@ if (wvs7$incomeLevel <= median_income) {
   wvs7$income_binary <- "High income"
 }
 ```
+
+:::
 
 ## Multi-condition Judgment
 
@@ -151,6 +165,8 @@ if (<condition 1>) {
 ---
 
 - Groups: low (≤3) / medium (>3 and ≤7) / high (>7); try it on the first respondent:
+
+::: {.fragment}
 
 ```{webr}
 #| label: incomeTriple
@@ -174,6 +190,8 @@ if (wvs7$incomeLevel[1] <= 3) {
 wvs7$incomeCat3[1]
 ```
 
+:::
+
 ## Vectorized Conditional Operations
 
 - `if-else` judges one value at a time; research often requires checking every element of a vector (e.g., 1264 observations)
@@ -182,6 +200,8 @@ wvs7$incomeCat3[1]
 ```r
 ifelse(<condition>, <value if TRUE>, <value if FALSE>)
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifelseIncome
@@ -195,15 +215,19 @@ wvs7$income_high <- ifelse(wvs7$incomeLevel > median_income,
 table(wvs7$income_high, useNA = "ifany")
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="`NA` in conditional statements"}
+::: {.callout-warning title="`NA` in conditional statements" .fragment}
 
 - Any comparison involving `NA` (`>`, `<`, `==`) returns `NA`, not TRUE/FALSE
 - `if()` will error if the condition is `NA`; use `is.na()` to test for missingness
 - `ifelse()` automatically sets the output to `NA` when the condition is `NA` (vectorized approach is recommended)
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: naInConditions
@@ -217,9 +241,13 @@ NA == NA
 is.na(NA)
 ```
 
+:::
+
 ---
 
 - `if()` errors out directly when the condition is `NA`:
+
+::: {.fragment}
 
 ```{webr}
 #| label: naInIf
@@ -230,9 +258,13 @@ if (NA > 5) {
 }
 ```
 
+:::
+
 ---
 
 - Multiple conditions can be handled by nesting `ifelse()`; logic is the same as chained `else if()`, but deep nesting becomes hard to read
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifelseNested
@@ -252,6 +284,8 @@ wvs7$incomeCat3_ifelse <- ifelse(
 table(wvs7$incomeCat3_ifelse, useNA = "ifany")
 ```
 
+:::
+
 ---
 
 - `dplyr::case_when()` is clearer: use `~` to link condition and assigned value
@@ -263,6 +297,8 @@ case_when(
   <condition 2> ~ <value 2>,
   ...)
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: caseWhenIncome
@@ -276,10 +312,14 @@ wvs7$incomeCat3 <- case_when(
 table(wvs7$incomeCat3, useNA = "ifany")
 ```
 
+:::
+
 ---
 
 - With income groups in hand, we can preliminarily compare their views on equality
 - Combine with `group_by()` to compute group means:
+
+::: {.fragment}
 
 ```{webr}
 #| label: incomeEqualityTable
@@ -292,9 +332,11 @@ wvs7 |>
   )
 ```
 
+:::
+
 - Equality attitudes differ across income groups, echoing the visualization trends from the previous chapter
 
-## Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 1**: Multi-way group analysis
 
@@ -311,6 +353,8 @@ Equality attitudes may be jointly affected by income, gender, education, etc. Us
 - Use `drop_na()` to remove rows missing on the grouping variables before grouping
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: conditionalGroupExercise
@@ -329,6 +373,8 @@ wvs7$incomeCat3 <- case_when(
 # Complete Task A and Task B here
 
 ```
+
+:::
 
 ::: { .solution exercise="conditionalGroupExercise" }
 
@@ -389,6 +435,8 @@ for (<index variable> in <sequence>) {
 
 - Demo: "dancing in chains" — using only single-value `if()` together with `for` to split income into three groups
 
+::: {.fragment}
+
 ```{webr}
 #| label: forIncomeCat
 
@@ -423,6 +471,8 @@ table(wvs7$incomeCat3_loop, useNA = "ifany")
 identical(wvs7$incomeCat3_loop, wvs7$incomeCat3)
 ```
 
+:::
+
 - `identical()` confirms the loop matches `case_when()`; but `case_when()` is more concise
 - Loops are better suited to non-vectorizable tasks (reading files, plotting, saving results)
 
@@ -440,6 +490,8 @@ while (<condition>) {
 ---
 
 - Demo: random sampling until we collect 10 high-income respondents
+
+::: {.fragment}
 
 ```{webr}
 #| label: whileSample
@@ -471,9 +523,13 @@ while (length(high_income_sample) < 10) {
 high_income_sample
 ```
 
+:::
+
 ---
 
 - Every `for` loop can be rewritten as an equivalent `while` loop
+
+::: {.fragment}
 
 ```{webr}
 #| label: whileIncomeCat
@@ -509,6 +565,8 @@ while (i <= nrow(wvs7)) {
 table(wvs7$incomeCat3_while, useNA = "ifany")
 identical(wvs7$incomeCat3_while, wvs7$incomeCat3)
 ```
+
+:::
 
 ---
 
@@ -547,6 +605,8 @@ repeat {
 ---
 
 - Rewrite the earlier `while` sampling example with `repeat`:
+
+::: {.fragment}
 
 ```{webr}
 #| label: repeatSample
@@ -587,6 +647,8 @@ if (exists("high_income_sample")) {
 }
 ```
 
+:::
+
 ## `break` and `next`: loop control
 
 - `break`: terminates the entire loop
@@ -594,6 +656,8 @@ if (exists("high_income_sample")) {
 - Both work in all loop types
 
 - `break` example: stop and alert the researcher when 5 consecutive missing values appear
+
+::: {.fragment}
 
 ```{webr}
 #| label: breakDemo
@@ -624,9 +688,13 @@ wvs7$data_check |>
   table(useNA = "ifany")
 ```
 
+:::
+
 ---
 
 - `next` example: find the first 10 high-income respondents with complete data (like a filtering funnel)
+
+::: {.fragment}
 
 ```{webr}
 #| label: nextDemo
@@ -657,6 +725,8 @@ for (i in 1:nrow(wvs7)) {
 }
 ```
 
+:::
+
 ## Batch Processing
 
 - Loops are powerful but cumbersome to write: initialization, indexing, and value extraction are all manual and error-prone
@@ -678,6 +748,8 @@ mutate(<data>, across(<selected variables>, <function or code>))
 
 ---
 
+::: {.fragment}
+
 ```{webr}
 #| label: acrossScale
 
@@ -691,6 +763,8 @@ select(wvs7_std, incomeLevel, incomeLevel_scaled, equalIncentive, equalIncentive
   head()
 ```
 
+:::
+
 - `where(is.numeric)` selects only numeric columns; `.names = "{.col}_scaled"` auto-names the new variables
 
 ---
@@ -702,6 +776,8 @@ select(wvs7_std, incomeLevel, incomeLevel_scaled, equalIncentive, equalIncentive
 filter(<data>, if_any(<selected variables>, <condition function>))
 filter(<data>, if_all(<selected variables>, <condition function>))
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: ifAnyAll
@@ -719,6 +795,8 @@ wvs7 |>
   head()
 ```
 
+:::
+
 ## Batch Processing with `purrr`
 
 - `dplyr` functions act only on data frames/lists; for general tasks (reading files, fitting models, plotting), use `purrr`'s `map` family
@@ -732,6 +810,8 @@ map(<target>, {<code>})
 ---
 
 - With a `for` background, learning `map` is easy; first compute mean equality attitudes per income group using `for`
+
+::: {.fragment}
 
 ```{webr}
 #| label: forBasic
@@ -757,9 +837,13 @@ names(df_equalMean_for) <- incomeGroups
 df_equalMean_for
 ```
 
+:::
+
 ---
 
 - Same task with `map()`: `split()` to partition + `map()` to apply
+
+::: {.fragment}
 
 ```{webr}
 #| label: mapBasic
@@ -778,11 +862,13 @@ df_equalMean_map <- split(wvs7, ~ incomeCat3) |>
 df_equalMean_map
 ```
 
+:::
+
 - Compare: `for` requires a container, indexing, and manual naming; `map` does it in one line
 
 ---
 
-::: {.callout-tip title="Output types"}
+::: {.callout-tip title="Output types" .fragment}
 
 - `map()` returns a list by default
 - For other types use variants: `map_dbl()` / `map_chr()` / `map_lgl()` / `map_dfr()`
@@ -790,6 +876,8 @@ df_equalMean_map
 - `walk()`: like `map` but returns `NULL`; use for side effects like saving files, plotting, or printing
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: mapList
@@ -809,7 +897,11 @@ if (!exists("df_equalMean_map")) {
 class(df_equalMean_map)
 ```
 
+:::
+
 ---
+
+::: {.fragment}
 
 ```{webr}
 #| label: mapVec
@@ -833,6 +925,8 @@ df_equalMean_map_vec
 class(df_equalMean_map_vec)
 ```
 
+:::
+
 - Advanced `map`: iterating over multiple objects simultaneously
 - `map2()` iterates over two equal-length objects ("dual track", like two parallel rails)
 
@@ -843,6 +937,8 @@ map2(<object 1>, <object 2>, {<code>})
 ---
 
 - Example: draw a scatter + fitted line per income group, each with a different color
+
+::: {.fragment}
 
 ```{webr}
 #| label: map2Demo
@@ -872,6 +968,8 @@ split(wvs7, ~ incomeCat3) |>
 })
 ```
 
+:::
+
 - The title is supplied inside `labs()`, together with the axis labels.
 
 ---
@@ -881,6 +979,8 @@ split(wvs7, ~ incomeCat3) |>
 ```r
 pmap(<list of objects>, {<code>})
 ```
+
+::: {.fragment}
 
 ```{webr}
 #| label: pmapDemo
@@ -909,6 +1009,8 @@ pmap(params, \(data, color, title) {
 })
 ```
 
+:::
+
 ## Debugging in Batch Processing
 
 - In complex batch pipelines, a single bad observation (missing, wrong type) can halt the entire process
@@ -920,6 +1022,8 @@ pmap(params, \(data, color, title) {
 ---
 
 - First construct an error-throwing function for demonstration:
+
+::: {.fragment}
 
 ```{webr}
 #| label: safelyError
@@ -940,9 +1044,13 @@ num_list <- list(a = c(1, 4, 9), b = c(-1, 2, 3), c = c(16, 25, 36))
 map(num_list, possibly(calc_sqrt, otherwise = NA_real_))
 ```
 
+:::
+
 ---
 
 - After wrapping with `safely()`, `map` no longer aborts and returns result/error per element
+
+::: {.fragment}
 
 ```{webr}
 #| label: safelyDemo
@@ -956,9 +1064,13 @@ results <- map(num_list, safe_sqrt)
 results
 ```
 
+:::
+
 ---
 
 - `possibly()`: fills NA on error and keeps going
+
+::: {.fragment}
 
 ```{webr}
 #| label: possiblyDemo
@@ -969,11 +1081,13 @@ possible_sqrt <- possibly(calc_sqrt, otherwise = NA_real_)
 map(num_list, possible_sqrt)
 ```
 
+:::
+
 ---
 
 :::: {style="font-size: 0.7em;"}
 
-::: {.callout-tip title="The `apply` function family"}
+::: {.callout-tip title="The `apply` function family" .fragment}
 
 - R ships with its own batch-processing `apply` family (apply / lapply / sapply / vapply / tapply / mapply)
 - The structure is less uniform than `map`'s, but no extra package is needed; the family is common in textbooks and online
@@ -992,7 +1106,7 @@ map(num_list, possible_sqrt)
 
 ::::
 
-## Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 2**: Cross-country differences in the income–equality relationship (batch processing)
 
@@ -1009,6 +1123,8 @@ Does the relationship between income level and equality attitudes vary across co
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: batchExercise
 #| exercise: batchExercise
@@ -1021,6 +1137,8 @@ data("wvs7", package = "drhur")
 # Complete the by-country batch processing here
 
 ```
+
+:::
 
 ::: { .solution exercise="batchExercise" }
 
@@ -1075,7 +1193,11 @@ country_plots[1:4]
 
 :::
 
-## Chapter Recap {.smaller}
+## Recap {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - This chapter covered using conditional statements to classify data, and loops and batch processing to handle repetitive tasks efficiently
 - Findings: low-income respondents lean slightly toward equality of outcome (≈5.85), high-income respondents lean slightly toward equality of opportunity (≈6.22), echoing the visualizations of the previous two chapters
@@ -1088,10 +1210,16 @@ country_plots[1:4]
     - Loop statements: `for()`, `while()`, `repeat`
     - Loop control: `next`, `break`
 
----
+:::
+
+::: {.column width="50%"}
 
 - Batch processing
     - dplyr column-wise batching: `across()`
     - dplyr row-filtering batching: `if_any()`, `if_all()`
     - purrr list batching: `map()`, `map2()`, `pmap()`
     - Exception handling: `safely()`, `possibly()`
+
+:::
+
+::::

@@ -1,8 +1,8 @@
 ---
 title: "描述性统计"
-subtitle: 基础篇
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: 胡悦
-institute: Learning R with Dr. Hu and His Friends Workshop Series
+institute: "清华大学政治学系"
 
 webr:
   repos:
@@ -18,17 +18,19 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# 描述性统计 {#sec-descriptive}
+## 提要
 
-::: {.callout-note title="本章重点"}
 
 1. 矩在描述数据分布中的作用
 2. 使用 `dplyr` 和 `modelsummary` 制作高质量描述统计表
 3. 直方图、密度图、箱线图与小提琴图的原理与应用
 
-*本章研究问题*：民众的平等观念如何分布，是更看重机会平等还是结果平等？
+::: {.fragment}
+
+*研究问题*：民众的平等观念如何分布，是更看重机会平等还是结果平等？
 
 :::
+
 
 ## 描述统计计算
 
@@ -46,6 +48,8 @@ webr:
     - R 自带 `table()`：直接计算频数，向量形式
     - `dplyr::count()`：表格形式，更规整、支持多变量联合计数
 
+::: {.fragment}
+
 ```{webr}
 #| label: count
 
@@ -61,6 +65,8 @@ wvs7 |> count(equalIncentive)
 # 多变量联合计数：分国家、分性别的平等观念分布
 wvs7 |> count(country, female, equalIncentive) |> head(10)
 ```
+
+:::
 
 ---
 
@@ -89,6 +95,8 @@ wvs7 |> count(country, female, equalIncentive) |> head(10)
     - 峰度 = 山顶尖锐程度
 - 知道这些特征，就能大致勾勒出山的样态
 
+::: {.fragment}
+
 ```{webr}
 #| label: idealDistribution
 
@@ -106,9 +114,11 @@ ggplot(data.frame(x = c(1, 10)), aes(x)) +
   labs(x = "平等观念", y = "密度", title = "理想分布")
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="矩的悖论"}
+::: {.callout-warning title="矩的悖论" .fragment}
 
 - 实际社科数据往往不呈完全钟形分布
 - 比如平等观念真实分布更像"山坡"
@@ -117,6 +127,8 @@ ggplot(data.frame(x = c(1, 10)), aes(x)) +
 - 更稳妥的方式：将原始数据可视化（后文会讲）
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: realDistribution
@@ -135,6 +147,8 @@ ggplot(wvs7, aes(x = equalIncentive)) +
   labs(x = "平等观念", y = "密度", title = "实际分布（WVS7）")
 ```
 
+:::
+
 ---
 
 - 计算具体矩的函数：
@@ -142,6 +156,8 @@ ggplot(wvs7, aes(x = equalIncentive)) +
     - `var()`：方差
     - `sd()`：标准差
 - `summary()` 一次返回六组：最小值、Q1、中位数、平均数、Q3、最大值
+
+::: {.fragment}
 
 ```{webr}
 #| label: moments_calc
@@ -159,9 +175,11 @@ sd(wvs7$equalIncentive, na.rm = TRUE)
 summary(wvs7$equalIncentive)
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="统计量与缺失值"}
+::: {.callout-important title="统计量与缺失值" .fragment}
 
 - 单独计算矩时通常加 `na.rm = TRUE`
 - R 默认不会忽略任何值——包括缺失值
@@ -170,6 +188,8 @@ summary(wvs7$equalIncentive)
 - `na.rm = TRUE` 显式告诉 R"先移除缺失值再算"
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: mean_na
@@ -180,6 +200,8 @@ mean(wvs7$equalIncentive)
 # 正确示范：先移除缺失值
 mean(wvs7$equalIncentive, na.rm = TRUE)
 ```
+
+:::
 
 ---
 
@@ -193,6 +215,8 @@ mean(wvs7$equalIncentive, na.rm = TRUE)
 - 例：考察各国总体教育状况与年龄差异
 - 教育水平用样本均值估计
 - 年龄差异用标准差估计
+
+::: {.fragment}
 
 ```{webr}
 #| label: summarise_by_country
@@ -208,6 +232,8 @@ group_by(wvs7, country) |>
   head()
 ```
 
+:::
+
 ---
 
 - `group_by()` 给数据加"分组"元数据
@@ -215,7 +241,7 @@ group_by(wvs7, country) |>
 - `ungroup()` 显式移除剩余分组标记，恢复普通表格
 - 结果：把分析单元从"个人"拔高到"国家"，便于宏观比较
 
-## 现学现练 {.unnumbered}
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习1**：按收入水平的平等观念分布
 
@@ -232,6 +258,8 @@ group_by(wvs7, country) |>
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: income_equality
 #| exercise: income_equality
@@ -242,6 +270,8 @@ data("wvs7", package = "drhur")
 # 在此完成代码
 
 ```
+
+:::
 
 ::: { .solution exercise="income_equality" }
 
@@ -285,6 +315,8 @@ wvs7 |>
 - 既有传统统计量（均值、中位数、标准差）
 - 又附带嵌入式直方图，直观看分布
 
+::: {.fragment}
+
 ```{webr}
 #| label: datasummary_skim
 
@@ -297,9 +329,13 @@ select(wvs7, age, equalIncentive) |>
   datasummary_skim(type = "numeric", output = "data.frame")
 ```
 
+:::
+
 ---
 
 - 按变量类型分别生成：
+
+::: {.fragment}
 
 ```{webr}
 #| label: datasummary_by_type
@@ -328,10 +364,14 @@ wvs7 |>
   head(20)
 ```
 
+:::
+
 ---
 
 - `datasummary()` 支持完全定制
 - 公式语法：`<变量(行)> ~ <统计量(列)>`
+
+::: {.fragment}
 
 ```{webr}
 #| label: datasummary_custom
@@ -342,7 +382,9 @@ library(modelsummary)
 datasummary(age + equalIncentive ~ Mean + SD, data = wvs7, output = "data.frame")
 ```
 
-## 现学现练 {.unnumbered}
+:::
+
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习2**：定制描述统计表
 
@@ -361,6 +403,8 @@ datasummary(age + equalIncentive ~ Mean + SD, data = wvs7, output = "data.frame"
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: datasummary_custom_ex
 #| exercise: datasummary_custom_ex
@@ -371,6 +415,8 @@ data("wvs7", package = "drhur")
 # 在此完成代码
 
 ```
+
+:::
 
 ::: { .solution exercise="datasummary_custom_ex" }
 
@@ -399,6 +445,8 @@ datasummary(
 - 把数据分成若干区间，矩形高度表示频数
 - 适用于连续变量
 
+::: {.fragment}
+
 ```{webr}
 #| label: histogram
 
@@ -412,9 +460,13 @@ ggplot(wvs7, aes(x = age)) +
   labs(x = "年龄", y = "频数")
 ```
 
+:::
+
 ---
 
 - 离散变量更适合条形图（`geom_bar`）
+
+::: {.fragment}
 
 ```{webr}
 #| label: barplot
@@ -426,6 +478,8 @@ ggplot(wvs7, aes(x = factor(equalIncentive))) +
   geom_bar(alpha = 0.6) +
   labs(x = "平等观念", y = "频数")
 ```
+
+:::
 
 ---
 
@@ -439,6 +493,8 @@ ggplot(wvs7, aes(x = factor(equalIncentive))) +
     - **左图**：灰色柱子是原始直方图；在每个数据点上放一条以该点为中心的核函数曲线（"小山丘"）
     - **中图**：把三条独立曲线（虚线）在每个 x 位置相加，得到"总高度"实线
     - **右图**：把"总高度"除以观测值数量（这里是 3）做平均化——形状不变，y 轴数值缩小
+
+::: {.fragment}
 
 ```{webr}
 #| label: hist2density
@@ -495,10 +551,14 @@ p_density <- ggplot(df_kde, aes(x = x, y = kde)) +
   theme(plot.title = element_text(size = 8))
 ```
 
+:::
+
 ---
 
 - 把这个原理应用到真实数据：年龄变量同时画直方图与密度曲线
 - 年龄分布大致呈单峰形态，但略有右偏（尾部向右延伸）
+
+::: {.fragment}
 
 ```{webr}
 #| label: density_plot
@@ -512,9 +572,11 @@ ggplot(wvs7, aes(x = age)) +
   labs(x = "年龄", y = "密度")
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="连续变量才适合密度图"}
+::: {.callout-warning title="连续变量才适合密度图" .fragment}
 
 - 密度图假设变量在连续轴上取值
 - 定序、分类变量两相邻类别间不存在连续空间
@@ -532,6 +594,8 @@ ggplot(wvs7, aes(x = age)) +
 - 须线：从箱体向两侧延伸到 ±1.5 IQR 内的极值
 - 须线外的点：潜在离群点
 
+::: {.fragment}
+
 ```{webr}
 #| label: boxplot
 
@@ -542,6 +606,8 @@ ggplot(wvs7, aes(y = age)) +
   geom_boxplot(alpha = 0.6) +
   labs(y = "年龄")
 ```
+
+:::
 
 ---
 
@@ -557,6 +623,8 @@ ggplot(wvs7, aes(y = age)) +
 - 箱线图的局限：完全基于统计量，可能严重误导
 - 三种截然不同的分布可能画出完全相同的箱线图
 - 这是因为统计量恰好一致而原始分布完全不同
+
+::: {.fragment}
 
 ```{webr}
 #| label: boxplot_mislead
@@ -593,6 +661,8 @@ p_violin <- ggplot(raw_data, aes(x = dist, y = value)) +
 p_raw + p_violin + plot_layout(axes = "collect")
 ```
 
+:::
+
 ---
 
 - 小提琴图（violin plot）：箱线图的更好替代
@@ -602,6 +672,8 @@ p_raw + p_violin + plot_layout(axes = "collect")
 - 与密度图比：在垂直轴上呈现，多组比较更紧凑
 - 例：比较不同平等观念群体的年龄分布
 - 用 `ntile()` 把 10 档简化为 3 组（结果平等更重要 / 二者都重要 / 机会平等更重要）
+
+::: {.fragment}
 
 ```{webr}
 #| label: violin_age_equality
@@ -626,6 +698,8 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
   labs(x = "平等观念", y = "年龄")
 ```
 
+:::
+
 ---
 
 - 关键观察：
@@ -640,7 +714,11 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
 - 后跟图形类型英文：`geom_histogram`、`geom_density`、`geom_boxplot`、`geom_violin`
 - 简单明了，下一章 ggplot2 集中讲
 
-## 本章重点及回顾
+## 小结 {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - 矩（Moments）
     - 一阶矩：平均数
@@ -653,7 +731,9 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
     - 频数统计：`table()` / `count()`
     - 分组聚合：`group_by()` + `summarise()`
 
----
+:::
+
+::: {.column width="50%"}
 
 - 描述统计可视化
     - 描述统计表：`datasummary_skim()`、`datasummary()`
@@ -661,3 +741,7 @@ ggplot(df_violin, aes(x = eq_group, y = age)) +
     - 密度图：`geom_density()`
     - 箱线图：`geom_boxplot()`
     - 小提琴图：`geom_violin()`（重点）
+
+:::
+
+::::

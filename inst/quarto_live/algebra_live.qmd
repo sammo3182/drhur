@@ -1,28 +1,32 @@
 ---
 title: 基础数学概念
-subtitle: 基础篇
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: 胡悦
-institute: Learning R with Dr. Hu and His Friends Workshop Series
+institute: "清华大学政治学系"
 ---
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# 基础数学概念 {#sec-algebra}
+## 提要
 
-::: {.callout-note title="本章重点"}
 
 1. 基础代数
 2. 向量
 3. 矩阵与解方程
 
-*本章研究问题*：R 语言中数据分析的底层逻辑是什么？
+::: {.fragment}
+
+*研究问题*：R 语言中数据分析的底层逻辑是什么？
 
 :::
+
 
 ## 基本运算
 
 - R中的运算符与数学一致：`+`、`-`、`*`、`/`
 - 在Console中直接书写算式即可运算
+
+::: {.fragment}
 
 ```{webr}
 #| label: algebraBasics
@@ -37,15 +41,19 @@ institute: Learning R with Dr. Hu and His Friends Workshop Series
 (2 + 4) / (5 - 3)
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="空格的使用"}
+::: {.callout-tip title="空格的使用" .fragment}
 
 - 空格不影响运算，但能提高可读性
 - Tidyverse style guide推荐使用空格和空行
 - 可用`styler`、`air`等包统一格式
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: woSpace
@@ -54,10 +62,14 @@ institute: Learning R with Dr. Hu and His Friends Workshop Series
 (2+4) / (  5-  3            )
 ```
 
+:::
+
 ---
 
 - 幂运算`^`、取余`%%`、对数`log()`/`log10()`、指数`exp()`
 - 常用缩写命令：`sqrt()`（平方根）、`abs()`（绝对值）
+
+::: {.fragment}
 
 ```{webr}
 #| label: moreAlgebra
@@ -76,11 +88,15 @@ sqrt(9)
 abs(-9)
 ```
 
+:::
+
 ---
 
 - 三角函数：`sin()`、`cos()`、`tan()`、`acos()`、`asin()`、`atan()`
 - `pi`是R预存的圆周率常量
 - 其他预存常量：`letters`、`LETTERS`、`month.name`、`month.abb`
+
+::: {.fragment}
 
 ```{webr}
 #| label: trigFunctions
@@ -94,9 +110,11 @@ atan(0.5)
 
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="科学计数法"}
+::: {.callout-important title="科学计数法" .fragment}
 
 - `e`连接系数与指数，表示10的幂
 - 例：200 = 2e2；0.002 = 2e-3
@@ -109,6 +127,8 @@ atan(0.5)
 - 逻辑运算：`&`（与）、`|`（或）、`!`（非）
 - 空集对象：`NULL`
 - 不等式判断：`==`、`!=`、`>`、`<`、`>=`、`<=`
+
+::: {.fragment}
 
 ```{webr}
 #| label: boolean
@@ -132,12 +152,14 @@ atan(0.5)
 -3 | 2 > 2
 ```
 
+:::
+
 ---
 
 - 布尔运算次序放在最后：先算不等式，再算逻辑
 - 单定值参与布尔运算时，会进行自相等判断
 
-::: {.callout-tip title="等于的使用"}
+::: {.callout-tip title="等于的使用" .fragment}
 
 - `==`表达等于，`=`留作赋值符
 - 初学者常误用`=`代替`==`，多加练习即可
@@ -148,6 +170,8 @@ atan(0.5)
 
 - 向量（vector）：一串有方向的数
 - 创建方式：`c()`、`:`（连续整数）、`seq()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: sequence
@@ -166,10 +190,14 @@ a == a2
 a == a3
 ```
 
+:::
+
 ---
 
 - 向量索引：`[]`提取子集
 - `a[2]`提取第2个元素，`a[c(3,4)]`提取多个元素
+
+::: {.fragment}
 
 ```{webr}
 #| label: vector
@@ -185,9 +213,11 @@ a[5]
 a[c(3,4)]
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="赋值符`<-`"}
+::: {.callout-important title="赋值符`<-`" .fragment}
 
 - `<-`是R最常用的赋值符，箭头表示"存进"
 - 快捷键：Windows/Linux `Alt + -`，Mac `option + -`
@@ -199,6 +229,8 @@ a[c(3,4)]
 
 - 向量加减法：对应元素相加减
 - 标量与向量运算：标量作用于每个元素
+
+::: {.fragment}
 
 ```{webr}
 #| label: vectorAdd
@@ -214,11 +246,15 @@ a + b
 a - c
 ```
 
+:::
+
 ---
 
 - 元素积（Hadamard积）：`*`，对应位置相乘
 - 内积（点乘）：`%*%`，结果为标量
 - 张量积（外积）：`%o%`或`outer()`，结果为矩阵
+
+::: {.fragment}
 
 ```{webr}
 #| label: vecTimes
@@ -237,14 +273,18 @@ a %o% b
 
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="向量的“非常规”运算"}
+::: {.callout-tip title="向量的“非常规”运算" .fragment}
 
 - R中`a / b`为逐项除法，数学上向量无除法
 - 回收原则（recycling rule）：短向量自动重复匹配长向量
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: vectorDiv
@@ -262,7 +302,11 @@ d / a
 
 ```
 
+:::
+
 ---
+
+::: {.fragment}
 
 ```{webr}
 #| label: recycle
@@ -273,9 +317,13 @@ e <- c(1, 2)
 a * e 
 ```
 
+:::
+
 ---
 
 - 可用`c()`创建字符型向量，需加双引号
+
+::: {.fragment}
 
 ```{webr}
 #| label: character
@@ -287,7 +335,9 @@ aSentence
 
 ```
 
-## 现学现练 {.unnumbered}
+:::
+
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习1**：向量回收原则
 
@@ -301,6 +351,8 @@ aSentence
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: recycle_rule
 #| exercise: recycle_rule
@@ -313,7 +365,9 @@ a / e
 
 ```
 
----
+:::
+
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 ::: { .solution exercise="recycle_rule" }
 
@@ -331,7 +385,7 @@ a / e
 
 :::
 
----
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 **练习2**：推演干支纪年系统
 
@@ -345,6 +399,8 @@ a / e
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: ganzhi
 #| exercise: ganzhi
@@ -355,7 +411,9 @@ dizhi <- c("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉",
 
 ```
 
----
+:::
+
+## 现学现练 {.unnumbered background-color="#43464B"}
 
 ::: { .solution exercise="ganzhi" }
 
@@ -385,6 +443,8 @@ outer(tg_yin, dz_yin, FUN = paste0)
 - `matrix()`创建，按列填充（column-major order）
 - `nrow`或`ncol`指定维度（二选一）
 
+::: {.fragment}
+
 ```{webr}
 #| label: matrix
 
@@ -392,9 +452,13 @@ outer(tg_yin, dz_yin, FUN = paste0)
 matrix(c(1, 2, 3, 4), nrow = 2)
 ```
 
+:::
+
 ---
 
 - 矩阵也遵循回收原则
+
+::: {.fragment}
 
 ```{webr}
 #| label: matrixRecycle
@@ -404,10 +468,14 @@ matrix(1:3, nrow = 2)
 
 ```
 
+:::
+
 ---
 
 - 矩阵索引：`A[行, 列]`
 - 行或列留空代表选择全行或全列
+
+::: {.fragment}
 
 ```{webr}
 #| label: matrixCell
@@ -424,10 +492,14 @@ A[1, ]
 A[, 2]
 ```
 
+:::
+
 ---
 
 - 转置：`t()`，行列互换
 - 两次转置还原
+
+::: {.fragment}
 
 ```{webr}
 #| label: matrixTrans
@@ -440,9 +512,11 @@ t(A)
 t(t(A))
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="嵌套调用的逻辑"}
+::: {.callout-important title="嵌套调用的逻辑" .fragment}
 
 - "由内而外"：先算最内层，结果作为外层输入
 - 类似数学复合函数 $g(f(x))$
@@ -453,6 +527,8 @@ t(t(A))
 
 - 矩阵加减法：同维矩阵，对应元素相加减
 - 矩阵乘法：元素积`*`、内积`%*%`（前列=后行）、张量积`%o%`、交叉积`crossprod()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: matrixTimes
@@ -479,10 +555,14 @@ crossprod(B, C)
 
 ```
 
+:::
+
 ---
 
 - `solve()`求解线性方程组
 - 解方程与回归方程的矩阵表示高度相似
+
+::: {.fragment}
 
 ```{webr}
 #| label: solve
@@ -503,9 +583,11 @@ x
 
 ```
 
-## 本章重点及回顾
+:::
 
-::: {.callout-note title="小提示"}
+## 小结
+
+::: {.callout-note title="小提示" .fragment}
 
 本章以及后续章节将涵盖较多知识点。
 其中，部分内容无需一次性掌握，建立初步印象即可，很多知识点的内涵以及操作将会在后续章节的场景应用中逐步深化理解。而另外一些内容则构成当前阶段的关键基础，若未能及时掌握，将直接影响后续理解。

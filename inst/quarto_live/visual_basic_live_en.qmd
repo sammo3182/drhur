@@ -1,8 +1,8 @@
 ---
 title: "Data Visualization"
-subtitle: "Basics"
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: "Yue Hu"
-institute: "Learning R with Dr. Hu and His Friends Workshop Series"
+institute: "Department of Political Science, THU"
 
 webr:
   packages:
@@ -18,17 +18,19 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# Data Visualization {#sec-visualize .smaller}
+## Outline
 
-::: {.callout-note title="Chapter Highlights"}
 
 1. Base graphics
 2. Trellis graphics
 3. Grammar of graphics
 
+::: {.fragment}
+
 *Research question*: What is the relationship between income level and egalitarian beliefs?
 
 :::
+
 
 ---
 
@@ -44,6 +46,8 @@ webr:
 - Logic: draw step by step, like a painter stroke by stroke — function order = layer order
 - Scatter plot function: `plot(<x-variable>, <y-variable>)`
 
+::: {.fragment}
+
 ```{webr}
 #| label: basicPlot
 
@@ -58,10 +62,14 @@ wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("Male", "F
 plot(wvs7$incomeLevel, wvs7$equalIncentive)
 ```
 
+:::
+
 ---
 
 - Both variables are integers; points overlap heavily, masking information
 - Solution: `jitter()` adds a small random offset to spread overlapping points apart
+
+::: {.fragment}
 
 ```{webr}
 #| label: jitterPlot
@@ -78,10 +86,14 @@ plot(
 )
 ```
 
+:::
+
 ---
 
 - Add a fit line to judge trend: positive slope (low-left to high-right) = positive correlation
 - `lm()` fits a linear model; `abline()` draws the model as a straight line
+
+::: {.fragment}
 
 ```{webr}
 #| label: lmPlot
@@ -99,12 +111,14 @@ plot(
 abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
 ```
 
+:::
+
 - The gold line rises from left to right (positive slope) → higher income leans toward equality of opportunity
 - But the line is shallow: income affects egalitarian views, yet not dramatically
 
 ---
 
-::: {.callout-important title="Theory vs. Practice"}
+::: {.callout-important title="Theory vs. Practice" .fragment}
 
 - Tutorial examples often show crisp visual patterns; continuous data are uncommon in social sciences and humanities
 - Plotting discrete data with continuous-data methods often yields the messy look of the initial plot
@@ -114,6 +128,8 @@ abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
 
 - Counter-example: a clean relationship between continuous variables (horsepower vs. mileage, clearly negative)
 
+::: {.fragment}
+
 ```{webr}
 #| label: cleanExample
 
@@ -121,10 +137,14 @@ abline(lm(equalIncentive ~ incomeLevel, data = wvs7), col = "gold")
 plot(mtcars$hp, mtcars$mpg, xlab = "Horsepower", ylab = "Miles per gallon")
 ```
 
+:::
+
 ---
 
 - Another trick for discrete-as-continuous: kernel-density smoothing (covered last chapter)
 - `smoothScatter()`: color by density — darker where points cluster, lighter where they thin out
+
+::: {.fragment}
 
 ```{webr}
 #| label: smoothScatterPlot
@@ -137,6 +157,8 @@ smoothScatter(
   ylab = "Egalitarian belief (outcome -> opportunity)"
 )
 ```
+
+:::
 
 ---
 
@@ -168,6 +190,8 @@ dev.off()
 
 - Multi-panel comparison: `par(mfrow = c(1, 2))` splits the canvas into 1 row × 2 columns
 - Draw male and female scatters with fit lines, place side by side to compare
+
+::: {.fragment}
 
 ```{webr}
 #| label: sexPlot
@@ -203,6 +227,8 @@ abline(lm(equalIncentive ~ incomeLevel, data = df_female), col = "gold")
 par(mfrow = c(1, 1))
 ```
 
+:::
+
 - Women overall lean more toward equality of outcome (lower intercept), but the income–egalitarianism trend is consistent across genders
 - Base graphics lacks a unified high-level grammar; fine-tuning is laborious → good for quick exploration, not final presentation
 
@@ -211,6 +237,8 @@ par(mfrow = c(1, 1))
 - Trellis Graph: split into small panels by a variable, with unified axes for comparison
 - Proposed by statistician William Cleveland and colleagues in the 1980s–1990s
 - The `lattice` package implements this in R: `xyplot(y ~ x | conditioning variable)`
+
+::: {.fragment}
 
 ```{webr}
 #| label: trellisPlot
@@ -242,10 +270,14 @@ xyplot(
 )
 ```
 
+:::
+
 ---
 
 - Same effect as base graphics, but the code is cleaner and more uniform
 - `lattice` can also draw 3D plots: `cloud(z ~ x * y)`
+
+::: {.fragment}
 
 ```{webr}
 #| label: lattice3D
@@ -253,6 +285,8 @@ xyplot(
 # Use cloud() to draw a 3D scatter cloud
 cloud(jitter(equalIncentive, 0.5) ~ jitter(incomeLevel, 0.5) * jitter(education, 0.5), data = wvs7)
 ```
+
+:::
 
 - `cloud()` syntax `z ~ x * y`: z is height (dependent variable), x*y form the base plane
 - Observe how "egalitarianism" undulates over the income × education plane
@@ -281,7 +315,7 @@ print(p)
 dev.off()
 ```
 
-## Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 1**: Faceted scatter plot (lattice)
 
@@ -294,6 +328,8 @@ Use `xyplot()` to draw a scatter of `education` (x) against `equalIncentive` (y)
 - Inside `panel = function(x, y, ...)`, call `panel.xyplot()` + `panel.lmline(col = "red")`
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: latticeExercise
@@ -308,6 +344,8 @@ wvs7$female_label <- factor(wvs7$female, levels = c(0, 1), labels = c("Male", "F
 # Complete the xyplot below
 
 ```
+
+:::
 
 ::: { .solution exercise="latticeExercise" }
 
@@ -396,6 +434,8 @@ ggplot(data = <data>) +
 
 - Step 1: initialize the canvas, bind data and global mapping
 
+::: {.fragment}
+
 ```{webr}
 #| label: ggplotInit
 
@@ -405,10 +445,14 @@ library(ggplot2)
 ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive))
 ```
 
+:::
+
 ---
 
 - Step 2: stack jittered points with `geom_jitter()`
 - `width`/`height` control jitter amount on x/y; `alpha` sets transparency to ease overlap
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotStep2
@@ -418,10 +462,14 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   geom_jitter(width = 0.3, height = 0.3, alpha = 0.7)
 ```
 
+:::
+
 ---
 
 - Step 3: add a linear regression fit line
 - `method = "lm"` for linear model; `se = FALSE` turns off the confidence band
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotStep3
@@ -432,9 +480,13 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   geom_smooth(method = "lm", se = FALSE, color = "gold", linewidth = 1)
 ```
 
+:::
+
 ---
 
 - Step 4: fill in axis labels with `labs()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotStep4
@@ -446,9 +498,13 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   labs(x = "Income level", y = "Egalitarian belief (outcome -> opportunity)")
 ```
 
+:::
+
 ---
 
 - Facets need only `facet_wrap(~ female_label, ncol = 2)`: group by gender, two columns
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotFacet
@@ -464,6 +520,8 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
   labs(x = "Income level", y = "Egalitarian belief (outcome -> opportunity)")
 ```
 
+:::
+
 - Trend consistent: income ↑ → slight lean toward equality of opportunity (true for both genders)
 - Slight gender difference: women's fit line has a lower intercept → at the same income, women demand more equality of outcome
 
@@ -473,6 +531,8 @@ ggplot(wvs7, aes(x = incomeLevel, y = equalIncentive)) +
 - First: a bar chart with confidence intervals, focused on **comparison**
 - Comparing means is not enough; overlay error intervals to show "uncertainty"
 - First aggregate: compute median and 95% confidence interval per income × gender group
+
+::: {.fragment}
 
 ```{webr}
 #| label: dataBar
@@ -496,10 +556,14 @@ wvs7_agg <- select(wvs7, equalIncentive, incomeLevel, female_label) |>
             ub_ed = median_ed + stats::qnorm(1 - (1 - 0.95) / 2) * se_ed)
 ```
 
+:::
+
 ---
 
 - `geom_bar(stat = "identity")` draws bars using the y values directly; `position_dodge()` places bars side by side
 - `geom_errorbar()` draws error whiskers; position must match the bars
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotBar
@@ -525,11 +589,15 @@ ggplot(wvs7_agg, aes(x = incomeLevel, y = median_ed, fill = female_label)) +
   scale_fill_gb(name = "Gender", reverse = TRUE)
 ```
 
+:::
+
 ---
 
 - Second: a heatmap — x/y represent two variables, color depth represents a third
 - Especially fitting when the third variable is continuous (e.g., education `education`)
 - First aggregate the median egalitarian belief for each education × income combination
+
+::: {.fragment}
 
 ```{webr}
 #| label: dataHeat
@@ -542,9 +610,13 @@ wvs7 |>
   ungroup() -> wvs7_heat
 ```
 
+:::
+
 ---
 
 - `geom_tile()` draws tiles; `scale_fill_gb()` sets the continuous fill scale
+
+::: {.fragment}
 
 ```{webr}
 #| label: ggplotHeat
@@ -563,10 +635,12 @@ ggplot(data = wvs7_heat, mapping = aes(
   scale_fill_gb(name = "Egalitarian belief", discrete = FALSE)
 ```
 
+:::
+
 - Darker shades cluster top-right: highly educated + high-income individuals favor equality of opportunity most
 - Consistent with the intuition that "the privileged prefer equality of opportunity"
 
-## Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 2**: Marginal-density scatter plot (ggside)
 
@@ -580,6 +654,8 @@ Use `ggside` to recreate a marginal-density scatter plot: income (x) × educatio
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: ggsideExercise
 #| exercise: ggsideExercise
@@ -591,6 +667,8 @@ data("wvs7", package = "drhur")
 # Complete the ggside plot below
 
 ```
+
+:::
 
 ::: { .solution exercise="ggsideExercise" }
 
@@ -636,13 +714,13 @@ ggplot(data = wvs7_narm,
 
 :::
 
----
+## Exercise {.unnumbered background-color="#43464B"}
 
 - The key to `ggplot2`: grasp the grammatical spine and the design philosophy
 - Complex plots still follow the universal formula: declare data + mapping → stack `geom_*`, `labs()`, `scale_*`, `theme()`
 - The fancier the look, the longer the code — but the underlying structure stays the same
 
-::: {.callout-tip title="Extensions of `ggplot2`"}
+::: {.callout-tip title="Extensions of `ggplot2`" .fragment}
 
 - `ggplot2` has a large extension ecosystem:
     - `ggrepel`: avoids overlapping text labels in scatter plots
@@ -651,6 +729,8 @@ ggplot(data = wvs7_narm,
 - Example: this book's `drhutools::cdplot()` draws conditional density plots
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: extCdplot
@@ -665,6 +745,8 @@ wvs7 |>
   na.omit() |>
   drhutools::cdplot()
 ```
+
+:::
 
 - One line yields a professional conditional density plot — this is the charm of the `ggplot2` ecosystem
 
@@ -697,7 +779,11 @@ ggsave("plot_heat.png")
 - The point of visualization is not to dazzle but to deliver the data's information to the reader accurately
 - One principle: a good visualization delivers its key message to the reader's eyes at first glance
 
-## Chapter Highlights and Review {.smaller}
+## Recap {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - Scatter plot: income level and egalitarian belief show a weak positive correlation
 - Faceted plot shows: the trend is consistent across men and women, yet women favor equality of outcome more at the same income
@@ -711,7 +797,9 @@ ggsave("plot_heat.png")
     - Conditional scatter plot: `xyplot()`
     - 3D scatter plot: `cloud()`
 
----
+:::
+
+::: {.column width="50%"}
 
 - ggplot2 visualization
     - Scatter layers: `geom_point()` / `geom_jitter()`
@@ -722,3 +810,7 @@ ggsave("plot_heat.png")
     - Set theme: `theme_*`
     - Adjust scale: `scale_*`
     - Save plot: `ggsave()`
+
+:::
+
+::::

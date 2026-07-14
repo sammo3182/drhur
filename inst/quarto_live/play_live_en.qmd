@@ -1,8 +1,8 @@
 ---
 title: "Programming Fundamentals and Data I/O"
-subtitle: "Basics"
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: "Yue Hu"
-institute: "Learning R with Dr. Hu and His Friends Workshop Series"
+institute: "Department of Political Science, THU"
 
 webr:
   packages:
@@ -12,9 +12,8 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# Programming Fundamentals and Data I/O {#sec-play .smaller}
+## Outline
 
-::: {.callout-note title="Chapter Highlights"}
 
 1. Foundational concepts
 2. Basic syntax
@@ -22,11 +21,14 @@ webr:
 4. Data attributes
 5. Data output
 
+::: {.fragment}
+
 *Research question*: How does R help researchers store, import, and export data?
 
 :::
 
-## Object-Oriented Programming {#sec-sub_oop .smaller}
+
+## Object-Oriented Programming
 
 - Object-Oriented Programming (OOP): organizes and encapsulates data through classes and objects
 - C++, Java, Python, and R all adopt the OOP architecture
@@ -45,6 +47,8 @@ webr:
 - In R, a function is a mathematical mapping and a set of executable actions
 - Seen already: `c()`, `matrix()`, `mean()`
 
+::: {.fragment}
+
 ```{webr}
 #| label: function
 
@@ -56,6 +60,8 @@ y <- mean(x)
 
 y
 ```
+
+:::
 
 ---
 
@@ -71,6 +77,8 @@ y
 - Custom function: `function(<inputs>){<actions>}`
 - Example: define a BMI calculator (BMI = weight / height²)
 
+::: {.fragment}
+
 ```{webr}
 #| label: bmi
 
@@ -84,7 +92,9 @@ calculateBMI <- function(weight, height) {
 calculateBMI(80, 1.69)
 ```
 
-::: {.callout-tip title="Auto-printing"}
+:::
+
+::: {.callout-tip title="Auto-printing" .fragment}
 
 - Typing a function name directly triggers auto-print: the result appears in the console
 - Pro: immediate visual feedback
@@ -99,7 +109,7 @@ calculateBMI(80, 1.69)
     - Only letters, digits, `.`, and `_` are allowed
     - Case-sensitive
 
-::: {.callout-tip title="Why these naming rules?"}
+::: {.callout-tip title="Why these naming rules?" .fragment}
 
 - Start with a letter: lets the computer distinguish "names" from "numbers"
 - No special characters: avoids conflict with programming symbols
@@ -152,7 +162,7 @@ drhur("play")
     - `help.search("keyword")`: search by keyword
     - `help.start()`: open the master documentation (rarely used)
 
-::: {.callout-tip title="How long does installing a package take?"}
+::: {.callout-tip title="How long does installing a package take?" .fragment}
 
 - Typically a few to a dozen seconds
 - The first install also pulls dependencies, taking longer
@@ -160,7 +170,7 @@ drhur("play")
 
 :::
 
-## Hands-on Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 1**: Install multiple R packages at once
 
@@ -174,6 +184,8 @@ The argument name "packages" in `install.packages` is plural, suggesting that mu
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: install_multi
 #| exercise: install_multi
@@ -182,6 +194,8 @@ The argument name "packages" in `install.packages` is plural, suggesting that mu
 ?install.packages
 
 ```
+
+:::
 
 
 ::: { .solution exercise="install_multi" }
@@ -211,6 +225,8 @@ install.packages(c("regioncode", "dotwhisker", "drhur"))
 - Test with `inherits(object, "class_name")`
 - Example: an ordered variable created by `ordered()` inherits from `factor`
 
+::: {.fragment}
+
 ```{webr}
 #| label: inherit
 
@@ -225,13 +241,15 @@ inherits(x, "factor")
 inherits(y, "factor")
 ```
 
+:::
+
 ---
 
 - Encapsulation: bundling a series of commands into a single command combo
 - When called, R runs through all packaged steps in order
 - `function()` is the most common encapsulation tool
 
-::: {.callout-warning title="Encapsulation can be overwritten"}
+::: {.callout-warning title="Encapsulation can be overwritten" .fragment}
 
 - In R, functions are also objects: "everything can be a function"
 - Existing functions can be overwritten, including built-in ones
@@ -244,6 +262,8 @@ inherits(y, "factor")
 
 - Polymorphism: the same function handles different objects differently
 - Classic example: `summary()` — teaches according to the student
+
+::: {.fragment}
 
 ```{webr}
 #| label: polymorphism
@@ -259,10 +279,14 @@ summary(x)
 summary(y)
 ```
 
+:::
+
 ---
 
 - Safety: a command first checks class compatibility before acting
 - If incompatible, execution stops with an error and subsequent commands are not run
+
+::: {.fragment}
 
 ```{webr}
 #| label: safety
@@ -275,9 +299,11 @@ summary(y)
 1 + 1
 ```
 
+:::
+
 ---
 
-::: {.callout-important title="Command, method, function"}
+::: {.callout-important title="Command, method, function" .fragment}
 
 - *Command*: any executable line of code (e.g., `1 + 1`, `y <- sqrt(x)`)
 - *Function*: a fixed set of operations that takes input and returns output
@@ -289,7 +315,7 @@ summary(y)
 - Process data via the "object + command" pattern
 - Benefits: every step is traceable, safer, easier to collaborate on
 
-## Hands-on Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 2**: Interpret the polymorphism of `plot`
 
@@ -303,6 +329,8 @@ Run the commands below and explain, from a polymorphism perspective, why the sam
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: plot_polymorphism
 #| exercise: plot_polymorphism
@@ -312,6 +340,8 @@ plot(mtcars$mpg)
 plot(mtcars$mpg, mtcars$wt)
 
 ```
+
+:::
 
 
 ::: { .solution exercise="plot_polymorphism" }
@@ -340,6 +370,8 @@ plot(mtcars$mpg, mtcars$wt)
 - Equivalent commands: `assign()`, `->`, `<<-`, `=`
 - Basic syntax: `<name> <- <object>`
 
+::: {.fragment}
+
 ```{webr}
 #| label: object
 
@@ -350,9 +382,13 @@ aValidObject <- 1:5
 aValidObject
 ```
 
+:::
+
 ---
 
 - `<-` and `->` point in opposite directions; the side the arrow points to is the assigned name
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrow
@@ -364,11 +400,15 @@ a <- 12
 25 -> b
 ```
 
+:::
+
 ---
 
 - `=` can also assign, but differs slightly from `<-`:
     - At the top level: identical scope
     - Inside function call parentheses: `=` is mostly for naming arguments; `<-` is mostly for creating/modifying objects
+
+::: {.fragment}
 
 ```{webr}
 #| label: diffAssign
@@ -381,11 +421,15 @@ median(y <- 1:10); y
 median(x = 1:10); x
 ```
 
+:::
+
 ---
 
 - `<<-` is used to reference/modify a parent (global) variable
 - Useful when environments are nested and scopes need to be distinguished
 - Example: campus bulletin (global) vs. personal reminder (local)
+
+::: {.fragment}
 
 ```{webr}
 #| label: globalAssign
@@ -417,6 +461,8 @@ update_campus_bulletin()
 message("Bulletin: ", campus_bulletin)
 ```
 
+:::
+
 ---
 
 - Object naming rules:
@@ -426,7 +472,7 @@ message("Bulletin: ", campus_bulletin)
     - Case-sensitive: `X != x`
     - Beware of overwriting built-in commands (e.g., `list`, `mean`)
 
-## Hands-on Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 3**: Naming rules
 
@@ -440,6 +486,8 @@ The first line below throws an error and the second does not. Run them and expla
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: naming
 #| exercise: naming
@@ -449,6 +497,8 @@ The first line below throws an error and the second does not. Run them and expla
 var_name5 <- 1:5
 
 ```
+
+:::
 
 
 ::: { .solution exercise="naming" }
@@ -478,6 +528,8 @@ var_name5
 - Sub-subtypes: double (with decimals), integer
 - `NA` (not available): missing value, the "exception" of an otherwise homogeneous R vector
 
+::: {.fragment}
+
 ```{webr}
 #| label: numeric
 
@@ -494,11 +546,15 @@ vec_1_100 <- c(1:100)
 vec_miss <- c(1, NA, 3, NA, 24)
 ```
 
+:::
+
 ---
 
 - Logical vector: binary `TRUE/FALSE` (abbreviated `T/F`)
 - Extremely widely used: a lot of "programming" is essentially "deciding true or false"
 - `as.logical()` coerces to logical type
+
+::: {.fragment}
 
 ```{webr}
 #| label: logic
@@ -513,12 +569,16 @@ vec_logic <- as.logical(vec_num)
 vec_logic
 ```
 
+:::
+
 ---
 
 - Factor vector: records categorical information
 - Created with `factor()`; levels record the categories, labels name them
 - Subtype: ordered (ordinal) vector created by `ordered()`, with order among levels
 - Advanced tool: the `forcats` package specializes in categorical/ordinal variables (reorder levels, add categories, set reference group)
+
+::: {.fragment}
 
 ```{webr}
 #| label: factor
@@ -541,12 +601,16 @@ vec_fac2
 vec_ord
 ```
 
+:::
+
 ---
 
 - Character vector: records values in character form
 - R does not "understand" character meanings; it treats Chinese, English, Russian, etc. alike
 - Each character value must be wrapped in quotes when created
 - Built-in character constants: `letters`, `LETTERS`, `month.abb`, `month.name`
+
+::: {.fragment}
 
 ```{webr}
 #| label: character
@@ -557,12 +621,16 @@ vec_chr <- c("ox", "♥️", "R is hard, but I can nail it.")
 vec_chr
 ```
 
+:::
+
 ---
 
 - Time vector: R provides two flavors, `POSIXct` and `POSIXlt`
 - `POSIXct`: stored as seconds (since 1970-01-01)
 - `POSIXlt`: stored as a list of time components
 - Current time: `Sys.time()`, `Sys.Date()`, `Sys.timezone()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: time
@@ -582,14 +650,18 @@ Sys.time()
 Sys.Date()
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="The `lubridate` package"}
+::: {.callout-tip title="The `lubridate` package" .fragment}
 
 - Specialized for time variables
 - Flexibly parses year/month/day orderings, converts time zones, etc.
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: lubridate
@@ -606,7 +678,9 @@ dmy("16/10/2022")
 ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
 ```
 
-## Hands-on Practice {.unnumbered}
+:::
+
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 4**: Two ways to generate a letter sequence
 
@@ -620,6 +694,8 @@ Compare the two vectors produced below and verify whether they are exactly equal
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: letters_compare
 #| exercise: letters_compare
@@ -629,6 +705,8 @@ vec_letters_raw <- c("a", "b", "c", "d", "e")
 vec_letters_quick <- letters[1:5]
 
 ```
+
+:::
 
 
 ::: { .solution exercise="letters_compare" }
@@ -647,7 +725,7 @@ identical(vec_letters_raw, vec_letters_quick)
 
 :::
 
----
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 5**: Parse messy date strings
 
@@ -663,6 +741,8 @@ identical(vec_letters_raw, vec_letters_quick)
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: date_parse
 #| exercise: date_parse
@@ -671,6 +751,8 @@ library(lubridate)
 raw_dates <- c("20190101", "01012019", "021901")
 
 ```
+
+:::
 
 
 ::: { .solution exercise="date_parse" }
@@ -695,6 +777,8 @@ parsed_dates
     - Coordinate style: `df[row, column]`
     - Name style: `df$column_name` (most common)
 
+::: {.fragment}
+
 ```{webr}
 #| label: dataframe
 
@@ -715,11 +799,15 @@ df_toy[3, 3]
 df_toy$name
 ```
 
+:::
+
 ---
 
 - List: a heterogeneous container that holds a sequence of vectors
 - Each vector's size, length, and order are unrestricted
 - A data frame = a special list whose columns have equal length and align one-to-one
+
+::: {.fragment}
 
 ```{webr}
 #| label: list
@@ -738,14 +826,18 @@ ls_monks
 ls_monks$name
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="Multidimensional data: array"}
+::: {.callout-tip title="Multidimensional data: array" .fragment}
 
 - Created with `array()`; each dimension holds a vector
 - Rarely used in social sciences and humanities
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: array
@@ -756,6 +848,8 @@ an_array <- array(c(5, 9, 3, 10, 11, 12, 13, 14, 15), dim = c(3, 3, 2))
 an_array
 ```
 
+:::
+
 ## Data Attributes
 
 - Probe-style tools: query object attributes
@@ -765,6 +859,8 @@ an_array
     - `length()`: length (elements for a vector, components for a list, columns for a data frame)
     - `nrow()` / `ncol()` / `dim()`: dimensions
     - `summary()`: summary statistics
+
+::: {.fragment}
 
 ```{webr}
 #| label: probe
@@ -788,6 +884,8 @@ ncol(df_toy)
 dim(df_toy)
 ```
 
+:::
+
 ---
 
 - `class()`: what R "sees" the object as → determines which functions apply
@@ -796,7 +894,7 @@ dim(df_toy)
 - Use `nrow()` for rows, `ncol()` for columns, `dim()` for full dimensions
 - Predicate-style tools: usually start with `is` (`is.numeric()`, `is.character()`, `is.factor()`, `is.data.frame()`, `is.list()`); return a logical value indicating whether the object belongs to the type
 
-## Hands-on Practice {.unnumbered .smaller}
+## Exercise {.unnumbered .smaller background-color="#43464B"}
 
 **Question 6**: Explore the wvs7 dataset
 
@@ -821,6 +919,8 @@ Use what you have learned to inspect its basic structure:
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: wvs7_explore
 #| exercise: wvs7_explore
@@ -829,6 +929,8 @@ Use what you have learned to inspect its basic structure:
 data("wvs7", package = "drhur")
 
 ```
+
+:::
 
 
 ::: { .solution exercise="wvs7_explore" }
@@ -866,6 +968,8 @@ is.matrix(wvs7)      # FALSE (unless coerced)
 - Load one dataset: `data(<dataset_name>)`
 - Load a dataset from a package: `data(<dataset_name>, package = "<package_name>")`
 
+::: {.fragment}
+
 ```{webr}
 #| label: loadData_builtin
 
@@ -875,6 +979,8 @@ data(mtcars)
 # Inspect the summary
 summary(mtcars)
 ```
+
+:::
 
 ---
 
@@ -895,6 +1001,8 @@ summary(corruption)
 - R's built-in `datasets` package: no install/load required, call directly
 - Examples: `iris`, `mtcars`, `uspop`, etc.
 
+::: {.fragment}
+
 ```{webr}
 #| label: load_iris
 
@@ -904,6 +1012,8 @@ data(iris)
 # Inspect the first 6 rows to confirm
 head(iris)
 ```
+
+:::
 
 ## Reading Data Directly
 
@@ -931,7 +1041,7 @@ df_csv <- read.csv("./aDataset.csv")
 load("aDataset.RData")
 ```
 
-::: {.callout-warning title="File name case sensitivity"}
+::: {.callout-warning title="File name case sensitivity" .fragment}
 
 - Windows / Mac: `.RData` and `.rdata` are case-insensitive
 - Linux: strictly case-sensitive; the two are different files
@@ -988,7 +1098,7 @@ library(rio)
 df_anything <- import("<AnyTypeOfData>")
 ```
 
-## Hands-on Practice {.unnumbered}
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 7**: Load the built-in dataset uspop
 
@@ -1001,11 +1111,15 @@ Load the built-in dataset `uspop` and display its summary statistics.
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: uspop
 #| exercise: uspop
 
 ```
+
+:::
 
 
 ::: { .solution exercise="uspop" }
@@ -1055,7 +1169,7 @@ save(df_toy, ls_monks, file = "./data/test.rdata")
 write.csv(df_toy, file = "toy.csv")
 ```
 
-::: {.callout-warning title="CSV and Chinese data"}
+::: {.callout-warning title="CSV and Chinese data" .fragment}
 
 - Save Chinese data using UTF-8 encoding
 - Otherwise garbled characters may appear
@@ -1068,7 +1182,7 @@ write.csv(df_toy, file = "toy.csv")
 - Auto-detects the suffix and saves an R object to almost any format
 - Supports STATA, SPSS, SAS, Excel, JSON, Matlab, HTML, and more
 
-::: {.callout-tip title="Data storage efficiency"}
+::: {.callout-tip title="Data storage efficiency" .fragment}
 
 - Small-to-medium data: `.RData` is usually enough
 - Large data: consider specialized formats like `qs` or `fst`
@@ -1076,7 +1190,11 @@ write.csv(df_toy, file = "toy.csv")
 
 :::
 
-## Chapter Recap
+## Recap {.smaller}
+
+:::: {.columns}
+
+::: {.column width="33%"}
 
 - Foundational concepts
     - OOP (class and object)
@@ -1087,7 +1205,9 @@ write.csv(df_toy, file = "toy.csv")
     - Matrix
     - Data frames and lists (key topic)
 
----
+:::
+
+::: {.column width="33%"}
 
 - Data attributes: inspect data type, dimensions, and overview
 - Data input
@@ -1098,10 +1218,16 @@ write.csv(df_toy, file = "toy.csv")
     - Saving as R data
     - Saving in other data formats
 
----
+:::
+
+::: {.column width="33%"}
 
 - Key functions of this chapter:
     - Basic operations and package management: `install.packages()`, `library()`, `help()` / `?`
     - Data creation and types: `c()`, `data.frame()`, `list()`, `as.numeric()`, `as.character()`, `as.logical()`
     - Data attributes: `class()`, `summary()`, `dim()`, `nrow()`, `ncol()`, `length()`, `head()`
     - Data input and export: `data()`, `read.csv()`, `readRDS()`, `saveRDS()`, `write.csv()`
+
+:::
+
+::::

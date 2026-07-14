@@ -1,8 +1,8 @@
 ---
 title: "Data Wrangling"
-subtitle: "Basics"
+subtitle: "Learning R with Dr. Hu and His Friends Workshop Series"
 author: "Yue Hu"
-institute: "Learning R with Dr. Hu and His Friends Workshop Series"
+institute: "Department of Political Science, THU"
 
 webr:
   packages:
@@ -13,9 +13,8 @@ webr:
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-# Data Wrangling {#sec-munging .smaller}
+## Outline
 
-::: {.callout-note title="Chapter Highlights"}
 
 1. Single-dataset wrangling
     - Explore
@@ -26,15 +25,20 @@ webr:
     - Direct merging
     - Index-based merging
 
+::: {.fragment}
+
 *Research question*: Drawing on the "factors shaping people's views of equality" example, what useful information does the sample dataset `wvs7` contain?
 
 :::
+
 
 ## Data Exploration
 
 - Data exploration: an initial look at an unfamiliar dataset's composition, structure, format, and content
 - A follow-up to data input, and the first step of any data analysis
 - The simplest method is "just look at the data" — call the object name directly
+
+::: {.fragment}
 
 ```{webr}
 #| label: glimpse
@@ -46,9 +50,11 @@ data("wvs7", package = "drhur")
 wvs7
 ```
 
+:::
+
 ---
 
-::: {.callout-tip title="The `tibble` data frame"}
+::: {.callout-tip title="The `tibble` data frame" .fragment}
 
 - `wvs7` is stored as a `tibble` — an upgraded version of the ordinary data frame
 - It still has rows, columns, and cells
@@ -66,6 +72,8 @@ wvs7
 - Data structure = the size and composition of the data: number of observations, number of variables, variable names
 - Probe functions usually carry abbreviated English names
 - Example: `str` means "structure", listing each variable's type, row count, and column count
+
+::: {.fragment}
 
 ```{webr}
 #| label: systemView
@@ -85,6 +93,8 @@ head(names(wvs7))
 glimpse(wvs7)
 ```
 
+:::
+
 ---
 
 - The data have 1264 rows and 24 columns
@@ -96,6 +106,8 @@ glimpse(wvs7)
     - Matrix-style brackets: `<df>[, "name"]`
     - `$` form: `<df>$<name>` (most common)
 
+::: {.fragment}
+
 ```{webr}
 #| label: variable_extract
 
@@ -106,9 +118,13 @@ head(wvs7[, "country"])
 unique(wvs7$country) |> head(10)
 ```
 
+:::
+
 ---
 
 - Numeric variables: `mean()`, `median()`, `max()`, `var()`, `summary()`, etc.
+
+::: {.fragment}
 
 ```{webr}
 #| label: varCal_numeric
@@ -120,9 +136,13 @@ mean(wvs7$age, na.rm = TRUE)
 summary(wvs7$incomeLevel)
 ```
 
+:::
+
 ---
 
 - Ordinal and categorical variables: `unique()` for the value set, `table()` for the frequency distribution
+
+::: {.fragment}
 
 ```{webr}
 #| label: varCal_categorical
@@ -136,6 +156,8 @@ table(wvs7$female)
 # Categorical breakdown of marital status
 table(wvs7$marital)
 ```
+
+:::
 
 - `table()` returns different output for different variable types — yet another instance of OOP polymorphism
 
@@ -199,7 +221,7 @@ eatDumpling_pipe <- mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) |>
 - Read `|>` as "then" or "and then" — the function chain becomes close to natural language
 
 
-::: {.callout-note title="Pipe shortcut"}
+::: {.callout-note title="Pipe shortcut" .fragment}
 
 - Windows / Linux: `Ctrl + Shift + M`
 - Mac: `Cmd + Shift + M`
@@ -215,6 +237,8 @@ eatDumpling_pipe <- mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) |>
 - For columns: use `select()`
 - Syntax: `select(<df>, <var1>, <var2>, ...)`
 
+::: {.fragment}
+
 ```{webr}
 #| label: select
 
@@ -224,12 +248,16 @@ library(dplyr)
 select(wvs7, equalIncentive, incomeLevel, confidence_gov, education, country)
 ```
 
+:::
+
 ---
 
 - Pattern-based bulk selection:
     - `starts_with()`: starts with a given string
     - `ends_with()`: ends with a given string
     - `matches()`: regular-expression match anywhere in the name
+
+::: {.fragment}
 
 ```{webr}
 #| label: select_startwith
@@ -238,7 +266,9 @@ select(wvs7, equalIncentive, incomeLevel, confidence_gov, education, country)
 select(wvs7, starts_with("corruption"))
 ```
 
-::: {.callout-tip title="Pattern-based selection helpers"}
+:::
+
+::: {.callout-tip title="Pattern-based selection helpers" .fragment}
 
 - `starts_with`: opening characters
 - `ends_with`: closing characters
@@ -254,6 +284,8 @@ select(wvs7, starts_with("corruption"))
 - `select(wvs7, -(varA:varB))` drops a contiguous range
 - Can be combined with helpers such as `starts_with`
 
+::: {.fragment}
+
 ```{webr}
 #| label: deselect
 
@@ -261,11 +293,15 @@ select(wvs7, starts_with("corruption"))
 select(wvs7, starts_with("corruption"), -corruption_state)
 ```
 
+:::
+
 ---
 
 - `rename()` changes a variable name
 - Syntax: `rename(<df>, <new_name> = <old_name>)`
 - Multiple variables can be renamed at once
+
+::: {.fragment}
 
 ```{webr}
 #| label: rename
@@ -273,6 +309,8 @@ select(wvs7, starts_with("corruption"), -corruption_state)
 # Rename 'country' to 'nationality'
 rename(wvs7, nationality = country)
 ```
+
+:::
 
 ---
 
@@ -287,6 +325,8 @@ rename(wvs7, nationality = country)
 - Syntax: `filter(<df>, <condition1>, <condition2>, ...)`
 - Multiple conditions separated by commas — equivalent to logical AND
 
+::: {.fragment}
+
 ```{webr}
 #| label: filter
 
@@ -299,10 +339,14 @@ select(wvs7, equalIncentive, country) |>
   filter(country %in% c("South Korea", "Japan"))
 ```
 
+:::
+
 ---
 
 - `filter()` supports any logical or comparison expression
 - Compound example: Japanese respondents over age 50
+
+::: {.fragment}
 
 ```{webr}
 #| label: filter_compound
@@ -312,7 +356,9 @@ select(wvs7, equalIncentive, country, age) |>
   filter(country == "Japan", age > 50)
 ```
 
-::: {.callout-note title="Why didn't the rename stick?"}
+:::
+
+::: {.callout-note title="Why didn't the rename stick?" .fragment}
 
 - `rename()` does not automatically overwrite the data in your environment
 - To make the change permanent, you must assign back with `<-`
@@ -326,6 +372,8 @@ select(wvs7, equalIncentive, country, age) |>
 - Syntax: `arrange(<df>, <var1>, <var2>, ...)`
 - Default order is ascending (smallest to largest)
 
+::: {.fragment}
+
 ```{webr}
 #| label: arrange
 
@@ -335,11 +383,15 @@ select(wvs7, equalIncentive, incomeLevel, country) |>
   arrange(incomeLevel)
 ```
 
+:::
+
 ---
 
 - Two ways to do descending:
     - Wrap the variable in `desc()`
     - Prepend a minus sign `-` (numeric variables only)
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrange_desc
@@ -355,10 +407,14 @@ select(wvs7, equalIncentive, incomeLevel, country) |>
   arrange(-incomeLevel)
 ```
 
+:::
+
 ---
 
 - `arrange()` also accepts multiple sort keys
 - Order determines priority: rows are sorted by the first variable; ties go to the second
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrange_compound
@@ -368,15 +424,19 @@ select(wvs7, equalIncentive, incomeLevel, age) |>
   arrange(incomeLevel, age)
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="Order of sort keys"}
+::: {.callout-warning title="Order of sort keys" .fragment}
 
 - Argument order in `select` and `filter` does not matter
 - In `arrange`, **argument order determines sort priority**
 - Swapping the keys yields a completely different result
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: arrange_order
@@ -386,11 +446,15 @@ select(wvs7, equalIncentive, incomeLevel, age) |>
   arrange(age, incomeLevel)
 ```
 
+:::
+
 ## Modifying Variables
 
 - Reshape how a variable is encoded
 - Example: collapse a 10-level income variable into a "poor / rich" binary
 - Use `mutate()` — syntax: `mutate(<df>, <new_var> = <expression>)`
+
+::: {.fragment}
 
 ```{webr}
 #| label: mutate
@@ -400,10 +464,14 @@ select(wvs7, equalIncentive, incomeLevel) |>
   mutate(poor = incomeLevel <= 3)
 ```
 
+:::
+
 ---
 
 - `mutate()` can create several new variables at once, separated by `,`
 - Multiple new variables can be derived from the same source
+
+::: {.fragment}
 
 ```{webr}
 #| label: mutate_multiple
@@ -416,14 +484,18 @@ select(wvs7, equalIncentive, incomeLevel) |>
   )
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="Beware of duplicate names"}
+::: {.callout-warning title="Beware of duplicate names" .fragment}
 
 - `mutate` allows the same name to be assigned twice — the later assignment overwrites the earlier
 - In one pipeline, giving the same name two different expressions causes the first to be discarded
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: mutate_overwrite
@@ -436,6 +508,8 @@ select(wvs7, country, incomeLevel) |>
   )
 ```
 
+:::
+
 ## Direct Merging {.smaller}
 
 - Data merging: combine multiple data frames into a single new one
@@ -445,6 +519,8 @@ select(wvs7, country, incomeLevel) |>
 - Two flavors:
     - Row-binding: equal column count required; `bind_rows()`
     - Column-binding: equal row count required; `bind_cols()`
+
+::: {.fragment}
 
 ```{webr}
 #| label: bindRow
@@ -461,15 +537,19 @@ wvs7_ja3 <- filter(wvs7, country == "Japan") |>
 bind_rows(wvs7_sk3, wvs7_ja3)
 ```
 
+:::
+
 ---
 
-::: {.callout-warning title="Row-binding with unequal columns"}
+::: {.callout-warning title="Row-binding with unequal columns" .fragment}
 
 - `bind_rows` still works when column counts disagree
 - Missing cells are automatically filled with `NA`
 - Useful when sources have slightly different structures
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: bindRow_unequal
@@ -488,10 +568,14 @@ wvs7_ja3_confidence <- select(wvs7, country, confidence_gov) |>
 bind_rows(wvs7_sk3_income, wvs7_ja3_confidence)
 ```
 
+:::
+
 ---
 
 - Column-binding: use `bind_cols`
 - The function name is plural — do not forget the "s"
+
+::: {.fragment}
 
 ```{webr}
 #| label: bindCols
@@ -506,6 +590,8 @@ wvs7_country <- select(wvs7, country)
 bind_cols(wvs7_confidence, wvs7_country)
 ```
 
+:::
+
 ## Index-Based Merging
 
 - Combine datasets by matching index values
@@ -513,7 +599,7 @@ bind_cols(wvs7_confidence, wvs7_country)
 - Supports one-to-one and one-to-many
 
 
-::: {.callout-important title="Structural consistency"}
+::: {.callout-important title="Structural consistency" .fragment}
 
 - Structural consistency = the index variables follow the same coding scheme
 - The variables need not cover every possible value
@@ -527,6 +613,8 @@ bind_cols(wvs7_confidence, wvs7_country)
     - `wvs7_eq`: individual-level, Japan + South Korea
     - `country_info`: country-level, Japan + Thailand
 - Both have a country variable serving as index (under different names)
+
+::: {.fragment}
 
 ```{webr}
 #| label: join_data
@@ -547,6 +635,8 @@ wvs7_eq
 country_info
 ```
 
+:::
+
 ---
 
 ::: {style="font-size: 0.7em;"}
@@ -559,6 +649,8 @@ country_info
 - Generic syntax: `<type>_join(<data1>, <data2>, by = join_by(<index>))`
 
 :::
+
+::: {.fragment}
 
 ```{webr}
 #| label: join
@@ -576,7 +668,9 @@ wvs7_ij$country |> unique()
 wvs7_fj$country |> unique()
 ```
 
-## Hands-on Practice {.unnumbered}
+:::
+
+## Exercise {.unnumbered background-color="#43464B"}
 
 **Question 1**: Comprehensive data wrangling
 
@@ -600,6 +694,8 @@ On `wvs7`, write a single `dplyr` pipeline that does all of the following:
 
 :::
 
+::: {.fragment}
+
 ```{webr}
 #| label: dplyr_pipeline
 #| exercise: dplyr_pipeline
@@ -610,6 +706,8 @@ data("wvs7", package = "drhur")
 # Build the dplyr pipeline here
 
 ```
+
+:::
 
 ::: { .solution exercise="dplyr_pipeline" }
 
@@ -637,7 +735,11 @@ wvs7 |>
 
 :::
 
-## Chapter Recap and Review {.smaller}
+## Recap {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 - Data exploration
     - Row / column count: `nrow()` / `ncol()`
@@ -653,7 +755,9 @@ wvs7 |>
     - Arrange: `arrange()`
     - Add / modify: `mutate()`
 
----
+:::
+
+::: {.column width="50%"}
 
 - Data merging
     - Row-bind: `bind_rows()`
@@ -662,3 +766,7 @@ wvs7 |>
     - Right join: `right_join()`
     - Inner join: `inner_join()`
     - Full join: `full_join()`
+
+:::
+
+::::
