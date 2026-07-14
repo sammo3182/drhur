@@ -570,7 +570,7 @@ identical(wvs7$incomeCat3_while, wvs7$incomeCat3)
 
 ---
 
-:::{.callout-warning title="while-loop pitfalls"}
+:::{.callout-warning title="while-loop pitfalls" .fragment}
 
 - Most common mistake: forgetting to update the condition variable → infinite loop!
 - If you find yourself in an infinite loop: press `Esc` to interrupt

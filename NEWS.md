@@ -1,3 +1,17 @@
+# drhur 2.0.1
+
+## Slide improvements
+
+All six *Basics* workshops (both the Chinese and English editions) received a
+consistent redesign of their reveal.js slide decks:
+
+- Applied the `goldenBlack` theme and enabled incremental reveals (`incremental: true`) for step-by-step pacing.
+- Standardised the opening slide as an outline (`## Outline` / `## 提要`), moving the "Chapter highlights" bullets out of the callout and showing each chapter's research question as a fragment.
+- Renamed the practice sections to *Exercise* (`## Exercise` / `## 现学现练`) on a dark (`#43464B`) background.
+- Added a closing recap slide (`## Recap` / `## 小结`).
+- Set a shared subtitle ("Learning R with Dr. Hu and His Friends Workshop Series") and institute ("Department of Political Science, THU" / "清华大学政治学系") across all decks.
+- Reflowed overfull closing slides into columns so their content is no longer clipped, and removed redundant `---` separators before slides that already begin with a heading.
+
 # drhur 2.0.0
 
 ## Major changes

@@ -569,7 +569,7 @@ identical(wvs7$incomeCat3_while, wvs7$incomeCat3)
 
 ---
 
-:::{.callout-warning title="while循环“陷阱”"}
+:::{.callout-warning title="while循环“陷阱”" .fragment}
 
 - 最易犯错：忘记更新条件变量 → 无限循环！
 - 不小心进入无限循环：可按 `Esc` 中断

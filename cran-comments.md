@@ -1,14 +1,15 @@
 ## Submission summary
 
-This is a major update (2.0.0). The workshops have been switched from `learnr`
-Shiny tutorials to self-contained Quarto Live documents whose code cells run in
-the browser via WebAssembly (`webR`); no local R session is required to run the
-exercises. Each of the six *Basics* workshops is now bundled in both simplified
-Chinese (`lang = "cn"`) and English (`lang = "en"`) editions.
+This is a minor update (2.0.1). It refines the bundled Quarto Live slide decks
+of the six *Basics* workshops (both the Chinese and English editions): a
+consistent `goldenBlack` theme, incremental reveals, standardised outline,
+exercise and recap sections, a shared subtitle and institute, and layout fixes
+so no closing slide is clipped. There are no changes to the package's R code,
+exported functions, or the behaviour of `drhur()`.
 
 ## Test environments
 
-- Local: Windows 11, R-devel (2026-04-04 r89791), x86_64-w64-mingw32
+- Local: Windows 11, R-devel (2026-06-17 r90169), x86_64-w64-mingw32
 
 ## R CMD check results
 
