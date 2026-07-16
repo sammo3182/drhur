@@ -1,4 +1,4 @@
-# drhur (development version)
+# drhur 2.0.2
 
 ## Licence
 
