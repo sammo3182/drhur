@@ -28,8 +28,6 @@ The one NOTE is the incoming-feasibility NOTE about the licence change itself:
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Yue Hu <yuehu@tsinghua.edu.cn>'
 
-Days since last update: 2
-
 Change to non-FOSS package license.
 New license:
   CC BY-NC 4.0
@@ -37,7 +35,7 @@ Old license:
   MIT + file LICENSE
 ```
 
-Both parts of this NOTE are expected and are addressed below.
+This NOTE is expected and is addressed below.
 
 ## Notes for the CRAN team
 
@@ -55,21 +53,6 @@ Both parts of this NOTE are expected and are addressed below.
   accompanying `LICENSE` file. Should the CRAN team consider a NonCommercial
   licence unacceptable for this package, please let us know and we will
   reconsider before this version is published.
-
-- **On CRAN's right to distribute.** Section 2(a)(1) of CC BY-NC 4.0 grants a
-  worldwide, royalty-free, irrevocable licence to reproduce and share the
-  material for NonCommercial purposes. The maintainer's intent is that CRAN and
-  its mirrors may host, build, and redistribute this package in perpetuity. If
-  the CRAN team reads the NonCommercial restriction as being in tension with the
-  policy requirement that "the package's license must give the right for CRAN to
-  distribute the package in perpetuity", we would welcome guidance.
-
-- **Days since last update: 2.** Version 2.0.1 was published on 2026-07-14. This
-  follow-up is soon afterwards only because the licence change is a legal
-  correction rather than a functional one, and we would rather not leave the
-  materials under the wrong licence for a full release cycle. It contains no
-  code changes. We are happy to postpone publication if the CRAN team prefers
-  the usual interval between updates.
 
 - `SystemRequirements` lists the Quarto command-line tool. It is needed only to
   render a workshop at runtime; the examples are wrapped in `\dontrun{}` and the
