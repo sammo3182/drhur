@@ -50,9 +50,7 @@ This NOTE is expected and is addressed below.
   non-FOSS in `share/licenses/license.db` and that the NOTE is therefore
   expected rather than accidental. The licence is a canonical entry in that
   database, so the `License` field is given in the standardised form with no
-  accompanying `LICENSE` file. Should the CRAN team consider a NonCommercial
-  licence unacceptable for this package, please let us know and we will
-  reconsider before this version is published.
+  accompanying `LICENSE` file.
 
 - `SystemRequirements` lists the Quarto command-line tool. It is needed only to
   render a workshop at runtime; the examples are wrapped in `\dontrun{}` and the
