@@ -13,7 +13,7 @@ Description: Provides interactive workshops for learning R easily and happily.
     in the browser via 'WebAssembly', so learners can read the instructions and
     run the exercises side by side without a local R setup. The materials
     accompany the "Learning R with Dr. Hu" workshop series.
-License: MIT + file LICENSE
+License: CC BY-NC 4.0
 VignetteBuilder: knitr
 Encoding: UTF-8
 URL: https://www.drhuyue.site/drhur/, https://github.com/sammo3182/drhur

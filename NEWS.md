@@ -1,3 +1,13 @@
+# drhur (development version)
+
+## Licence
+
+- Relicensed from MIT to Creative Commons Attribution-NonCommercial 4.0
+  International (CC BY-NC 4.0). The workshop materials may still be shared and
+  adapted with attribution, but no longer for commercial purposes. Versions
+  released up to and including 2.0.1 remain available under the MIT terms they
+  shipped with.
+
 # drhur 2.0.1
 
 ## Slide improvements

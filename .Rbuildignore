@@ -4,6 +4,7 @@
 ^docs$
 ^pkgdown$
 CONDUCT.md
+^LICENSE\.md$
 data-raw/
 ^Meta$
 ^dev$
